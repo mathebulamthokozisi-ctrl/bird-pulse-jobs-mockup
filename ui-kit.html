@@ -207,11 +207,43 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
 .card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-title{font-size:13.5px;font-weight:700;color:var(--fg)}
 .card-body{padding:20px}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
-.stat-card-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:6px}
-.stat-card-value{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--fg);line-height:1}
-.stat-card-sub{font-size:11.5px;color:var(--muted-fg);margin-top:4px}
-.stat-card-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:8px}
+/* ── Stat cards — production style with reactive gradient hover ── */
+.stat-card{
+  position:relative;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-top:3px solid var(--sc-accent,var(--slate-300));
+  border-radius:10px;
+  padding:20px 22px 18px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:box-shadow .2s,transform .18s;
+  cursor:default;
+  --mx:50%;--my:50%;
+}
+.stat-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle 180px at var(--mx) var(--my),var(--sc-glow,rgba(99,102,241,.07)),transparent 70%);
+  opacity:0;
+  transition:opacity .25s;
+  pointer-events:none;
+  border-radius:inherit;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.stat-card:hover::before{opacity:1}
+/* accent variants */
+.sc-slate{--sc-accent:var(--slate-300);--sc-glow:rgba(100,116,139,.08)}
+.sc-amber{--sc-accent:#f59e0b;--sc-glow:rgba(245,158,11,.1)}
+.sc-red{--sc-accent:var(--red-500);--sc-glow:rgba(239,68,68,.1)}
+.sc-green{--sc-accent:var(--green-500);--sc-glow:rgba(34,197,94,.1)}
+.sc-indigo{--sc-accent:var(--indigo-500);--sc-glow:rgba(99,102,241,.1)}
+.stat-card-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+.stat-card-value{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--sc-accent,var(--fg));line-height:1}
+.stat-card-value.neutral{color:var(--fg)}
+.stat-card-sub{font-size:11.5px;color:var(--muted-fg);margin-top:5px}
+.stat-card-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:10px}
 .delta-up{background:var(--green-50);color:var(--green-700)}
 .delta-down{background:var(--red-50);color:var(--red-600)}
 
@@ -780,24 +812,52 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
       <span class="kit-section-num">08</span>
     </div>
 
-    <div class="three-col">
-      <div class="stat-card">
-        <div class="stat-card-label">Quote Value</div>
-        <div class="stat-card-value">R 48,500</div>
-        <div class="stat-card-sub">excl. VAT</div>
-        <div class="stat-card-delta delta-up"><span class="ms" style="font-size:12px">trending_up</span> +12.4%</div>
+    <!-- 5-card row matching production Finance dashboard -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+
+      <!-- Drafts — slate -->
+      <div class="stat-card sc-slate">
+        <div class="stat-card-label">Drafts</div>
+        <div class="stat-card-value neutral" style="font-size:32px">1</div>
+        <div class="stat-card-sub">Not yet sent</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-card-label">Estimated Cost</div>
-        <div class="stat-card-value">R 36,200</div>
-        <div class="stat-card-sub">materials + labour</div>
-        <div class="stat-card-delta delta-up"><span class="ms" style="font-size:12px">trending_up</span> +25.4% margin</div>
+
+      <!-- Outstanding — amber -->
+      <div class="stat-card sc-amber">
+        <div class="stat-card-label">Outstanding</div>
+        <div class="stat-card-value">R 261 490</div>
+        <div class="stat-card-sub">16 awaiting payment</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-card-label">Actual Cost</div>
-        <div class="stat-card-value">R 0</div>
-        <div class="stat-card-sub">pending</div>
-        <div class="stat-card-delta delta-down"><span class="ms" style="font-size:12px">trending_down</span> Not started</div>
+
+      <!-- Overdue — red -->
+      <div class="stat-card sc-red">
+        <div class="stat-card-label">Overdue</div>
+        <div class="stat-card-value" style="font-size:32px">4</div>
+        <div class="stat-card-sub">R 25 136 at risk</div>
+      </div>
+
+      <!-- Collected — green -->
+      <div class="stat-card sc-green">
+        <div class="stat-card-label">Collected</div>
+        <div class="stat-card-value">R 1 071 725</div>
+        <div class="stat-card-sub">45 paid</div>
+      </div>
+
+      <!-- Collection Rate — indigo -->
+      <div class="stat-card sc-indigo">
+        <div class="stat-card-label">Collection Rate</div>
+        <div class="stat-card-value" style="font-size:32px">78%</div>
+        <div class="stat-card-sub">0 part paid</div>
+      </div>
+
+    </div>
+
+    <div class="comp-group" style="margin-top:16px">
+      <div class="comp-group-label">Stat card anatomy</div>
+      <div style="font-size:12.5px;color:var(--fg-2);line-height:2">
+        <strong>Structure:</strong> white bg · 3px coloured top border · 1px slate border sides/bottom · 10px radius · 20px 22px padding<br>
+        <strong>Hover:</strong> translateY(-2px) · shadow-md · radial gradient glow follows mouse cursor (JS-driven <code>--mx</code> / <code>--my</code> CSS vars)<br>
+        <strong>Variants:</strong> <span class="anno">.sc-slate</span> <span class="anno">.sc-amber</span> <span class="anno">.sc-red</span> <span class="anno">.sc-green</span> <span class="anno">.sc-indigo</span>
       </div>
     </div>
 
@@ -1038,6 +1098,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
 </div>
 
 <script>
+// ── Reactive gradient on stat cards ──
+document.querySelectorAll('.stat-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width*100).toFixed(1)+'%';
+    const y=((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
+    card.style.setProperty('--mx',x);
+    card.style.setProperty('--my',y);
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.setProperty('--mx','50%');
+    card.style.setProperty('--my','50%');
+  });
+});
+
 // Highlight active nav link on scroll
 const sections=document.querySelectorAll('.anchor');
 const navLinks=document.querySelectorAll('.kit-nav a');
