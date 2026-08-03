@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bird Pulse — Jobs Module</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+<style>
+:root{
+  --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-200:#c7d2fe;--indigo-300:#a5b4fc;
+  --indigo-400:#818cf8;--indigo-500:#6366f1;--indigo-600:#4f46e5;--indigo-700:#4338ca;
+  --indigo-800:#3730a3;--indigo-900:#312e81;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;
+  --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;
+  --slate-800:#1e293b;--slate-900:#0f172a;
+  --green-50:#f0fdf4;--green-100:#dcfce7;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;
+  --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;--red-700:#b91c1c;
+  --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-600:#d97706;--amber-700:#b45309;
+  --orange-500:#f97316;--orange-600:#ea580c;
+  --bg:#f1f5f9;--white:#ffffff;--border:#e2e8f0;
+  --fg:#0f172a;--fg-2:#334155;--muted-fg:#64748b;--muted:#f8fafc;
+  --radius:6px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -1px rgba(0,0,0,.04);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.08),0 4px 6px -2px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--bg);height:100vh;display:flex;overflow:hidden}
+.ms{font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;font-size:16px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';font-feature-settings:'liga';-webkit-font-smoothing:antialiased;vertical-align:middle}
+
+/* ── Sidebar nav ── */
+.nav{width:200px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.nav-logo{padding:14px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.nav-logo-icon{width:28px;height:28px;border-radius:8px;background:var(--indigo-600);display:flex;align-items:center;justify-content:center}
+.nav-logo-icon .ms{font-size:16px;color:#fff}
+.nav-logo-text{font-size:13px;font-weight:700;color:var(--fg)}
+.nav-section{padding:12px 8px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg)}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius);cursor:pointer;color:var(--fg-2);font-size:12.5px;font-weight:500;text-decoration:none;margin:1px 4px}
+.nav-item:hover{background:var(--slate-100)}
+.nav-item.active{background:var(--indigo-50);color:var(--indigo-700)}
+.nav-item .ms{font-size:17px;color:inherit}
+
+/* ── Main area ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Page: Jobs List ── */
+#page-list{display:flex;flex-direction:column;flex:1;overflow:hidden}
+#page-detail{display:none;flex-direction:column;flex:1;overflow:hidden}
+
+/* ── Toolbar ── */
+.toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 16px;height:46px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.toolbar-count{background:var(--indigo-600);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px;margin-right:4px}
+.toolbar-search{display:flex;align-items:center;gap:6px;background:var(--slate-100);border:1px solid var(--border);border-radius:var(--radius);padding:0 10px;height:28px;flex:1;max-width:320px}
+.toolbar-search input{border:none;background:transparent;outline:none;font-size:12px;color:var(--fg);width:100%}
+.toolbar-search .ms{font-size:14px;color:var(--muted-fg)}
+.spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:0 10px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);color:var(--fg-2);font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s}
+.btn:hover{background:var(--slate-50);border-color:var(--slate-300)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--indigo-600);border-color:var(--indigo-600);color:#fff}
+.btn.primary:hover{background:var(--indigo-700);border-color:var(--indigo-700)}
+.btn.danger{color:var(--red-600);border-color:var(--red-200)}
+.btn.danger:hover{background:var(--red-50)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--slate-100)}
+.btn.sm{height:24px;font-size:10.5px;padding:0 8px}
+.btn .ms{font-size:13px}
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.view-toggle .btn{border:none;border-radius:0;height:28px}
+.view-toggle .btn.active{background:var(--indigo-600);color:#fff}
+
+/* ── Quick filter chips ── */
+.filter-chips-bar{background:var(--white);border-bottom:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--muted-fg);transition:all .12s}
+.chip:hover{border-color:var(--indigo-300);color:var(--indigo-600)}
+.chip.active{background:var(--indigo-50);border-color:var(--indigo-300);color:var(--indigo-700)}
+.chip .ms{font-size:12px}
+.active-filter-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.filter-chip-active{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500;background:var(--indigo-50);border:1px solid var(--indigo-200);color:var(--indigo-700)}
+.filter-chip-active .ms{font-size:11px;cursor:pointer}
+.filter-chip-active .ms:hover{color:var(--red-500)}
+
+/* ── Content area with sidebar ── */
+.content-area{display:flex;flex:1;overflow:hidden}
+
+/* ── Filter sidebar ── */
+.filter-sidebar{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.filter-sidebar.hidden{display:none}
+.filter-section{padding:12px 14px;border-bottom:1px solid var(--border)}
+.filter-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+.filter-item{display:flex;align-items:center;gap:7px;padding:3px 0;cursor:pointer;font-size:12px;color:var(--fg-2)}
+.filter-item input[type=checkbox]{accent-color:var(--indigo-600);width:13px;height:13px}
+.filter-toggle{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--fg-2);margin:1px 0}
+.filter-toggle:hover{background:var(--slate-50)}
+.filter-toggle.active{background:var(--indigo-50);color:var(--indigo-700)}
+.filter-toggle .ms{font-size:14px}
+
+/* ── Table area ── */
+.table-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
+table{width:100%;border-collapse:collapse;background:var(--white)}
+thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:2px solid var(--border);background:var(--white);white-space:nowrap;position:relative;user-select:none}
+thead th:first-child{width:36px;padding:8px 6px}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;background:var(--white)}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:var(--indigo-50)}
+tbody tr.selected{background:var(--indigo-50)}
+td{padding:8px 10px;vertical-align:middle;font-size:12.5px;color:var(--fg-2)}
+td:first-child{padding:8px 6px}
+.job-num{font-weight:600;color:var(--fg);font-size:12px}
+.job-client{font-weight:600;font-size:12px;color:var(--fg)}
+.job-site{font-size:11px;color:var(--muted-fg)}
+.job-desc{font-size:12px;color:var(--fg-2);max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team-avatars{display:flex;gap:-2px}
+.avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--white)}
+.avatar.av-js{background:#4f46e5}.avatar.av-sj{background:#7c3aed}.avatar.av-md{background:#0891b2}.avatar.av-kl{background:#059669}
+
+/* Status pills */
+.pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:500;white-space:nowrap}
+.pill-blue{background:var(--indigo-50);color:var(--indigo-700)}
+.pill-green{background:var(--green-50);color:var(--green-700)}
+.pill-amber{background:var(--amber-50);color:var(--amber-700)}
+.pill-red{background:var(--red-50);color:var(--red-700)}
+.pill-orange{background:#fff7ed;color:var(--orange-600)}
+.pill-slate{background:var(--slate-100);color:var(--slate-600)}
+.pill-purple{background:#f5f3ff;color:#6d28d9}
+.pill-teal{background:#f0fdfa;color:#0f766e}
+
+/* Bulk action bar */
+.bulk-bar{background:rgba(79,70,229,.05);border-bottom:1px solid rgba(79,70,229,.15);padding:6px 16px;display:none;align-items:center;gap:8px;flex-shrink:0}
+.bulk-bar.visible{display:flex}
+.bulk-count{font-size:11.5px;font-weight:600;color:var(--indigo-700)}
+
+/* Pagination */
+.pagination{background:var(--white);border-top:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.pagination .info{font-size:11.5px;color:var(--muted-fg);margin-right:auto}
+.page-btn{width:28px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--fg-2)}
+.page-btn:hover{background:var(--slate-50)}
+.page-btn.active{background:var(--indigo-600);color:#fff;border-color:var(--indigo-600)}
+.page-btn .ms{font-size:14px}
+
+/* Board view */
+.board-wrap{flex:1;overflow-x:auto;padding:16px;display:none;gap:12px}
+.board-wrap.visible{display:flex}
+.board-col{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.board-col-header{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.board-col-header .count{background:var(--slate-100);color:var(--muted-fg);border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:auto}
+.board-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:box-shadow .12s,border-color .12s}
+.board-card:hover{box-shadow:var(--shadow-md);border-color:var(--indigo-200)}
+.board-card-num{font-size:10px;font-weight:700;color:var(--muted-fg);margin-bottom:3px}
+.board-card-client{font-size:12px;font-weight:600;color:var(--fg)}
+.board-card-desc{font-size:11px;color:var(--muted-fg);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board-card-footer{display:flex;align-items:center;gap:6px;margin-top:8px}
+
+/* ── Detail page ── */
+.detail-breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:0 16px;height:36px;display:flex;align-items:center;gap:6px;font-size:12px;flex-shrink:0}
+.detail-breadcrumb a{color:var(--muted-fg);cursor:pointer;text-decoration:none}
+.detail-breadcrumb a:hover{color:var(--indigo-600)}
+.detail-breadcrumb .sep{color:var(--slate-300);font-size:11px}
+.detail-breadcrumb .current{color:var(--fg);font-weight:600}
+.detail-breadcrumb .spacer{flex:1}
+.auto-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-200);cursor:pointer;transition:all .12s}
+.auto-badge:hover{background:var(--indigo-100)}
+.auto-badge.off{background:var(--slate-100);color:var(--muted-fg);border-color:var(--slate-200)}
+.auto-badge .ms{font-size:13px}
+
+.detail-header-bar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;flex-shrink:0}
+.detail-title{font-size:18px;font-weight:700;color:var(--fg);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.detail-meta{display:flex;align-items:center;gap:14px;margin-top:5px;font-size:12px;color:var(--muted-fg);flex-wrap:wrap}
+.detail-meta .ms{font-size:14px;color:var(--slate-400)}
+.detail-meta span{display:flex;align-items:center;gap:4px}
+.detail-meta strong{color:var(--fg-2);font-weight:600}
+
+.pipeline-bar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:0;overflow-x:auto;flex-shrink:0}
+.pipe-step{display:flex;align-items:center;gap:0;flex-shrink:0}
+.pipe-node{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:var(--radius);cursor:pointer;font-size:11.5px;font-weight:500;color:var(--muted-fg);transition:all .12s;white-space:nowrap}
+.pipe-node:hover{background:var(--slate-50);color:var(--fg-2)}
+.pipe-node.done{color:var(--green-600)}
+.pipe-node.done .ms{color:var(--green-500)}
+.pipe-node.active{color:var(--indigo-700);font-weight:600;background:var(--indigo-50);border-bottom:2px solid var(--indigo-600)}
+.pipe-node.active .ms{color:var(--indigo-600)}
+.pipe-node .ms{font-size:15px;color:var(--slate-300)}
+.pipe-arrow{color:var(--slate-300);font-size:13px;margin:0 -2px}
+
+.guard-bar{background:var(--white);border-bottom:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.guard-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-right:4px}
+.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500}
+.guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
+.guard-key.met .ms{font-size:12px;color:var(--green-500)}
+.guard-key.blocked{background:var(--red-50);color:var(--red-700);border:1px solid var(--red-100)}
+.guard-key.blocked .ms{font-size:12px;color:var(--red-500)}
+.guard-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+.auto-note{font-size:10px;color:var(--indigo-600);display:flex;align-items:center;gap:3px;font-weight:500}
+.auto-note .ms{font-size:12px}
+
+.guidance-bar{background:var(--white);border-bottom:1px solid var(--border);border-left:3px solid var(--indigo-500);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.guidance-icon{width:26px;height:26px;border-radius:50%;background:var(--indigo-100);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.guidance-icon .ms{font-size:14px;color:var(--indigo-600)}
+.guidance-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo-600);margin-bottom:2px}
+.guidance-msg{font-size:12px;color:var(--fg-2)}
+
+/* Detail body */
+.detail-body{display:flex;flex:1;overflow:hidden}
+.detail-sidebar{width:268px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.detail-main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.sec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+
+/* Team */
+.team-slot{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.team-slot:last-child{border-bottom:none}
+.team-role{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)}
+.team-name{font-size:12px;font-weight:600;color:var(--fg)}
+.team-edit{margin-left:auto;color:var(--muted-fg);cursor:pointer;font-size:14px}
+.team-edit:hover{color:var(--indigo-600)}
+
+/* P/L */
+.pl-header{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.pl-amount{font-size:18px;font-weight:700}
+.pl-amount.profit{color:var(--green-600)}
+.pl-amount.loss{color:var(--red-600)}
+.pl-margin{font-size:10.5px;font-weight:600}
+.pl-margin.profit{color:var(--green-600)}
+.pl-body{padding:10px 12px}
+.pl-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;color:var(--fg-2)}
+.pl-row .key{color:var(--muted-fg)}
+.pl-row .val{font-weight:500;font-variant-numeric:tabular-nums}
+
+/* VAT */
+.vat-box{margin:0 14px 14px;background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:var(--radius);padding:10px 12px}
+.vat-row{display:flex;justify-content:space-between;font-size:11.5px;padding:2px 0;color:var(--fg-2)}
+.vat-row .key{color:var(--muted-fg)}
+
+/* Documents */
+.doc-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.doc-row:last-child{border-bottom:none}
+.doc-icon{width:30px;height:30px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-icon .ms{font-size:15px}
+.doc-name{font-size:12px;font-weight:600;color:var(--fg)}
+.doc-meta{font-size:10.5px;color:var(--muted-fg)}
+.doc-action{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:var(--radius);font-size:10.5px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--fg-2);white-space:nowrap}
+.doc-action:hover{background:var(--slate-50)}
+.doc-action.create{color:var(--indigo-600);border-color:var(--indigo-200);background:var(--indigo-50)}
+.doc-action.create:hover{background:var(--indigo-100)}
+.doc-action .ms{font-size:12px}
+.doc-auto{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-200)}
+.doc-auto .ms{font-size:11px}
+
+/* Workflow automations */
+.auto-flow-card{padding:12px 14px;border-top:1px solid var(--border)}
+.auto-flow-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.auto-flow-title .ms{font-size:13px;color:var(--indigo-500)}
+.flow-step{display:flex;align-items:flex-start;gap:6px;padding:4px 0;font-size:11.5px;color:var(--fg-2)}
+.flow-step .ms{font-size:13px;flex-shrink:0;margin-top:1px}
+.flow-step.auto .ms{color:var(--indigo-500)}
+.flow-step.manual .ms{color:var(--amber-500)}
+
+/* Cards */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-body{padding:14px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px 20px}
+.info-field{}
+.info-field-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:3px}
+.info-field-value{font-size:13px;font-weight:500;color:var(--fg)}
+.info-field-sub{font-size:11px;color:var(--muted-fg)}
+.desc-box{background:var(--slate-50);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12.5px;color:var(--fg-2);line-height:1.6;margin-top:10px}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--white);padding:0 14px}
+.tab-btn{padding:10px 14px;font-size:12.5px;font-weight:500;color:var(--muted-fg);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:5px;transition:color .12s}
+.tab-btn:hover{color:var(--fg-2)}
+.tab-btn.active{color:var(--indigo-700);border-bottom-color:var(--indigo-600);font-weight:600}
+.tab-badge{background:var(--indigo-100);color:var(--indigo-700);border-radius:20px;padding:1px 6px;font-size:9.5px;font-weight:700}
+.tab-content{display:none;padding:14px}
+.tab-content.active{display:block}
+
+/* Overview tab */
+.metric-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.metric-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.metric-card.highlight{background:var(--green-50);border-color:var(--green-100)}
+.metric-card.highlight.loss{background:var(--red-50);border-color:var(--red-100)}
+.metric-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:4px}
+.metric-value{font-size:20px;font-weight:700;color:var(--fg)}
+.metric-value.profit{color:var(--green-600)}
+.metric-value.loss{color:var(--red-600)}
+.chart-area{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.chart-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px}
+.chart-bars{display:flex;align-items:flex-end;gap:16px;height:80px;padding-bottom:4px}
+.chart-bar-group{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.chart-bar-pair{display:flex;align-items:flex-end;gap:3px;height:70px}
+.chart-bar{width:18px;border-radius:3px 3px 0 0;transition:opacity .12s}
+.chart-bar:hover{opacity:.8}
+.chart-bar.est{background:var(--indigo-200)}
+.chart-bar.act{background:var(--indigo-600)}
+.chart-bar-label{font-size:10px;color:var(--muted-fg)}
+.chart-legend{display:flex;gap:12px;margin-top:8px}
+.chart-legend-item{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--muted-fg)}
+.chart-legend-dot{width:10px;height:10px;border-radius:2px}
+.var-table{width:100%;border-collapse:collapse;font-size:12px}
+.var-table th{text-align:left;padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:var(--white);position:relative;user-select:none}
+.var-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--fg-2)}
+.var-table tr:last-child td{border-bottom:none}
+.var-table .num{font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
+.var-table .pos{color:var(--green-600)}
+.var-table .neg{color:var(--red-600)}
+.var-table .total-row td{font-weight:700;background:var(--indigo-50);color:var(--fg)}
+
+/* Communication tab */
+.comm-thread{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.comm-thread-header{background:var(--white);padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;border-bottom:1px solid var(--border)}
+.comm-thread-header:hover{background:var(--slate-50)}
+.comm-subject{font-size:12.5px;font-weight:600;color:var(--fg);flex:1}
+.comm-meta{font-size:10.5px;color:var(--muted-fg)}
+.comm-status{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.comm-status.pending{background:var(--amber-50);color:var(--amber-700);border:1px solid var(--amber-100)}
+.comm-status.replied{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
+.comm-status.resolved{background:var(--slate-100);color:var(--muted-fg);border:1px solid var(--slate-200)}
+.comm-body{background:var(--white);padding:12px 14px;display:none}
+.comm-body.open{display:block}
+.comm-msg{background:var(--slate-50);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--fg-2);line-height:1.6;margin-bottom:10px}
+.comm-msg-from{font-size:10.5px;font-weight:600;color:var(--muted-fg);margin-bottom:4px}
+.comm-reply-box{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.comm-reply-box textarea{width:100%;border:none;outline:none;padding:10px 12px;font-size:12px;font-family:inherit;resize:none;min-height:70px;color:var(--fg)}
+.comm-reply-footer{background:var(--slate-50);border-top:1px solid var(--border);padding:6px 10px;display:flex;justify-content:flex-end;gap:6px}
+
+/* Timeline tab */
+.timeline-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.timeline-dot .ms{font-size:14px}
+.timeline-dot.status{background:var(--indigo-100)}
+.timeline-dot.status .ms{color:var(--indigo-600)}
+.timeline-dot.email{background:var(--green-100)}
+.timeline-dot.email .ms{color:var(--green-600)}
+.timeline-dot.doc{background:var(--amber-100)}
+.timeline-dot.doc .ms{color:var(--amber-600)}
+.timeline-dot.note{background:var(--slate-100)}
+.timeline-dot.note .ms{color:var(--muted-fg)}
+.timeline-content{flex:1}
+.timeline-title{font-size:12.5px;font-weight:600;color:var(--fg)}
+.timeline-sub{font-size:11.5px;color:var(--muted-fg);margin-top:1px}
+.timeline-time{font-size:10.5px;color:var(--slate-400);margin-left:auto;flex-shrink:0}
+.timeline-expand{font-size:10.5px;color:var(--indigo-600);cursor:pointer;margin-top:4px;display:inline-flex;align-items:center;gap:3px}
+.timeline-expand:hover{text-decoration:underline}
+.timeline-email-body{background:var(--slate-50);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--fg-2);line-height:1.6;margin-top:6px;display:none}
+.timeline-email-body.open{display:block}
+
+/* HSE tab */
+.hse-pipeline{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.hse-step{flex:1;padding:8px 10px;text-align:center;font-size:11px;font-weight:500;color:var(--muted-fg);cursor:pointer;background:var(--white);border-right:1px solid var(--border);transition:all .12s}
+.hse-step:last-child{border-right:none}
+.hse-step:hover{background:var(--slate-50)}
+.hse-step.done{background:var(--green-50);color:var(--green-700)}
+.hse-step.active{background:var(--indigo-50);color:var(--indigo-700);font-weight:600}
+.hse-inherit-banner{background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;color:var(--indigo-700)}
+.hse-inherit-banner .ms{font-size:16px;color:var(--indigo-500)}
+.risk-table{width:100%;border-collapse:collapse;font-size:12px}
+.risk-table th{padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:var(--white);text-align:left;position:relative;user-select:none}
+.risk-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--fg-2)}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-table td input{border:none;outline:none;background:transparent;font-size:12px;font-family:inherit;width:100%;color:var(--fg)}
+.risk-table td input:focus{background:var(--indigo-50);border-radius:3px;padding:2px 4px}
+.risk-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:22px;border-radius:var(--radius);font-size:11px;font-weight:700}
+.risk-high{background:#fee2e2;color:var(--red-700)}
+.risk-med{background:var(--amber-100);color:var(--amber-700)}
+.risk-low{background:var(--green-100);color:var(--green-700)}
+
+/* Modals */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:10px;box-shadow:var(--shadow-lg);width:100%;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.modal-sm{max-width:420px}
+.modal-md{max-width:560px}
+.modal-lg{max-width:720px}
+.modal-xl{max-width:900px}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-header h3{font-size:15px;font-weight:700;color:var(--fg)}
+.modal-close{width:28px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted-fg)}
+.modal-close:hover{background:var(--slate-50);color:var(--fg)}
+.modal-close .ms{font-size:16px}
+.modal-body{padding:20px;flex:1}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.cols-3{grid-template-columns:1fr 1fr 1fr}
+.form-row.cols-1{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:11px;font-weight:600;color:var(--fg-2)}
+.form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:12.5px;font-family:inherit;color:var(--fg);outline:none;transition:border-color .12s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px rgba(79,70,229,.08)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin:14px 0 10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* Estimate modal */
+.est-line-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+.est-line-table th{padding:6px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);text-align:left}
+.est-line-table td{padding:6px 8px;border-bottom:1px solid var(--border)}
+.est-line-table td input{border:none;outline:none;background:transparent;font-size:12px;font-family:inherit;width:100%;color:var(--fg)}
+.est-line-table td input:focus{background:var(--indigo-50);border-radius:3px;padding:2px 4px}
+.est-total-row{display:flex;justify-content:flex-end;gap:20px;padding:8px 0;font-size:12.5px;font-weight:600;color:var(--fg);border-top:2px solid var(--border)}
+
+/* Jobcard modal */
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.photo-slot{aspect-ratio:1;border:2px dashed var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--slate-50);transition:border-color .12s}
+.photo-slot:hover{border-color:var(--indigo-300);background:var(--indigo-50)}
+.photo-slot .ms{font-size:22px;color:var(--muted-fg)}
+.photo-slot img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+.sig-box{border:2px dashed var(--border);border-radius:var(--radius);height:100px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--slate-50);font-size:12px;color:var(--muted-fg);transition:border-color .12s}
+.sig-box:hover{border-color:var(--indigo-300)}
+.sig-box.signed{border-style:solid;border-color:var(--green-300);background:var(--green-50);color:var(--green-700);font-weight:600}
+
+/* Actual costs modal */
+.cost-entry-table{width:100%;border-collapse:collapse;font-size:12px}
+.cost-entry-table th{padding:6px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);text-align:left}
+.cost-entry-table td{padding:6px 8px;border-bottom:1px solid var(--border)}
+.cost-entry-table td input,.cost-entry-table td select{border:1px solid var(--border);border-radius:4px;padding:4px 7px;font-size:11.5px;font-family:inherit;color:var(--fg);outline:none;width:100%}
+.cost-entry-table td input:focus,.cost-entry-table td select:focus{border-color:var(--indigo-400)}
+
+/* Confirm dialog */
+.confirm-dialog{max-width:380px}
+.confirm-msg{font-size:13px;color:var(--fg-2);line-height:1.6}
+
+/* Assign modal */
+.assignee-list{display:flex;flex-direction:column;gap:6px}
+.assignee-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);background:var(--white);transition:all .12s}
+.assignee-item:hover{border-color:var(--indigo-300);background:var(--indigo-50)}
+.assignee-item.selected{border-color:var(--indigo-500);background:var(--indigo-50)}
+.assignee-item .ms{margin-left:auto;color:var(--indigo-600);display:none}
+.assignee-item.selected .ms{display:block}
+
+/* Columns modal */
+.col-toggle-list{display:flex;flex-direction:column;gap:4px}
+.col-toggle-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:var(--radius);background:var(--slate-50);border:1px solid var(--border)}
+.col-toggle-item.locked{opacity:.5}
+.col-toggle-label{font-size:12.5px;font-weight:500;color:var(--fg-2)}
+.toggle-switch{position:relative;width:34px;height:18px;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:var(--slate-200);border-radius:20px;transition:background .2s}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle-switch input:checked~.toggle-track{background:var(--indigo-600)}
+.toggle-switch input:checked~.toggle-thumb{transform:translateX(16px)}
+
+/* Toast */
+.toast-container{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:2000}
+.toast{background:var(--slate-800);color:#fff;padding:10px 16px;border-radius:var(--radius);font-size:12.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-lg);animation:slideIn .2s ease;max-width:320px}
+.toast.success{background:var(--green-700)}
+.toast.error{background:var(--red-700)}
+.toast .ms{font-size:16px}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* Col resize handle */
+.col-resize-handle{position:absolute;top:0;right:-3px;width:6px;height:100%;cursor:col-resize;z-index:10;border-radius:3px;transition:background .15s}
+.col-resize-handle:hover,.col-resize-handle.active{background:var(--indigo-400)}
+.col-resize-handle.active{background:var(--indigo-600)}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><span class="ms">bolt</span></div>
+    <span class="nav-logo-text">Bird Pulse</span>
+  </div>
+  <div class="nav-section">Workspace</div>
+  <a class="nav-item" href="#"><span class="ms">dashboard</span>Dashboard</a>
+  <a class="nav-item active" id="nav-jobs" href="#" onclick="showList()"><span class="ms">work</span>Jobs</a>
+  <a class="nav-item" href="#"><span class="ms">people</span>Clients</a>
+  <a class="nav-item" href="#"><span class="ms">receipt_long</span>Invoices</a>
+  <a class="nav-item" href="#"><span class="ms">health_and_safety</span>HSE</a>
+  <div class="nav-section">CRM</div>
+  <a class="nav-item" href="#"><span class="ms">hub</span>Cockpit</a>
+  <a class="nav-item" href="#"><span class="ms">contacts</span>People</a>
+  <a class="nav-item" href="#"><span class="ms">business</span>Companies</a>
+  <a class="nav-item" href="#"><span class="ms">handshake</span>Deals</a>
+</nav>
+
+<!-- ── Main ── -->
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: JOBS LIST
+═══════════════════════════════════════════════════════════ -->
+<div id="page-list">
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <span class="toolbar-count" id="jobs-count">24</span>
+    <div class="toolbar-search">
+      <span class="ms">search</span>
+      <input type="text" id="search-input" placeholder="Search jobs, clients, sites…" oninput="applyFilters()">
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="filter-btn" onclick="toggleFilterSidebar()"><span class="ms">filter_list</span>Filters</button>
+    <button class="btn" id="columns-btn" onclick="openColumnsModal()"><span class="ms">view_column</span>Columns</button>
+    <button class="btn" onclick="exportCSV()"><span class="ms">download</span>Export</button>
+    <button class="btn primary" onclick="openNewJobModal()"><span class="ms">add</span>New Job</button>
+    <div class="view-toggle">
+      <button class="btn active" id="vbtn-list" onclick="setView('list')"><span class="ms">view_list</span>List</button>
+      <button class="btn" id="vbtn-board" onclick="setView('board')"><span class="ms">view_kanban</span>Board</button>
+    </div>
+  </div>
+
+  <!-- Quick filter chips -->
+  <div class="filter-chips-bar">
+    <div class="chip" id="ftog-mine" onclick="toggleQuick('mine')"><span class="ms">person</span>My jobs</div>
+    <div class="chip" id="ftog-unassigned" onclick="toggleQuick('unassigned')"><span class="ms">person_off</span>Unassigned</div>
+    <div class="chip" id="ftog-active" onclick="toggleQuick('active')"><span class="ms">play_circle</span>Active only</div>
+    <div class="chip" id="ftog-week" onclick="toggleQuick('week')"><span class="ms">calendar_today</span>This week</div>
+    <div class="chip" id="ftog-overdue" onclick="toggleQuick('overdue')"><span class="ms">warning</span>Overdue</div>
+    <div id="active-chips" class="active-filter-chips"></div>
+  </div>
+
+  <!-- Bulk action bar -->
+  <div class="bulk-bar" id="bulk-bar">
+    <span class="bulk-count" id="bulk-count">0 selected</span>
+    <button class="btn sm" onclick="bulkDelete()"><span class="ms">delete</span>Delete</button>
+    <button class="btn sm" onclick="openBulkAssign()"><span class="ms">person_add</span>Assign</button>
+    <button class="btn sm" onclick="openBulkStatus()"><span class="ms">label</span>Set Status</button>
+    <button class="btn sm" onclick="exportSelected()"><span class="ms">download</span>Export selected</button>
+    <button class="btn sm ghost" onclick="clearSelection()" style="margin-left:auto"><span class="ms">close</span>Deselect all</button>
+  </div>
+
+  <!-- Content area -->
+  <div class="content-area">
+
+    <!-- Filter sidebar -->
+    <div class="filter-sidebar" id="filter-sidebar">
+      <div class="filter-section">
+        <div class="filter-section-title">Quick Filters</div>
+        <div class="filter-toggle" id="fs-mine" onclick="toggleQuick('mine')"><span class="ms">person</span>My jobs only</div>
+        <div class="filter-toggle" id="fs-unassigned" onclick="toggleQuick('unassigned')"><span class="ms">person_off</span>Unassigned</div>
+        <div class="filter-toggle" id="fs-active" onclick="toggleQuick('active')"><span class="ms">play_circle</span>Active only</div>
+        <div class="filter-toggle" id="fs-week" onclick="toggleQuick('week')"><span class="ms">calendar_today</span>This week</div>
+        <div class="filter-toggle" id="fs-overdue" onclick="toggleQuick('overdue')"><span class="ms">warning</span>Overdue</div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-section-title">Workflow Status</div>
+        <label class="filter-item"><input type="checkbox" id="s-booked" checked onchange="applyFilters()">Job Booked</label>
+        <label class="filter-item"><input type="checkbox" id="s-estimate" checked onchange="applyFilters()">Estimate Done</label>
+        <label class="filter-item"><input type="checkbox" id="s-quoted" checked onchange="applyFilters()">Quoted / Sent</label>
+        <label class="filter-item"><input type="checkbox" id="s-accepted" checked onchange="applyFilters()">Quote Accepted</label>
+        <label class="filter-item"><input type="checkbox" id="s-inprogress" checked onchange="applyFilters()">In Progress</label>
+        <label class="filter-item"><input type="checkbox" id="s-completed" checked onchange="applyFilters()">Completed</label>
+        <label class="filter-item"><input type="checkbox" id="s-invoiced" checked onchange="applyFilters()">Invoiced</label>
+        <label class="filter-item"><input type="checkbox" id="s-paid" checked onchange="applyFilters()">Paid</label>
+      </div>
+      <div class="filter-section">
+        <div class="filter-section-title">Priority</div>
+        <label class="filter-item"><input type="checkbox" id="p-urgent" checked onchange="applyFilters()">🔴 Urgent</label>
+        <label class="filter-item"><input type="checkbox" id="p-high" checked onchange="applyFilters()">🟠 High</label>
+        <label class="filter-item"><input type="checkbox" id="p-normal" checked onchange="applyFilters()">🔵 Normal</label>
+        <label class="filter-item"><input type="checkbox" id="p-low" checked onchange="applyFilters()">⚪ Low</label>
+      </div>
+      <div class="filter-section">
+        <div class="filter-section-title">Client</div>
+        <label class="filter-item"><input type="checkbox" id="c-acme" checked onchange="applyFilters()">Acme Corp</label>
+        <label class="filter-item"><input type="checkbox" id="c-globex" checked onchange="applyFilters()">Globex Ltd</label>
+        <label class="filter-item"><input type="checkbox" id="c-initech" checked onchange="applyFilters()">Initech</label>
+        <label class="filter-item"><input type="checkbox" id="c-umbrella" checked onchange="applyFilters()">Umbrella Inc</label>
+        <label class="filter-item"><input type="checkbox" id="c-wayne" checked onchange="applyFilters()">Wayne Enterprises</label>
+      </div>
+      <div class="filter-section">
+        <div class="filter-section-title">Assigned To</div>
+        <label class="filter-item"><input type="checkbox" id="a-js" checked onchange="applyFilters()">John Smith</label>
+        <label class="filter-item"><input type="checkbox" id="a-sj" checked onchange="applyFilters()">Sarah Jones</label>
+        <label class="filter-item"><input type="checkbox" id="a-md" checked onchange="applyFilters()">Mike Davis</label>
+        <label class="filter-item"><input type="checkbox" id="a-kl" checked onchange="applyFilters()">Kate Lee</label>
+      </div>
+    </div>
+
+    <!-- Table + board -->
+    <div class="table-wrap" id="table-wrap">
+      <table id="jobs-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)" style="accent-color:var(--indigo-600)"></th>
+            <th data-col="num">Job #</th>
+            <th data-col="client">Client / Site</th>
+            <th data-col="desc">Description</th>
+            <th data-col="type">Type</th>
+            <th data-col="priority">Priority</th>
+            <th data-col="status">Status</th>
+            <th data-col="finance">Finance</th>
+            <th data-col="team">Team</th>
+            <th data-col="value">Value</th>
+            <th data-col="date">Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="jobs-tbody"></tbody>
+      </table>
+      <div class="pagination">
+        <span class="info" id="pagination-info">Showing 1–24 of 24</span>
+        <div style="margin-left:auto;display:flex;gap:4px">
+          <div class="page-btn" onclick="changePage(-1)"><span class="ms">chevron_left</span></div>
+          <div class="page-btn active" id="pg-1" onclick="goPage(1)">1</div>
+          <div class="page-btn" id="pg-2" onclick="goPage(2)">2</div>
+          <div class="page-btn" id="pg-3" onclick="goPage(3)">3</div>
+          <div class="page-btn" onclick="changePage(1)"><span class="ms">chevron_right</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Board view -->
+    <div class="board-wrap" id="board-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: JOB DETAIL
+═══════════════════════════════════════════════════════════ -->
+<div id="page-detail">
+
+  <!-- Breadcrumb -->
+  <div class="detail-breadcrumb">
+    <a onclick="showList()">Jobs</a>
+    <span class="sep">›</span>
+    <span class="current" id="d-breadcrumb">JOB-0042</span>
+    <div class="spacer"></div>
+    <div class="auto-badge" id="auto-badge" onclick="toggleAutoTransitions()">
+      <span class="ms">auto_awesome</span><span id="auto-badge-text">AUTO-TRANSITIONS ON</span>
+    </div>
+    <button class="btn" style="height:26px" title="Unlock stage" onclick="openUnlockModal()"><span class="ms" style="font-size:14px">lock_open</span></button>
+    <button class="btn" style="height:26px" title="Duplicate job" onclick="duplicateJob()"><span class="ms" style="font-size:14px">content_copy</span></button>
+    <button class="btn danger" style="height:26px" title="Delete job" onclick="openDeleteConfirm()"><span class="ms" style="font-size:14px">delete</span></button>
+  </div>
+
+  <!-- Header bar -->
+  <div class="detail-header-bar">
+    <div class="detail-title">
+      <span id="d-title">JOB-0042 — Electrical Rewiring</span>
+      <span id="d-status-pill"></span>
+      <span id="d-finance-pill"></span>
+      <span id="d-priority-pill"></span>
+    </div>
+    <div class="detail-meta">
+      <span><span class="ms">business</span><strong id="d-client">Acme Corp</strong></span>
+      <span><span class="ms">location_on</span><span id="d-site">Main Warehouse</span></span>
+      <span><span class="ms">build</span><span id="d-type">Electrical</span></span>
+      <span><span class="ms">calendar_today</span><span id="d-date">12 Jul 2026</span></span>
+      <span><span class="ms">attach_money</span><strong id="d-value">R 48,500</strong></span>
+    </div>
+  </div>
+
+  <!-- Pipeline bar -->
+  <div class="pipeline-bar" id="pipeline-bar"></div>
+
+  <!-- Guard keys bar -->
+  <div class="guard-bar">
+    <span class="guard-label">Guard Keys:</span>
+    <div id="guard-keys-display"></div>
+    <div class="guard-actions">
+      <button class="btn sm" id="btn-wip" onclick="markWIP()"><span class="ms">engineering</span>Mark WIP</button>
+      <button class="btn sm" id="btn-done" onclick="markDone()"><span class="ms">check_circle</span>Mark Done</button>
+      <span class="auto-note" id="auto-note"><span class="ms">bolt</span>Invoice auto-creates on completion</span>
+    </div>
+  </div>
+
+  <!-- Guidance banner -->
+  <div class="guidance-bar">
+    <div class="guidance-icon"><span class="ms">bolt</span></div>
+    <div style="flex:1">
+      <div class="guidance-label" id="guidance-label">Current Stage — In Progress</div>
+      <div class="guidance-msg" id="guidance-msg">Complete the jobcard and get it signed before marking the job done.</div>
+    </div>
+    <button class="btn primary sm" id="guidance-action-btn" onclick="handleGuidanceAction()"><span class="ms" style="font-size:12px">open_in_new</span><span id="guidance-action-label">Open Jobcard</span></button>
+  </div>
+
+  <!-- Body -->
+  <div class="detail-body">
+
+    <!-- Left sidebar -->
+    <aside class="detail-sidebar">
+
+      <!-- Team -->
+      <div style="padding:14px 14px 10px">
+        <div class="sec-label">Team</div>
+        <div id="team-slots"></div>
+      </div>
+
+      <!-- P/L Widget -->
+      <div style="padding:14px;border-top:1px solid var(--border)">
+        <div class="sec-label">Financials</div>
+        <div class="pl-header">
+          <span class="ms" id="pl-icon" style="font-size:20px;color:var(--green-500)">trending_up</span>
+          <div>
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)">Estimated P/L</div>
+            <div class="pl-amount profit" id="pl-amount">+R 12,300</div>
+            <div class="pl-margin profit" id="pl-margin">25.4% margin</div>
+          </div>
+        </div>
+        <div class="pl-body">
+          <div class="pl-row"><span class="key">Quote (excl. VAT)</span><span class="val" id="pl-quote">R 48,500</span></div>
+          <div class="pl-row"><span class="key">Estimate Cost</span><span class="val" id="pl-est">R 36,200</span></div>
+          <div class="pl-row"><span class="key">Actual Cost</span><span class="val" id="pl-actual" style="color:var(--muted-fg)">R 0 (pending)</span></div>
+          <div class="pl-row"><span class="key">Commission</span><span class="val" id="pl-comm">R 0</span></div>
+          <div class="pl-row"><span class="key">Est. Profit</span><span class="val" id="pl-profit" style="color:var(--green-600)">+R 12,300</span></div>
+        </div>
+      </div>
+
+      <!-- VAT Card -->
+      <div class="vat-box">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo-700);margin-bottom:6px;display:flex;align-items:center;gap:4px"><span class="ms" style="font-size:12px;color:var(--indigo-600)">percent</span>VAT Summary</div>
+        <div class="vat-row"><span class="key">Output VAT (15%)</span><span class="val" id="vat-output">R 7,275</span></div>
+        <div class="vat-row"><span class="key">Input VAT</span><span class="val" id="vat-input">R 4,710</span></div>
+        <div class="vat-row" style="border-top:1px solid var(--indigo-200);margin-top:4px;padding-top:4px"><span class="key" style="font-weight:600">Net VAT</span><span class="val" style="font-weight:700" id="vat-net">R 2,565</span></div>
+      </div>
+
+      <!-- Documents -->
+      <div style="padding:14px 14px 10px;border-top:1px solid var(--border)">
+        <div class="sec-label">Documents</div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">calculate</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Estimate</div><div class="doc-meta">12 items · R 36,200</div></div>
+          <span class="pill pill-slate" style="font-size:9.5px;margin-right:4px">Draft</span>
+          <div class="doc-action" onclick="openEstimateModal()"><span class="ms">open_in_new</span>Open</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">description</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Quote</div><div class="doc-meta">QUO-0089 · R 48,500</div></div>
+          <span class="pill pill-blue" style="font-size:9.5px;margin-right:4px">Sent</span>
+          <div class="doc-action" onclick="openQuoteModal()"><span class="ms">open_in_new</span>Open</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">receipt_long</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Invoice</div><div class="doc-meta" id="invoice-meta">Auto-creates on completion</div></div>
+          <span class="doc-auto"><span class="ms">bolt</span>AUTO</span>
+          <div class="doc-action create" id="invoice-create-btn" onclick="openInvoiceModal()"><span class="ms">add</span>Create</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">attach_money</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Actual Costs</div><div class="doc-meta" id="actual-costs-meta">R 0 · 0 entries</div></div>
+          <div class="doc-action" onclick="openActualCostsModal()"><span class="ms">open_in_new</span>Open</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">assignment</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Jobcard</div><div class="doc-meta" id="jobcard-meta">0 photos · Awaiting signature</div></div>
+          <span class="pill pill-slate" style="font-size:9.5px;margin-right:4px" id="jobcard-status-pill">Draft</span>
+          <div class="doc-action" onclick="openJobcardModal()"><span class="ms">open_in_new</span>Open</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">health_and_safety</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">HSE Pack</div><div class="doc-meta" id="hse-meta">Not generated</div></div>
+          <div class="doc-action create" id="hse-generate-btn" onclick="generateHSE()"><span class="ms">add</span>Generate</div>
+        </div>
+      </div>
+
+      <!-- Workflow automations -->
+      <div class="auto-flow-card">
+        <div class="auto-flow-title"><span class="ms">auto_awesome</span>Workflow Automations</div>
+        <div class="flow-step auto"><span class="ms">bolt</span>Quote sent → status auto-updates</div>
+        <div class="flow-step auto"><span class="ms">bolt</span>Quote approved → job moves to In Progress</div>
+        <div class="flow-step auto"><span class="ms">bolt</span>Jobcard signed → unlocks Mark Done</div>
+        <div class="flow-step auto"><span class="ms">bolt</span>Job completed → invoice auto-created</div>
+        <div class="flow-step manual"><span class="ms">person</span>Payment → manual confirmation required</div>
+        <div class="flow-step manual"><span class="ms">person</span>Commission → manual sign-off required</div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="detail-main">
+
+      <!-- Job Info Card -->
+      <div class="card">
+        <div class="card-label">Job Info <button class="btn sm" onclick="openEditJobModal()" style="margin-left:auto"><span class="ms">edit</span>Edit</button></div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div class="info-field"><div class="info-field-label">Client</div><div class="info-field-value" id="ji-client">Acme Corp</div></div>
+            <div class="info-field"><div class="info-field-label">Site</div><div class="info-field-value" id="ji-site">Main Warehouse</div><div class="info-field-sub" id="ji-site-addr">14 Industrial Rd, JHB</div></div>
+            <div class="info-field"><div class="info-field-label">Job Type</div><div class="info-field-value" id="ji-type">Electrical</div></div>
+            <div class="info-field"><div class="info-field-label">Job Nature</div><div class="info-field-value" id="ji-nature">To Be Done</div></div>
+            <div class="info-field"><div class="info-field-label">Created</div><div class="info-field-value" id="ji-created">12 Jul 2026</div></div>
+            <div class="info-field"><div class="info-field-label">Requested Date</div><div class="info-field-value" id="ji-req-date">18 Jul 2026</div></div>
+            <div class="info-field"><div class="info-field-label">Client Reference</div><div class="info-field-value" id="ji-ref">PO-2026-4421</div></div>
+            <div class="info-field"><div class="info-field-label">Priority</div><div id="ji-priority"></div></div>
+          </div>
+          <div style="margin-top:12px"><div class="info-field-label">Description</div><div class="desc-box" id="ji-desc">Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.</div></div>
+        </div>
+      </div>
+
+      <!-- Tabs card -->
+      <div class="card">
+        <div class="tabs" id="detail-tabs">
+          <div class="tab-btn active" onclick="switchTab('overview',this)"><span class="ms">bar_chart</span>Overview</div>
+          <div class="tab-btn" onclick="switchTab('communication',this)"><span class="ms">forum</span>Communication <span class="tab-badge">3</span></div>
+          <div class="tab-btn" onclick="switchTab('timeline',this)"><span class="ms">history</span>Timeline <span class="tab-badge">6</span></div>
+          <div class="tab-btn" onclick="switchTab('hse',this)"><span class="ms">health_and_safety</span>HSE</div>
+        </div>
+
+        <!-- Overview -->
+        <div class="tab-content active" id="tab-overview">
+          <div class="metric-cards">
+            <div class="metric-card"><div class="metric-label">Quote Value</div><div class="metric-value" id="ov-quote">R 48,500</div></div>
+            <div class="metric-card"><div class="metric-label">Estimated Cost</div><div class="metric-value" id="ov-est">R 36,200</div></div>
+            <div class="metric-card"><div class="metric-label">Actual Cost</div><div class="metric-value" id="ov-actual">R 0</div></div>
+            <div class="metric-card highlight" id="ov-profit-card"><div class="metric-label">Est. Profit</div><div class="metric-value profit" id="ov-profit">+R 12,300</div></div>
+          </div>
+          <div class="chart-area">
+            <div class="chart-title">Cost by Category</div>
+            <div class="chart-bars" id="chart-bars"></div>
+            <div class="chart-legend">
+              <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--indigo-200)"></div>Estimated</div>
+              <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--indigo-600)"></div>Actual</div>
+            </div>
+          </div>
+          <div class="card" style="border:none;padding:0">
+            <table class="var-table" id="var-table">
+              <thead><tr>
+                <th>Category</th>
+                <th style="text-align:right">Estimated</th>
+                <th style="text-align:right">Actual</th>
+                <th style="text-align:right">Variance</th>
+                <th style="text-align:right">%</th>
+              </tr></thead>
+              <tbody id="var-tbody">
+                <tr><td>Materials</td><td class="num">R 26,200</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td></tr>
+                <tr><td>Labour</td><td class="num">R 10,000</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td></tr>
+                <tr><td>Subcontractor</td><td class="num">R 0</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td></tr>
+                <tr><td>Travel</td><td class="num">R 0</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td><td class="num" style="color:var(--muted-fg)">—</td></tr>
+                <tr class="total-row"><td>Total</td><td class="num">R 36,200</td><td class="num" id="var-actual-total">R 0</td><td class="num pos" id="var-variance">+R 36,200</td><td class="num pos" id="var-pct">+100%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Communication -->
+        <div class="tab-content" id="tab-communication">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads</div>
+            <button class="btn sm primary" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
+          </div>
+          <div id="comm-threads"></div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="tab-content" id="tab-timeline">
+          <div id="timeline-items"></div>
+        </div>
+
+        <!-- HSE -->
+        <div class="tab-content" id="tab-hse">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-size:14px;font-weight:600;color:var(--fg)">HSE Job Pack</div>
+            <button class="btn sm primary" onclick="generateHSE()"><span class="ms">add</span>Generate Pack</button>
+          </div>
+          <div class="hse-pipeline" id="hse-pipeline"></div>
+          <div class="hse-inherit-banner">
+            <span class="ms">link</span>
+            <div style="flex:1">
+              <div style="font-weight:600">Inherits from Acme Corp Master HSE File</div>
+              <div style="font-size:11px;margin-top:2px;color:var(--indigo-600)">Standing compliance documents, certificates, and policies are linked from the client master file.</div>
+            </div>
+            <button class="btn sm" onclick="toast('Opening client HSE master file…')"><span class="ms">open_in_new</span>View</button>
+          </div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:8px">Risk Assessment</div>
+          <table class="risk-table" id="risk-table">
+            <thead><tr>
+              <th>Hazard</th><th>Activity</th><th>L</th><th>C</th><th>Rating</th><th>Control Measure</th><th></th>
+            </tr></thead>
+            <tbody id="risk-tbody"></tbody>
+          </table>
+          <button class="btn sm" style="margin-top:8px" onclick="addRiskRow()"><span class="ms">add</span>Add Risk Row</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════════════════ -->
+
+<!-- New Job Modal -->
+<div class="modal-overlay" id="new-job-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3>New Job</h3><div class="modal-close" onclick="closeModal('new-job-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Client *</label><select id="nj-client"><option>Acme Corp</option><option>Globex Ltd</option><option>Initech</option><option>Umbrella Inc</option><option>Wayne Enterprises</option></select></div>
+        <div class="form-group"><label>Site *</label><select id="nj-site"><option>Main Warehouse</option><option>Head Office</option><option>Server Room</option><option>Factory Floor A</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Job Type *</label><select id="nj-type"><option>Electrical</option><option>Mechanical</option><option>Plumbing</option><option>Civil</option><option>Installation</option><option>Maintenance</option><option>Other</option></select></div>
+        <div class="form-group"><label>Job Nature</label><select id="nj-nature"><option>To Be Done</option><option>Recurring</option><option>Emergency</option><option>Warranty</option></select></div>
+      </div>
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Description *</label><textarea id="nj-desc" placeholder="Describe the scope of work…"></textarea></div>
+      </div>
+      <div class="form-row cols-3">
+        <div class="form-group"><label>Priority</label><select id="nj-priority"><option>Normal</option><option>Low</option><option>High</option><option>Urgent</option></select></div>
+        <div class="form-group"><label>Requested Date</label><input type="date" id="nj-date"></div>
+        <div class="form-group"><label>Client PO / Reference</label><input type="text" id="nj-ref" placeholder="PO-2026-XXXX"></div>
+      </div>
+      <div class="form-section-title">Team Assignment</div>
+      <div class="form-row">
+        <div class="form-group"><label>Tech Manager</label><select id="nj-tm"><option value="">— Unassigned —</option><option>John Smith</option><option>Sarah Jones</option><option>Mike Davis</option><option>Kate Lee</option></select></div>
+        <div class="form-group"><label>Coordinator</label><select id="nj-coord"><option value="">— Unassigned —</option><option>John Smith</option><option>Sarah Jones</option><option>Mike Davis</option><option>Kate Lee</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Sales Rep</label><select id="nj-sales"><option value="">— Unassigned —</option><option>John Smith</option><option>Sarah Jones</option><option>Mike Davis</option><option>Kate Lee</option></select></div>
+        <div class="form-group"><label>Job Owner</label><select id="nj-owner"><option value="">— Unassigned —</option><option>John Smith</option><option>Sarah Jones</option><option>Mike Davis</option><option>Kate Lee</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('new-job-modal')">Cancel</button>
+      <button class="btn primary" onclick="submitNewJob()"><span class="ms">check</span>Create Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- Columns Modal -->
+<div class="modal-overlay" id="columns-modal" onclick="if(event.target===this)closeModal('columns-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3>Visible Columns</h3><div class="modal-close" onclick="closeModal('columns-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="col-toggle-list" id="col-toggle-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="resetColumns()">Reset to default</button>
+      <button class="btn primary" onclick="closeModal('columns-modal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Assign Modal -->
+<div class="modal-overlay" id="bulk-assign-modal" onclick="if(event.target===this)closeModal('bulk-assign-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3>Assign to Team Member</h3><div class="modal-close" onclick="closeModal('bulk-assign-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="assignee-list">
+        <div class="assignee-item" onclick="selectAssignee(this,'John Smith','JS','av-js')"><div class="avatar av-js">JS</div><div><div style="font-size:12.5px;font-weight:600">John Smith</div><div style="font-size:11px;color:var(--muted-fg)">Tech Manager</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectAssignee(this,'Sarah Jones','SJ','av-sj')"><div class="avatar av-sj">SJ</div><div><div style="font-size:12.5px;font-weight:600">Sarah Jones</div><div style="font-size:11px;color:var(--muted-fg)">Coordinator</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectAssignee(this,'Mike Davis','MD','av-md')"><div class="avatar av-md">MD</div><div><div style="font-size:12.5px;font-weight:600">Mike Davis</div><div style="font-size:11px;color:var(--muted-fg)">Sales Rep</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectAssignee(this,'Kate Lee','KL','av-kl')"><div class="avatar av-kl">KL</div><div><div style="font-size:12.5px;font-weight:600">Kate Lee</div><div style="font-size:11px;color:var(--muted-fg)">Job Owner</div></div><span class="ms">check_circle</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('bulk-assign-modal')">Cancel</button>
+      <button class="btn primary" id="bulk-assign-confirm" onclick="confirmBulkAssign()" disabled>Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Status Modal -->
+<div class="modal-overlay" id="bulk-status-modal" onclick="if(event.target===this)closeModal('bulk-status-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3>Set Status</h3><div class="modal-close" onclick="closeModal('bulk-status-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-group"><label>New Status</label>
+        <select id="bulk-status-select">
+          <option>Booked</option><option>Estimate Done</option><option>Quoted</option><option>Quote Accepted</option>
+          <option>In Progress</option><option>Completed</option><option>Client Approved</option>
+          <option>Invoiced</option><option>Paid</option><option>Commission Paid</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('bulk-status-modal')">Cancel</button>
+      <button class="btn primary" onclick="confirmBulkStatus()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="delete-confirm-modal" onclick="if(event.target===this)closeModal('delete-confirm-modal')">
+  <div class="modal confirm-dialog">
+    <div class="modal-header"><h3>Delete Job</h3><div class="modal-close" onclick="closeModal('delete-confirm-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body"><p class="confirm-msg" id="delete-confirm-msg">Are you sure you want to delete this job? This action cannot be undone.</p></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('delete-confirm-modal')">Cancel</button>
+      <button class="btn danger" onclick="confirmDelete()"><span class="ms">delete</span>Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Estimate Modal -->
+<div class="modal-overlay" id="estimate-modal" onclick="if(event.target===this)closeModal('estimate-modal')">
+  <div class="modal modal-xl">
+    <div class="modal-header"><h3>Estimate — JOB-0042</h3><div class="modal-close" onclick="closeModal('estimate-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <table class="est-line-table" id="est-table">
+        <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit Price</th><th>Total</th><th></th></tr></thead>
+        <tbody id="est-tbody"></tbody>
+      </table>
+      <button class="btn sm" onclick="addEstimateLine()"><span class="ms">add</span>Add Line</button>
+      <div class="est-total-row">
+        <span>Subtotal:</span><span id="est-subtotal">R 36,200</span>
+        <span>VAT (15%):</span><span id="est-vat">R 5,430</span>
+        <span style="font-size:14px">Total:</span><span id="est-total" style="font-size:14px;color:var(--indigo-600)">R 41,630</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('estimate-modal')">Close</button>
+      <button class="btn" onclick="toast('Estimate exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn primary" onclick="saveEstimate()"><span class="ms">check</span>Save &amp; Finalise</button>
+    </div>
+  </div>
+</div>
+
+<!-- Quote Modal -->
+<div class="modal-overlay" id="quote-modal" onclick="if(event.target===this)closeModal('quote-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3>Quote — QUO-0089</h3><div class="modal-close" onclick="closeModal('quote-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Quote Value</div><div style="font-size:16px;font-weight:700">R 48,500</div></div>
+        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Status</div><div><span class="pill pill-blue">Sent</span></div></div>
+        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Sent Date</div><div style="font-size:13px;font-weight:600">13 Jul 2026</div></div>
+        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Expiry</div><div style="font-size:13px;font-weight:600">27 Jul 2026</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--muted-fg);margin-bottom:12px">Quote includes all labour, materials, and subcontractor costs as per the estimate. Excludes permit fees.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm" onclick="toast('Quote PDF opened')"><span class="ms">picture_as_pdf</span>View PDF</button>
+        <button class="btn sm" onclick="toast('Quote re-sent to client')"><span class="ms">send</span>Re-send to Client</button>
+        <button class="btn sm primary" onclick="acceptQuote()"><span class="ms">check_circle</span>Mark as Accepted</button>
+        <button class="btn sm danger" onclick="toast('Quote marked as rejected')"><span class="ms">cancel</span>Mark as Rejected</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('quote-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice Modal -->
+<div class="modal-overlay" id="invoice-modal" onclick="if(event.target===this)closeModal('invoice-modal')">
+  <div class="modal modal-md">
+    <div class="modal-header"><h3>Create Invoice</h3><div class="modal-close" onclick="closeModal('invoice-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div style="background:var(--amber-50);border:1px solid var(--amber-100);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--amber-700);margin-bottom:14px;display:flex;align-items:center;gap:6px">
+        <span class="ms" style="font-size:16px">warning</span>
+        Job is not yet completed. Invoice will auto-create when job is marked Done. You can create a manual invoice below.
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Invoice Date</label><input type="date" id="inv-date"></div>
+        <div class="form-group"><label>Due Date</label><input type="date" id="inv-due"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (excl. VAT)</label><input type="text" id="inv-amount" value="48500"></div>
+        <div class="form-group"><label>Reference</label><input type="text" id="inv-ref" placeholder="INV-0089"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('invoice-modal')">Cancel</button>
+      <button class="btn primary" onclick="createInvoice()"><span class="ms">receipt_long</span>Create Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- Actual Costs Modal -->
+<div class="modal-overlay" id="actual-costs-modal" onclick="if(event.target===this)closeModal('actual-costs-modal')">
+  <div class="modal modal-xl">
+    <div class="modal-header"><h3>Actual Costs — JOB-0042</h3><div class="modal-close" onclick="closeModal('actual-costs-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <table class="cost-entry-table" id="costs-table">
+        <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Supplier / Resource</th><th>Amount (R)</th><th></th></tr></thead>
+        <tbody id="costs-tbody"></tbody>
+      </table>
+      <button class="btn sm" style="margin-top:8px" onclick="addCostLine()"><span class="ms">add</span>Add Entry</button>
+      <div class="est-total-row" style="margin-top:12px">
+        <span>Total Actual Cost:</span><span id="costs-total" style="color:var(--indigo-600)">R 0</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('actual-costs-modal')">Close</button>
+      <button class="btn primary" onclick="saveActualCosts()"><span class="ms">check</span>Save Costs</button>
+    </div>
+  </div>
+</div>
+
+<!-- Jobcard Modal -->
+<div class="modal-overlay" id="jobcard-modal" onclick="if(event.target===this)closeModal('jobcard-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3>Jobcard — JOB-0042</h3><div class="modal-close" onclick="closeModal('jobcard-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-section-title" style="margin-top:0;border-top:none;padding-top:0">Site Photos</div>
+      <div class="photo-grid" id="photo-grid">
+        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
+        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
+        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
+        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
+      </div>
+      <div class="form-section-title">Work Completed Notes</div>
+      <div class="form-group"><textarea id="jc-notes" placeholder="Describe work completed on site…" style="min-height:80px"></textarea></div>
+      <div class="form-section-title">Client Signature</div>
+      <div class="sig-box" id="sig-box" onclick="captureSignature()">
+        <span id="sig-label">Click to capture client signature</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('jobcard-modal')">Close</button>
+      <button class="btn" onclick="toast('Jobcard exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn primary" onclick="saveJobcard()"><span class="ms">check</span>Save Jobcard</button>
+    </div>
+  </div>
+</div>
+
+<!-- Unlock Modal -->
+<div class="modal-overlay" id="unlock-modal" onclick="if(event.target===this)closeModal('unlock-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3>Override Stage Lock</h3><div class="modal-close" onclick="closeModal('unlock-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <p class="confirm-msg" style="margin-bottom:12px">You are about to override the guard key requirements and manually advance the stage. This should only be used in exceptional circumstances.</p>
+      <div class="form-group"><label>Reason for override *</label><textarea id="unlock-reason" placeholder="Explain why guard keys are being bypassed…" style="min-height:60px"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('unlock-modal')">Cancel</button>
+      <button class="btn danger" onclick="confirmUnlock()"><span class="ms">lock_open</span>Override &amp; Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Job Modal -->
+<div class="modal-overlay" id="edit-job-modal" onclick="if(event.target===this)closeModal('edit-job-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3>Edit Job Info</h3><div class="modal-close" onclick="closeModal('edit-job-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Client</label><select id="ej-client"><option>Acme Corp</option><option>Globex Ltd</option><option>Initech</option><option>Umbrella Inc</option><option>Wayne Enterprises</option></select></div>
+        <div class="form-group"><label>Site</label><input type="text" id="ej-site" value="Main Warehouse"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Job Type</label><select id="ej-type"><option>Electrical</option><option>Mechanical</option><option>Plumbing</option><option>Civil</option><option>Installation</option><option>Maintenance</option></select></div>
+        <div class="form-group"><label>Job Nature</label><select id="ej-nature"><option>To Be Done</option><option>Recurring</option><option>Emergency</option><option>Warranty</option></select></div>
+      </div>
+      <div class="form-row cols-3">
+        <div class="form-group"><label>Priority</label><select id="ej-priority"><option>Normal</option><option>Low</option><option selected>High</option><option>Urgent</option></select></div>
+        <div class="form-group"><label>Requested Date</label><input type="date" id="ej-req-date" value="2026-07-18"></div>
+        <div class="form-group"><label>Client Reference</label><input type="text" id="ej-ref" value="PO-2026-4421"></div>
+      </div>
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Description</label><textarea id="ej-desc" style="min-height:80px">Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.</textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('edit-job-modal')">Cancel</button>
+      <button class="btn primary" onclick="saveJobEdit()"><span class="ms">check</span>Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Team Assign Modal -->
+<div class="modal-overlay" id="team-assign-modal" onclick="if(event.target===this)closeModal('team-assign-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3 id="team-assign-title">Assign Tech Manager</h3><div class="modal-close" onclick="closeModal('team-assign-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="assignee-list" id="team-assign-list">
+        <div class="assignee-item" onclick="selectTeamMember(this,'John Smith','JS','av-js')"><div class="avatar av-js">JS</div><div><div style="font-size:12.5px;font-weight:600">John Smith</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectTeamMember(this,'Sarah Jones','SJ','av-sj')"><div class="avatar av-sj">SJ</div><div><div style="font-size:12.5px;font-weight:600">Sarah Jones</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectTeamMember(this,'Mike Davis','MD','av-md')"><div class="avatar av-md">MD</div><div><div style="font-size:12.5px;font-weight:600">Mike Davis</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectTeamMember(this,'Kate Lee','KL','av-kl')"><div class="avatar av-kl">KL</div><div><div style="font-size:12.5px;font-weight:600">Kate Lee</div></div><span class="ms">check_circle</span></div>
+        <div class="assignee-item" onclick="selectTeamMember(this,'','','')"><div class="avatar" style="background:var(--slate-300)">—</div><div><div style="font-size:12.5px;font-weight:600;color:var(--muted-fg)">Unassign</div></div><span class="ms">check_circle</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('team-assign-modal')">Cancel</button>
+      <button class="btn primary" id="team-assign-confirm" onclick="confirmTeamAssign()" disabled>Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Comm Modal -->
+<div class="modal-overlay" id="new-comm-modal" onclick="if(event.target===this)closeModal('new-comm-modal')">
+  <div class="modal modal-md">
+    <div class="modal-header"><h3>New Message</h3><div class="modal-close" onclick="closeModal('new-comm-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Subject</label><input type="text" id="nc-subject" placeholder="e.g. Site access query"></div>
+      </div>
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Message</label><textarea id="nc-body" placeholder="Type your message…" style="min-height:100px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('new-comm-modal')">Cancel</button>
+      <button class="btn primary" onclick="sendNewComm()"><span class="ms">send</span>Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+const JOBS = [
+  {num:'JOB-0042',client:'Acme Corp',site:'Main Warehouse',desc:'Electrical Rewiring — DB replacement & conduit runs',priority:'High',status:'In Progress',finance:'Quoted',team:['JS','SJ'],value:48500,date:'12 Jul 2026',assignee:'JS',type:'Electrical'},
+  {num:'JOB-0041',client:'Globex Ltd',site:'Head Office',desc:'HVAC Maintenance — quarterly service all units',priority:'Normal',status:'Completed',finance:'Invoiced',team:['SJ'],value:12200,date:'10 Jul 2026',assignee:'SJ',type:'Maintenance'},
+  {num:'JOB-0040',client:'Initech',site:'Server Room',desc:'UPS Installation — 20kVA system with bypass',priority:'Urgent',status:'Quoted',finance:'Quoted',team:['MD'],value:95000,date:'08 Jul 2026',assignee:'MD',type:'Installation'},
+  {num:'JOB-0039',client:'Umbrella Inc',site:'Factory Floor A',desc:'Fire Suppression — FM200 system inspection & recharge',priority:'High',status:'New',finance:'Estimated',team:['JS'],value:28400,date:'07 Jul 2026',assignee:'JS',type:'Maintenance'},
+  {num:'JOB-0038',client:'Wayne Enterprises',site:'R&D Lab',desc:'Structured Cabling — Cat6A full floor installation',priority:'Normal',status:'In Progress',finance:'Quoted',team:['SJ','MD'],value:67800,date:'05 Jul 2026',assignee:'SJ',type:'Installation'},
+  {num:'JOB-0037',client:'Acme Corp',site:'Dispatch Bay',desc:'Generator Service — 500kVA annual maintenance',priority:'Normal',status:'Completed',finance:'Paid',team:['MD'],value:18500,date:'03 Jul 2026',assignee:'MD',type:'Maintenance'},
+  {num:'JOB-0036',client:'Globex Ltd',site:'Warehouse B',desc:'Solar PV — 50kW rooftop installation',priority:'High',status:'In Progress',finance:'Quoted',team:['JS'],value:320000,date:'01 Jul 2026',assignee:'JS',type:'Installation'},
+  {num:'JOB-0035',client:'Initech',site:'Data Centre',desc:'Cooling Upgrade — precision AC units ×3',priority:'Urgent',status:'Quoted',finance:'Quoted',team:['SJ'],value:145000,date:'28 Jun 2026',assignee:'SJ',type:'Installation'},
+  {num:'JOB-0034',client:'Umbrella Inc',site:'Security Post',desc:'Access Control — biometric readers ×12',priority:'Normal',status:'Completed',finance:'Invoiced',team:['MD'],value:54200,date:'25 Jun 2026',assignee:'MD',type:'Installation'},
+  {num:'JOB-0033',client:'Wayne Enterprises',site:'Boardroom',desc:'AV System — 4K display wall & conferencing',priority:'Normal',status:'New',finance:'Estimated',team:['JS'],value:88000,date:'23 Jun 2026',assignee:'JS',type:'Installation'},
+  {num:'JOB-0032',client:'Acme Corp',site:'Parking Structure',desc:'LED Lighting Upgrade — 240 fittings',priority:'Low',status:'Completed',finance:'Paid',team:['SJ'],value:42600,date:'20 Jun 2026',assignee:'SJ',type:'Installation'},
+  {num:'JOB-0031',client:'Globex Ltd',site:'Canteen',desc:'Plumbing — hot water system replacement',priority:'Normal',status:'In Progress',finance:'Quoted',team:['MD'],value:22100,date:'18 Jun 2026',assignee:'MD',type:'Repair'},
+  {num:'JOB-0030',client:'Initech',site:'Office Block C',desc:'Painting — full interior repaint 3 floors',priority:'Low',status:'Quoted',finance:'Quoted',team:['JS'],value:35000,date:'15 Jun 2026',assignee:'JS',type:'Other'},
+  {num:'JOB-0029',client:'Umbrella Inc',site:'Cold Storage',desc:'Refrigeration — compressor overhaul',priority:'High',status:'Completed',finance:'Invoiced',team:['SJ'],value:61400,date:'12 Jun 2026',assignee:'SJ',type:'Repair'},
+  {num:'JOB-0028',client:'Wayne Enterprises',site:'Gym',desc:'Flooring — rubber gym tiles full area',priority:'Low',status:'New',finance:'Estimated',team:['MD'],value:19800,date:'10 Jun 2026',assignee:'MD',type:'Other'},
+  {num:'JOB-0027',client:'Acme Corp',site:'Roof',desc:'Waterproofing — torch-on membrane full roof',priority:'High',status:'In Progress',finance:'Quoted',team:['JS'],value:78000,date:'08 Jun 2026',assignee:'JS',type:'Maintenance'},
+  {num:'JOB-0026',client:'Globex Ltd',site:'Substation',desc:'Transformer Replacement — 500kVA unit',priority:'Urgent',status:'Completed',finance:'Paid',team:['SJ'],value:210000,date:'05 Jun 2026',assignee:'SJ',type:'Electrical'},
+  {num:'JOB-0025',client:'Initech',site:'Entrance',desc:'Boom Gate — automated vehicle access system',priority:'Normal',status:'Quoted',finance:'Quoted',team:['MD'],value:44500,date:'02 Jun 2026',assignee:'MD',type:'Installation'},
+  {num:'JOB-0024',client:'Umbrella Inc',site:'Lab 3',desc:'Fume Hood Installation — 4 units with ducting',priority:'Normal',status:'In Progress',finance:'Quoted',team:['JS'],value:33200,date:'30 May 2026',assignee:'JS',type:'Installation'},
+  {num:'JOB-0023',client:'Wayne Enterprises',site:'Basement',desc:'Sump Pump — dual pump installation with alarm',priority:'Normal',status:'Completed',finance:'Invoiced',team:['SJ'],value:28900,date:'28 May 2026',assignee:'SJ',type:'Repair'},
+  {num:'JOB-0022',client:'Acme Corp',site:'Canteen',desc:'Kitchen Equipment — commercial hood & suppression',priority:'High',status:'New',finance:'Estimated',team:['MD'],value:52000,date:'25 May 2026',assignee:'MD',type:'Installation'},
+  {num:'JOB-0021',client:'Globex Ltd',site:'Loading Bay',desc:'Dock Levellers — 4 units hydraulic',priority:'Normal',status:'In Progress',finance:'Quoted',team:['JS'],value:96000,date:'22 May 2026',assignee:'JS',type:'Installation'},
+  {num:'JOB-0020',client:'Initech',site:'Comms Room',desc:'Fibre Termination — 48-port patch panel',priority:'Low',status:'Completed',finance:'Paid',team:['SJ'],value:14200,date:'20 May 2026',assignee:'SJ',type:'Installation'},
+  {num:'JOB-0019',client:'Umbrella Inc',site:'Roof Plant Room',desc:'Chiller Service — 200TR unit annual maintenance',priority:'Normal',status:'Quoted',finance:'Quoted',team:['MD'],value:38500,date:'18 May 2026',assignee:'MD',type:'Maintenance'},
+];
+
+const PIPELINE_STAGES = ['Booked','Estimated','Quoted','Accepted','In Progress','Completed','Client Approved','Invoiced','Paid','Commission Paid'];
+const GUARD_KEYS = {
+  'In Progress': [{key:'Estimate Finalized',met:true},{key:'Quote Ready',met:true},{key:'Client Contact',met:true},{key:'Quote Approved',met:true},{key:'Jobcard Signed',met:false},{key:'Invoice Ready',met:false}],
+  'Completed':   [{key:'Jobcard Signed',met:false},{key:'Invoice Ready',met:false}],
+  'Invoiced':    [{key:'Invoice Ready',met:false}],
+  'Paid':        [{key:'Payment Confirmed',met:false}],
+};
+const GUIDANCE = {
+  'Booked':          {label:'Current Stage — Booked',msg:'Create an estimate to proceed.',action:'Open Estimate'},
+  'Estimated':       {label:'Current Stage — Estimated',msg:'Send the quote to the client for approval.',action:'Open Quote'},
+  'Quoted':          {label:'Current Stage — Quoted',msg:'Waiting for client to approve the quote.',action:'Re-send Quote'},
+  'Accepted':        {label:'Current Stage — Quote Accepted',msg:'Quote accepted. Mark job as In Progress to begin work.',action:'Mark WIP'},
+  'In Progress':     {label:'Current Stage — In Progress',msg:'Complete the jobcard and get it signed before marking the job done. Invoice will be auto-created from the quote.',action:'Open Jobcard'},
+  'Completed':       {label:'Current Stage — Completed',msg:'Job completed. Awaiting client approval before invoicing.',action:'Request Approval'},
+  'Client Approved': {label:'Current Stage — Client Approved',msg:'Client has approved. Create and send the invoice.',action:'Create Invoice'},
+  'Invoiced':        {label:'Current Stage — Invoiced',msg:'Invoice sent. Awaiting payment.',action:'View Invoice'},
+  'Paid':            {label:'Current Stage — Paid',msg:'Payment received. Record commission if applicable.',action:'Record Commission'},
+  'Commission Paid': {label:'Stage Complete',msg:'All stages complete. Job is fully closed.',action:'View Summary'},
+};
+
+const TEAM_ROLES = ['Tech Manager','Coordinator','Sales Rep','Job Owner'];
+const TEAM_DATA = [
+  {role:'Tech Manager',name:'John Smith',initials:'JS',cls:'av-js'},
+  {role:'Coordinator',name:'Sarah Jones',initials:'SJ',cls:'av-sj'},
+  {role:'Sales Rep',name:'Mike Davis',initials:'MD',cls:'av-md'},
+  {role:'Job Owner',name:'',initials:'—',cls:''},
+];
+
+const EST_LINES = [
+  {desc:'DB Board 3-phase 400A',cat:'Materials',qty:1,unit:'ea',price:8500},
+  {desc:'Sub-distribution boards (×3)',cat:'Materials',qty:3,unit:'ea',price:2200},
+  {desc:'3-phase isolators (×6)',cat:'Materials',qty:6,unit:'ea',price:450},
+  {desc:'Conduit 20mm (×50m)',cat:'Materials',qty:50,unit:'m',price:45},
+  {desc:'Cable NYY 4mm (×200m)',cat:'Materials',qty:200,unit:'m',price:38},
+  {desc:'Cable trays & brackets',cat:'Materials',qty:1,unit:'lot',price:3200},
+  {desc:'Electrician (senior) 40h',cat:'Labour',qty:40,unit:'h',price:145},
+  {desc:'Electrician (junior) 30h',cat:'Labour',qty:30,unit:'h',price:95},
+  {desc:'Apprentice 20h',cat:'Labour',qty:20,unit:'h',price:55},
+  {desc:'Inspection & COC',cat:'Subcontractor',qty:1,unit:'ea',price:1800},
+  {desc:'Transport & fuel',cat:'Travel',qty:1,unit:'lot',price:600},
+  {desc:'Consumables & misc',cat:'Materials',qty:1,unit:'lot',price:950},
+];
+
+const COMM_THREADS = [
+  {id:1,subject:'Site access query — DB room locked',from:'Acme Corp (portal)',date:'14 Jul 2026',status:'pending',messages:[{from:'Acme Corp',time:'14 Jul 2026 09:15',body:'Hi, the DB room will be locked on Tuesday. Please contact John at 082-555-1234 to arrange access. He will be on site from 07:00.'},{from:'You',time:'14 Jul 2026 10:30',body:'Thanks for the heads up. We will contact John on Monday to confirm the access time. Our team will be on site at 07:30.'}]},
+  {id:2,subject:'COC certificate — client request',from:'Acme Corp (portal)',date:'13 Jul 2026',status:'replied',messages:[{from:'Acme Corp',time:'13 Jul 2026 14:00',body:'Can you please confirm when the COC will be issued? Our insurance requires it within 30 days of completion.'}]},
+  {id:3,subject:'Scope change — additional sub-board on level 2',from:'Acme Corp (portal)',date:'11 Jul 2026',status:'pending',messages:[{from:'Acme Corp',time:'11 Jul 2026 11:00',body:'We have identified a need for an additional sub-distribution board on level 2 of the warehouse. Can you provide a variation quote for this?'}]},
+];
+
+const TIMELINE_ITEMS = [
+  {type:'status',icon:'label',title:'Status changed to In Progress',sub:'Quote accepted by Acme Corp',time:'12 Jul 2026 08:00',email:null},
+  {type:'email',icon:'email',title:'Quote sent to client',sub:'QUO-0089 sent to accounts@acmecorp.co.za',time:'11 Jul 2026 14:30',email:{from:'You → accounts@acmecorp.co.za',body:'Dear Acme Corp,\n\nPlease find attached our quotation QUO-0089 for the electrical rewiring of the Main Warehouse DB room.\n\nQuote value: R 48,500 (excl. VAT)\nValidity: 14 days\n\nPlease do not hesitate to contact us with any queries.\n\nKind regards,\nBird Pulse Team'}},
+  {type:'doc',icon:'calculate',title:'Estimate created',sub:'12 line items · R 36,200',time:'10 Jul 2026 16:00',email:null},
+  {type:'status',icon:'label',title:'Job created — Booked',sub:'Created by John Smith',time:'10 Jul 2026 09:00',email:null},
+  {type:'email',icon:'email',title:'Confirmation email sent to client',sub:'Job booking confirmation sent',time:'10 Jul 2026 09:05',email:{from:'You → accounts@acmecorp.co.za',body:'Dear Acme Corp,\n\nThis email confirms that we have received your job request and have booked it into our system as JOB-0042.\n\nOur team will be in touch shortly to arrange site access and confirm the schedule.\n\nKind regards,\nBird Pulse Team'}},
+  {type:'note',icon:'note',title:'Internal note added',sub:'John Smith: Client prefers morning start times',time:'09 Jul 2026 17:00',email:null},
+];
+
+const HSE_STAGES = ['Draft','Assembling','Internal Review','Awaiting Signatures','With Client','Approved'];
+const RISK_ROWS = [
+  {hazard:'Electrical shock',activity:'DB replacement',l:2,c:5,control:'Isolate supply, test dead, PPE'},
+  {hazard:'Working at height',activity:'Conduit runs',l:2,c:4,control:'Scaffold, harness, spotter'},
+  {hazard:'Fire / arc flash',activity:'Live terminations',l:1,c:5,control:'Arc-rated PPE, fire extinguisher on site'},
+  {hazard:'Manual handling',activity:'Cable pulling',l:3,c:2,control:'Team lift, cable rollers'},
+];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let currentPage = 1;
+const PAGE_SIZE = 12;
+let filteredJobs = [...JOBS];
+let selectedJobs = new Set();
+let currentView = 'list';
+let filterSidebarOpen = true;
+let quickFilters = {mine:false,unassigned:false,active:false,week:false,overdue:false};
+let visibleCols = {num:true,client:true,desc:true,type:true,priority:true,status:true,finance:true,team:true,value:true,date:true};
+let currentJobNum = 'JOB-0042';
+let currentStageIdx = 4; // In Progress
+let autoTransitions = true;
+let jobcardSigned = false;
+let photoCount = 0;
+let actualCostEntries = [];
+let hseStageIdx = 1; // Assembling
+let teamData = JSON.parse(JSON.stringify(TEAM_DATA));
+let bulkAssignTarget = null;
+let teamAssignRole = null;
+let teamAssignSelected = null;
+let commThreads = JSON.parse(JSON.stringify(COMM_THREADS));
+let timelineItems = JSON.parse(JSON.stringify(TIMELINE_ITEMS));
+let estLines = JSON.parse(JSON.stringify(EST_LINES));
+
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+function fmt(n){return 'R '+n.toLocaleString('en-ZA')}
+function toast(msg,type=''){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className='toast '+(type||'');
+  t.innerHTML=`<span class="ms">${type==='success'?'check_circle':type==='error'?'error':'info'}</span>${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300)},3000);
+}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function statusPill(s){
+  const map={'New':'pill-slate','Booked':'pill-blue','Estimated':'pill-slate','Quoted':'pill-blue','Quote Accepted':'pill-purple','In Progress':'pill-purple','Completed':'pill-green','Client Approved':'pill-teal','Invoiced':'pill-amber','Paid':'pill-green','Commission Paid':'pill-green'};
+  return `<span class="pill ${map[s]||'pill-slate'}">${s}</span>`;
+}
+function financePill(f){
+  const map={'Estimated':'pill-slate','Quoted':'pill-blue','Invoiced':'pill-amber','Paid':'pill-green'};
+  return `<span class="pill ${map[f]||'pill-slate'}">${f}</span>`;
+}
+function priorityPill(p){
+  const map={'Urgent':'pill-red','High':'pill-orange','Normal':'pill-blue','Low':'pill-slate'};
+  return `<span class="pill ${map[p]||'pill-slate'}">${p}</span>`;
+}
+function avatarHtml(code){
+  const map={JS:'av-js',SJ:'av-sj',MD:'av-md',KL:'av-kl'};
+  return `<div class="avatar ${map[code]||''}" style="margin-left:-4px">${code}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIST PAGE
+// ═══════════════════════════════════════════════════════════
+function showList(){
+  document.getElementById('page-list').style.display='flex';
+  document.getElementById('page-detail').style.display='none';
+  renderJobs();
+}
+function toggleFilterSidebar(){
+  filterSidebarOpen=!filterSidebarOpen;
+  document.getElementById('filter-sidebar').classList.toggle('hidden',!filterSidebarOpen);
+  document.getElementById('filter-btn').classList.toggle('active',filterSidebarOpen);
+}
+function toggleQuick(key){
+  quickFilters[key]=!quickFilters[key];
+  document.getElementById('ftog-'+key).classList.toggle('active',quickFilters[key]);
+  const fs=document.getElementById('fs-'+key);
+  if(fs)fs.classList.toggle('active',quickFilters[key]);
+  applyFilters();
+}
+function applyFilters(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  const statuses=[];
+  if(document.getElementById('s-booked').checked)statuses.push('Booked');
+  if(document.getElementById('s-estimate').checked)statuses.push('Estimated','New');
+  if(document.getElementById('s-quoted').checked)statuses.push('Quoted');
+  if(document.getElementById('s-accepted').checked)statuses.push('Quote Accepted');
+  if(document.getElementById('s-inprogress').checked)statuses.push('In Progress');
+  if(document.getElementById('s-completed').checked)statuses.push('Completed');
+  if(document.getElementById('s-invoiced').checked)statuses.push('Invoiced');
+  if(document.getElementById('s-paid').checked)statuses.push('Paid');
+  const priorities=[];
+  if(document.getElementById('p-urgent').checked)priorities.push('Urgent');
+  if(document.getElementById('p-high').checked)priorities.push('High');
+  if(document.getElementById('p-normal').checked)priorities.push('Normal');
+  if(document.getElementById('p-low').checked)priorities.push('Low');
+  const clients=[];
+  if(document.getElementById('c-acme').checked)clients.push('Acme Corp');
+  if(document.getElementById('c-globex').checked)clients.push('Globex Ltd');
+  if(document.getElementById('c-initech').checked)clients.push('Initech');
+  if(document.getElementById('c-umbrella').checked)clients.push('Umbrella Inc');
+  if(document.getElementById('c-wayne').checked)clients.push('Wayne Enterprises');
+  const assignees=[];
+  if(document.getElementById('a-js').checked)assignees.push('JS');
+  if(document.getElementById('a-sj').checked)assignees.push('SJ');
+  if(document.getElementById('a-md').checked)assignees.push('MD');
+  if(document.getElementById('a-kl').checked)assignees.push('KL');
+  filteredJobs=JOBS.filter(j=>{
+    if(q&&!`${j.num} ${j.client} ${j.site} ${j.desc}`.toLowerCase().includes(q))return false;
+    if(!statuses.includes(j.status))return false;
+    if(!priorities.includes(j.priority))return false;
+    if(!clients.includes(j.client))return false;
+    if(!j.team.some(t=>assignees.includes(t)))return false;
+    if(quickFilters.mine&&j.assignee!=='JS')return false;
+    if(quickFilters.unassigned&&j.team.length>0)return false;
+    if(quickFilters.active&&!['In Progress','Quoted','Booked','Estimated'].includes(j.status))return false;
+    return true;
+  });
+  currentPage=1;
+  renderJobs();
+  renderActiveChips();
+}
+function renderActiveChips(){
+  const c=document.getElementById('active-chips');
+  const chips=[];
+  if(quickFilters.mine)chips.push({label:'My jobs',key:'mine'});
+  if(quickFilters.unassigned)chips.push({label:'Unassigned',key:'unassigned'});
+  if(quickFilters.active)chips.push({label:'Active only',key:'active'});
+  if(quickFilters.week)chips.push({label:'This week',key:'week'});
+  if(quickFilters.overdue)chips.push({label:'Overdue',key:'overdue'});
+  c.innerHTML=chips.map(ch=>`<div class="filter-chip-active">${ch.label}<span class="ms" onclick="toggleQuick('${ch.key}')">close</span></div>`).join('');
+}
+function renderJobs(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const page=filteredJobs.slice(start,start+PAGE_SIZE);
+  const tbody=document.getElementById('jobs-tbody');
+  tbody.innerHTML=page.map(j=>`
+    <tr onclick="openDetail('${j.num}')" class="${selectedJobs.has(j.num)?'selected':''}">
+      <td onclick="event.stopPropagation()"><input type="checkbox" style="accent-color:var(--indigo-600)" ${selectedJobs.has(j.num)?'checked':''} onchange="toggleSelect('${j.num}',this)"></td>
+      ${visibleCols.num?`<td><div class="job-num">${j.num}</div></td>`:''}
+      ${visibleCols.client?`<td><div class="job-client">${j.client}</div><div class="job-site">${j.site}</div></td>`:''}
+      ${visibleCols.desc?`<td><div class="job-desc">${j.desc}</div></td>`:''}
+      ${visibleCols.type?`<td style="color:var(--muted-fg);font-size:12px">${j.type||'—'}</td>`:''}
+      ${visibleCols.priority?`<td>${priorityPill(j.priority)}</td>`:''}
+      ${visibleCols.status?`<td>${statusPill(j.status)}</td>`:''}
+      ${visibleCols.finance?`<td>${financePill(j.finance)}</td>`:''}
+      ${visibleCols.team?`<td><div style="display:flex;gap:2px">${j.team.map(avatarHtml).join('')}</div></td>`:''}
+      ${visibleCols.value?`<td style="font-weight:600;font-variant-numeric:tabular-nums">${fmt(j.value)}</td>`:''}
+      ${visibleCols.date?`<td style="color:var(--muted-fg);font-size:12px">${j.date}</td>`:''}
+      <td onclick="event.stopPropagation()"><button class="btn ghost" style="height:24px;width:24px;padding:0" onclick="openJobMenu(event,'${j.num}')"><span class="ms" style="font-size:16px">more_vert</span></button></td>
+    </tr>`).join('');
+  document.getElementById('jobs-count').textContent=filteredJobs.length+' Jobs';
+  const total=filteredJobs.length;
+  document.getElementById('pagination-info').textContent=`Showing ${start+1}–${Math.min(start+PAGE_SIZE,total)} of ${total}`;
+  updateSelectAll();
+  if(!document.querySelector('#jobs-table .col-resize-handle'))initColResize('jobs-table');
+}
+function toggleSelect(num,cb){
+  if(cb.checked)selectedJobs.add(num);else selectedJobs.delete(num);
+  const row=cb.closest('tr');
+  row.classList.toggle('selected',cb.checked);
+  updateBulkBar();
+  updateSelectAll();
+}
+function toggleSelectAll(cb){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const page=filteredJobs.slice(start,start+PAGE_SIZE);
+  page.forEach(j=>{if(cb.checked)selectedJobs.add(j.num);else selectedJobs.delete(j.num);});
+  renderJobs();
+  updateBulkBar();
+}
+function updateSelectAll(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const page=filteredJobs.slice(start,start+PAGE_SIZE);
+  const sa=document.getElementById('select-all');
+  if(sa)sa.checked=page.length>0&&page.every(j=>selectedJobs.has(j.num));
+}
+function updateBulkBar(){
+  const bar=document.getElementById('bulk-bar');
+  const n=selectedJobs.size;
+  bar.classList.toggle('visible',n>0);
+  document.getElementById('bulk-count').textContent=n+' selected';
+}
+function clearSelection(){selectedJobs.clear();renderJobs();updateBulkBar();}
+function changePage(d){goPage(currentPage+d);}
+function goPage(p){
+  const max=Math.ceil(filteredJobs.length/PAGE_SIZE);
+  if(p<1||p>max)return;
+  currentPage=p;
+  [1,2,3].forEach(i=>{const b=document.getElementById('pg-'+i);if(b)b.classList.toggle('active',i===p);});
+  renderJobs();
+}
+function setView(v){
+  currentView=v;
+  document.getElementById('vbtn-list').classList.toggle('active',v==='list');
+  document.getElementById('vbtn-board').classList.toggle('active',v==='board');
+  document.getElementById('table-wrap').style.display=v==='list'?'flex':'none';
+  const bw=document.getElementById('board-wrap');
+  bw.classList.toggle('visible',v==='board');
+  if(v==='board')renderBoard();
+}
+function renderBoard(){
+  const statuses=['New','Booked','Quoted','In Progress','Completed','Invoiced','Paid'];
+  const bw=document.getElementById('board-wrap');
+  bw.innerHTML=statuses.map(s=>{
+    const jobs=filteredJobs.filter(j=>j.status===s);
+    return `<div class="board-col">
+      <div class="board-col-header"><span style="width:8px;height:8px;border-radius:50%;background:var(--indigo-400);display:inline-block"></span>${s}<span class="count">${jobs.length}</span></div>
+      ${jobs.map(j=>`<div class="board-card" onclick="openDetail('${j.num}')">
+        <div class="board-card-num">${j.num}</div>
+        <div class="board-card-client">${j.client}</div>
+        <div class="board-card-desc">${j.desc}</div>
+        <div class="board-card-footer">${priorityPill(j.priority)}<span style="margin-left:auto;font-size:11.5px;font-weight:600">${fmt(j.value)}</span></div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+function openJobMenu(e,num){
+  e.stopPropagation();
+  toast(`Actions for ${num}: Edit | Duplicate | Delete`);
+}
+function exportCSV(){
+  const headers=['Job #','Client','Site','Description','Priority','Status','Finance','Value','Date'];
+  const rows=filteredJobs.map(j=>[j.num,j.client,j.site,`"${j.desc}"`,j.priority,j.status,j.finance,j.value,j.date]);
+  const csv=[headers.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='jobs-export.csv';a.click();
+  toast('Exported '+filteredJobs.length+' jobs','success');
+}
+function exportSelected(){
+  const jobs=JOBS.filter(j=>selectedJobs.has(j.num));
+  const headers=['Job #','Client','Site','Description','Priority','Status','Finance','Value','Date'];
+  const rows=jobs.map(j=>[j.num,j.client,j.site,`"${j.desc}"`,j.priority,j.status,j.finance,j.value,j.date]);
+  const csv=[headers.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`jobs-selected-${jobs.length}.csv`;a.click();
+  toast('Exported '+jobs.length+' selected jobs','success');
+}
+function bulkDelete(){
+  document.getElementById('delete-confirm-msg').textContent=`Delete ${selectedJobs.size} selected job(s)? This cannot be undone.`;
+  openModal('delete-confirm-modal');
+}
+function confirmDelete(){
+  closeModal('delete-confirm-modal');
+  const n=selectedJobs.size;
+  selectedJobs.forEach(num=>{const i=JOBS.findIndex(j=>j.num===num);if(i>-1)JOBS.splice(i,1);});
+  selectedJobs.clear();
+  applyFilters();
+  updateBulkBar();
+  toast(`${n} job(s) deleted`,'success');
+}
+function openBulkAssign(){openModal('bulk-assign-modal');}
+function selectAssignee(el,name,init,cls){
+  document.querySelectorAll('#bulk-assign-modal .assignee-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  bulkAssignTarget={name,init,cls};
+  document.getElementById('bulk-assign-confirm').disabled=false;
+}
+function confirmBulkAssign(){
+  closeModal('bulk-assign-modal');
+  if(!bulkAssignTarget)return;
+  selectedJobs.forEach(num=>{const j=JOBS.find(j=>j.num===num);if(j){j.assignee=bulkAssignTarget.init;if(!j.team.includes(bulkAssignTarget.init))j.team.push(bulkAssignTarget.init);}});
+  renderJobs();
+  toast(`Assigned ${selectedJobs.size} job(s) to ${bulkAssignTarget.name}`,'success');
+  bulkAssignTarget=null;
+  document.getElementById('bulk-assign-confirm').disabled=true;
+}
+function openBulkStatus(){openModal('bulk-status-modal');}
+function confirmBulkStatus(){
+  const s=document.getElementById('bulk-status-select').value;
+  closeModal('bulk-status-modal');
+  selectedJobs.forEach(num=>{const j=JOBS.find(j=>j.num===num);if(j)j.status=s;});
+  renderJobs();
+  toast(`Updated ${selectedJobs.size} job(s) to "${s}"`,'success');
+}
+function openNewJobModal(){openModal('new-job-modal');}
+function submitNewJob(){
+  const desc=document.getElementById('nj-desc').value.trim();
+  if(!desc){toast('Please enter a description','error');return;}
+  const newJob={
+    num:'JOB-'+(1000+JOBS.length+1),
+    client:document.getElementById('nj-client').value,
+    site:document.getElementById('nj-site').value,
+    desc,
+    priority:document.getElementById('nj-priority').value,
+    status:'Booked',finance:'Estimated',
+    team:['JS'],value:0,
+    date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    assignee:'JS'
+  };
+  JOBS.unshift(newJob);
+  closeModal('new-job-modal');
+  applyFilters();
+  toast('Job '+newJob.num+' created','success');
+}
+function openColumnsModal(){
+  const list=document.getElementById('col-toggle-list');
+  const cols=[
+    {key:'num',label:'Job #',locked:true},
+    {key:'client',label:'Client / Site',locked:true},
+    {key:'desc',label:'Description',locked:false},
+    {key:'type',label:'Type',locked:false},
+    {key:'priority',label:'Priority',locked:false},
+    {key:'status',label:'Status',locked:false},
+    {key:'finance',label:'Finance',locked:false},
+    {key:'team',label:'Team',locked:false},
+    {key:'value',label:'Value',locked:false},
+    {key:'date',label:'Date',locked:false},
+  ];
+  list.innerHTML=cols.map(c=>`
+    <div class="col-toggle-item ${c.locked?'locked':''}">
+      <span class="col-toggle-label">${c.label}${c.locked?' 🔒':''}</span>
+      <label class="toggle-switch">
+        <input type="checkbox" ${visibleCols[c.key]?'checked':''} ${c.locked?'disabled':''} onchange="toggleCol('${c.key}',this)">
+        <div class="toggle-track"></div><div class="toggle-thumb"></div>
+      </label>
+    </div>`).join('');
+  openModal('columns-modal');
+}
+function toggleCol(key,cb){
+  visibleCols[key]=cb.checked;
+  renderJobs();
+}
+function resetColumns(){
+  Object.keys(visibleCols).forEach(k=>visibleCols[k]=true);
+  openColumnsModal();
+  renderJobs();
+}
+
+// ═══════════════════════════════════════════════════════════
+// DETAIL PAGE
+// ═══════════════════════════════════════════════════════════
+function openDetail(num){
+  currentJobNum=num;
+  const j=JOBS.find(j=>j.num===num)||JOBS[0];
+  document.getElementById('page-list').style.display='none';
+  document.getElementById('page-detail').style.display='flex';
+  // Breadcrumb
+  document.getElementById('d-breadcrumb').textContent=j.num;
+  // Header
+  document.getElementById('d-title').innerHTML=`${j.num} — ${j.desc.split(' — ')[0]}`;
+  document.getElementById('d-status-pill').innerHTML=statusPill(j.status);
+  document.getElementById('d-finance-pill').innerHTML=financePill(j.finance);
+  document.getElementById('d-priority-pill').innerHTML=priorityPill(j.priority);
+  document.getElementById('d-client').textContent=j.client;
+  document.getElementById('d-site').textContent=j.site;
+  document.getElementById('d-type').textContent='Electrical';
+  document.getElementById('d-date').textContent=j.date;
+  document.getElementById('d-value').textContent=fmt(j.value);
+  // Job info card
+  document.getElementById('ji-client').textContent=j.client;
+  document.getElementById('ji-site').textContent=j.site;
+  document.getElementById('ji-type').textContent='Electrical';
+  document.getElementById('ji-nature').textContent='To Be Done';
+  document.getElementById('ji-created').textContent=j.date;
+  document.getElementById('ji-req-date').textContent='18 Jul 2026';
+  document.getElementById('ji-ref').textContent='PO-2026-4421';
+  document.getElementById('ji-priority').innerHTML=priorityPill(j.priority);
+  document.getElementById('ji-desc').textContent=j.desc.includes('—')?'Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.':j.desc;
+  // Set stage
+  currentStageIdx=PIPELINE_STAGES.indexOf(j.status);
+  if(currentStageIdx<0)currentStageIdx=4;
+  renderPipeline();
+  renderGuardKeys();
+  renderGuidance();
+  renderTeam();
+  renderHSEPipeline();
+  renderRiskTable();
+  renderCommThreads();
+  renderTimeline();
+  renderEstimateTable();
+  // Switch to overview tab
+  switchTab('overview',document.querySelector('#detail-tabs .tab-btn'));
+  setTimeout(()=>{initColResize('var-table');initColResize('risk-table');},100);
+}
+function renderPipeline(){
+  const bar=document.getElementById('pipeline-bar');
+  bar.innerHTML=PIPELINE_STAGES.map((s,i)=>{
+    let cls='';
+    if(i<currentStageIdx)cls='done';
+    else if(i===currentStageIdx)cls='active';
+    const icon=i<currentStageIdx?'check_circle':i===currentStageIdx?'radio_button_checked':'radio_button_unchecked';
+    return `<div class="pipe-step">
+      <div class="pipe-node ${cls}" onclick="clickPipelineStage(${i})"><span class="ms">${icon}</span>${s}</div>
+      ${i<PIPELINE_STAGES.length-1?'<span class="pipe-arrow ms">chevron_right</span>':''}
+    </div>`;
+  }).join('');
+}
+function clickPipelineStage(idx){
+  if(idx===currentStageIdx)return;
+  if(idx>currentStageIdx+1){toast('Cannot skip stages. Advance one at a time.','error');return;}
+  if(idx<currentStageIdx){
+    if(!confirm(`Revert to "${PIPELINE_STAGES[idx]}"? This will move the job back.`))return;
+    currentStageIdx=idx;
+    updateJobStatus();
+    return;
+  }
+  // Advance
+  const guards=GUARD_KEYS[PIPELINE_STAGES[currentStageIdx]]||[];
+  const blocked=guards.filter(g=>!g.met);
+  if(blocked.length>0&&!autoTransitions){
+    toast(`Blocked by: ${blocked.map(g=>g.key).join(', ')}. Use Unlock to override.`,'error');
+    return;
+  }
+  currentStageIdx=idx;
+  updateJobStatus();
+}
+function updateJobStatus(){
+  const j=JOBS.find(j=>j.num===currentJobNum);
+  if(j)j.status=PIPELINE_STAGES[currentStageIdx];
+  renderPipeline();
+  renderGuardKeys();
+  renderGuidance();
+  document.getElementById('d-status-pill').innerHTML=statusPill(PIPELINE_STAGES[currentStageIdx]);
+  toast(`Stage advanced to "${PIPELINE_STAGES[currentStageIdx]}"`,'success');
+  addTimelineItem('status','label',`Status changed to ${PIPELINE_STAGES[currentStageIdx]}`,'Updated manually',new Date().toLocaleString());
+}
+function renderGuardKeys(){
+  const stage=PIPELINE_STAGES[currentStageIdx];
+  const guards=GUARD_KEYS[stage]||[];
+  const display=document.getElementById('guard-keys-display');
+  if(guards.length===0){display.innerHTML='<span style="font-size:11px;color:var(--muted-fg)">No guard keys for this stage</span>';return;}
+  display.innerHTML=guards.map(g=>`<span class="guard-key ${g.met?'met':'blocked'}"><span class="ms">${g.met?'check':'close'}</span>${g.key}</span>`).join(' ');
+  const btnDone=document.getElementById('btn-done');
+  const allMet=guards.every(g=>g.met);
+  btnDone.disabled=!allMet;
+  btnDone.title=allMet?'':'Requires: '+guards.filter(g=>!g.met).map(g=>g.key).join(', ');
+}
+function renderGuidance(){
+  const stage=PIPELINE_STAGES[currentStageIdx];
+  const g=GUIDANCE[stage]||{label:'Stage: '+stage,msg:'',action:'Continue'};
+  document.getElementById('guidance-label').textContent=g.label;
+  document.getElementById('guidance-msg').textContent=g.msg;
+  document.getElementById('guidance-action-label').textContent=g.action;
+}
+function handleGuidanceAction(){
+  const stage=PIPELINE_STAGES[currentStageIdx];
+  const actions={
+    'Booked':()=>openEstimateModal(),
+    'Estimated':()=>openQuoteModal(),
+    'Quoted':()=>toast('Quote re-sent to client','success'),
+    'Accepted':()=>markWIP(),
+    'In Progress':()=>openJobcardModal(),
+    'Completed':()=>toast('Approval request sent to client','success'),
+    'Client Approved':()=>openInvoiceModal(),
+    'Invoiced':()=>toast('Opening invoice…'),
+    'Paid':()=>toast('Opening commission record…'),
+    'Commission Paid':()=>toast('Job summary opened'),
+  };
+  (actions[stage]||(() => toast('Action triggered')))();
+}
+function markWIP(){
+  if(currentStageIdx<4){currentStageIdx=4;updateJobStatus();}
+  else toast('Job is already In Progress or further','error');
+}
+function markDone(){
+  const guards=GUARD_KEYS[PIPELINE_STAGES[currentStageIdx]]||[];
+  const blocked=guards.filter(g=>!g.met);
+  if(blocked.length>0){toast('Cannot mark done: '+blocked.map(g=>g.key).join(', '),'error');return;}
+  currentStageIdx=5;updateJobStatus();
+  if(autoTransitions){toast('Invoice auto-created from quote','success');}
+}
+function toggleAutoTransitions(){
+  autoTransitions=!autoTransitions;
+  const badge=document.getElementById('auto-badge');
+  badge.classList.toggle('off',!autoTransitions);
+  document.getElementById('auto-badge-text').textContent=autoTransitions?'AUTO-TRANSITIONS ON':'AUTO-TRANSITIONS OFF';
+  toast(autoTransitions?'Auto-transitions enabled':'Auto-transitions disabled');
+}
+function renderTeam(){
+  const slots=document.getElementById('team-slots');
+  slots.innerHTML=teamData.map((t,i)=>`
+    <div class="team-slot">
+      <div class="avatar ${t.cls||''}" style="${!t.name?'background:var(--slate-300)':''}">${t.initials||'—'}</div>
+      <div style="flex:1">
+        <div class="team-role">${t.role}</div>
+        <div class="team-name" style="${!t.name?'color:var(--muted-fg)':''}">${t.name||'Unassigned'}</div>
+      </div>
+      <span class="ms team-edit" onclick="openTeamAssign(${i})">${t.name?'edit':'add'}</span>
+    </div>`).join('');
+}
+function openTeamAssign(roleIdx){
+  teamAssignRole=roleIdx;
+  teamAssignSelected=null;
+  document.getElementById('team-assign-title').textContent='Assign '+teamData[roleIdx].role;
+  document.querySelectorAll('#team-assign-list .assignee-item').forEach(i=>i.classList.remove('selected'));
+  document.getElementById('team-assign-confirm').disabled=true;
+  openModal('team-assign-modal');
+}
+function selectTeamMember(el,name,init,cls){
+  document.querySelectorAll('#team-assign-list .assignee-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  teamAssignSelected={name,init,cls};
+  document.getElementById('team-assign-confirm').disabled=false;
+}
+function confirmTeamAssign(){
+  if(teamAssignRole===null||!teamAssignSelected)return;
+  teamData[teamAssignRole]={...teamData[teamAssignRole],...teamAssignSelected};
+  closeModal('team-assign-modal');
+  renderTeam();
+  toast('Team updated','success');
+}
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else{const b=document.querySelector(`.tab-btn[onclick*="'${name}'"]`);if(b)b.classList.add('active');}
+  const tc=document.getElementById('tab-'+name);
+  if(tc)tc.classList.add('active');
+  setTimeout(()=>{
+    if(name==='overview'&&!document.querySelector('#var-table .col-resize-handle'))initColResize('var-table');
+    if(name==='hse'&&!document.querySelector('#risk-table .col-resize-handle'))initColResize('risk-table');
+  },50);
+}
+// Chart
+function renderChart(){
+  const cats=[{name:'Materials',est:26200,act:0},{name:'Labour',est:10000,act:0},{name:'Sub',est:0,act:0},{name:'Travel',est:0,act:0}];
+  const maxVal=Math.max(...cats.map(c=>Math.max(c.est,c.act)),1);
+  document.getElementById('chart-bars').innerHTML=cats.filter(c=>c.est>0||c.act>0).map(c=>`
+    <div class="chart-bar-group">
+      <div class="chart-bar-pair">
+        <div class="chart-bar est" style="height:${(c.est/maxVal*65)+5}px" title="Est: ${fmt(c.est)}"></div>
+        <div class="chart-bar act" style="height:${(c.act/maxVal*65)+5}px" title="Act: ${fmt(c.act)}"></div>
+      </div>
+      <div class="chart-bar-label">${c.name}</div>
+    </div>`).join('');
+}
+// Communication
+function renderCommThreads(){
+  const c=document.getElementById('comm-threads');
+  c.innerHTML=commThreads.map(t=>`
+    <div class="comm-thread">
+      <div class="comm-thread-header" onclick="toggleCommThread(${t.id})">
+        <span class="ms" style="font-size:16px;color:var(--muted-fg)">forum</span>
+        <div style="flex:1">
+          <div class="comm-subject">${t.subject}</div>
+          <div class="comm-meta">${t.from} · ${t.date}</div>
+        </div>
+        <span class="comm-status ${t.status}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span>
+        <span class="ms" style="font-size:16px;color:var(--muted-fg);margin-left:8px">expand_more</span>
+      </div>
+      <div class="comm-body" id="comm-body-${t.id}">
+        ${t.messages.map(m=>`<div class="comm-msg"><div class="comm-msg-from">${m.from} · ${m.time}</div>${m.body}</div>`).join('')}
+        <div class="comm-reply-box">
+          <textarea placeholder="Type your reply…" id="comm-reply-${t.id}"></textarea>
+          <div class="comm-reply-footer">
+            <button class="btn sm" onclick="markCommResolved(${t.id})"><span class="ms">check</span>Mark Resolved</button>
+            <button class="btn sm primary" onclick="sendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleCommThread(id){
+  const b=document.getElementById('comm-body-'+id);
+  b.classList.toggle('open');
+}
+function sendCommReply(id){
+  const ta=document.getElementById('comm-reply-'+id);
+  const body=ta.value.trim();
+  if(!body){toast('Please type a reply','error');return;}
+  const t=commThreads.find(t=>t.id===id);
+  if(t){
+    t.messages.push({from:'You',time:new Date().toLocaleString(),body});
+    t.status='replied';
+    ta.value='';
+    renderCommThreads();
+    document.getElementById('comm-body-'+id).classList.add('open');
+    toast('Reply sent','success');
+    addTimelineItem('email','email','Reply sent: '+t.subject,'Sent to '+t.from,new Date().toLocaleString());
+  }
+}
+function markCommResolved(id){
+  const t=commThreads.find(t=>t.id===id);
+  if(t){t.status='resolved';renderCommThreads();toast('Thread marked as resolved','success');}
+}
+function openNewCommModal(){openModal('new-comm-modal');}
+function sendNewComm(){
+  const subj=document.getElementById('nc-subject').value.trim();
+  const body=document.getElementById('nc-body').value.trim();
+  if(!subj||!body){toast('Please fill in subject and message','error');return;}
+  commThreads.unshift({id:Date.now(),subject:subj,from:'You (outbound)',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'replied',messages:[{from:'You',time:new Date().toLocaleString(),body}]});
+  closeModal('new-comm-modal');
+  renderCommThreads();
+  toast('Message sent','success');
+}
+// Timeline
+function renderTimeline(){
+  const c=document.getElementById('timeline-items');
+  c.innerHTML=timelineItems.map((t,i)=>`
+    <div class="timeline-item">
+      <div class="timeline-dot ${t.type}"><span class="ms">${t.icon}</span></div>
+      <div class="timeline-content">
+        <div class="timeline-title">${t.title}</div>
+        <div class="timeline-sub">${t.sub}</div>
+        ${t.email?`<div class="timeline-expand" onclick="toggleTimelineEmail(${i})"><span class="ms">expand_more</span>Show full message</div><div class="timeline-email-body" id="tl-email-${i}"><div style="font-size:10.5px;color:var(--muted-fg);margin-bottom:6px">${t.email.from}</div><pre style="font-family:inherit;white-space:pre-wrap;font-size:12px;color:var(--fg-2)">${t.email.body}</pre></div>`:''}
+      </div>
+      <div class="timeline-time">${t.time}</div>
+    </div>`).join('');
+}
+function toggleTimelineEmail(i){
+  const el=document.getElementById('tl-email-'+i);
+  el.classList.toggle('open');
+}
+function addTimelineItem(type,icon,title,sub,time){
+  timelineItems.unshift({type,icon,title,sub,time,email:null});
+  if(document.getElementById('tab-timeline').classList.contains('active'))renderTimeline();
+}
+// HSE
+function renderHSEPipeline(){
+  const p=document.getElementById('hse-pipeline');
+  p.innerHTML=HSE_STAGES.map((s,i)=>`<div class="hse-step ${i<hseStageIdx?'done':i===hseStageIdx?'active':''}" onclick="setHSEStage(${i})">${s}</div>`).join('');
+}
+function setHSEStage(i){hseStageIdx=i;renderHSEPipeline();toast('HSE pack moved to "'+HSE_STAGES[i]+'"','success');}
+function generateHSE(){
+  if(hseStageIdx===0){hseStageIdx=1;renderHSEPipeline();}
+  document.getElementById('hse-meta').textContent='Assembling';
+  document.getElementById('hse-generate-btn').innerHTML='<span class="ms">open_in_new</span>Open';
+  toast('HSE pack generated and now assembling','success');
+  switchTab('hse',null);
+  document.querySelector('.tab-btn[onclick*="hse"]').classList.add('active');
+}
+function renderRiskTable(){
+  const tbody=document.getElementById('risk-tbody');
+  tbody.innerHTML=RISK_ROWS.map((r,i)=>{
+    const rating=r.l*r.c;
+    const cls=rating>=10?'risk-high':rating>=6?'risk-med':'risk-low';
+    return `<tr>
+      <td><input value="${r.hazard}" onchange="RISK_ROWS[${i}].hazard=this.value"></td>
+      <td><input value="${r.activity}" onchange="RISK_ROWS[${i}].activity=this.value"></td>
+      <td><input type="number" value="${r.l}" min="1" max="5" style="width:40px" onchange="RISK_ROWS[${i}].l=+this.value;updateRiskRating(${i})"></td>
+      <td><input type="number" value="${r.c}" min="1" max="5" style="width:40px" onchange="RISK_ROWS[${i}].c=+this.value;updateRiskRating(${i})"></td>
+      <td><span class="risk-badge ${cls}" id="risk-rating-${i}">${rating}</span></td>
+      <td><input value="${r.control}" onchange="RISK_ROWS[${i}].control=this.value"></td>
+      <td><button class="btn ghost sm" onclick="removeRiskRow(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
+    </tr>`;
+  }).join('');
+}
+function updateRiskRating(i){
+  const r=RISK_ROWS[i];const rating=r.l*r.c;
+  const cls=rating>=10?'risk-high':rating>=6?'risk-med':'risk-low';
+  const el=document.getElementById('risk-rating-'+i);
+  if(el){el.textContent=rating;el.className='risk-badge '+cls;}
+}
+function addRiskRow(){
+  RISK_ROWS.push({hazard:'New hazard',activity:'',l:1,c:1,control:''});
+  renderRiskTable();
+}
+function removeRiskRow(i){RISK_ROWS.splice(i,1);renderRiskTable();}
+// Estimate
+function renderEstimateTable(){
+  const tbody=document.getElementById('est-tbody');
+  tbody.innerHTML=estLines.map((l,i)=>`<tr>
+    <td><input value="${l.desc}" onchange="estLines[${i}].desc=this.value;recalcEst()"></td>
+    <td><select onchange="estLines[${i}].cat=this.value">
+      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===l.cat?'selected':''}>${c}</option>`).join('')}
+    </select></td>
+    <td><input type="number" value="${l.qty}" style="width:60px" onchange="estLines[${i}].qty=+this.value;recalcEst()"></td>
+    <td><input value="${l.unit}" style="width:50px" onchange="estLines[${i}].unit=this.value"></td>
+    <td><input type="number" value="${l.price}" style="width:80px" onchange="estLines[${i}].price=+this.value;recalcEst()"></td>
+    <td style="font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
+    <td><button class="btn ghost sm" onclick="removeEstLine(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
+  </tr>`).join('');
+  recalcEst();
+}
+function recalcEst(){
+  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
+  const vat=sub*0.15;
+  document.getElementById('est-subtotal').textContent=fmt(sub);
+  document.getElementById('est-vat').textContent=fmt(Math.round(vat));
+  document.getElementById('est-total').textContent=fmt(Math.round(sub+vat));
+}
+function addEstimateLine(){estLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});renderEstimateTable();}
+function removeEstLine(i){estLines.splice(i,1);renderEstimateTable();}
+function saveEstimate(){
+  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
+  document.getElementById('pl-est').textContent=fmt(sub);
+  const quote=48500;const profit=quote-sub;
+  document.getElementById('pl-profit').textContent=(profit>=0?'+':'')+fmt(profit);
+  document.getElementById('pl-amount').textContent=(profit>=0?'+':'')+fmt(profit);
+  document.getElementById('pl-margin').textContent=((profit/quote)*100).toFixed(1)+'% margin';
+  closeModal('estimate-modal');
+  toast('Estimate saved and finalised','success');
+  addTimelineItem('doc','calculate','Estimate updated',estLines.length+' items · '+fmt(sub),new Date().toLocaleString());
+}
+function openEstimateModal(){renderEstimateTable();openModal('estimate-modal');}
+function openQuoteModal(){openModal('quote-modal');}
+function acceptQuote(){
+  closeModal('quote-modal');
+  if(currentStageIdx<3){currentStageIdx=3;updateJobStatus();}
+  toast('Quote marked as accepted. Job moved to Quote Accepted.','success');
+}
+function openInvoiceModal(){
+  const today=new Date();
+  const due=new Date(today);due.setDate(due.getDate()+30);
+  document.getElementById('inv-date').value=today.toISOString().split('T')[0];
+  document.getElementById('inv-due').value=due.toISOString().split('T')[0];
+  openModal('invoice-modal');
+}
+function createInvoice(){
+  closeModal('invoice-modal');
+  document.getElementById('invoice-meta').textContent='INV-0089 · R 48,500';
+  document.getElementById('invoice-create-btn').innerHTML='<span class="ms">open_in_new</span>Open';
+  document.getElementById('invoice-create-btn').className='doc-action';
+  toast('Invoice INV-0089 created','success');
+  addTimelineItem('doc','receipt_long','Invoice created','INV-0089 · R 48,500',new Date().toLocaleString());
+}
+function openActualCostsModal(){
+  renderCostTable();
+  openModal('actual-costs-modal');
+}
+function renderCostTable(){
+  const tbody=document.getElementById('costs-tbody');
+  tbody.innerHTML=actualCostEntries.map((e,i)=>`<tr>
+    <td><input type="date" value="${e.date}" onchange="actualCostEntries[${i}].date=this.value;recalcCosts()"></td>
+    <td><select onchange="actualCostEntries[${i}].cat=this.value">
+      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===e.cat?'selected':''}>${c}</option>`).join('')}
+    </select></td>
+    <td><input value="${e.desc}" onchange="actualCostEntries[${i}].desc=this.value"></td>
+    <td><input value="${e.supplier}" onchange="actualCostEntries[${i}].supplier=this.value"></td>
+    <td><input type="number" value="${e.amount}" onchange="actualCostEntries[${i}].amount=+this.value;recalcCosts()"></td>
+    <td><button class="btn ghost sm" onclick="removeCostLine(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
+  </tr>`).join('');
+  recalcCosts();
+}
+function addCostLine(){
+  actualCostEntries.push({date:new Date().toISOString().split('T')[0],cat:'Materials',desc:'',supplier:'',amount:0});
+  renderCostTable();
+}
+function removeCostLine(i){actualCostEntries.splice(i,1);renderCostTable();}
+function recalcCosts(){
+  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('costs-total').textContent=fmt(total);
+}
+function saveActualCosts(){
+  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('actual-costs-meta').textContent=fmt(total)+' · '+actualCostEntries.length+' entries';
+  document.getElementById('pl-actual').textContent=fmt(total);
+  document.getElementById('pl-actual').style.color='var(--fg-2)';
+  // Update guard key
+  const gk=GUARD_KEYS['In Progress'];
+  if(gk){const ir=gk.find(g=>g.key==='Invoice Ready');if(ir&&total>0)ir.met=true;}
+  renderGuardKeys();
+  closeModal('actual-costs-modal');
+  toast('Actual costs saved','success');
+  addTimelineItem('doc','attach_money','Actual costs updated',fmt(total)+' · '+actualCostEntries.length+' entries',new Date().toLocaleString());
+}
+// Jobcard
+function openJobcardModal(){openModal('jobcard-modal');}
+function addPhoto(slot){
+  // Simulate adding a photo with a coloured placeholder
+  const colors=['#ddd6fe','#bfdbfe','#bbf7d0','#fde68a','#fecaca'];
+  const c=colors[photoCount%colors.length];
+  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</div>`;
+  slot.onclick=null;
+  photoCount++;
+  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · '+(jobcardSigned?'Signed':'Awaiting signature');
+  // Add new empty slot if all filled
+  const grid=document.getElementById('photo-grid');
+  if(!grid.querySelector('.photo-slot[onclick]')){
+    const ns=document.createElement('div');ns.className='photo-slot';ns.innerHTML='<span class="ms">add_a_photo</span>';ns.onclick=()=>addPhoto(ns);grid.appendChild(ns);
+  }
+}
+function captureSignature(){
+  const box=document.getElementById('sig-box');
+  box.classList.add('signed');
+  document.getElementById('sig-label').textContent='✓ Signed by client — '+new Date().toLocaleString();
+  jobcardSigned=true;
+  // Update guard key
+  const gk=GUARD_KEYS['In Progress'];
+  if(gk){const js=gk.find(g=>g.key==='Jobcard Signed');if(js)js.met=true;}
+  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · Signed';
+  document.getElementById('jobcard-status-pill').innerHTML='<span class="pill pill-green" style="font-size:9.5px">Signed</span>';
+  renderGuardKeys();
+  toast('Signature captured','success');
+}
+function saveJobcard(){
+  closeModal('jobcard-modal');
+  toast('Jobcard saved','success');
+  addTimelineItem('doc','assignment','Jobcard updated',photoCount+' photos · '+(jobcardSigned?'Signed':'Unsigned'),new Date().toLocaleString());
+}
+// Unlock
+function openUnlockModal(){openModal('unlock-modal');}
+function confirmUnlock(){
+  const reason=document.getElementById('unlock-reason').value.trim();
+  if(!reason){toast('Please provide a reason','error');return;}
+  closeModal('unlock-modal');
+  // Clear all blocked guard keys for current stage
+  const gk=GUARD_KEYS[PIPELINE_STAGES[currentStageIdx]];
+  if(gk)gk.forEach(g=>g.met=true);
+  renderGuardKeys();
+  toast('Stage unlocked. Guard keys overridden.','success');
+  addTimelineItem('status','lock_open','Stage override','Reason: '+reason,new Date().toLocaleString());
+}
+// Duplicate
+function duplicateJob(){
+  const j=JOBS.find(j=>j.num===currentJobNum);
+  if(!j)return;
+  const copy={...j,num:'JOB-'+(1000+JOBS.length+1),status:'Booked',finance:'Estimated',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+  JOBS.unshift(copy);
+  toast('Job duplicated as '+copy.num,'success');
+}
+// Delete (from detail)
+function openDeleteConfirm(){
+  document.getElementById('delete-confirm-msg').textContent=`Delete ${currentJobNum}? This cannot be undone.`;
+  openModal('delete-confirm-modal');
+}
+// Edit job
+function openEditJobModal(){openModal('edit-job-modal');}
+function saveJobEdit(){
+  const j=JOBS.find(j=>j.num===currentJobNum);
+  if(j){
+    j.client=document.getElementById('ej-client').value;
+    j.site=document.getElementById('ej-site').value;
+    j.priority=document.getElementById('ej-priority').value;
+  }
+  closeModal('edit-job-modal');
+  openDetail(currentJobNum);
+  toast('Job info updated','success');
+}
+
+// ═══════════════════════════════════════════════════════════
+// COLUMN RESIZER
+// ═══════════════════════════════════════════════════════════
+function initColResize(tableId){
+  const table=document.getElementById(tableId);
+  if(!table)return;
+  const key='colWidths_'+tableId;
+  const saved=JSON.parse(localStorage.getItem(key)||'null');
+  const ths=table.querySelectorAll('thead th');
+  table.style.tableLayout='fixed';
+  ths.forEach((th,i)=>{
+    if(saved&&saved[i]){th.style.width=saved[i]+'px';th.style.minWidth=saved[i]+'px';}
+    if(i===ths.length-1)return;
+    th.style.position='relative';th.style.userSelect='none';
+    if(th.querySelector('.col-resize-handle'))return;
+    const h=document.createElement('div');h.className='col-resize-handle';th.appendChild(h);
+    let sx,sw;
+    h.addEventListener('mousedown',e=>{
+      e.preventDefault();e.stopPropagation();sx=e.clientX;sw=th.offsetWidth;h.classList.add('active');
+      const mv=e=>{const nw=Math.max(40,sw+(e.clientX-sx));th.style.width=nw+'px';th.style.minWidth=nw+'px';};
+      const up=()=>{
+        h.classList.remove('active');document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);
+        const w={};ths.forEach((t,idx)=>w[idx]=t.offsetWidth);localStorage.setItem(key,JSON.stringify(w));
+      };
+      document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+applyFilters();
+renderChart();
+</script>
+</body>
+</html>
