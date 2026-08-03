@@ -1506,10 +1506,22 @@ function renderBoard(){
     return `<div class="board-col">
       <div class="board-col-header" style="--col-accent:${accent}">${s}<span class="count">${jobs.length}</span></div>
       ${jobs.map(j=>`<div class="board-card" onclick="openDetail('${j.num}')">
-        <div class="board-card-num">${j.num}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span class="board-card-num">${j.num}</span>
+          <span style="font-size:10px;color:var(--muted-fg)">${j.date}</span>
+        </div>
         <div class="board-card-client">${j.client}</div>
-        <div class="board-card-desc">${j.desc}</div>
-        <div class="board-card-footer">${priorityPill(j.priority)}<span style="margin-left:auto;font-size:11.5px;font-weight:600">${fmt(j.value)}</span></div>
+        <div style="font-size:10.5px;color:var(--muted-fg);margin-bottom:3px">${j.site}</div>
+        <div class="board-card-desc" style="margin-bottom:8px">${j.desc}</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap">
+          ${priorityPill(j.priority)}
+          <span style="font-size:10px;color:var(--muted-fg);font-weight:500">${j.type}</span>
+          ${financePill(j.finance)}
+        </div>
+        <div class="board-card-footer">
+          <div style="display:flex;margin-right:auto">${j.team.map(t=>avatarHtml(t)).join('')}</div>
+          <span style="font-size:12px;font-weight:700;color:var(--fg)">${fmt(j.value)}</span>
+        </div>
       </div>`).join('')}
     </div>`;
   }).join('');
