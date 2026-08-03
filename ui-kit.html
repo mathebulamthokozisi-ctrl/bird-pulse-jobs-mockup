@@ -146,32 +146,57 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
 .guard-key.blocked{background:var(--red-50);color:var(--red-600);border:1px solid var(--red-100)}
 .guard-key.pending{background:var(--slate-50);color:var(--muted-fg);border:1px solid var(--border)}
 
-/* ── Pipeline bar (chevron ribbon) ── */
-.pipe-demo{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:0 16px;display:flex;align-items:stretch;overflow:hidden;gap:2px;height:52px}
-.pipe-seg{flex:1;min-width:90px;position:relative;display:flex;align-items:center;gap:8px;padding:0 16px 0 24px;cursor:default;clip-path:polygon(0 0,calc(100% - 11px) 0,100% 50%,calc(100% - 11px) 100%,0 100%,11px 50%);background:#f1f3f7}
-.pipe-seg:first-child{clip-path:polygon(0 0,calc(100% - 11px) 0,100% 50%,calc(100% - 11px) 100%,0 100%);padding-left:14px}
-.pipe-seg:last-child{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,11px 50%)}
-.pipe-seg.done{background:var(--indigo-600)}
-.pipe-seg.active{background:var(--indigo-50);box-shadow:inset 0 0 0 1.5px var(--indigo-200)}
-.pipe-seg.future{background:#f1f3f7}
-.pipe-seg.declined{background:#fef2f2;box-shadow:inset 0 0 0 1.5px #fecaca}
-.pipe-icon-c{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pipe-icon-c .ms{font-size:13px}
-.pipe-seg.done .pipe-icon-c{background:rgba(255,255,255,.22);color:#fff}
-.pipe-seg.active .pipe-icon-c{background:var(--indigo-100);color:var(--indigo-700)}
-.pipe-seg.future .pipe-icon-c{background:#e2e5eb;color:#9ca3af}
-.pipe-seg.declined .pipe-icon-c{background:#fee2e2;color:#dc2626}
-.pipe-seg-lbl{font-size:11.5px;font-weight:600;white-space:nowrap}
-.pipe-seg.done .pipe-seg-lbl{color:#fff}
+/* ── Pipeline stepper — rounded-square icon style ── */
+.pipe-demo{
+  background:var(--white);border:1px solid var(--border);border-radius:10px;
+  padding:20px 24px 18px;display:flex;align-items:flex-start;
+  overflow:hidden;position:relative;
+}
+/* Grey connecting line behind icons */
+.pipe-demo::before{
+  content:'';position:absolute;top:40px;left:60px;right:60px;
+  height:2px;background:var(--slate-200);z-index:0;
+}
+.pipe-seg{
+  flex:1;min-width:80px;display:flex;flex-direction:column;
+  align-items:center;gap:8px;cursor:default;position:relative;z-index:1;
+}
+/* Indigo progress fill line on done stages */
+.pipe-seg.done::after{
+  content:'';position:absolute;top:21px;left:50%;right:-50%;
+  height:2px;background:var(--indigo-500);z-index:0;
+}
+.pipe-seg:last-child.done::after{display:none}
+/* Rounded-square icon */
+.pipe-icon-c{
+  width:42px;height:42px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;position:relative;z-index:2;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+.pipe-icon-c .ms{font-size:18px;font-weight:400}
+.pipe-seg.done .pipe-icon-c{background:var(--indigo-600);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.35)}
+.pipe-seg.active .pipe-icon-c{background:var(--white);color:var(--indigo-600);border:2px solid var(--indigo-500);box-shadow:0 4px 14px rgba(79,70,229,.2)}
+.pipe-seg.future .pipe-icon-c{background:#f1f3f7;color:#c4c9d4;border:1.5px solid var(--slate-200);box-shadow:none}
+.pipe-seg.declined .pipe-icon-c{background:#fef2f2;color:#dc2626;border:2px solid #fecaca;box-shadow:0 2px 8px rgba(220,38,38,.15)}
+/* Label */
+.pipe-seg-lbl{font-size:12px;font-weight:700;white-space:nowrap;text-align:center;line-height:1.2}
+.pipe-seg.done .pipe-seg-lbl{color:var(--indigo-700)}
 .pipe-seg.active .pipe-seg-lbl{color:var(--indigo-800)}
-.pipe-seg.future .pipe-seg-lbl{color:#9ca3af}
+.pipe-seg.future .pipe-seg-lbl{color:var(--slate-400)}
 .pipe-seg.declined .pipe-seg-lbl{color:#b91c1c}
-.pipe-chip-s{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:20px;line-height:1;white-space:nowrap}
-.pipe-seg.done .pipe-chip-s{background:rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+/* Sub-status chip */
+.pipe-chip-s{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;line-height:1;white-space:nowrap}
+.pipe-seg.done .pipe-chip-s{background:var(--indigo-50);color:var(--indigo-600)}
 .pipe-seg.active .pipe-chip-s{background:var(--indigo-600);color:#fff}
 .pipe-seg.declined .pipe-chip-s{background:#fecaca;color:#b91c1c}
-.pipe-pulse-s{width:7px;height:7px;border-radius:50%;background:var(--indigo-500);flex-shrink:0;animation:ppulse 1.8s ease-in-out infinite}
-@keyframes ppulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+/* Pulse ring on active icon */
+.pipe-pulse-s{
+  position:absolute;top:-5px;left:-5px;right:-5px;bottom:-5px;
+  border-radius:14px;border:2px solid var(--indigo-300);
+  animation:ppulse 2s ease-in-out infinite;pointer-events:none;z-index:1;
+}
+@keyframes ppulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:0;transform:scale(1.15)}}
 
 /* ── Form controls ── */
 .input{height:34px;border:1px solid var(--border);border-radius:var(--radius);padding:0 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
@@ -599,7 +624,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
     <div class="kit-section-header">
       <span class="kit-section-title">Pipeline Bar</span>
       <span class="kit-section-num">05</span>
-      <span class="kit-section-desc">Chevron-ribbon stepper — 5 stages from <code>JobProgressPipeline.tsx</code></span>
+      <span class="kit-section-desc">Rounded-square icon stepper — 5 stages from <code>JobProgressPipeline.tsx</code></span>
     </div>
 
     <div class="comp-group">
@@ -607,7 +632,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
       <div class="pipe-demo">
         <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Estimate</span></div>
         <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Quote</span></div>
-        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span><span class="pipe-chip-s">In Progress</span><span class="pipe-pulse-s"></span></div>
+        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="pipe-pulse-s"></span><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span><span class="pipe-chip-s">In Progress</span></div>
         <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">receipt_long</span></div><span class="pipe-seg-lbl">Invoice</span></div>
         <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">payments</span></div><span class="pipe-seg-lbl">Paid</span></div>
       </div>
@@ -616,7 +641,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
     <div class="comp-group">
       <div class="comp-group-label">State: Job Booked (stage 1 active, all others future)</div>
       <div class="pipe-demo">
-        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="ms">calculate</span></div><span class="pipe-seg-lbl">Estimate</span><span class="pipe-chip-s">Booked</span><span class="pipe-pulse-s"></span></div>
+        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="pipe-pulse-s"></span><span class="ms">calculate</span></div><span class="pipe-seg-lbl">Estimate</span><span class="pipe-chip-s">Booked</span></div>
         <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">description</span></div><span class="pipe-seg-lbl">Quote</span></div>
         <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span></div>
         <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">receipt_long</span></div><span class="pipe-seg-lbl">Invoice</span></div>
