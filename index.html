@@ -117,7 +117,7 @@ td:first-child{padding:8px 6px}
 
 /* Status pills — quiet design: very thin border, barely-there tint fill, strong text colour.
    Border is 1px, fill is ~5% opacity of the text colour. No heavy backgrounds. */
-.pill{display:inline-flex;align-items:center;padding:1px 7px;border-radius:20px;font-size:9.5px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent}
+.pill{display:inline-flex;align-items:center;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent;flex-shrink:0}
 /* blue */
 .pill-blue{background:#f0f5ff;color:#2563eb;border-color:#bfdbfe}
 /* green */
@@ -1496,9 +1496,9 @@ function renderJobs(){
       ${visibleCols.client?`<td><div class="job-client">${j.client}</div><div class="job-site">${j.site}</div></td>`:''}
       ${visibleCols.desc?`<td><div class="job-desc">${j.desc}</div></td>`:''}
       ${visibleCols.type?`<td style="color:var(--muted-fg);font-size:12px">${j.type||'—'}</td>`:''}
-      ${visibleCols.priority?`<td>${priorityPill(j.priority)}</td>`:''}
-      ${visibleCols.status?`<td>${statusPill(j.status)}</td>`:''}
-      ${visibleCols.finance?`<td>${financePill(j.finance)}</td>`:''}
+      ${visibleCols.priority?`<td style="white-space:nowrap">${priorityPill(j.priority)}</td>`:''}
+      ${visibleCols.status?`<td style="white-space:nowrap">${statusPill(j.status)}</td>`:''}
+      ${visibleCols.finance?`<td style="white-space:nowrap">${financePill(j.finance)}</td>`:''}
       ${visibleCols.team?`<td><div style="display:flex;gap:2px">${j.team.map(avatarHtml).join('')}</div></td>`:''}
       ${visibleCols.value?`<td style="font-weight:600;font-variant-numeric:tabular-nums">${fmt(j.value)}</td>`:''}
       ${visibleCols.date?`<td style="color:var(--muted-fg);font-size:12px">${j.date}</td>`:''}
