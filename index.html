@@ -517,7 +517,6 @@ td:first-child{padding:8px 6px}
     <div class="chip" id="ftog-unassigned" onclick="toggleQuick('unassigned')"><span class="ms">person_off</span>Unassigned</div>
     <div class="chip" id="ftog-active" onclick="toggleQuick('active')"><span class="ms">play_circle</span>Active only</div>
     <div class="chip" id="ftog-week" onclick="toggleQuick('week')"><span class="ms">calendar_today</span>This week</div>
-    <div class="chip" id="ftog-overdue" onclick="toggleQuick('overdue')"><span class="ms">warning</span>Overdue</div>
     <div id="active-chips" class="active-filter-chips"></div>
   </div>
 
@@ -542,7 +541,6 @@ td:first-child{padding:8px 6px}
         <div class="filter-toggle" id="fs-unassigned" onclick="toggleQuick('unassigned')"><span class="ms">person_off</span>Unassigned</div>
         <div class="filter-toggle" id="fs-active" onclick="toggleQuick('active')"><span class="ms">play_circle</span>Active only</div>
         <div class="filter-toggle" id="fs-week" onclick="toggleQuick('week')"><span class="ms">calendar_today</span>This week</div>
-        <div class="filter-toggle" id="fs-overdue" onclick="toggleQuick('overdue')"><span class="ms">warning</span>Overdue</div>
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Workflow Status</div>
@@ -1364,7 +1362,7 @@ let filteredJobs = [...JOBS];
 let selectedJobs = new Set();
 let currentView = 'list';
 let filterSidebarOpen = true;
-let quickFilters = {mine:false,unassigned:false,active:false,week:false,overdue:false};
+let quickFilters = {mine:false,unassigned:false,active:false,week:false};
 let visibleCols = {num:true,client:true,desc:true,type:true,priority:true,status:true,finance:true,team:true,value:true,date:true};
 let currentJobNum = 'JOB-0042';
 let currentJobStatus = 'work_in_progress'; // tracks raw status key
@@ -1486,7 +1484,6 @@ function renderActiveChips(){
   if(quickFilters.unassigned)chips.push({label:'Unassigned',key:'unassigned'});
   if(quickFilters.active)chips.push({label:'Active only',key:'active'});
   if(quickFilters.week)chips.push({label:'This week',key:'week'});
-  if(quickFilters.overdue)chips.push({label:'Overdue',key:'overdue'});
   c.innerHTML=chips.map(ch=>`<div class="filter-chip-active">${ch.label}<span class="ms" onclick="toggleQuick('${ch.key}')">close</span></div>`).join('');
 }
 function renderJobs(){
