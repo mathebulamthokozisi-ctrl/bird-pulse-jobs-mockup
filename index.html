@@ -21,9 +21,9 @@
   --bg:#f0f2f5;--white:#ffffff;--border:#e8eaed;
   --row-alt:#fafafa;
   --fg:#0f172a;--fg-2:#334155;--muted-fg:#64748b;--muted:#f8fafc;
-  --radius:6px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
-  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -1px rgba(0,0,0,.04);
-  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.08),0 4px 6px -2px rgba(0,0,0,.04);
+  --radius:6px;--shadow:0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--bg);height:100vh;display:flex;overflow:hidden}
@@ -115,25 +115,25 @@ td:first-child{padding:8px 6px}
 .avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--white)}
 .avatar.av-js{background:#4f46e5}.avatar.av-sj{background:#7c3aed}.avatar.av-md{background:#0891b2}.avatar.av-kl{background:#059669}
 
-/* Status pills — matches CRM DynamicStatusBadge exactly:
-   rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border */
-.pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;border:1px solid transparent}
-/* info/default — hsl(217 91% 95%) bg, hsl(221 83% 53%) text, hsl(217 70% 85%) border */
-.pill-blue{background:#eff6ff;color:#2563eb;border-color:#93c5fd}
-/* approved/success — hsl(141 72% 93%) bg, hsl(142 64% 36%) text, hsl(141 50% 80%) border */
-.pill-green{background:#d1fae5;color:#1a8a4a;border-color:#6ee7b7}
-/* sent/warning — hsl(38 92% 95%) bg, hsl(32 81% 40%) text, hsl(38 60% 80%) border */
-.pill-amber{background:#fef3c7;color:#92400e;border-color:#fcd34d}
-/* declined/destructive — hsl(0 94% 94%) bg, hsl(0 72% 51%) text, hsl(0 60% 85%) border */
-.pill-red{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
-/* orange warning variant */
-.pill-orange{background:#ffedd5;color:#ea580c;border-color:#fdba74}
-/* draft/muted — hsl(220 14% 96%) bg, hsl(220 9% 46%) text, hsl(220 13% 88%) border */
-.pill-slate{background:#f3f4f6;color:#6b7280;border-color:#d1d5db}
-/* pending/purple */
-.pill-purple{background:#f5f3ff;color:#6d28d9;border-color:#c4b5fd}
+/* Status pills — quiet design: very thin border, barely-there tint fill, strong text colour.
+   Border is 1px, fill is ~5% opacity of the text colour. No heavy backgrounds. */
+.pill{display:inline-flex;align-items:center;padding:1px 7px;border-radius:20px;font-size:9.5px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent}
+/* blue */
+.pill-blue{background:#f0f5ff;color:#2563eb;border-color:#bfdbfe}
+/* green */
+.pill-green{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0}
+/* amber */
+.pill-amber{background:#fffbf0;color:#b45309;border-color:#fde68a}
+/* red */
+.pill-red{background:#fff5f5;color:#dc2626;border-color:#fecaca}
+/* orange */
+.pill-orange{background:#fff7f0;color:#ea580c;border-color:#fed7aa}
+/* slate/muted */
+.pill-slate{background:#f8f9fa;color:#6b7280;border-color:#e5e7eb}
+/* purple */
+.pill-purple{background:#faf5ff;color:#7c3aed;border-color:#ddd6fe}
 /* teal */
-.pill-teal{background:#f0fdfa;color:#0f766e;border-color:#99f6e4}
+.pill-teal{background:#f0fffe;color:#0f766e;border-color:#99f6e4}
 
 /* Bulk action bar */
 .bulk-bar{background:rgba(79,70,229,.05);border-bottom:1px solid rgba(79,70,229,.15);padding:6px 16px;display:none;align-items:center;gap:8px;flex-shrink:0}
@@ -152,10 +152,10 @@ td:first-child{padding:8px 6px}
 .board-wrap{flex:1;overflow-x:auto;padding:16px;display:none;gap:12px}
 .board-wrap.visible{display:flex}
 .board-col{width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
-.board-col-header{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--col-accent,var(--indigo-400));border-radius:var(--radius);padding:9px 14px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--fg);box-shadow:0 2px 6px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04)}
+.board-col-header{background:var(--white);border:1px solid var(--border);border-top:2px solid var(--col-accent,var(--indigo-400));border-radius:var(--radius);padding:9px 14px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .board-col-header .count{color:var(--muted-fg);font-size:12px;font-weight:500;margin-left:auto}
-.board-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:box-shadow .12s,border-color .12s}
-.board-card:hover{box-shadow:var(--shadow-md);border-color:var(--indigo-200)}
+.board-card{background:var(--white);border:1px solid #eaecef;border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:box-shadow .15s,border-color .15s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.board-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);border-color:#d0d5dd}
 .board-card-num{font-size:10px;font-weight:700;color:var(--muted-fg);margin-bottom:3px}
 .board-card-client{font-size:12px;font-weight:600;color:var(--fg)}
 .board-card-desc{font-size:11px;color:var(--muted-fg);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -544,14 +544,22 @@ td:first-child{padding:8px 6px}
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Workflow Status</div>
-        <label class="filter-item"><input type="checkbox" id="s-booked" onchange="applyFilters()">Job Booked</label>
-        <label class="filter-item"><input type="checkbox" id="s-estimate" onchange="applyFilters()">Estimate Done</label>
-        <label class="filter-item"><input type="checkbox" id="s-quoted" onchange="applyFilters()">Quoted / Sent</label>
-        <label class="filter-item"><input type="checkbox" id="s-accepted" onchange="applyFilters()">Quote Accepted</label>
-        <label class="filter-item"><input type="checkbox" id="s-inprogress" onchange="applyFilters()">In Progress</label>
-        <label class="filter-item"><input type="checkbox" id="s-completed" onchange="applyFilters()">Completed</label>
+        <label class="filter-item"><input type="checkbox" id="s-job-booked" onchange="applyFilters()">Job Booked</label>
+        <label class="filter-item"><input type="checkbox" id="s-estimate-done" onchange="applyFilters()">Estimate Done</label>
+        <label class="filter-item"><input type="checkbox" id="s-quote-drafted" onchange="applyFilters()">Quote Drafted</label>
+        <label class="filter-item"><input type="checkbox" id="s-quote-sent" onchange="applyFilters()">Quote Sent</label>
+        <label class="filter-item"><input type="checkbox" id="s-quote-finalized" onchange="applyFilters()">Quote Finalized</label>
+        <label class="filter-item"><input type="checkbox" id="s-quote-accepted" onchange="applyFilters()">Quote Accepted</label>
+        <label class="filter-item"><input type="checkbox" id="s-on-my-way" onchange="applyFilters()">On My Way</label>
+        <label class="filter-item"><input type="checkbox" id="s-work-in-progress" onchange="applyFilters()">Work In Progress</label>
+        <label class="filter-item"><input type="checkbox" id="s-job-in-progress" onchange="applyFilters()">Job In Progress</label>
+        <label class="filter-item"><input type="checkbox" id="s-job-completed" onchange="applyFilters()">Job Completed</label>
+        <label class="filter-item"><input type="checkbox" id="s-client-approved" onchange="applyFilters()">Client Approved</label>
         <label class="filter-item"><input type="checkbox" id="s-invoiced" onchange="applyFilters()">Invoiced</label>
         <label class="filter-item"><input type="checkbox" id="s-paid" onchange="applyFilters()">Paid</label>
+        <label class="filter-item"><input type="checkbox" id="s-commission-paid" onchange="applyFilters()">Commission Paid</label>
+        <label class="filter-item"><input type="checkbox" id="s-quote-declined" onchange="applyFilters()">Quote Declined</label>
+        <label class="filter-item"><input type="checkbox" id="s-cancelled" onchange="applyFilters()">Cancelled</label>
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Priority</div>
@@ -1197,50 +1205,104 @@ td:first-child{padding:8px 6px}
 // DATA
 // ═══════════════════════════════════════════════════════════
 const JOBS = [
-  {num:'JOB-0042',client:'Acme Corp',site:'Main Warehouse',desc:'Electrical Rewiring — DB replacement & conduit runs',priority:'High',status:'In Progress',finance:'Quoted',team:['JS','SJ'],value:48500,date:'12 Jul 2026',assignee:'JS',type:'Electrical'},
-  {num:'JOB-0041',client:'Globex Ltd',site:'Head Office',desc:'HVAC Maintenance — quarterly service all units',priority:'Normal',status:'Completed',finance:'Invoiced',team:['SJ'],value:12200,date:'10 Jul 2026',assignee:'SJ',type:'Maintenance'},
-  {num:'JOB-0040',client:'Initech',site:'Server Room',desc:'UPS Installation — 20kVA system with bypass',priority:'Urgent',status:'Quoted',finance:'Quoted',team:['MD'],value:95000,date:'08 Jul 2026',assignee:'MD',type:'Installation'},
-  {num:'JOB-0039',client:'Umbrella Inc',site:'Factory Floor A',desc:'Fire Suppression — FM200 system inspection & recharge',priority:'High',status:'New',finance:'Estimated',team:['JS'],value:28400,date:'07 Jul 2026',assignee:'JS',type:'Maintenance'},
-  {num:'JOB-0038',client:'Wayne Enterprises',site:'R&D Lab',desc:'Structured Cabling — Cat6A full floor installation',priority:'Normal',status:'In Progress',finance:'Quoted',team:['SJ','MD'],value:67800,date:'05 Jul 2026',assignee:'SJ',type:'Installation'},
-  {num:'JOB-0037',client:'Acme Corp',site:'Dispatch Bay',desc:'Generator Service — 500kVA annual maintenance',priority:'Normal',status:'Completed',finance:'Paid',team:['MD'],value:18500,date:'03 Jul 2026',assignee:'MD',type:'Maintenance'},
-  {num:'JOB-0036',client:'Globex Ltd',site:'Warehouse B',desc:'Solar PV — 50kW rooftop installation',priority:'High',status:'In Progress',finance:'Quoted',team:['JS'],value:320000,date:'01 Jul 2026',assignee:'JS',type:'Installation'},
-  {num:'JOB-0035',client:'Initech',site:'Data Centre',desc:'Cooling Upgrade — precision AC units ×3',priority:'Urgent',status:'Quoted',finance:'Quoted',team:['SJ'],value:145000,date:'28 Jun 2026',assignee:'SJ',type:'Installation'},
-  {num:'JOB-0034',client:'Umbrella Inc',site:'Security Post',desc:'Access Control — biometric readers ×12',priority:'Normal',status:'Completed',finance:'Invoiced',team:['MD'],value:54200,date:'25 Jun 2026',assignee:'MD',type:'Installation'},
-  {num:'JOB-0033',client:'Wayne Enterprises',site:'Boardroom',desc:'AV System — 4K display wall & conferencing',priority:'Normal',status:'New',finance:'Estimated',team:['JS'],value:88000,date:'23 Jun 2026',assignee:'JS',type:'Installation'},
-  {num:'JOB-0032',client:'Acme Corp',site:'Parking Structure',desc:'LED Lighting Upgrade — 240 fittings',priority:'Low',status:'Completed',finance:'Paid',team:['SJ'],value:42600,date:'20 Jun 2026',assignee:'SJ',type:'Installation'},
-  {num:'JOB-0031',client:'Globex Ltd',site:'Canteen',desc:'Plumbing — hot water system replacement',priority:'Normal',status:'In Progress',finance:'Quoted',team:['MD'],value:22100,date:'18 Jun 2026',assignee:'MD',type:'Repair'},
-  {num:'JOB-0030',client:'Initech',site:'Office Block C',desc:'Painting — full interior repaint 3 floors',priority:'Low',status:'Quoted',finance:'Quoted',team:['JS'],value:35000,date:'15 Jun 2026',assignee:'JS',type:'Other'},
-  {num:'JOB-0029',client:'Umbrella Inc',site:'Cold Storage',desc:'Refrigeration — compressor overhaul',priority:'High',status:'Completed',finance:'Invoiced',team:['SJ'],value:61400,date:'12 Jun 2026',assignee:'SJ',type:'Repair'},
-  {num:'JOB-0028',client:'Wayne Enterprises',site:'Gym',desc:'Flooring — rubber gym tiles full area',priority:'Low',status:'New',finance:'Estimated',team:['MD'],value:19800,date:'10 Jun 2026',assignee:'MD',type:'Other'},
-  {num:'JOB-0027',client:'Acme Corp',site:'Roof',desc:'Waterproofing — torch-on membrane full roof',priority:'High',status:'In Progress',finance:'Quoted',team:['JS'],value:78000,date:'08 Jun 2026',assignee:'JS',type:'Maintenance'},
-  {num:'JOB-0026',client:'Globex Ltd',site:'Substation',desc:'Transformer Replacement — 500kVA unit',priority:'Urgent',status:'Completed',finance:'Paid',team:['SJ'],value:210000,date:'05 Jun 2026',assignee:'SJ',type:'Electrical'},
-  {num:'JOB-0025',client:'Initech',site:'Entrance',desc:'Boom Gate — automated vehicle access system',priority:'Normal',status:'Quoted',finance:'Quoted',team:['MD'],value:44500,date:'02 Jun 2026',assignee:'MD',type:'Installation'},
-  {num:'JOB-0024',client:'Umbrella Inc',site:'Lab 3',desc:'Fume Hood Installation — 4 units with ducting',priority:'Normal',status:'In Progress',finance:'Quoted',team:['JS'],value:33200,date:'30 May 2026',assignee:'JS',type:'Installation'},
-  {num:'JOB-0023',client:'Wayne Enterprises',site:'Basement',desc:'Sump Pump — dual pump installation with alarm',priority:'Normal',status:'Completed',finance:'Invoiced',team:['SJ'],value:28900,date:'28 May 2026',assignee:'SJ',type:'Repair'},
-  {num:'JOB-0022',client:'Acme Corp',site:'Canteen',desc:'Kitchen Equipment — commercial hood & suppression',priority:'High',status:'New',finance:'Estimated',team:['MD'],value:52000,date:'25 May 2026',assignee:'MD',type:'Installation'},
-  {num:'JOB-0021',client:'Globex Ltd',site:'Loading Bay',desc:'Dock Levellers — 4 units hydraulic',priority:'Normal',status:'In Progress',finance:'Quoted',team:['JS'],value:96000,date:'22 May 2026',assignee:'JS',type:'Installation'},
-  {num:'JOB-0020',client:'Initech',site:'Comms Room',desc:'Fibre Termination — 48-port patch panel',priority:'Low',status:'Completed',finance:'Paid',team:['SJ'],value:14200,date:'20 May 2026',assignee:'SJ',type:'Installation'},
-  {num:'JOB-0019',client:'Umbrella Inc',site:'Roof Plant Room',desc:'Chiller Service — 200TR unit annual maintenance',priority:'Normal',status:'Quoted',finance:'Quoted',team:['MD'],value:38500,date:'18 May 2026',assignee:'MD',type:'Maintenance'},
+  {num:'JOB-0042',client:'Acme Corp',site:'Main Warehouse',desc:'Electrical Rewiring — DB replacement & conduit runs',priority:'High',status:'work_in_progress',finance:'quoted',team:['JS','SJ'],value:48500,date:'12 Jul 2026',assignee:'JS',type:'install'},
+  {num:'JOB-0041',client:'Globex Ltd',site:'Head Office',desc:'HVAC Maintenance — quarterly service all units',priority:'Normal',status:'job_completed',finance:'invoiced',team:['SJ'],value:12200,date:'10 Jul 2026',assignee:'SJ',type:'maintenance'},
+  {num:'JOB-0040',client:'Initech',site:'Server Room',desc:'UPS Installation — 20kVA system with bypass',priority:'Urgent',status:'quote_sent',finance:'quoted',team:['MD'],value:95000,date:'08 Jul 2026',assignee:'MD',type:'new_installation'},
+  {num:'JOB-0039',client:'Umbrella Inc',site:'Factory Floor A',desc:'Fire Suppression — FM200 system inspection & recharge',priority:'High',status:'job_booked',finance:'estimated',team:['JS'],value:28400,date:'07 Jul 2026',assignee:'JS',type:'maintenance'},
+  {num:'JOB-0038',client:'Wayne Enterprises',site:'R&D Lab',desc:'Structured Cabling — Cat6A full floor installation',priority:'Normal',status:'job_in_progress',finance:'quoted',team:['SJ','MD'],value:67800,date:'05 Jul 2026',assignee:'SJ',type:'install'},
+  {num:'JOB-0037',client:'Acme Corp',site:'Dispatch Bay',desc:'Generator Service — 500kVA annual maintenance',priority:'Normal',status:'job_completed',finance:'paid',team:['MD'],value:18500,date:'03 Jul 2026',assignee:'MD',type:'maintenance'},
+  {num:'JOB-0036',client:'Globex Ltd',site:'Warehouse B',desc:'Solar PV — 50kW rooftop installation',priority:'High',status:'work_in_progress',finance:'quoted',team:['JS'],value:320000,date:'01 Jul 2026',assignee:'JS',type:'new_build'},
+  {num:'JOB-0035',client:'Initech',site:'Data Centre',desc:'Cooling Upgrade — precision AC units ×3',priority:'Urgent',status:'quote_finalized',finance:'quoted',team:['SJ'],value:145000,date:'28 Jun 2026',assignee:'SJ',type:'install'},
+  {num:'JOB-0034',client:'Umbrella Inc',site:'Security Post',desc:'Access Control — biometric readers ×12',priority:'Normal',status:'work_client_approved',finance:'invoiced',team:['MD'],value:54200,date:'25 Jun 2026',assignee:'MD',type:'install'},
+  {num:'JOB-0033',client:'Wayne Enterprises',site:'Boardroom',desc:'AV System — 4K display wall & conferencing',priority:'Normal',status:'estimate_done',finance:'estimated',team:['JS'],value:88000,date:'23 Jun 2026',assignee:'JS',type:'supply_and_deliver'},
+  {num:'JOB-0032',client:'Acme Corp',site:'Parking Structure',desc:'LED Lighting Upgrade — 240 fittings',priority:'Low',status:'invoiced',finance:'paid',team:['SJ'],value:42600,date:'20 Jun 2026',assignee:'SJ',type:'install'},
+  {num:'JOB-0031',client:'Globex Ltd',site:'Canteen',desc:'Plumbing — hot water system replacement',priority:'Normal',status:'on_my_way',finance:'quoted',team:['MD'],value:22100,date:'18 Jun 2026',assignee:'MD',type:'repair'},
+  {num:'JOB-0030',client:'Initech',site:'Office Block C',desc:'Painting — full interior repaint 3 floors',priority:'Low',status:'quote_drafted',finance:'quoted',team:['JS'],value:35000,date:'15 Jun 2026',assignee:'JS',type:'other'},
+  {num:'JOB-0029',client:'Umbrella Inc',site:'Cold Storage',desc:'Refrigeration — compressor overhaul',priority:'High',status:'paid',finance:'paid',team:['SJ'],value:61400,date:'12 Jun 2026',assignee:'SJ',type:'repair'},
+  {num:'JOB-0028',client:'Wayne Enterprises',site:'Gym',desc:'Flooring — rubber gym tiles full area',priority:'Low',status:'job_booked',finance:'estimated',team:['MD'],value:19800,date:'10 Jun 2026',assignee:'MD',type:'other'},
+  {num:'JOB-0027',client:'Acme Corp',site:'Roof',desc:'Waterproofing — torch-on membrane full roof',priority:'High',status:'work_in_progress',finance:'quoted',team:['JS'],value:78000,date:'08 Jun 2026',assignee:'JS',type:'maintenance'},
+  {num:'JOB-0026',client:'Globex Ltd',site:'Substation',desc:'Transformer Replacement — 500kVA unit',priority:'Urgent',status:'commission_paid',finance:'paid',team:['SJ'],value:210000,date:'05 Jun 2026',assignee:'SJ',type:'reinstatement'},
+  {num:'JOB-0025',client:'Initech',site:'Entrance',desc:'Boom Gate — automated vehicle access system',priority:'Normal',status:'quote_sent',finance:'quoted',team:['MD'],value:44500,date:'02 Jun 2026',assignee:'MD',type:'install'},
+  {num:'JOB-0024',client:'Umbrella Inc',site:'Lab 3',desc:'Fume Hood Installation — 4 units with ducting',priority:'Normal',status:'job_in_progress',finance:'quoted',team:['JS'],value:33200,date:'30 May 2026',assignee:'JS',type:'install'},
+  {num:'JOB-0023',client:'Wayne Enterprises',site:'Basement',desc:'Sump Pump — dual pump installation with alarm',priority:'Normal',status:'job_completed',finance:'invoiced',team:['SJ'],value:28900,date:'28 May 2026',assignee:'SJ',type:'repair'},
+  {num:'JOB-0022',client:'Acme Corp',site:'Canteen',desc:'Kitchen Equipment — commercial hood & suppression',priority:'High',status:'quote_accepted',finance:'quoted',team:['MD'],value:52000,date:'25 May 2026',assignee:'MD',type:'install'},
+  {num:'JOB-0021',client:'Globex Ltd',site:'Loading Bay',desc:'Dock Levellers — 4 units hydraulic',priority:'Normal',status:'work_in_progress',finance:'quoted',team:['JS'],value:96000,date:'22 May 2026',assignee:'JS',type:'install'},
+  {num:'JOB-0020',client:'Initech',site:'Comms Room',desc:'Fibre Termination — 48-port patch panel',priority:'Low',status:'commission_paid',finance:'paid',team:['SJ'],value:14200,date:'20 May 2026',assignee:'SJ',type:'install'},
+  {num:'JOB-0019',client:'Umbrella Inc',site:'Roof Plant Room',desc:'Chiller Service — 200TR unit annual maintenance',priority:'Normal',status:'quote_finalized',finance:'quoted',team:['MD'],value:38500,date:'18 May 2026',assignee:'MD',type:'maintenance'},
 ];
 
-const PIPELINE_STAGES = ['Booked','Estimated','Quoted','Accepted','In Progress','Completed','Client Approved','Invoiced','Paid','Commission Paid'];
+// 5 grouped pipeline stages — matches production JobProgressPipeline.tsx exactly
+const PIPELINE_STAGES = [
+  {key:'estimate', label:'Estimate', icon:'calculate', statuses:['job_booked','estimate_done']},
+  {key:'quote',    label:'Quote',    icon:'description', statuses:['quote_drafted','quote_sent','quote_finalized','quote_accepted','quote_declined']},
+  {key:'work',     label:'Work',     icon:'construction', statuses:['on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved']},
+  {key:'invoice',  label:'Invoice',  icon:'receipt_long', statuses:['invoiced']},
+  {key:'paid',     label:'Paid',     icon:'payments', statuses:['paid','commission_paid']},
+];
+// Flat status list for backward-compat lookups
+const ALL_STATUSES = PIPELINE_STAGES.flatMap(s=>s.statuses);
+function getStageForStatus(status){
+  return PIPELINE_STAGES.findIndex(s=>s.statuses.includes(status));
+}
+function getSubStatus(stageKey, status){
+  const sub = {
+    quote: {quote_accepted:'Approved',quote_sent:'Sent',quote_declined:'Declined',quote_finalized:'Finalized',quote_drafted:'Draft'},
+    work:  {work_client_approved:'Approved',job_completed:'Completed',work_in_progress:'In Progress',job_in_progress:'In Progress',on_my_way:'En Route'},
+    invoice: {invoiced:'Sent'},
+    paid: {commission_paid:'Commission Paid',paid:'Paid'},
+  };
+  return (sub[stageKey]||{})[status]||null;
+}
+// Real guard keys from production useWorkflowGuardKeys.ts — GUARD_KEY_LABELS
+// Keys: estimate_finalized, quote_ready, client_contact_present, quote_approval_present,
+//       invoice_ready, payment_recorded, commission_enabled
+// Note: 'Jobcard Signed' is NOT a guard key — it is a jobcard field. Removed.
+const GUARD_KEY_DEFS = [
+  {key:'estimate_finalized',    label:'Estimate Finalized',   desc:'Estimate exists with total > 0'},
+  {key:'quote_ready',           label:'Quote Ready',           desc:'Quote exists with status ready/sent/approved and total > 0'},
+  {key:'client_contact_present',label:'Client Contact',        desc:'Client has email or phone number'},
+  {key:'quote_approval_present',label:'Quote Approved',        desc:'Quote is approved or PO uploaded'},
+  {key:'invoice_ready',         label:'Invoice Ready',         desc:'Invoice exists with total > 0'},
+  {key:'payment_recorded',      label:'Payment Recorded',      desc:'All invoices are marked as paid'},
+  {key:'commission_enabled',    label:'Commission Enabled',    desc:'Commission feature is enabled for this organisation'},
+];
+// Guard key state per job — keyed by job status stage
 const GUARD_KEYS = {
-  'In Progress': [{key:'Estimate Finalized',met:true},{key:'Quote Ready',met:true},{key:'Client Contact',met:true},{key:'Quote Approved',met:true},{key:'Jobcard Signed',met:false},{key:'Invoice Ready',met:false}],
-  'Completed':   [{key:'Jobcard Signed',met:false},{key:'Invoice Ready',met:false}],
-  'Invoiced':    [{key:'Invoice Ready',met:false}],
-  'Paid':        [{key:'Payment Confirmed',met:false}],
+  job_booked:             [{key:'estimate_finalized',met:false}],
+  estimate_done:          [{key:'estimate_finalized',met:true},{key:'quote_ready',met:false},{key:'client_contact_present',met:true}],
+  quote_drafted:          [{key:'estimate_finalized',met:true},{key:'quote_ready',met:false},{key:'client_contact_present',met:true}],
+  quote_sent:             [{key:'estimate_finalized',met:true},{key:'quote_ready',met:true},{key:'client_contact_present',met:true}],
+  quote_finalized:        [{key:'estimate_finalized',met:true},{key:'quote_ready',met:true},{key:'client_contact_present',met:true}],
+  quote_accepted:         [{key:'estimate_finalized',met:true},{key:'quote_ready',met:true},{key:'client_contact_present',met:true},{key:'quote_approval_present',met:true}],
+  on_my_way:              [{key:'quote_approval_present',met:true}],
+  work_in_progress:       [{key:'quote_approval_present',met:true}],
+  job_in_progress:        [{key:'quote_approval_present',met:true}],
+  job_completed:          [{key:'quote_approval_present',met:true},{key:'invoice_ready',met:false}],
+  work_client_approved:   [{key:'quote_approval_present',met:true},{key:'invoice_ready',met:false}],
+  invoiced:               [{key:'invoice_ready',met:true},{key:'payment_recorded',met:false}],
+  paid:                   [{key:'invoice_ready',met:true},{key:'payment_recorded',met:true}],
+  commission_paid:        [{key:'invoice_ready',met:true},{key:'payment_recorded',met:true},{key:'commission_enabled',met:true}],
+  quote_declined:         [],
+  cancelled:              [],
 };
+// Guidance messages — matches STATUS_GUIDANCE in production JobNextActions.tsx exactly
 const GUIDANCE = {
-  'Booked':          {label:'Current Stage — Booked',msg:'Create an estimate to proceed.',action:'Open Estimate'},
-  'Estimated':       {label:'Current Stage — Estimated',msg:'Send the quote to the client for approval.',action:'Open Quote'},
-  'Quoted':          {label:'Current Stage — Quoted',msg:'Waiting for client to approve the quote.',action:'Re-send Quote'},
-  'Accepted':        {label:'Current Stage — Quote Accepted',msg:'Quote accepted. Mark job as In Progress to begin work.',action:'Mark WIP'},
-  'In Progress':     {label:'Current Stage — In Progress',msg:'Complete the jobcard and get it signed before marking the job done. Invoice will be auto-created from the quote.',action:'Open Jobcard'},
-  'Completed':       {label:'Current Stage — Completed',msg:'Job completed. Awaiting client approval before invoicing.',action:'Request Approval'},
-  'Client Approved': {label:'Current Stage — Client Approved',msg:'Client has approved. Create and send the invoice.',action:'Create Invoice'},
-  'Invoiced':        {label:'Current Stage — Invoiced',msg:'Invoice sent. Awaiting payment.',action:'View Invoice'},
-  'Paid':            {label:'Current Stage — Paid',msg:'Payment received. Record commission if applicable.',action:'Record Commission'},
-  'Commission Paid': {label:'Stage Complete',msg:'All stages complete. Job is fully closed.',action:'View Summary'},
+  job_booked:           {icon:'edit_note',    label:'Create an Estimate',          msg:'Create and finalize an Estimate to begin the quoting process.',                          action:'Open Estimate',  module:'estimate'},
+  estimate_done:        {icon:'request_quote',label:'Draft a Quote',               msg:'Draft a Quote from the estimate and send it to the client.',                              action:'Open Quote',     module:'quote'},
+  quote_drafted:        {icon:'request_quote',label:'Finalize the Quote',          msg:'Finalize the Quote and send it to the client for approval.',                              action:'Open Quote',     module:'quote'},
+  quote_finalized:      {icon:'send',         label:'Send the Quote',              msg:'Send the finalized Quote to the client via email.',                                        action:'Open Quote',     module:'quote'},
+  quote_sent:           {icon:'hourglass_top',label:'Awaiting Client Response',    msg:'Waiting for client response. Mark as Accepted or Declined in the Quote editor.',        action:'Open Quote',     module:'quote'},
+  quote_accepted:       {icon:'engineering',  label:'Dispatch Team',               msg:'Quote approved — dispatch the team and start the Jobcard.',                               action:'Open Jobcard',   module:'jobcard'},
+  on_my_way:            {icon:'directions_car',label:'En Route',                   msg:'Technician en route. Start the Jobcard once on site.',                                    action:'Open Jobcard',   module:'jobcard'},
+  work_in_progress:     {icon:'construction', label:'Work in Progress',            msg:'Work in progress. Complete the Jobcard and capture sign-off.',                            action:'Open Jobcard',   module:'jobcard'},
+  job_in_progress:      {icon:'construction', label:'Work in Progress',            msg:'Work in progress. Complete the Jobcard and capture sign-off.',                            action:'Open Jobcard',   module:'jobcard'},
+  job_completed:        {icon:'draw',         label:'Request Client Sign-off',     msg:'Request client sign-off on the completed Jobcard.',                                       action:'Open Jobcard',   module:'jobcard'},
+  work_client_approved: {icon:'receipt_long', label:'Create Invoice',              msg:'Client signed off — create and send the Invoice.',                                        action:'Open Invoice',   module:'invoice'},
+  invoiced:             {icon:'hourglass_top',label:'Awaiting Payment',            msg:'Invoice sent. Awaiting payment from the client.',                                          action:'View Invoice',   module:'invoice'},
+  paid:                 {icon:'payments',     label:'Record Commission',           msg:'Payment received. Record commission if applicable.',                                       action:'Record Commission',module:'commissions'},
+  commission_paid:      {icon:'check_circle', label:'Job Complete',                msg:'All stages complete. Job is fully closed.',                                               action:'View Summary',   module:null},
+  quote_declined:       {icon:'cancel',       label:'Quote Declined',              msg:'The client declined the quote. Revise and re-send, or close the job.',                    action:'Open Quote',     module:'quote'},
+  cancelled:            {icon:'block',        label:'Job Cancelled',               msg:'This job has been cancelled.',                                                             action:null,             module:null},
 };
 
 const TEAM_ROLES = ['Tech Manager','Coordinator','Sales Rep','Job Owner'];
@@ -1301,7 +1363,7 @@ let filterSidebarOpen = true;
 let quickFilters = {mine:false,unassigned:false,active:false,week:false,overdue:false};
 let visibleCols = {num:true,client:true,desc:true,type:true,priority:true,status:true,finance:true,team:true,value:true,date:true};
 let currentJobNum = 'JOB-0042';
-let currentStageIdx = 4; // In Progress
+let currentJobStatus = 'work_in_progress'; // tracks raw status key
 let autoTransitions = true;
 let jobcardSigned = false;
 let photoCount = 0;
@@ -1330,8 +1392,9 @@ function toast(msg,type=''){
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function statusPill(s){
-  const map={'New':'pill-slate','Booked':'pill-blue','Estimated':'pill-slate','Quoted':'pill-blue','Quote Accepted':'pill-purple','In Progress':'pill-purple','Completed':'pill-green','Client Approved':'pill-teal','Invoiced':'pill-amber','Paid':'pill-green','Commission Paid':'pill-green'};
-  return `<span class="pill ${map[s]||'pill-slate'}">${s}</span>`;
+  const LABELS={job_booked:'Job Booked',estimate_done:'Estimate Done',quote_drafted:'Quote Drafted',quote_sent:'Quote Sent',quote_finalized:'Quote Finalized',quote_accepted:'Quote Accepted',quote_declined:'Quote Declined',on_my_way:'On My Way',work_in_progress:'Work In Progress',job_in_progress:'Job In Progress',job_completed:'Job Completed',work_client_approved:'Client Approved',invoiced:'Invoiced',paid:'Paid',commission_paid:'Commission Paid',cancelled:'Cancelled'};
+  const VARIANTS={job_booked:'pill-slate',estimate_done:'pill-slate',quote_drafted:'pill-slate',quote_sent:'pill-amber',quote_finalized:'pill-amber',quote_accepted:'pill-blue',quote_declined:'pill-red',on_my_way:'pill-blue',work_in_progress:'pill-blue',job_in_progress:'pill-blue',job_completed:'pill-green',work_client_approved:'pill-teal',invoiced:'pill-green',paid:'pill-green',commission_paid:'pill-green',cancelled:'pill-red'};
+  return `<span class="pill ${VARIANTS[s]||'pill-slate'}">${LABELS[s]||s}</span>`;
 }
 function financePill(f){
   const map={'Estimated':'pill-slate','Quoted':'pill-blue','Invoiced':'pill-amber','Paid':'pill-green'};
@@ -1369,14 +1432,17 @@ function toggleQuick(key){
 function applyFilters(){
   const q=document.getElementById('search-input').value.toLowerCase();
   const statuses=[];
-  if(document.getElementById('s-booked').checked)statuses.push('Booked');
-  if(document.getElementById('s-estimate').checked)statuses.push('Estimated','New');
-  if(document.getElementById('s-quoted').checked)statuses.push('Quoted');
-  if(document.getElementById('s-accepted').checked)statuses.push('Quote Accepted');
-  if(document.getElementById('s-inprogress').checked)statuses.push('In Progress');
-  if(document.getElementById('s-completed').checked)statuses.push('Completed');
-  if(document.getElementById('s-invoiced').checked)statuses.push('Invoiced');
-  if(document.getElementById('s-paid').checked)statuses.push('Paid');
+  const STATUS_IDS=[
+    ['s-job-booked','job_booked'],['s-estimate-done','estimate_done'],
+    ['s-quote-drafted','quote_drafted'],['s-quote-sent','quote_sent'],
+    ['s-quote-finalized','quote_finalized'],['s-quote-accepted','quote_accepted'],
+    ['s-on-my-way','on_my_way'],['s-work-in-progress','work_in_progress'],
+    ['s-job-in-progress','job_in_progress'],['s-job-completed','job_completed'],
+    ['s-client-approved','work_client_approved'],['s-invoiced','invoiced'],
+    ['s-paid','paid'],['s-commission-paid','commission_paid'],
+    ['s-quote-declined','quote_declined'],['s-cancelled','cancelled']
+  ];
+  STATUS_IDS.forEach(([id,val])=>{const el=document.getElementById(id);if(el&&el.checked)statuses.push(val);});
   const priorities=[];
   if(document.getElementById('p-urgent').checked)priorities.push('Urgent');
   if(document.getElementById('p-high').checked)priorities.push('High');
@@ -1489,40 +1555,40 @@ function setView(v){
   if(v==='board')renderBoard();
 }
 function renderBoard(){
-  const STAGE_COLOURS={
-    'New':'#94a3b8',
-    'Booked':'#6366f1',
-    'Quoted':'#f59e0b',
-    'In Progress':'#0ea5e9',
-    'Completed':'#22c55e',
-    'Invoiced':'#8b5cf6',
-    'Paid':'#10b981'
-  };
-  const statuses=['New','Booked','Quoted','In Progress','Completed','Invoiced','Paid'];
+  // Exact KANBAN_STAGES from production JobsKanbanBoard.tsx
+  const KANBAN_STAGES=[
+    {key:'booked',label:'Booked',statuses:['job_booked','estimate_done'],accent:'#94a3b8'},
+    {key:'quoting',label:'Quoting',statuses:['quote_drafted','quote_sent','quote_finalized'],accent:'#f59e0b'},
+    {key:'accepted',label:'Accepted',statuses:['quote_accepted'],accent:'#6366f1'},
+    {key:'in_progress',label:'In Progress',statuses:['on_my_way','work_in_progress','job_in_progress'],accent:'#0ea5e9'},
+    {key:'completed',label:'Completed',statuses:['job_completed','work_client_approved'],accent:'#22c55e'},
+    {key:'invoiced',label:'Invoiced',statuses:['invoiced','paid','commission_paid'],accent:'#10b981'},
+    {key:'declined_cancelled',label:'Declined / Cancelled',statuses:['quote_declined','cancelled'],accent:'#ef4444'},
+  ];
   const bw=document.getElementById('board-wrap');
-  bw.innerHTML=statuses.map(s=>{
-    const jobs=filteredJobs.filter(j=>j.status===s);
-    const accent=STAGE_COLOURS[s]||'#6366f1';
+  bw.innerHTML=KANBAN_STAGES.map(stage=>{
+    const jobs=filteredJobs.filter(j=>stage.statuses.includes(j.status));
+    const accent=stage.accent;
+    const s=stage.label;
     return `<div class="board-col">
       <div class="board-col-header" style="--col-accent:${accent}">${s}<span class="count">${jobs.length}</span></div>
-      ${jobs.map(j=>`<div class="board-card" onclick="openDetail('${j.num}')">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <span class="board-card-num">${j.num}</span>
-          <span style="font-size:10px;color:var(--muted-fg)">${j.date}</span>
-        </div>
-        <div class="board-card-client">${j.client}</div>
-        <div style="font-size:10.5px;color:var(--muted-fg);margin-bottom:3px">${j.site}</div>
-        <div class="board-card-desc" style="margin-bottom:8px">${j.desc}</div>
-        <div style="display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap">
-          ${priorityPill(j.priority)}
-          <span style="font-size:10px;color:var(--muted-fg);font-weight:500">${j.type}</span>
-          ${financePill(j.finance)}
-        </div>
-        <div class="board-card-footer">
-          <div style="display:flex;margin-right:auto">${j.team.map(t=>avatarHtml(t)).join('')}</div>
-          <span style="font-size:12px;font-weight:700;color:var(--fg)">${fmt(j.value)}</span>
-        </div>
-      </div>`).join('')}
+      ${jobs.map(j=>{
+        const SL={job_booked:'#6b7280',estimate_done:'#6b7280',quote_drafted:'#b45309',quote_sent:'#b45309',quote_finalized:'#b45309',quote_accepted:'#16a34a',quote_declined:'#dc2626',on_my_way:'#2563eb',work_in_progress:'#2563eb',job_in_progress:'#2563eb',job_completed:'#16a34a',work_client_approved:'#0f766e',invoiced:'#7c3aed',paid:'#16a34a',commission_paid:'#16a34a',cancelled:'#dc2626'};
+        const SN={job_booked:'JOB BOOKED',estimate_done:'ESTIMATE DONE',quote_drafted:'QUOTE DRAFTED',quote_sent:'QUOTE SENT',quote_finalized:'QUOTE FINALIZED',quote_accepted:'QUOTE ACCEPTED',quote_declined:'QUOTE DECLINED',on_my_way:'EN ROUTE',work_in_progress:'IN PROGRESS',job_in_progress:'IN PROGRESS',job_completed:'COMPLETED',work_client_approved:'CLIENT APPROVED',invoiced:'INVOICED',paid:'PAID',commission_paid:'COMMISSION PAID',cancelled:'CANCELLED'};
+        return `<div class="board-card" onclick="openDetail('${j.num}')">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:10px;font-weight:700;color:var(--muted-fg);letter-spacing:.02em">${j.num}</span>
+            <span style="font-size:9px;font-weight:700;letter-spacing:.07em;color:${SL[j.status]||'#6b7280'}">${SN[j.status]||j.status.toUpperCase()}</span>
+          </div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:1px">${j.client}</div>
+          <div style="font-size:11px;color:var(--muted-fg);margin-bottom:5px">${j.site}</div>
+          <div style="font-size:11px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:9px">${j.desc}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;gap:-2px">${j.team.map(t=>avatarHtml(t)).join('')}</div>
+            <span style="font-size:11.5px;font-weight:700;color:var(--fg)">${fmt(j.value)}</span>
+          </div>
+        </div>`;
+      }).join('')}
     </div>`;
   }).join('');
 }
@@ -1667,8 +1733,7 @@ function openDetail(num){
   document.getElementById('ji-priority').innerHTML=priorityPill(j.priority);
   document.getElementById('ji-desc').textContent=j.desc.includes('—')?'Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.':j.desc;
   // Set stage
-  currentStageIdx=PIPELINE_STAGES.indexOf(j.status);
-  if(currentStageIdx<0)currentStageIdx=4;
+  currentJobStatus=j.status||'job_booked';
   renderPipeline();
   renderGuardKeys();
   renderGuidance();
@@ -1684,89 +1749,95 @@ function openDetail(num){
 }
 function renderPipeline(){
   const bar=document.getElementById('pipeline-bar');
+  const activeStageIdx=getStageForStatus(currentJobStatus);
   bar.innerHTML=PIPELINE_STAGES.map((s,i)=>{
     let cls='';
-    if(i<currentStageIdx)cls='done';
-    else if(i===currentStageIdx)cls='active';
-    const icon=i<currentStageIdx?'check_circle':i===currentStageIdx?'radio_button_checked':'radio_button_unchecked';
+    if(i<activeStageIdx)cls='done';
+    else if(i===activeStageIdx)cls='active';
+    const icon=i<activeStageIdx?'check_circle':i===activeStageIdx?'radio_button_checked':'radio_button_unchecked';
+    const sub=getSubStatus(s.key,currentJobStatus);
+    const subLabel=i===activeStageIdx&&sub?`<span style="font-size:9px;opacity:.7;margin-left:3px">(${sub})</span>`:'';
     return `<div class="pipe-step">
-      <div class="pipe-node ${cls}" onclick="clickPipelineStage(${i})"><span class="ms">${icon}</span>${s}</div>
+      <div class="pipe-node ${cls}" onclick="clickPipelineStage(${i})"><span class="ms">${icon}</span>${s.label}${subLabel}</div>
       ${i<PIPELINE_STAGES.length-1?'<span class="pipe-arrow ms">chevron_right</span>':''}
     </div>`;
   }).join('');
 }
 function clickPipelineStage(idx){
-  if(idx===currentStageIdx)return;
-  if(idx>currentStageIdx+1){toast('Cannot skip stages. Advance one at a time.','error');return;}
-  if(idx<currentStageIdx){
-    if(!confirm(`Revert to "${PIPELINE_STAGES[idx]}"? This will move the job back.`))return;
-    currentStageIdx=idx;
+  const activeStageIdx=getStageForStatus(currentJobStatus);
+  if(idx===activeStageIdx)return;
+  if(idx>activeStageIdx+1){toast('Cannot skip stages. Advance one at a time.','error');return;}
+  if(idx<activeStageIdx){
+    if(!confirm(`Revert to "${PIPELINE_STAGES[idx].label}"? This will move the job back.`))return;
+    // Revert to first status of that stage
+    currentJobStatus=PIPELINE_STAGES[idx].statuses[0];
     updateJobStatus();
     return;
   }
-  // Advance
-  const guards=GUARD_KEYS[PIPELINE_STAGES[currentStageIdx]]||[];
+  // Advance — check guard keys for current status
+  const guards=GUARD_KEYS[currentJobStatus]||[];
   const blocked=guards.filter(g=>!g.met);
   if(blocked.length>0&&!autoTransitions){
-    toast(`Blocked by: ${blocked.map(g=>g.key).join(', ')}. Use Unlock to override.`,'error');
+    const def=GUARD_KEY_DEFS.find(d=>d.key===blocked[0].key)||{label:blocked[0].key};
+    toast(`Blocked by: ${blocked.map(g=>(GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key}).label).join(', ')}. Use Unlock to override.`,'error');
     return;
   }
-  currentStageIdx=idx;
+  // Advance to first status of next stage
+  currentJobStatus=PIPELINE_STAGES[idx].statuses[0];
   updateJobStatus();
 }
 function updateJobStatus(){
   const j=JOBS.find(j=>j.num===currentJobNum);
-  if(j)j.status=PIPELINE_STAGES[currentStageIdx];
+  if(j)j.status=currentJobStatus;
   renderPipeline();
   renderGuardKeys();
   renderGuidance();
-  document.getElementById('d-status-pill').innerHTML=statusPill(PIPELINE_STAGES[currentStageIdx]);
-  toast(`Stage advanced to "${PIPELINE_STAGES[currentStageIdx]}"`,'success');
-  addTimelineItem('status','label',`Status changed to ${PIPELINE_STAGES[currentStageIdx]}`,'Updated manually',new Date().toLocaleString());
+  document.getElementById('d-status-pill').innerHTML=statusPill(currentJobStatus);
+  const stageLabel=(PIPELINE_STAGES.find(s=>s.statuses.includes(currentJobStatus))||{label:currentJobStatus}).label;
+  toast(`Stage advanced to "${stageLabel}"`,'success');
+  addTimelineItem('status','label',`Status changed to ${currentJobStatus}`,'Updated manually',new Date().toLocaleString());
 }
 function renderGuardKeys(){
-  const stage=PIPELINE_STAGES[currentStageIdx];
-  const guards=GUARD_KEYS[stage]||[];
+  const guards=GUARD_KEYS[currentJobStatus]||[];
   const display=document.getElementById('guard-keys-display');
   if(guards.length===0){display.innerHTML='<span style="font-size:11px;color:var(--muted-fg)">No guard keys for this stage</span>';return;}
-  display.innerHTML=guards.map(g=>`<span class="guard-key ${g.met?'met':'blocked'}"><span class="ms">${g.met?'check':'close'}</span>${g.key}</span>`).join(' ');
+  display.innerHTML=guards.map(g=>{
+    const def=GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key,desc:''};
+    return `<span class="guard-key ${g.met?'met':'blocked'}" title="${def.desc}"><span class="ms">${g.met?'check':'close'}</span>${def.label}</span>`;
+  }).join(' ');
   const btnDone=document.getElementById('btn-done');
   const allMet=guards.every(g=>g.met);
   btnDone.disabled=!allMet;
-  btnDone.title=allMet?'':'Requires: '+guards.filter(g=>!g.met).map(g=>g.key).join(', ');
+  btnDone.title=allMet?'':'Requires: '+guards.filter(g=>!g.met).map(g=>(GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key}).label).join(', ');
 }
 function renderGuidance(){
-  const stage=PIPELINE_STAGES[currentStageIdx];
-  const g=GUIDANCE[stage]||{label:'Stage: '+stage,msg:'',action:'Continue'};
+  const g=GUIDANCE[currentJobStatus]||{icon:'info',label:'Stage: '+currentJobStatus,msg:'',action:'Continue',module:null};
   document.getElementById('guidance-label').textContent=g.label;
   document.getElementById('guidance-msg').textContent=g.msg;
-  document.getElementById('guidance-action-label').textContent=g.action;
+  const actionBtn=document.getElementById('guidance-action-label');
+  if(actionBtn)actionBtn.textContent=g.action||'Continue';
 }
 function handleGuidanceAction(){
-  const stage=PIPELINE_STAGES[currentStageIdx];
-  const actions={
-    'Booked':()=>openEstimateModal(),
-    'Estimated':()=>openQuoteModal(),
-    'Quoted':()=>toast('Quote re-sent to client','success'),
-    'Accepted':()=>markWIP(),
-    'In Progress':()=>openJobcardModal(),
-    'Completed':()=>toast('Approval request sent to client','success'),
-    'Client Approved':()=>openInvoiceModal(),
-    'Invoiced':()=>toast('Opening invoice…'),
-    'Paid':()=>toast('Opening commission record…'),
-    'Commission Paid':()=>toast('Job summary opened'),
+  const g=GUIDANCE[currentJobStatus]||{module:null};
+  const moduleActions={
+    estimate:()=>openEstimateModal(),
+    quote:()=>openQuoteModal(),
+    jobcard:()=>openJobcardModal(),
+    invoice:()=>openInvoiceModal(),
+    commissions:()=>toast('Opening commission record…'),
   };
-  (actions[stage]||(() => toast('Action triggered')))();
+  (moduleActions[g.module]||(() => toast('Action triggered')))();
 }
 function markWIP(){
-  if(currentStageIdx<4){currentStageIdx=4;updateJobStatus();}
+  const wip=['on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved','invoiced','paid','commission_paid'];
+  if(!wip.includes(currentJobStatus)){currentJobStatus='work_in_progress';updateJobStatus();}
   else toast('Job is already In Progress or further','error');
 }
 function markDone(){
-  const guards=GUARD_KEYS[PIPELINE_STAGES[currentStageIdx]]||[];
+  const guards=GUARD_KEYS[currentJobStatus]||[];
   const blocked=guards.filter(g=>!g.met);
-  if(blocked.length>0){toast('Cannot mark done: '+blocked.map(g=>g.key).join(', '),'error');return;}
-  currentStageIdx=5;updateJobStatus();
+  if(blocked.length>0){toast('Cannot mark done: '+blocked.map(g=>(GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key}).label).join(', '),'error');return;}
+  currentJobStatus='job_completed';updateJobStatus();
   if(autoTransitions){toast('Invoice auto-created from quote','success');}
 }
 function toggleAutoTransitions(){
