@@ -165,7 +165,7 @@ td:first-child{padding:8px 6px}
 .board-card-footer{display:flex;align-items:center;gap:6px;margin-top:8px}
 
 /* ── Detail page ── */
-.detail-breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:0 16px;height:46px;display:flex;align-items:center;gap:6px;font-size:12px;flex-shrink:0}
+.detail-breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:8px 16px;min-height:46px;display:flex;align-items:center;gap:16px;font-size:12px;flex-shrink:0}
 .detail-breadcrumb a{color:var(--muted-fg);cursor:pointer;text-decoration:none}
 .detail-breadcrumb a:hover{color:var(--indigo-600)}
 .detail-breadcrumb .sep{color:var(--slate-300);font-size:11px}
@@ -631,31 +631,30 @@ td:first-child{padding:8px 6px}
 ═══════════════════════════════════════════════════════════ -->
 <div id="page-detail">
 
-  <!-- Breadcrumb -->
+  <!-- Combined breadcrumb + title bar -->
   <div class="detail-breadcrumb">
-    <a onclick="showList()">Jobs</a>
-    <span class="sep">›</span>
-    <span class="current" id="d-breadcrumb">JOB-0042</span>
-    <div class="spacer"></div>
-    <div class="auto-badge" id="auto-badge" onclick="toggleAutoTransitions()">
-      <span class="ms">auto_awesome</span><span id="auto-badge-text">AUTO-TRANSITIONS ON</span>
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:1px;flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted-fg)">
+        <a onclick="showList()" style="color:var(--muted-fg);cursor:pointer;text-decoration:none">Jobs</a>
+        <span style="color:var(--slate-300);font-size:10px">›</span>
+        <span style="color:var(--fg);font-weight:500" id="d-breadcrumb">JOB-0042</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span id="d-title" style="font-size:15px;font-weight:700;color:var(--fg);white-space:nowrap">JOB-0042 — Electrical Rewiring</span>
+        <span id="d-status-pill"></span>
+        <span id="d-finance-pill"></span>
+        <span id="d-priority-pill"></span>
+      </div>
     </div>
-    <button class="btn" style="height:26px" title="Unlock stage" onclick="openUnlockModal()"><span class="ms" style="font-size:14px">lock_open</span></button>
-    <button class="btn" style="height:26px" title="Duplicate job" onclick="duplicateJob()"><span class="ms" style="font-size:14px">content_copy</span></button>
-    <button class="btn danger" style="height:26px" title="Delete job" onclick="openDeleteConfirm()"><span class="ms" style="font-size:14px">delete</span></button>
-  </div>
-
-  <!-- Header bar -->
-  <div class="detail-header-bar">
-    <div class="detail-title">
-      <span id="d-title">JOB-0042 — Electrical Rewiring</span>
-      <span id="d-status-pill"></span>
-      <span id="d-finance-pill"></span>
-      <span id="d-priority-pill"></span>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <div class="auto-badge" id="auto-badge" onclick="toggleAutoTransitions()">
+        <span class="ms">auto_awesome</span><span id="auto-badge-text">AUTO-TRANSITIONS ON</span>
+      </div>
+      <button class="btn" style="height:26px" title="Unlock stage" onclick="openUnlockModal()"><span class="ms" style="font-size:14px">lock_open</span></button>
+      <button class="btn" style="height:26px" title="Duplicate job" onclick="duplicateJob()"><span class="ms" style="font-size:14px">content_copy</span></button>
+      <button class="btn danger" style="height:26px" title="Delete job" onclick="openDeleteConfirm()"><span class="ms" style="font-size:14px">delete</span></button>
     </div>
-
   </div>
-
   <!-- Pipeline bar -->
   <div class="pipeline-bar" id="pipeline-bar"></div>
 
