@@ -544,36 +544,36 @@ td:first-child{padding:8px 6px}
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Workflow Status</div>
-        <label class="filter-item"><input type="checkbox" id="s-booked" checked onchange="applyFilters()">Job Booked</label>
-        <label class="filter-item"><input type="checkbox" id="s-estimate" checked onchange="applyFilters()">Estimate Done</label>
-        <label class="filter-item"><input type="checkbox" id="s-quoted" checked onchange="applyFilters()">Quoted / Sent</label>
-        <label class="filter-item"><input type="checkbox" id="s-accepted" checked onchange="applyFilters()">Quote Accepted</label>
-        <label class="filter-item"><input type="checkbox" id="s-inprogress" checked onchange="applyFilters()">In Progress</label>
-        <label class="filter-item"><input type="checkbox" id="s-completed" checked onchange="applyFilters()">Completed</label>
-        <label class="filter-item"><input type="checkbox" id="s-invoiced" checked onchange="applyFilters()">Invoiced</label>
-        <label class="filter-item"><input type="checkbox" id="s-paid" checked onchange="applyFilters()">Paid</label>
+        <label class="filter-item"><input type="checkbox" id="s-booked" onchange="applyFilters()">Job Booked</label>
+        <label class="filter-item"><input type="checkbox" id="s-estimate" onchange="applyFilters()">Estimate Done</label>
+        <label class="filter-item"><input type="checkbox" id="s-quoted" onchange="applyFilters()">Quoted / Sent</label>
+        <label class="filter-item"><input type="checkbox" id="s-accepted" onchange="applyFilters()">Quote Accepted</label>
+        <label class="filter-item"><input type="checkbox" id="s-inprogress" onchange="applyFilters()">In Progress</label>
+        <label class="filter-item"><input type="checkbox" id="s-completed" onchange="applyFilters()">Completed</label>
+        <label class="filter-item"><input type="checkbox" id="s-invoiced" onchange="applyFilters()">Invoiced</label>
+        <label class="filter-item"><input type="checkbox" id="s-paid" onchange="applyFilters()">Paid</label>
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Priority</div>
-        <label class="filter-item"><input type="checkbox" id="p-urgent" checked onchange="applyFilters()">🔴 Urgent</label>
-        <label class="filter-item"><input type="checkbox" id="p-high" checked onchange="applyFilters()">🟠 High</label>
-        <label class="filter-item"><input type="checkbox" id="p-normal" checked onchange="applyFilters()">🔵 Normal</label>
-        <label class="filter-item"><input type="checkbox" id="p-low" checked onchange="applyFilters()">⚪ Low</label>
+        <label class="filter-item"><input type="checkbox" id="p-urgent" onchange="applyFilters()">🔴 Urgent</label>
+        <label class="filter-item"><input type="checkbox" id="p-high" onchange="applyFilters()">🟠 High</label>
+        <label class="filter-item"><input type="checkbox" id="p-normal" onchange="applyFilters()">🔵 Normal</label>
+        <label class="filter-item"><input type="checkbox" id="p-low" onchange="applyFilters()">⚪ Low</label>
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Client</div>
-        <label class="filter-item"><input type="checkbox" id="c-acme" checked onchange="applyFilters()">Acme Corp</label>
-        <label class="filter-item"><input type="checkbox" id="c-globex" checked onchange="applyFilters()">Globex Ltd</label>
-        <label class="filter-item"><input type="checkbox" id="c-initech" checked onchange="applyFilters()">Initech</label>
-        <label class="filter-item"><input type="checkbox" id="c-umbrella" checked onchange="applyFilters()">Umbrella Inc</label>
-        <label class="filter-item"><input type="checkbox" id="c-wayne" checked onchange="applyFilters()">Wayne Enterprises</label>
+        <label class="filter-item"><input type="checkbox" id="c-acme" onchange="applyFilters()">Acme Corp</label>
+        <label class="filter-item"><input type="checkbox" id="c-globex" onchange="applyFilters()">Globex Ltd</label>
+        <label class="filter-item"><input type="checkbox" id="c-initech" onchange="applyFilters()">Initech</label>
+        <label class="filter-item"><input type="checkbox" id="c-umbrella" onchange="applyFilters()">Umbrella Inc</label>
+        <label class="filter-item"><input type="checkbox" id="c-wayne" onchange="applyFilters()">Wayne Enterprises</label>
       </div>
       <div class="filter-section">
         <div class="filter-section-title">Assigned To</div>
-        <label class="filter-item"><input type="checkbox" id="a-js" checked onchange="applyFilters()">John Smith</label>
-        <label class="filter-item"><input type="checkbox" id="a-sj" checked onchange="applyFilters()">Sarah Jones</label>
-        <label class="filter-item"><input type="checkbox" id="a-md" checked onchange="applyFilters()">Mike Davis</label>
-        <label class="filter-item"><input type="checkbox" id="a-kl" checked onchange="applyFilters()">Kate Lee</label>
+        <label class="filter-item"><input type="checkbox" id="a-js" onchange="applyFilters()">John Smith</label>
+        <label class="filter-item"><input type="checkbox" id="a-sj" onchange="applyFilters()">Sarah Jones</label>
+        <label class="filter-item"><input type="checkbox" id="a-md" onchange="applyFilters()">Mike Davis</label>
+        <label class="filter-item"><input type="checkbox" id="a-kl" onchange="applyFilters()">Kate Lee</label>
       </div>
     </div>
 
@@ -1395,10 +1395,11 @@ function applyFilters(){
   if(document.getElementById('a-kl').checked)assignees.push('KL');
   filteredJobs=JOBS.filter(j=>{
     if(q&&!`${j.num} ${j.client} ${j.site} ${j.desc}`.toLowerCase().includes(q))return false;
-    if(!statuses.includes(j.status))return false;
-    if(!priorities.includes(j.priority))return false;
-    if(!clients.includes(j.client))return false;
-    if(!j.team.some(t=>assignees.includes(t)))return false;
+    // Empty array = no filter active = show all; non-empty = restrict to checked items
+    if(statuses.length&&!statuses.includes(j.status))return false;
+    if(priorities.length&&!priorities.includes(j.priority))return false;
+    if(clients.length&&!clients.includes(j.client))return false;
+    if(assignees.length&&!j.team.some(t=>assignees.includes(t)))return false;
     if(quickFilters.mine&&j.assignee!=='JS')return false;
     if(quickFilters.unassigned&&j.team.length>0)return false;
     if(quickFilters.active&&!['In Progress','Quoted','Booked','Estimated'].includes(j.status))return false;
