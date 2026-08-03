@@ -179,16 +179,63 @@ td:first-child{padding:8px 6px}
 .detail-meta span{display:flex;align-items:center;gap:4px}
 .detail-meta strong{color:var(--fg-2);font-weight:600}
 
-.pipeline-bar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:0;overflow-x:auto;flex-shrink:0}
-.pipe-step{display:flex;align-items:center;gap:0;flex-shrink:0}
-.pipe-node{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:var(--radius);cursor:pointer;font-size:11.5px;font-weight:500;color:var(--muted-fg);transition:all .12s;white-space:nowrap}
-.pipe-node:hover{background:#fafafa;color:var(--fg-2)}
-.pipe-node.done{color:var(--green-600)}
-.pipe-node.done .ms{color:var(--green-500)}
-.pipe-node.active{color:var(--indigo-700);font-weight:600;background:var(--indigo-50);border-bottom:2px solid var(--indigo-600)}
-.pipe-node.active .ms{color:var(--indigo-600)}
-.pipe-node .ms{font-size:15px;color:var(--slate-300)}
-.pipe-arrow{color:var(--slate-300);font-size:13px;margin:0 -2px}
+/* ── Pipeline bar: chevron-ribbon stepper ── */
+.pipeline-bar{background:var(--white);border-bottom:1px solid var(--border);padding:4px 16px;display:flex;align-items:stretch;flex-shrink:0;overflow-x:auto;gap:2px;height:48px}
+.pipe-stage{
+  flex:1;min-width:100px;position:relative;display:flex;align-items:center;gap:8px;
+  padding:0 16px 0 24px;cursor:pointer;transition:background .15s;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);
+  background:#f1f3f7;
+  border-radius:0;
+}
+.pipe-stage:first-child{
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);
+  border-radius:4px 0 0 4px;padding-left:14px;
+}
+.pipe-stage:last-child{
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%,10px 50%);
+  border-radius:0 4px 4px 0;
+}
+.pipe-stage.done{background:var(--indigo-600)}
+.pipe-stage.done:hover{background:var(--indigo-700)}
+.pipe-stage.active{background:var(--indigo-50);box-shadow:inset 0 0 0 1.5px var(--indigo-200)}
+.pipe-stage.active:hover{background:#e8edff}
+.pipe-stage.declined{background:#fef2f2;box-shadow:inset 0 0 0 1.5px #fecaca}
+.pipe-stage.future{background:#f8f9fb}
+.pipe-stage.future:hover{background:#f1f3f7}
+/* Icon circle */
+.pipe-icon{
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+.pipe-icon .ms{font-size:13px;font-weight:400}
+.pipe-stage.done .pipe-icon{background:rgba(255,255,255,.22);color:#fff}
+.pipe-stage.active .pipe-icon{background:var(--indigo-100);color:var(--indigo-700)}
+.pipe-stage.declined .pipe-icon{background:#fee2e2;color:#dc2626}
+.pipe-stage.future .pipe-icon{background:#eaecf0;color:#9ca3af}
+/* Label */
+.pipe-lbl{font-size:11.5px;font-weight:600;white-space:nowrap;line-height:1}
+.pipe-stage.done .pipe-lbl{color:#fff}
+.pipe-stage.active .pipe-lbl{color:var(--indigo-800)}
+.pipe-stage.declined .pipe-lbl{color:#b91c1c}
+.pipe-stage.future .pipe-lbl{color:#9ca3af}
+/* Sub-status chip */
+.pipe-chip{
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  padding:2px 6px;border-radius:20px;line-height:1;white-space:nowrap;flex-shrink:0;
+}
+.pipe-stage.done .pipe-chip{background:rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.pipe-stage.active .pipe-chip{background:var(--indigo-600);color:#fff}
+.pipe-stage.declined .pipe-chip{background:#fecaca;color:#b91c1c}
+/* Pulse dot on active */
+.pipe-pulse{
+  width:7px;height:7px;border-radius:50%;background:var(--indigo-500);flex-shrink:0;
+  animation:pipe-pulse-anim 1.8s ease-in-out infinite;
+}
+@keyframes pipe-pulse-anim{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.4;transform:scale(.7)}
+}
 
 .guard-bar{background:var(--white);border-bottom:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
 .guard-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-right:4px}
@@ -558,6 +605,17 @@ td:first-child{padding:8px 6px}
         <label class="filter-item"><input type="checkbox" id="s-quote-declined" onchange="applyFilters()">Quote Declined</label>
         <label class="filter-item"><input type="checkbox" id="s-cancelled" onchange="applyFilters()">Cancelled</label>
       </div>
+      <!-- Finance Status filter — real backend field: job.finance_status (estimated/quoted/invoiced/paid)
+           Surfaced from backend data; not currently shown in production filter UI. Annotation for Claude/Lovable. -->
+      <div class="filter-section">
+        <div class="filter-section-title">Finance Status</div>
+        <label class="filter-item"><input type="checkbox" id="f-estimated" onchange="applyFilters()">Estimated</label>
+        <label class="filter-item"><input type="checkbox" id="f-quoted" onchange="applyFilters()">Quoted</label>
+        <label class="filter-item"><input type="checkbox" id="f-invoiced" onchange="applyFilters()">Invoiced</label>
+        <label class="filter-item"><input type="checkbox" id="f-paid" onchange="applyFilters()">Paid</label>
+      </div>
+      <!-- Priority filter — real backend field: job.priority (Urgent/High/Normal/Low)
+           Surfaced from backend data; not currently shown in production filter UI. Annotation for Claude/Lovable. -->
       <div class="filter-section">
         <div class="filter-section-title">Priority</div>
         <label class="filter-item"><input type="checkbox" id="p-urgent" onchange="applyFilters()">🔴 Urgent</label>
@@ -1427,6 +1485,12 @@ function applyFilters(){
     ['s-quote-declined','quote_declined'],['s-cancelled','cancelled']
   ];
   STATUS_IDS.forEach(([id,val])=>{const el=document.getElementById(id);if(el&&el.checked)statuses.push(val);});
+  // Finance Status filter (real backend field: job.finance_status)
+  const finances=[];
+  if(document.getElementById('f-estimated').checked)finances.push('Estimated');
+  if(document.getElementById('f-quoted').checked)finances.push('Quoted');
+  if(document.getElementById('f-invoiced').checked)finances.push('Invoiced');
+  if(document.getElementById('f-paid').checked)finances.push('Paid');
   const priorities=[];
   if(document.getElementById('p-urgent').checked)priorities.push('Urgent');
   if(document.getElementById('p-high').checked)priorities.push('High');
@@ -1447,6 +1511,7 @@ function applyFilters(){
     if(q&&!`${j.num} ${j.client} ${j.site} ${j.desc}`.toLowerCase().includes(q))return false;
     // Empty array = no filter active = show all; non-empty = restrict to checked items
     if(statuses.length&&!statuses.includes(j.status))return false;
+    if(finances.length&&!finances.includes(j.finance))return false;
     if(priorities.length&&!priorities.includes(j.priority))return false;
     if(clients.length&&!clients.includes(j.client))return false;
     if(assignees.length&&!j.team.some(t=>assignees.includes(t)))return false;
@@ -1699,21 +1764,23 @@ function openDetail(num){
   document.getElementById('d-status-pill').innerHTML=statusPill(j.status);
   document.getElementById('d-finance-pill').innerHTML=financePill(j.finance);
   document.getElementById('d-priority-pill').innerHTML=priorityPill(j.priority);
-  document.getElementById('d-client').textContent=j.client;
-  document.getElementById('d-site').textContent=j.site;
-  document.getElementById('d-type').textContent='Electrical';
-  document.getElementById('d-date').textContent=j.date;
-  document.getElementById('d-value').textContent=fmt(j.value);
+  // These IDs may not exist in all views — use safe access
+  const safe=(id,val,prop='textContent')=>{const el=document.getElementById(id);if(el)el[prop]=val;};
+  safe('d-client',j.client);
+  safe('d-site',j.site);
+  safe('d-type','Electrical');
+  safe('d-date',j.date);
+  safe('d-value',fmt(j.value));
   // Job info card
-  document.getElementById('ji-client').textContent=j.client;
-  document.getElementById('ji-site').textContent=j.site;
-  document.getElementById('ji-type').textContent='Electrical';
-  document.getElementById('ji-nature').textContent='To Be Done';
-  document.getElementById('ji-created').textContent=j.date;
-  document.getElementById('ji-req-date').textContent='18 Jul 2026';
-  document.getElementById('ji-ref').textContent='PO-2026-4421';
-  document.getElementById('ji-priority').innerHTML=priorityPill(j.priority);
-  document.getElementById('ji-desc').textContent=j.desc.includes('—')?'Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.':j.desc;
+  safe('ji-client',j.client);
+  safe('ji-site',j.site);
+  safe('ji-type','Electrical');
+  safe('ji-nature','To Be Done');
+  safe('ji-created',j.date);
+  safe('ji-req-date','18 Jul 2026');
+  safe('ji-ref','PO-2026-4421');
+  safe('ji-priority',priorityPill(j.priority),'innerHTML');
+  safe('ji-desc',j.desc.includes('—')?'Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.':j.desc);
   // Set stage
   currentJobStatus=j.status||'job_booked';
   renderPipeline();
@@ -1732,16 +1799,23 @@ function openDetail(num){
 function renderPipeline(){
   const bar=document.getElementById('pipeline-bar');
   const activeStageIdx=getStageForStatus(currentJobStatus);
+  const isDeclined=currentJobStatus==='quote_declined';
   bar.innerHTML=PIPELINE_STAGES.map((s,i)=>{
-    let cls='';
-    if(i<activeStageIdx)cls='done';
-    else if(i===activeStageIdx)cls='active';
-    const icon=i<activeStageIdx?'check_circle':i===activeStageIdx?'radio_button_checked':'radio_button_unchecked';
-    const sub=getSubStatus(s.key,currentJobStatus);
-    const subLabel=i===activeStageIdx&&sub?`<span style="font-size:9px;opacity:.7;margin-left:3px">(${sub})</span>`:'';
-    return `<div class="pipe-step">
-      <div class="pipe-node ${cls}" onclick="clickPipelineStage(${i})"><span class="ms">${icon}</span>${s.label}${subLabel}</div>
-      ${i<PIPELINE_STAGES.length-1?'<span class="pipe-arrow ms">chevron_right</span>':''}
+    const isDone=i<activeStageIdx;
+    const isActive=i===activeStageIdx;
+    const stateClass=isDone?'done':isActive?(isDeclined&&s.key==='quote'?'declined':'active'):'future';
+    // Icon: done stages show check, active/future shows stage icon
+    const iconName=isDone?'check':s.icon;
+    // Sub-status chip (only on active stage)
+    const sub=isActive?getSubStatus(s.key,currentJobStatus):null;
+    const subChip=sub?`<span class="pipe-chip">${sub}</span>`:'';
+    // Pulse dot only on active (non-declined)
+    const pulse=(isActive&&!isDeclined)?'<span class="pipe-pulse"></span>':'';
+    return `<div class="pipe-stage ${stateClass}" onclick="clickPipelineStage(${i})">
+      <div class="pipe-icon"><span class="ms">${iconName}</span></div>
+      <span class="pipe-lbl">${s.label}</span>
+      ${subChip}
+      ${pulse}
     </div>`;
   }).join('');
 }

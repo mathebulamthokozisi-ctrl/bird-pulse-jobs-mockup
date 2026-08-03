@@ -180,6 +180,7 @@ These are opportunities to surface real backend data in the mockup. Each is anno
 | Session 13 | Status values migrated to real backend snake_case keys |
 | Session 14 | Board columns updated to exact 7 KANBAN_STAGES from production |
 | Session 15 | CONVERSATION_NOTES.md created. Type label removed from board cards. Full backend audit completed. |
+| Session 16 | Pipeline bar rewritten to match production segmented bar design (5 stages, coloured tracks, icon boxes, sub-status badges). JS crash fixed (null element refs in openDetail). Finance Status filter added (real backend field). Priority filter annotated as surfaced-from-backend. |
 
 ---
 
