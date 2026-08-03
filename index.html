@@ -37,7 +37,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 .nav-section{padding:12px 8px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg)}
 .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius);cursor:pointer;color:var(--fg-2);font-size:12.5px;font-weight:500;text-decoration:none;margin:1px 4px}
 .nav-item:hover{background:var(--slate-100)}
-.nav-item.active{background:var(--indigo-50);color:var(--indigo-700)}
+.nav-item.active{background:#fef3c7;color:#3d1f00}
 .nav-item .ms{font-size:17px;color:inherit}
 
 /* ── Main area ── */
@@ -98,12 +98,11 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 /* ── Table area ── */
 .table-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
 table{width:100%;border-collapse:collapse;background:var(--white)}
-thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:2px solid var(--border);background:var(--white);white-space:nowrap;position:relative;user-select:none}
+thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:#f9fafb;white-space:nowrap;position:relative;user-select:none}
 thead th:first-child{width:36px;padding:8px 6px}
 tbody tr{border-bottom:1px solid var(--border);cursor:pointer;background:var(--white)}
-tbody tr:nth-child(even){background:#fafbfc}
-tbody tr:hover{background:var(--indigo-50)}
-tbody tr.selected{background:var(--indigo-50)}
+tbody tr:hover{background:#f3f4f680}
+tbody tr.selected{background:#eef2ff}
 td{padding:8px 10px;vertical-align:middle;font-size:12.5px;color:var(--fg-2)}
 td:first-child{padding:8px 6px}
 .job-num{font-weight:600;color:var(--fg);font-size:12px}
@@ -114,16 +113,25 @@ td:first-child{padding:8px 6px}
 .avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--white)}
 .avatar.av-js{background:#4f46e5}.avatar.av-sj{background:#7c3aed}.avatar.av-md{background:#0891b2}.avatar.av-kl{background:#059669}
 
-/* Status pills */
-.pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:500;white-space:nowrap}
-.pill-blue{background:var(--indigo-50);color:var(--indigo-700)}
-.pill-green{background:var(--green-50);color:var(--green-700)}
-.pill-amber{background:var(--amber-50);color:var(--amber-700)}
-.pill-red{background:var(--red-50);color:var(--red-700)}
-.pill-orange{background:#fff7ed;color:var(--orange-600)}
-.pill-slate{background:var(--slate-100);color:var(--slate-600)}
-.pill-purple{background:#f5f3ff;color:#6d28d9}
-.pill-teal{background:#f0fdfa;color:#0f766e}
+/* Status pills — matches CRM DynamicStatusBadge exactly:
+   rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border */
+.pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;border:1px solid transparent}
+/* info/default — hsl(217 91% 95%) bg, hsl(221 83% 53%) text, hsl(217 70% 85%) border */
+.pill-blue{background:#eff6ff;color:#2563eb;border-color:#93c5fd}
+/* approved/success — hsl(141 72% 93%) bg, hsl(142 64% 36%) text, hsl(141 50% 80%) border */
+.pill-green{background:#d1fae5;color:#1a8a4a;border-color:#6ee7b7}
+/* sent/warning — hsl(38 92% 95%) bg, hsl(32 81% 40%) text, hsl(38 60% 80%) border */
+.pill-amber{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+/* declined/destructive — hsl(0 94% 94%) bg, hsl(0 72% 51%) text, hsl(0 60% 85%) border */
+.pill-red{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+/* orange warning variant */
+.pill-orange{background:#ffedd5;color:#ea580c;border-color:#fdba74}
+/* draft/muted — hsl(220 14% 96%) bg, hsl(220 9% 46%) text, hsl(220 13% 88%) border */
+.pill-slate{background:#f3f4f6;color:#6b7280;border-color:#d1d5db}
+/* pending/purple */
+.pill-purple{background:#f5f3ff;color:#6d28d9;border-color:#c4b5fd}
+/* teal */
+.pill-teal{background:#f0fdfa;color:#0f766e;border-color:#99f6e4}
 
 /* Bulk action bar */
 .bulk-bar{background:rgba(79,70,229,.05);border-bottom:1px solid rgba(79,70,229,.15);padding:6px 16px;display:none;align-items:center;gap:8px;flex-shrink:0}
