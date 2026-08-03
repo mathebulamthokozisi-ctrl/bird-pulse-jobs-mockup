@@ -97,7 +97,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 .filter-toggle .ms{font-size:14px}
 
 /* ── Table area ── */
-.table-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
+.table-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--white)}
 table{width:100%;border-collapse:collapse;background:var(--white)}
 thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);border-right:1px solid rgba(0,0,0,.04);background:var(--white);white-space:nowrap;position:relative;user-select:none;text-align:left}
 thead th:last-child{border-right:none}
@@ -589,6 +589,7 @@ td:first-child{padding:8px 6px}
 
     <!-- Table + board -->
     <div class="table-wrap" id="table-wrap">
+      <div style="flex:1;overflow:auto">
       <table id="jobs-table">
         <thead>
           <tr>
@@ -608,6 +609,7 @@ td:first-child{padding:8px 6px}
         </thead>
         <tbody id="jobs-tbody"></tbody>
       </table>
+      </div>
       <div class="pagination">
         <span class="info" id="pagination-info">Showing 1–24 of 24</span>
         <div style="margin-left:auto;display:flex;gap:4px">
