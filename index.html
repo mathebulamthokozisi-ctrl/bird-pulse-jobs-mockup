@@ -171,10 +171,6 @@ td:first-child{padding:8px 6px}
 .detail-breadcrumb .sep{color:var(--slate-300);font-size:11px}
 .detail-breadcrumb .current{color:var(--fg);font-weight:600}
 .detail-breadcrumb .spacer{flex:1}
-.auto-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-200);cursor:pointer;transition:all .12s}
-.auto-badge:hover{background:var(--indigo-100)}
-.auto-badge.off{background:var(--slate-100);color:var(--muted-fg);border-color:var(--slate-200)}
-.auto-badge .ms{font-size:13px}
 
 .detail-header-bar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;flex-shrink:0}
 .detail-title{font-size:18px;font-weight:700;color:var(--fg);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -642,9 +638,6 @@ td:first-child{padding:8px 6px}
       <span id="d-priority-pill"></span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-      <div class="auto-badge" id="auto-badge" onclick="toggleAutoTransitions()">
-        <span class="ms">auto_awesome</span><span id="auto-badge-text">AUTO-TRANSITIONS ON</span>
-      </div>
       <button class="btn" style="height:26px" title="Unlock stage" onclick="openUnlockModal()"><span class="ms" style="font-size:14px">lock_open</span></button>
       <button class="btn" style="height:26px" title="Duplicate job" onclick="duplicateJob()"><span class="ms" style="font-size:14px">content_copy</span></button>
       <button class="btn danger" style="height:26px" title="Delete job" onclick="openDeleteConfirm()"><span class="ms" style="font-size:14px">delete</span></button>
@@ -1355,7 +1348,7 @@ let quickFilters = {mine:false,unassigned:false,active:false,week:false};
 let visibleCols = {num:true,client:true,desc:true,type:true,priority:true,status:true,finance:true,team:true,value:true,date:true};
 let currentJobNum = 'JOB-0042';
 let currentJobStatus = 'work_in_progress'; // tracks raw status key
-let autoTransitions = true;
+const autoTransitions = true; // always on — not user-configurable
 let jobcardSigned = false;
 let photoCount = 0;
 let actualCostEntries = [];
@@ -1829,13 +1822,7 @@ function markDone(){
   currentJobStatus='job_completed';updateJobStatus();
   if(autoTransitions){toast('Invoice auto-created from quote','success');}
 }
-function toggleAutoTransitions(){
-  autoTransitions=!autoTransitions;
-  const badge=document.getElementById('auto-badge');
-  badge.classList.toggle('off',!autoTransitions);
-  document.getElementById('auto-badge-text').textContent=autoTransitions?'AUTO-TRANSITIONS ON':'AUTO-TRANSITIONS OFF';
-  toast(autoTransitions?'Auto-transitions enabled':'Auto-transitions disabled');
-}
+
 function renderTeam(){
   const slots=document.getElementById('team-slots');
   slots.innerHTML=teamData.map((t,i)=>`
