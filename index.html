@@ -99,13 +99,15 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 /* ── Table area ── */
 .table-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
 table{width:100%;border-collapse:collapse;background:var(--white)}
-thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:var(--white);white-space:nowrap;position:relative;user-select:none;text-align:left}
+thead th{padding:8px 10px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);border-right:1px solid rgba(0,0,0,.04);background:var(--white);white-space:nowrap;position:relative;user-select:none;text-align:left}
+thead th:last-child{border-right:none}
 thead th:first-child{width:36px;padding:8px 6px}
 tbody tr{border-bottom:1px solid var(--border);cursor:pointer;background:var(--white)}
 tbody tr:nth-child(even){background:var(--row-alt)}
 tbody tr:hover{background:#f0f4ff}
 tbody tr.selected{background:#eef2ff}
-td{padding:8px 10px;vertical-align:middle;font-size:12.5px;color:var(--fg-2);text-align:left}
+td{padding:8px 10px;vertical-align:middle;font-size:12.5px;color:var(--fg-2);text-align:left;border-right:1px solid rgba(0,0,0,.04)}
+td:last-child{border-right:none}
 td:first-child{padding:8px 6px}
 .job-num{font-weight:600;color:var(--fg);font-size:12px}
 .job-client{font-weight:600;font-size:12px;color:var(--fg)}
