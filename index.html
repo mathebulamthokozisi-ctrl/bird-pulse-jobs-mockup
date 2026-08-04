@@ -530,12 +530,47 @@ td:first-child{padding:8px 8px}
 .doc-icon .ms{font-size:16px}
 .doc-name{font-size:12.5px;font-weight:600;color:var(--fg)}
 .doc-meta{font-size:11px;color:var(--muted-fg);margin-top:1px}
-.doc-action{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:var(--radius);font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--fg-2);white-space:nowrap;transition:background var(--t-fast),border-color var(--t-fast)}
-.doc-action:hover{background:var(--surface-2);border-color:var(--border-strong)}
-.doc-action.create{color:var(--indigo-600);border-color:var(--indigo-200);background:var(--indigo-50)}
-.doc-action.create:hover{background:var(--indigo-100);border-color:var(--indigo-300)}
+/* doc-row action button — single consistent style, always right */
+.doc-action{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:0 10px;height:28px;
+  border-radius:5px;
+  border:1.5px solid var(--border-strong);
+  background:var(--white);
+  color:var(--fg-2);
+  font-size:11px;font-weight:500;
+  cursor:pointer;white-space:nowrap;
+  transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast);
+  flex-shrink:0;
+}
+.doc-action:hover{background:var(--surface-2);border-color:var(--slate-400);color:var(--fg)}
 .doc-action .ms{font-size:13px}
-.doc-auto{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-200)}
+/* doc-tag — status tags, clearly non-interactive */
+.doc-tag{
+  display:inline-flex;align-items:center;
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  border:none;flex-shrink:0;
+  pointer-events:none;
+}
+.tag-slate{background:var(--slate-100);color:var(--slate-600)}
+.tag-blue{background:#dbeafe;color:#1d4ed8}
+.tag-green{background:var(--green-50);color:var(--green-700)}
+.tag-amber{background:var(--amber-50);color:var(--amber-700)}
+.tag-red{background:var(--red-50);color:var(--red-700)}
+.tag-indigo{background:var(--indigo-50);color:var(--indigo-700)}
+/* doc-auto tag — informational only, clearly non-interactive */
+.doc-auto{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--indigo-50);color:var(--indigo-600);
+  border:none;
+  flex-shrink:0;
+  pointer-events:none;
+}
 .doc-auto .ms{font-size:11px}
 
 /* Workflow automations */
@@ -2142,20 +2177,20 @@ td:first-child{padding:8px 8px}
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">calculate</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Estimate</div><div class="doc-meta">12 items · R 36,200</div></div>
-          <span class="pill pill-slate" style="font-size:9.5px;margin-right:4px">Draft</span>
+          <span class="doc-tag tag-slate">Draft</span>
           <div class="doc-action" onclick="openEstimateModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">description</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Quote</div><div class="doc-meta">QUO-0089 · R 48,500</div></div>
-          <span class="pill pill-blue" style="font-size:9.5px;margin-right:4px">Sent</span>
+          <span class="doc-tag tag-blue">Sent</span>
           <div class="doc-action" onclick="openQuoteModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">receipt_long</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Invoice</div><div class="doc-meta" id="invoice-meta">Auto-creates on completion</div></div>
-          <span class="doc-auto"><span class="ms">bolt</span>AUTO</span>
-          <div class="doc-action create" id="invoice-create-btn" onclick="openInvoiceModal()"><span class="ms">add</span>Create</div>
+          <span class="doc-auto"><span class="ms">bolt</span>Auto</span>
+          <div class="doc-action" id="invoice-create-btn" onclick="openInvoiceModal()"><span class="ms">add</span>Create</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">attach_money</span></div>
@@ -2165,13 +2200,13 @@ td:first-child{padding:8px 8px}
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">assignment</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Jobcard</div><div class="doc-meta" id="jobcard-meta">0 photos · Awaiting signature</div></div>
-          <span class="pill pill-slate" style="font-size:9.5px;margin-right:4px" id="jobcard-status-pill">Draft</span>
+          <span class="doc-tag tag-slate" id="jobcard-status-pill">Draft</span>
           <div class="doc-action" onclick="openJobcardModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">health_and_safety</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">HSE Pack</div><div class="doc-meta" id="hse-meta">Not generated</div></div>
-          <div class="doc-action create" id="hse-generate-btn" onclick="generateHSE()"><span class="ms">add</span>Generate</div>
+          <div class="doc-action" id="hse-generate-btn" onclick="generateHSE()"><span class="ms">add</span>Generate</div>
         </div>
       </div>
 
