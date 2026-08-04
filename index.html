@@ -869,14 +869,7 @@ td:first-child{padding:8px 6px}
         </div>
       </div>
 
-      <!-- [NEW SUGGESTION] Feature: Workflow Automations Panel
-           Reason: Surfaces the implicit automation rules that already exist in production
-           (portal quote approval → status update, jobcard sign-off → guard key unlock,
-           job completion → invoice auto-creation). Showing them explicitly reduces
-           confusion for coordinators who don't know why statuses change automatically.
-           Backend work needed: No new backend work — these are existing triggers.
-           A new `job_automation_log` table could record each auto-trigger event.
-           Not yet in production as a visible panel. -->
+      <!-- Workflow automations -->
       <div class="auto-flow-card">
         <div class="auto-flow-title"><span class="ms">auto_awesome</span>Workflow Automations</div>
         <div class="flow-step auto"><span class="ms">bolt</span>Quote sent → status auto-updates</div>
@@ -954,14 +947,11 @@ td:first-child{padding:8px 6px}
           </div>
         </div>
 
-        <!-- Communication: Client Portal Activity Feed
-             Source: production JobCommunicationTab.tsx + useJobPortalActions.ts
-             This tab shows read-only client portal actions (quote approvals, revision requests,
-             jobcard sign-offs/refusals, PO uploads). It is NOT a general helpdesk thread view.
-             The previous 'threaded reply' UI was an invented feature and has been replaced. -->
+        <!-- Communication -->
         <div class="tab-content" id="tab-communication">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div style="font-size:12px;color:var(--muted-fg)">Client portal activity — quote approvals, jobcard sign-offs, PO uploads</div>
+            <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads</div>
+            <button class="btn sm primary" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
           </div>
           <div id="comm-threads"></div>
         </div>
@@ -1016,10 +1006,8 @@ td:first-child{padding:8px 6px}
         <div class="form-group"><label>Site *</label><select id="nj-site"><option>Main Warehouse</option><option>Head Office</option><option>Server Room</option><option>Factory Floor A</option></select></div>
       </div>
       <div class="form-row">
-        <!-- Real JOB_TYPE_LABELS from production job-workflow-types.ts -->
-        <div class="form-group"><label>Job Type *</label><select id="nj-type"><option value="repair">Repair</option><option value="maintenance">Maintenance</option><option value="install">Installation</option><option value="new_installation">New Installation</option><option value="new_build">New Build</option><option value="reinstatement">Reinstatement</option><option value="supply_and_deliver">Supply &amp; Deliver</option><option value="other">Other</option></select></div>
-        <!-- Real job_nature values from production -->
-        <div class="form-group"><label>Job Nature</label><select id="nj-nature"><option value="to_be_done">To Be Done</option><option value="done_already">Done Already</option></select></div>
+        <div class="form-group"><label>Job Type *</label><select id="nj-type"><option>Electrical</option><option>Mechanical</option><option>Plumbing</option><option>Civil</option><option>Installation</option><option>Maintenance</option><option>Other</option></select></div>
+        <div class="form-group"><label>Job Nature</label><select id="nj-nature"><option>To Be Done</option><option>Recurring</option><option>Emergency</option><option>Warranty</option></select></div>
       </div>
       <div class="form-row cols-1">
         <div class="form-group"><label>Description *</label><textarea id="nj-desc" placeholder="Describe the scope of work…"></textarea></div>
@@ -1085,22 +1073,10 @@ td:first-child{padding:8px 6px}
     <div class="modal-header"><h3>Set Status</h3><div class="modal-close" onclick="closeModal('bulk-status-modal')"><span class="ms">close</span></div></div>
     <div class="modal-body">
       <div class="form-group"><label>New Status</label>
-        <!-- Real backend status keys from production job-workflow-types.ts -->
         <select id="bulk-status-select">
-          <option value="job_booked">Job Booked</option>
-          <option value="estimate_done">Estimate Done</option>
-          <option value="quote_drafted">Quote Drafted</option>
-          <option value="quote_sent">Quote Sent</option>
-          <option value="quote_finalized">Quote Finalized</option>
-          <option value="quote_accepted">Quote Accepted</option>
-          <option value="on_my_way">On My Way</option>
-          <option value="work_in_progress">Work In Progress</option>
-          <option value="job_in_progress">Job In Progress</option>
-          <option value="job_completed">Job Completed</option>
-          <option value="work_client_approved">Client Approved</option>
-          <option value="invoiced">Invoiced</option>
-          <option value="paid">Paid</option>
-          <option value="commission_paid">Commission Paid</option>
+          <option>Booked</option><option>Estimate Done</option><option>Quoted</option><option>Quote Accepted</option>
+          <option>In Progress</option><option>Completed</option><option>Client Approved</option>
+          <option>Invoiced</option><option>Paid</option><option>Commission Paid</option>
         </select>
       </div>
     </div>
@@ -1309,8 +1285,24 @@ td:first-child{padding:8px 6px}
   </div>
 </div>
 
-<!-- new-comm-modal removed: Communication tab is now a read-only portal activity feed.
-     Outbound messaging is handled via the Quote/Jobcard email actions, not a freeform modal. -->
+<!-- New Comm Modal -->
+<div class="modal-overlay" id="new-comm-modal" onclick="if(event.target===this)closeModal('new-comm-modal')">
+  <div class="modal modal-md">
+    <div class="modal-header"><h3>New Message</h3><div class="modal-close" onclick="closeModal('new-comm-modal')"><span class="ms">close</span></div></div>
+    <div class="modal-body">
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Subject</label><input type="text" id="nc-subject" placeholder="e.g. Site access query"></div>
+      </div>
+      <div class="form-row cols-1">
+        <div class="form-group"><label>Message</label><textarea id="nc-body" placeholder="Type your message…" style="min-height:100px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('new-comm-modal')">Cancel</button>
+      <button class="btn primary" onclick="sendNewComm()"><span class="ms">send</span>Send</button>
+    </div>
+  </div>
+</div>
 
 <!-- Toast container -->
 <div class="toast-container" id="toast-container"></div>
@@ -1443,14 +1435,10 @@ const EST_LINES = [
   {desc:'Consumables & misc',cat:'Materials',qty:1,unit:'lot',price:950},
 ];
 
-// Portal actions — source: production client_portal_actions table + useJobPortalActions.ts
-// These are read-only events triggered by the client on the portal (quote approvals,
-// revision requests, jobcard sign-offs, PO uploads). NOT a helpdesk thread view.
-const PORTAL_ACTIONS = [
-  {id:1, action_type:'quote_approved',   actor:'Acme Corp (portal)', date:'12 Jul 2026 08:00', ref:'QUO-0089', note:'Client approved the quote via portal.'},
-  {id:2, action_type:'po_uploaded',      actor:'Acme Corp (portal)', date:'12 Jul 2026 08:02', ref:'PO-2026-4421', note:'Client uploaded PO-2026-4421 as proof of approval.'},
-  {id:3, action_type:'quote_revision',   actor:'Acme Corp (portal)', date:'11 Jul 2026 15:45', ref:'QUO-0089', note:'Client requested a revision: "Please include the level 2 sub-board in scope."'},
-  {id:4, action_type:'jobcard_viewed',   actor:'Acme Corp (portal)', date:'14 Jul 2026 09:30', ref:'JC-0042', note:'Client opened the jobcard for review on the portal.'},
+const COMM_THREADS = [
+  {id:1,subject:'Site access query — DB room locked',from:'Acme Corp (portal)',date:'14 Jul 2026',status:'pending',messages:[{from:'Acme Corp',time:'14 Jul 2026 09:15',body:'Hi, the DB room will be locked on Tuesday. Please contact John at 082-555-1234 to arrange access. He will be on site from 07:00.'},{from:'You',time:'14 Jul 2026 10:30',body:'Thanks for the heads up. We will contact John on Monday to confirm the access time. Our team will be on site at 07:30.'}]},
+  {id:2,subject:'COC certificate — client request',from:'Acme Corp (portal)',date:'13 Jul 2026',status:'replied',messages:[{from:'Acme Corp',time:'13 Jul 2026 14:00',body:'Can you please confirm when the COC will be issued? Our insurance requires it within 30 days of completion.'}]},
+  {id:3,subject:'Scope change — additional sub-board on level 2',from:'Acme Corp (portal)',date:'11 Jul 2026',status:'pending',messages:[{from:'Acme Corp',time:'11 Jul 2026 11:00',body:'We have identified a need for an additional sub-distribution board on level 2 of the warehouse. Can you provide a variation quote for this?'}]},
 ];
 
 const TIMELINE_ITEMS = [
@@ -1492,7 +1480,7 @@ let teamData = JSON.parse(JSON.stringify(TEAM_DATA));
 let bulkAssignTarget = null;
 let teamAssignRole = null;
 let teamAssignSelected = null;
-let portalActions = JSON.parse(JSON.stringify(PORTAL_ACTIONS));
+let commThreads = JSON.parse(JSON.stringify(COMM_THREADS));
 let timelineItems = JSON.parse(JSON.stringify(TIMELINE_ITEMS));
 let estLines = JSON.parse(JSON.stringify(EST_LINES));
 
@@ -1516,11 +1504,8 @@ function statusPill(s){
   return `<span class="pill ${VARIANTS[s]||'pill-slate'}">${LABELS[s]||s}</span>`;
 }
 function financePill(f){
-  // Lowercase keys matching real job.finance field values
-  const map={estimated:'pill-slate',quoted:'pill-blue',invoiced:'pill-amber',paid:'pill-green'};
-  const labels={estimated:'Estimated',quoted:'Quoted',invoiced:'Invoiced',paid:'Paid'};
-  const key=(f||'').toLowerCase();
-  return `<span class="pill ${map[key]||'pill-slate'}">${labels[key]||f}</span>`;
+  const map={'Estimated':'pill-slate','Quoted':'pill-blue','Invoiced':'pill-amber','Paid':'pill-green'};
+  return `<span class="pill ${map[f]||'pill-slate'}">${f}</span>`;
 }
 function priorityPill(p){
   const map={'Urgent':'pill-red','High':'pill-orange','Normal':'pill-blue','Low':'pill-slate'};
@@ -1567,10 +1552,10 @@ function applyFilters(){
   STATUS_IDS.forEach(([id,val])=>{const el=document.getElementById(id);if(el&&el.checked)statuses.push(val);});
   // Finance Status filter (real backend field: job.finance_status)
   const finances=[];
-  if(document.getElementById('f-estimated').checked)finances.push('estimated');
-  if(document.getElementById('f-quoted').checked)finances.push('quoted');
-  if(document.getElementById('f-invoiced').checked)finances.push('invoiced');
-  if(document.getElementById('f-paid').checked)finances.push('paid');
+  if(document.getElementById('f-estimated').checked)finances.push('Estimated');
+  if(document.getElementById('f-quoted').checked)finances.push('Quoted');
+  if(document.getElementById('f-invoiced').checked)finances.push('Invoiced');
+  if(document.getElementById('f-paid').checked)finances.push('Paid');
   const priorities=[];
   if(document.getElementById('p-urgent').checked)priorities.push('Urgent');
   if(document.getElementById('p-high').checked)priorities.push('High');
@@ -1591,15 +1576,13 @@ function applyFilters(){
     if(q&&!`${j.num} ${j.client} ${j.site} ${j.desc}`.toLowerCase().includes(q))return false;
     // Empty array = no filter active = show all; non-empty = restrict to checked items
     if(statuses.length&&!statuses.includes(j.status))return false;
-    if(finances.length&&!finances.includes((j.finance||'').toLowerCase()))return false;
+    if(finances.length&&!finances.includes(j.finance))return false;
     if(priorities.length&&!priorities.includes(j.priority))return false;
     if(clients.length&&!clients.includes(j.client))return false;
     if(assignees.length&&!j.team.some(t=>assignees.includes(t)))return false;
     if(quickFilters.mine&&j.assignee!=='JS')return false;
     if(quickFilters.unassigned&&j.team.length>0)return false;
-    // 'active' = jobs that are currently in-flight (not yet invoiced/paid/cancelled)
-    const ACTIVE_STATUSES=['job_booked','estimate_done','quote_drafted','quote_sent','quote_finalized','quote_accepted','on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved'];
-    if(quickFilters.active&&!ACTIVE_STATUSES.includes(j.status))return false;
+    if(quickFilters.active&&!['In Progress','Quoted','Booked','Estimated'].includes(j.status))return false;
     return true;
   });
   currentPage=1;
@@ -1789,7 +1772,7 @@ function submitNewJob(){
     site:document.getElementById('nj-site').value,
     desc,
     priority:document.getElementById('nj-priority').value,
-    status:'job_booked',finance:'estimated',
+    status:'Booked',finance:'Estimated',
     team:['JS'],value:0,
     date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
     assignee:'JS'
@@ -1871,7 +1854,6 @@ function openDetail(num){
   renderTeam();
   renderHSEPipeline();
   renderRiskTable();
-  portalActions = JSON.parse(JSON.stringify(PORTAL_ACTIONS)); // reset per-job portal actions
   renderCommThreads();
   renderTimeline();
   renderEstimateTable();
@@ -2035,39 +2017,65 @@ function renderChart(){
       <div class="chart-bar-label">${c.name}</div>
     </div>`).join('');
 }
-// Communication — Client Portal Activity Feed
-// Source: production JobCommunicationTab.tsx + useJobPortalActions.ts
-// Renders read-only portal action cards, not a threaded reply UI.
-const ACTION_META = {
-  quote_approved:  {icon:'check_circle', label:'Quote Approved',    color:'var(--green-600)',  bg:'var(--green-50)'},
-  quote_revision:  {icon:'edit',         label:'Revision Requested', color:'var(--amber-600)', bg:'var(--amber-50)'},
-  po_uploaded:     {icon:'upload_file',  label:'PO Uploaded',        color:'var(--indigo-600)', bg:'var(--indigo-50)'},
-  jobcard_viewed:  {icon:'visibility',   label:'Jobcard Viewed',     color:'var(--slate-600)',  bg:'var(--slate-100)'},
-  jobcard_signed:  {icon:'draw',         label:'Jobcard Signed',     color:'var(--green-600)',  bg:'var(--green-50)'},
-  jobcard_refused: {icon:'cancel',       label:'Jobcard Refused',    color:'var(--red-600)',    bg:'var(--red-50)'},
-};
+// Communication
 function renderCommThreads(){
   const c=document.getElementById('comm-threads');
-  if(!portalActions||portalActions.length===0){
-    c.innerHTML='<div style="text-align:center;padding:32px 0;color:var(--muted-fg);font-size:12px"><span class="ms" style="font-size:32px;display:block;margin-bottom:8px;color:var(--slate-300)">forum</span>No client portal activity yet.</div>';
-    return;
-  }
-  c.innerHTML=portalActions.map(a=>{
-    const m=ACTION_META[a.action_type]||{icon:'info',label:a.action_type,color:'var(--muted-fg)',bg:'var(--slate-50)'};
-    return `<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
-      <div style="width:34px;height:34px;border-radius:8px;background:${m.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span class="ms" style="font-size:18px;color:${m.color}">${m.icon}</span>
+  c.innerHTML=commThreads.map(t=>`
+    <div class="comm-thread">
+      <div class="comm-thread-header" onclick="toggleCommThread(${t.id})">
+        <span class="ms" style="font-size:16px;color:var(--muted-fg)">forum</span>
+        <div style="flex:1">
+          <div class="comm-subject">${t.subject}</div>
+          <div class="comm-meta">${t.from} · ${t.date}</div>
+        </div>
+        <span class="comm-status ${t.status}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span>
+        <span class="ms" style="font-size:16px;color:var(--muted-fg);margin-left:8px">expand_more</span>
       </div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:2px">${m.label}</div>
-        <div style="font-size:11.5px;color:var(--fg-2);margin-bottom:4px">${a.note}</div>
-        <div style="font-size:11px;color:var(--muted-fg)">${a.actor} · ${a.date}${a.ref?` · <span style="font-family:monospace;font-size:10.5px;color:var(--indigo-600)">${a.ref}</span>`:''}</div>
+      <div class="comm-body" id="comm-body-${t.id}">
+        ${t.messages.map(m=>`<div class="comm-msg"><div class="comm-msg-from">${m.from} · ${m.time}</div>${m.body}</div>`).join('')}
+        <div class="comm-reply-box">
+          <textarea placeholder="Type your reply…" id="comm-reply-${t.id}"></textarea>
+          <div class="comm-reply-footer">
+            <button class="btn sm" onclick="markCommResolved(${t.id})"><span class="ms">check</span>Mark Resolved</button>
+            <button class="btn sm primary" onclick="sendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
+          </div>
+        </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
-// Communication tab functions removed — tab is now a read-only portal activity feed.
-// No reply/resolve/new-message actions are needed here.
+function toggleCommThread(id){
+  const b=document.getElementById('comm-body-'+id);
+  b.classList.toggle('open');
+}
+function sendCommReply(id){
+  const ta=document.getElementById('comm-reply-'+id);
+  const body=ta.value.trim();
+  if(!body){toast('Please type a reply','error');return;}
+  const t=commThreads.find(t=>t.id===id);
+  if(t){
+    t.messages.push({from:'You',time:new Date().toLocaleString(),body});
+    t.status='replied';
+    ta.value='';
+    renderCommThreads();
+    document.getElementById('comm-body-'+id).classList.add('open');
+    toast('Reply sent','success');
+    addTimelineItem('email','email','Reply sent: '+t.subject,'Sent to '+t.from,new Date().toLocaleString());
+  }
+}
+function markCommResolved(id){
+  const t=commThreads.find(t=>t.id===id);
+  if(t){t.status='resolved';renderCommThreads();toast('Thread marked as resolved','success');}
+}
+function openNewCommModal(){openModal('new-comm-modal');}
+function sendNewComm(){
+  const subj=document.getElementById('nc-subject').value.trim();
+  const body=document.getElementById('nc-body').value.trim();
+  if(!subj||!body){toast('Please fill in subject and message','error');return;}
+  commThreads.unshift({id:Date.now(),subject:subj,from:'You (outbound)',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'replied',messages:[{from:'You',time:new Date().toLocaleString(),body}]});
+  closeModal('new-comm-modal');
+  renderCommThreads();
+  toast('Message sent','success');
+}
 // Timeline
 function renderTimeline(){
   const c=document.getElementById('timeline-items');
@@ -2280,7 +2288,7 @@ function confirmUnlock(){
 function duplicateJob(){
   const j=JOBS.find(j=>j.num===currentJobNum);
   if(!j)return;
-  const copy={...j,num:'JOB-'+(1000+JOBS.length+1),status:'job_booked',finance:'estimated',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+  const copy={...j,num:'JOB-'+(1000+JOBS.length+1),status:'Booked',finance:'Estimated',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
   JOBS.unshift(copy);
   toast('Job duplicated as '+copy.num,'success');
 }
