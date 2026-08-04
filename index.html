@@ -2277,12 +2277,13 @@ td:first-child{padding:8px 6px}
     <div class="de-topbar-divider"></div>
     <span class="ms de-topbar-icon">calculate</span>
     <span class="de-topbar-title">Estimate</span>
-    <span class="de-topbar-sub" id="est-editor-sub">JOB-0042 · Draft</span>
+    <span class="de-topbar-sub" id="est-editor-sub">EST-0042 · Draft</span>
     <div class="de-topbar-spacer"></div>
     <div class="de-topbar-actions">
-      <button class="btn sm" onclick="addEstimateLine()"><span class="ms">add</span>Add Line</button>
       <button class="btn sm" onclick="toast('Estimate exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
-      <button class="btn primary sm" onclick="saveEstimate()"><span class="ms">check</span>Save &amp; Finalise</button>
+      <button class="btn sm" onclick="toast('PO linked to estimate')"><span class="ms">link</span>Link PO</button>
+      <button class="btn sm" onclick="saveEstimate()"><span class="ms">save</span>Save</button>
+      <button class="btn primary sm" onclick="toast('Estimate finalised','success')"><span class="ms">lock</span>Finalise</button>
     </div>
   </div>
   <div class="de-statusbar">
@@ -2299,12 +2300,36 @@ td:first-child{padding:8px 6px}
   </div>
   <div class="de-body">
     <div class="de-main">
+      <!-- Estimate metadata -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:14px 16px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div class="form-group" style="margin:0">
+              <label>Estimate #</label>
+              <input type="text" value="EST-0042" style="font-weight:600">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Estimate Date</label>
+              <input type="date" value="2026-07-11">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Prepared By</label>
+              <input type="text" value="John Smith">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Title / Reference</label>
+              <input type="text" placeholder="e.g. Electrical Rewiring — Phase 1">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Scope card -->
       <div class="de-card">
         <div class="de-card-header">
           <span class="ms">manage_search</span>
           <span class="de-card-title">Scope of Work</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Required before adding line items</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required before adding line items</span>
         </div>
         <div class="de-card-body">
           <div class="form-group">
@@ -2334,24 +2359,27 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:36%">Description</th>
-                <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:5%">#</th>
+                <th style="width:11%">Category</th>
+                <th style="width:30%">Description</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:13%">Unit Cost (R)</th>
-                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:11%">Unit Cost (R)</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
+                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-materials"></tbody>
           </table>
         </div>
-        <div style="padding:8px 16px 12px">
-          <button class="de-add-row" onclick="addEstimateLine('materials')"><span class="ms">add</span>Add Materials Line</button>
+        <div style="padding:8px 16px 12px;display:flex;gap:8px">
+          <button class="de-add-row" onclick="addEstimateLine('materials')"><span class="ms">add</span>Materials</button>
+          <button class="de-add-row" onclick="addEstimateLine('materials','other')"><span class="ms">add</span>Other</button>
         </div>
       </div>
 
-          <!-- Section: Equipment -->
+      <!-- Section: Equipment -->
       <div class="de-card">
         <div class="de-card-header" style="background:#fef3c7;border-bottom:1px solid #fde68a">
           <span class="ms" style="color:#d97706">construction</span>
@@ -2363,22 +2391,25 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:36%">Description</th>
-                <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:5%">#</th>
+                <th style="width:11%">Owned/Hired</th>
+                <th style="width:30%">Description / Asset</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:13%">Unit Cost (R)</th>
-                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:11%">Unit Cost (R)</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
+                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-equipment">
-              <tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No equipment lines — click Add to include plant/equipment costs</td></tr>
+              <tr><td colspan="9" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No equipment lines — click Add to include plant/equipment costs</td></tr>
             </tbody>
           </table>
         </div>
-        <div style="padding:8px 16px 12px">
-          <button class="de-add-row" onclick="addEstimateLine('equipment')"><span class="ms">add</span>Add Equipment Line</button>
+        <div style="padding:8px 16px 12px;display:flex;gap:8px">
+          <button class="de-add-row" onclick="addEstimateLine('equipment','owned')"><span class="ms">add</span>Owned</button>
+          <button class="de-add-row" onclick="addEstimateLine('equipment','hired')"><span class="ms">add</span>Hired</button>
         </div>
       </div>
 
@@ -2394,20 +2425,24 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:36%">Description</th>
-                <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:5%">#</th>
+                <th style="width:11%">Type</th>
+                <th style="width:30%">Description / Resource</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:13%">Unit Cost (R)</th>
-                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:11%">Unit Cost (R)</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
+                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-labour"></tbody>
           </table>
         </div>
-        <div style="padding:8px 16px 12px">
-          <button class="de-add-row" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add Labour Line</button>
+        <div style="padding:8px 16px 12px;display:flex;gap:8px">
+          <button class="de-add-row" onclick="addEstimateLine('labour','internal')"><span class="ms">add</span>Internal</button>
+          <button class="de-add-row" onclick="addEstimateLine('labour','tradesman')"><span class="ms">add</span>Tradesman</button>
+          <button class="de-add-row" onclick="addEstimateLine('labour','subcontractor')"><span class="ms">add</span>Subcontractor</button>
         </div>
       </div>
 
@@ -2423,22 +2458,28 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:36%">Description</th>
-                <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:5%">#</th>
+                <th style="width:11%">Category</th>
+                <th style="width:30%">Description</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:13%">Unit Cost (R)</th>
-                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:11%">Unit Cost (R)</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
+                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-preliminaries">
-              <tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
+              <tr><td colspan="9" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
             </tbody>
           </table>
         </div>
-        <div style="padding:8px 16px 12px">
-          <button class="de-add-row" onclick="addEstimateLine('preliminaries')"><span class="ms">add</span>Add Preliminaries Line</button>
+        <div style="padding:8px 16px 12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries','travel')"><span class="ms">add</span>Travel</button>
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries','waste')"><span class="ms">add</span>Waste</button>
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries','site_est')"><span class="ms">add</span>Site Est.</button>
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries','hse')"><span class="ms">add</span>HSE</button>
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries','other')"><span class="ms">add</span>Other</button>
         </div>
       </div>
 
@@ -2478,9 +2519,43 @@ td:first-child{padding:8px 6px}
     <!-- Sidebar -->
     <aside class="de-sidebar">
       <div class="de-sb-section">
-        <div class="de-sb-label"><span class="ms">summarize</span>Summary</div>
+        <div class="de-sb-label"><span class="ms">summarize</span>Total Projected Cost</div>
         <div class="de-big-num" id="est-sb-total">R 36,200</div>
         <div class="de-big-sub">Estimated cost (excl. VAT)</div>
+      </div>
+      <!-- Section bars -->
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">bar_chart</span>By Section</div>
+        <div style="space-y:8px">
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+              <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#f97316;display:inline-block"></span>Materials</span>
+              <span style="font-weight:600">R 18,400</span>
+            </div>
+            <div style="height:4px;background:var(--border);border-radius:2px"><div style="height:4px;background:#f97316;border-radius:2px;width:51%"></div></div>
+          </div>
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+              <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#3b82f6;display:inline-block"></span>Equipment</span>
+              <span style="font-weight:600">R 0</span>
+            </div>
+            <div style="height:4px;background:var(--border);border-radius:2px"><div style="height:4px;background:#3b82f6;border-radius:2px;width:0%"></div></div>
+          </div>
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+              <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block"></span>Labour</span>
+              <span style="font-weight:600">R 14,200</span>
+            </div>
+            <div style="height:4px;background:var(--border);border-radius:2px"><div style="height:4px;background:#10b981;border-radius:2px;width:39%"></div></div>
+          </div>
+          <div style="margin-bottom:4px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+              <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;display:inline-block"></span>Preliminaries</span>
+              <span style="font-weight:600">R 3,600</span>
+            </div>
+            <div style="height:4px;background:var(--border);border-radius:2px"><div style="height:4px;background:#8b5cf6;border-radius:2px;width:10%"></div></div>
+          </div>
+        </div>
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">trending_up</span>Margin vs Quote</div>
@@ -2490,14 +2565,18 @@ td:first-child{padding:8px 6px}
         <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px" id="est-sb-margin">25.4% margin</div>
       </div>
       <div class="de-sb-section">
-        <div class="de-sb-label"><span class="ms">donut_large</span>By Category</div>
-        <div class="de-cat-bar" id="est-cat-bar"></div>
-      </div>
-      <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">info</span>Document Info</div>
+        <div class="de-sb-row"><span class="key">Estimate #</span><span class="val">EST-0042</span></div>
         <div class="de-sb-row"><span class="key">Lines</span><span class="val" id="est-sb-lines">12</span></div>
         <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate">Draft</span></span></div>
+        <div class="de-sb-row"><span class="key">Prepared by</span><span class="val" style="font-weight:400">John Smith</span></div>
         <div class="de-sb-row"><span class="key">Last saved</span><span class="val" style="font-weight:400;color:var(--muted-fg)">Not saved</span></div>
+      </div>
+      <!-- Linked PO panel -->
+      <div class="de-sb-section" style="border:1px solid var(--indigo-200);border-radius:var(--radius);padding:10px;background:var(--indigo-50)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--indigo-700);margin-bottom:8px">Linked PO</div>
+        <div style="font-size:12px;color:var(--muted-fg);margin-bottom:8px;line-height:1.4">No PO linked. Use <strong>Link PO</strong> to import line items from a client purchase order.</div>
+        <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('PO link dialog coming soon')"><span class="ms">link</span>Link PO</button>
       </div>
     </aside>
   </div>
@@ -2609,29 +2688,58 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:40%">Description</th>
-                <th style="width:10%">Qty</th>
-                <th style="width:10%">Unit</th>
-                <th style="width:14%">Unit Price (R)</th>
-                <th style="width:12%;text-align:right">Total (R)</th>
+                <th style="width:28%">Description</th>
+                <th style="width:6%">Qty</th>
+                <th style="width:7%">Unit</th>
+                <th style="width:10%">Unit Price (R)</th>
+                <th style="width:7%">Comm %</th>
+                <th style="width:8%">Comm (R)</th>
+                <th style="width:7%">Disc %</th>
+                <th style="width:9%">Tax Type</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="quote-tbody"></tbody>
             <tfoot>
+              <tr id="quote-row-subtotal-before-disc" style="display:none">
+                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal before discount</td>
+                <td class="de-line-total" id="quote-subtotal-before" style="text-align:right">R 48,500</td>
+                <td></td>
+              </tr>
+              <tr id="quote-row-discount" style="display:none">
+                <td colspan="8" style="text-align:right;color:var(--amber-600);font-size:11.5px;font-weight:500">Discount (5%)</td>
+                <td style="text-align:right;font-weight:600;color:var(--amber-600)" id="quote-discount-amt">−R 2,425</td>
+                <td></td>
+              </tr>
               <tr>
-                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
+                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
                 <td class="de-line-total" id="quote-subtotal" style="text-align:right">R 48,500</td>
                 <td></td>
               </tr>
               <tr>
-                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
+                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
                 <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="quote-vat">R 7,275</td>
                 <td></td>
               </tr>
               <tr>
-                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
+                <td colspan="8" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
                 <td class="de-line-grand" id="quote-total" style="text-align:right">R 55,775</td>
+                <td></td>
+              </tr>
+              <tr id="quote-row-deposit" style="display:none">
+                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Deposit (30%)</td>
+                <td style="text-align:right;font-weight:600;color:var(--indigo-600)" id="quote-deposit-amt">R 16,732</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="8" style="text-align:right;color:var(--green-700);font-size:11.5px;font-weight:600">Profit</td>
+                <td style="text-align:right;font-weight:700;color:var(--green-600)" id="quote-profit">R 12,300</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Commission (total)</td>
+                <td style="text-align:right;font-weight:600;color:var(--muted-fg)" id="quote-commission-total">R 3,850</td>
                 <td></td>
               </tr>
             </tfoot>
@@ -2641,6 +2749,77 @@ td:first-child{padding:8px 6px}
           <button class="de-add-row" onclick="addQuoteLine()"><span class="ms">add</span>Add Line Item</button>
         </div>
       </div>
+
+      <!-- Discount & Deposit card -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">percent</span>
+          <span class="de-card-title">Discount &amp; Deposit</span>
+        </div>
+        <div class="de-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <!-- Discount -->
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:10px">Client Discount</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <div style="display:flex;border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden">
+                  <button class="btn sm" id="disc-type-pct" style="border-radius:0;border:none;background:var(--indigo-600);color:#fff;font-weight:700" onclick="setDiscType('pct')">%</button>
+                  <button class="btn sm" id="disc-type-rand" style="border-radius:0;border:none" onclick="setDiscType('rand')">R</button>
+                </div>
+                <input type="number" id="quote-disc-val" value="0" min="0" step="0.5" style="width:80px;padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+                <span style="font-size:12px;color:var(--muted-fg)" id="quote-disc-display">No discount applied</span>
+              </div>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;color:var(--fg-2)">
+                <input type="checkbox" id="disc-reduce-comm" style="accent-color:var(--indigo-600)">
+                Reduce commission proportionally with discount
+              </label>
+              <div style="margin-top:6px;font-size:11px;color:var(--muted-fg);line-height:1.4">When enabled, the commission amount scales down by the same percentage as the discount, preserving your net margin.</div>
+            </div>
+            <!-- Deposit -->
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:10px">Deposit Required</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <input type="number" id="quote-deposit-pct" value="0" min="0" max="100" step="5" style="width:80px;padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+                <span style="font-size:13px;color:var(--muted-fg)">%</span>
+                <span style="font-size:12px;color:var(--muted-fg)" id="quote-deposit-display">No deposit required</span>
+              </div>
+              <div style="font-size:11px;color:var(--muted-fg);line-height:1.4">Deposit amount appears on the quote PDF and flows through to the first invoice as a deduction.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes & Bank Details card -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">notes</span>
+          <span class="de-card-title">Notes &amp; Bank Details</span>
+        </div>
+        <div class="de-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <!-- Notes -->
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:8px">Notes for Client</div>
+              <textarea class="de-notes-area" id="quote-notes" placeholder="Add notes visible to the client on the quote PDF…" style="min-height:100px">Thank you for the opportunity to quote. Please do not hesitate to contact us with any queries.</textarea>
+            </div>
+            <!-- Bank Details -->
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:8px">Bank Details</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;font-size:12.5px">
+                <span style="color:var(--muted-fg);white-space:nowrap">Bank</span>
+                <input type="text" value="First National Bank" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+                <span style="color:var(--muted-fg);white-space:nowrap">Account Name</span>
+                <input type="text" value="Bird Pulse (Pty) Ltd" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+                <span style="color:var(--muted-fg);white-space:nowrap">Account No.</span>
+                <input type="text" value="62812345678" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+                <span style="color:var(--muted-fg);white-space:nowrap">Branch Code</span>
+                <input type="text" value="250655" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- T&C -->
       <div class="de-card">
         <div class="de-card-header">
@@ -2669,6 +2848,7 @@ td:first-child{padding:8px 6px}
         <div class="de-sb-label"><span class="ms">trending_up</span>Margin</div>
         <div class="de-sb-row"><span class="key">Quote (excl.)</span><span class="val">R 48,500</span></div>
         <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val">R 36,200</span></div>
+        <div class="de-sb-row"><span class="key">Commission</span><span class="val">R 3,850</span></div>
         <div class="de-sb-total"><span>Gross Profit</span><span class="val profit">+R 12,300</span></div>
         <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px">25.4% margin</div>
       </div>
@@ -2678,6 +2858,8 @@ td:first-child{padding:8px 6px}
         <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-blue">Sent</span></span></div>
         <div class="de-sb-row"><span class="key">Valid until</span><span class="val" style="font-weight:400">25 Jul 2026</span></div>
         <div class="de-sb-row"><span class="key">Terms</span><span class="val" style="font-weight:400">30 days</span></div>
+        <div class="de-sb-row"><span class="key">Sales Rep</span><span class="val" style="font-weight:400">John Smith</span></div>
+        <div class="de-sb-row"><span class="key">Customer Code</span><span class="val" style="font-weight:400">ACME-001</span></div>
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">bolt</span>Actions</div>
@@ -2802,28 +2984,29 @@ td:first-child{padding:8px 6px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:45%">Description</th>
-                <th style="width:10%">Qty</th>
-                <th style="width:10%">Unit</th>
-                <th style="width:14%">Unit Price (R)</th>
-                <th style="width:12%;text-align:right">Total (R)</th>
+                <th style="width:36%">Description</th>
+                <th style="width:8%">Qty</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Unit Price (R)</th>
+                <th style="width:11%">Tax Type</th>
+                <th style="width:10%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="inv-tbody"></tbody>
             <tfoot>
               <tr>
-                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
+                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
                 <td class="de-line-total" id="inv-subtotal" style="text-align:right">R 48,500</td>
                 <td></td>
               </tr>
               <tr>
-                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
+                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
                 <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="inv-vat">R 7,275</td>
                 <td></td>
               </tr>
               <tr>
-                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Due (incl. VAT)</td>
+                <td colspan="5" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Due (incl. VAT)</td>
                 <td class="de-line-grand" id="inv-total" style="text-align:right">R 55,775</td>
                 <td></td>
               </tr>
@@ -2834,17 +3017,58 @@ td:first-child{padding:8px 6px}
           <button class="de-add-row" onclick="addInvLine()"><span class="ms">add</span>Add Line Item</button>
         </div>
       </div>
-      <!-- Payment notes -->
+
+      <!-- Notes & Summary -->
       <div class="de-card">
         <div class="de-card-header">
           <span class="ms">notes</span>
-          <span class="de-card-title">Payment Notes</span>
+          <span class="de-card-title">Notes &amp; Summary</span>
         </div>
         <div class="de-card-body">
-          <div class="form-group">
-            <textarea class="de-notes-area" id="inv-notes" placeholder="Bank details, payment reference, special instructions…" style="min-height:80px">Bank: FNB Business · Account: 62812345678 · Branch: 250655
-Reference: INV-0089 / JOB-0042</textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <!-- Notes -->
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:8px">Notes for Client</div>
+              <textarea class="de-notes-area" id="inv-notes" placeholder="Payment instructions, special notes…" style="min-height:100px">Please use invoice number as payment reference.
+EFT payments preferred.</textarea>
+            </div>
+            <!-- Summary -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Summary</div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
+                <span style="color:var(--muted-fg)">Subtotal (Excl VAT)</span><span style="font-weight:600">R 48,500</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
+                <span style="color:var(--muted-fg)">VAT (15%)</span><span style="font-weight:600">R 7,275</span>
+              </div>
+              <div style="border-top:1px solid var(--border);margin:8px 0"></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700">
+                <span>Total (Incl VAT)</span><span>R 55,775</span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Bank Details -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">account_balance</span>
+          <span class="de-card-title">Bank Details</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Printed on invoice PDF</span>
+        </div>
+        <div class="de-card-body">
+          <div style="display:grid;grid-template-columns:auto 1fr auto 1fr;gap:8px 16px;align-items:center;font-size:12.5px">
+            <span style="color:var(--muted-fg);white-space:nowrap">Bank</span>
+            <input type="text" value="First National Bank" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+            <span style="color:var(--muted-fg);white-space:nowrap">Account Name</span>
+            <input type="text" value="Bird Pulse (Pty) Ltd" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+            <span style="color:var(--muted-fg);white-space:nowrap">Account No.</span>
+            <input type="text" value="62812345678" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+            <span style="color:var(--muted-fg);white-space:nowrap">Branch Code</span>
+            <input type="text" value="250655" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+          </div>
+          <div style="margin-top:10px;font-size:11.5px;color:var(--muted-fg)">Payment Reference: <strong style="color:var(--fg)">INV-0089 / JOB-0042</strong></div>
         </div>
       </div>
     </div>
@@ -2916,6 +3140,30 @@ Reference: INV-0089 / JOB-0042</textarea>
   </div>
   <div class="de-body">
     <div class="de-main">
+      <!-- Summary metric cards -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:12px 16px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:4px">Total Actual</div>
+              <div style="font-size:18px;font-weight:700" id="costs-metric-total">R 0</div>
+            </div>
+            <div style="border:1px solid #bbf7d0;border-radius:var(--radius);padding:12px;text-align:center;background:#f0fdf4">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#16a34a;margin-bottom:4px">Confirmed</div>
+              <div style="font-size:18px;font-weight:700;color:#15803d" id="costs-metric-confirmed">R 0</div>
+            </div>
+            <div style="border:1px solid #fde68a;border-radius:var(--radius);padding:12px;text-align:center;background:#fffbeb">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#d97706;margin-bottom:4px">Provisional</div>
+              <div style="font-size:18px;font-weight:700;color:#b45309" id="costs-metric-provisional">R 0</div>
+            </div>
+            <div style="border:1px solid var(--indigo-200);border-radius:var(--radius);padding:12px;text-align:center;background:var(--indigo-50)">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--indigo-600);margin-bottom:4px">Proj. Profit</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green-600)" id="costs-metric-profit">+R 48,500</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Cost entries table -->
       <div class="de-card">
         <div class="de-card-header">
@@ -2927,22 +3175,34 @@ Reference: INV-0089 / JOB-0042</textarea>
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:10%">Date</th>
-                <th style="width:13%">Category</th>
-                <th style="width:22%">Description</th>
-                <th style="width:14%">Supplier / Resource</th>
-                <th style="width:11%">Reference No.</th>
-                <th style="width:12%">Proof Type</th>
-                <th style="width:10%;text-align:right">Amount (R)</th>
+                <th style="width:9%">Date</th>
+                <th style="width:11%">Category</th>
+                <th style="width:18%">Description</th>
+                <th style="width:12%">Supplier / Resource</th>
+                <th style="width:9%">Reference No.</th>
+                <th style="width:10%">Proof Type</th>
+                <th style="width:8%">Status</th>
+                <th style="width:9%;text-align:right">Amount (R)</th>
+                <th style="width:6%">Proof</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="costs-tbody"></tbody>
             <tfoot>
               <tr>
-                <td colspan="6" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Actual Cost</td>
+                <td colspan="7" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Confirmed</td>
+                <td style="text-align:right;font-weight:600;color:var(--green-600)" id="costs-confirmed-total">R 0</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td colspan="7" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Provisional</td>
+                <td style="text-align:right;font-weight:600;color:var(--amber-600)" id="costs-provisional-total">R 0</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td colspan="7" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Actual Cost</td>
                 <td class="de-line-grand" id="costs-total" style="text-align:right">R 0</td>
-                <td></td>
+                <td colspan="2"></td>
               </tr>
             </tfoot>
           </table>
@@ -3005,6 +3265,8 @@ Reference: INV-0089 / JOB-0042</textarea>
     <div class="de-topbar-spacer"></div>
     <div class="de-topbar-actions">
       <button class="btn sm" onclick="toast('Jobcard exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn sm" onclick="toast('Signing link sent to client email')"><span class="ms">link</span>Request Signature</button>
+      <button class="btn sm" onclick="toast('Jobcard sent to client')"><span class="ms">send</span>Send to Client</button>
       <button class="btn primary sm" onclick="saveJobcard()"><span class="ms">check</span>Save Jobcard</button>
     </div>
   </div>
@@ -3107,10 +3369,36 @@ Reference: INV-0089 / JOB-0042</textarea>
             <div class="form-group">
               <textarea class="de-notes-area" id="jc-work" placeholder="Describe the work that was completed…" style="min-height:120px"></textarea>
             </div>
-            <div class="form-group" style="margin-top:12px">
-              <label>Materials Used <span style="font-weight:400;text-transform:none;color:var(--muted-fg)">(optional)</span></label>
-              <textarea class="de-notes-area" id="jc-materials" placeholder="List materials used on site (if different from estimate)…" style="min-height:70px"></textarea>
-            </div>
+          </div>
+        </div>
+
+        <!-- Materials Used (structured table) -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">inventory_2</span>
+            <span class="de-card-title">Materials Used on Site</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Optional — printed on jobcard PDF</span>
+          </div>
+          <div class="de-table-wrap">
+            <table class="de-line-table">
+              <thead>
+                <tr>
+                  <th style="width:40%">Description / Part No.</th>
+                  <th style="width:15%">Category</th>
+                  <th style="width:10%">Unit</th>
+                  <th style="width:10%">Qty Used</th>
+                  <th style="width:12%">Unit Cost (R)</th>
+                  <th style="width:9%;text-align:right">Total (R)</th>
+                  <th style="width:4%"></th>
+                </tr>
+              </thead>
+              <tbody id="jc-materials-tbody">
+                <tr><td colspan="7" style="text-align:center;padding:14px;color:var(--muted-fg);font-size:12px">No materials recorded — click Add to log materials used on site</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:8px 16px 12px">
+            <button class="de-add-row" onclick="toast('Add materials row')"><span class="ms">add</span>Add Material</button>
           </div>
         </div>
 
@@ -3185,9 +3473,25 @@ Reference: INV-0089 / JOB-0042</textarea>
               <span class="ms">verified</span>
               <span id="sig-confirmed-text">Signature captured</span>
             </div>
+            <!-- Client Comments -->
+            <div class="form-group" style="margin-top:14px">
+              <label>Client Comments <span style="font-weight:400;text-transform:none;color:var(--muted-fg)">(optional)</span></label>
+              <textarea class="de-notes-area" id="jc-client-comments" placeholder="Any comments from the client about the work performed…" style="min-height:70px"></textarea>
+            </div>
             <!-- Refusal option -->
             <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
-              <button class="btn danger sm" onclick="toast('Refusal recorded','error')"><span class="ms">thumb_down</span>Client Refuses to Sign</button>
+              <div style="font-size:12px;font-weight:600;color:var(--muted-fg);margin-bottom:8px">Client refuses to sign?</div>
+              <div id="jc-refusal-section" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);padding:12px;margin-bottom:10px">
+                <div class="form-group" style="margin-bottom:8px">
+                  <label style="color:var(--red-700)">Refused By (Name)</label>
+                  <input type="text" id="jc-refused-by" placeholder="Full name of person refusing" style="max-width:280px">
+                </div>
+                <div class="form-group" style="margin:0">
+                  <label style="color:var(--red-700)">Refusal Reason</label>
+                  <textarea class="de-notes-area" id="jc-refusal-reason" placeholder="Reason for refusing to sign…" style="min-height:70px"></textarea>
+                </div>
+              </div>
+              <button class="btn danger sm" onclick="document.getElementById('jc-refusal-section').style.display='block';toast('Refusal section opened','error')"><span class="ms">thumb_down</span>Client Refuses to Sign</button>
               <span style="font-size:11px;color:var(--muted-fg);margin-left:10px">Records refusal reason and locks the jobcard</span>
             </div>
           </div>
@@ -3201,17 +3505,31 @@ Reference: INV-0089 / JOB-0042</textarea>
           <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate" id="jc-status-pill">Draft</span></span></div>
           <div class="de-sb-row"><span class="key">Signature</span><span class="val" id="jc-sig-status" style="color:var(--muted-fg)">Awaiting</span></div>
           <div class="de-sb-row"><span class="key">Photos</span><span class="val" id="jc-sb-photos">0</span></div>
+          <div class="de-sb-row"><span class="key">Last saved</span><span class="val" style="font-weight:400;color:var(--muted-fg)">Not saved</span></div>
+        </div>
+        <!-- Signing link status -->
+        <div class="de-sb-section" style="border:1px solid var(--indigo-200);border-radius:var(--radius);padding:10px;background:var(--indigo-50)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--indigo-700);margin-bottom:8px">Signing Link</div>
+          <div style="font-size:12px;color:var(--muted-fg);margin-bottom:8px;line-height:1.4">No signing link sent yet. Use <strong>Request Signature</strong> to send a link to the client.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Signing link sent to client email')"><span class="ms">link</span>Request Signature</button>
         </div>
         <div class="de-sb-section">
           <div class="de-sb-label"><span class="ms">group</span>Team on Site</div>
           <div class="de-sb-row"><span class="key">Tech Manager</span><span class="val" style="font-weight:400">John Smith</span></div>
           <div class="de-sb-row"><span class="key">Coordinator</span><span class="val" style="font-weight:400">Sarah Jones</span></div>
+          <div class="de-sb-row"><span class="key">Electrician</span><span class="val" style="font-weight:400">Mike Dlamini</span></div>
+          <div class="de-sb-row"><span class="key">Assistant</span><span class="val" style="font-weight:400">Thabo Mokoena</span></div>
         </div>
         <div class="de-sb-section">
           <div class="de-sb-label"><span class="ms">schedule</span>Schedule</div>
           <div class="de-sb-row"><span class="key">Requested</span><span class="val" style="font-weight:400">18 Jul 2026</span></div>
           <div class="de-sb-row"><span class="key">Start</span><span class="val" style="font-weight:400" id="jc-sb-start">—</span></div>
           <div class="de-sb-row"><span class="key">End</span><span class="val" style="font-weight:400" id="jc-sb-end">—</span></div>
+        </div>
+        <div class="de-sb-section">
+          <div class="de-sb-label"><span class="ms">description</span>Document Info</div>
+          <div class="de-sb-row"><span class="key">Template</span><span class="val" style="font-weight:400">Standard Jobcard</span></div>
+          <div class="de-sb-row"><span class="key">Job</span><span class="val" style="font-weight:400">JOB-0042</span></div>
         </div>
       </aside>
     </div>
