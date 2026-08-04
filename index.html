@@ -582,10 +582,11 @@ td:first-child{padding:8px 8px}
 .doc-action:hover{background:var(--surface-2);border-color:var(--slate-400);color:var(--fg)}
 .doc-action:active{transform:translateY(1px)}
 .doc-action .ms{font-size:13px}
-/* doc-tag — alias for .tag (backwards compat) */
-.doc-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;flex-shrink:0;pointer-events:none;line-height:1.5}
+/* doc-tag slot — fixed width so buttons always align in the same column */
+.doc-tag-slot{width:54px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end}
+.doc-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;pointer-events:none;line-height:1.5;white-space:nowrap}
 /* doc-auto — alias for .tag.tag-indigo with icon */
-.doc-auto{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--indigo-50);color:var(--indigo-700);border:none;flex-shrink:0;pointer-events:none;line-height:1.5}
+.doc-auto{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--indigo-50);color:var(--indigo-700);border:none;pointer-events:none;line-height:1.5;white-space:nowrap}
 .doc-auto .ms{font-size:11px}
 
 /* Workflow automations */
@@ -2233,35 +2234,37 @@ td:first-child{padding:8px 8px}
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">calculate</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Estimate</div><div class="doc-meta">12 items · R 36,200</div></div>
-          <span class="doc-tag tag-slate">Draft</span>
+          <div class="doc-tag-slot"><span class="doc-tag tag-slate">Draft</span></div>
           <div class="doc-action" onclick="openEstimateModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">description</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Quote</div><div class="doc-meta">QUO-0089 · R 48,500</div></div>
-          <span class="doc-tag tag-blue">Sent</span>
+          <div class="doc-tag-slot"><span class="doc-tag tag-blue">Sent</span></div>
           <div class="doc-action" onclick="openQuoteModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">receipt_long</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Invoice</div><div class="doc-meta" id="invoice-meta">Auto-creates on completion</div></div>
-          <span class="doc-auto"><span class="ms">bolt</span>Auto</span>
+          <div class="doc-tag-slot"><span class="doc-auto"><span class="ms">bolt</span>Auto</span></div>
           <div class="doc-action" id="invoice-create-btn" onclick="openInvoiceModal()"><span class="ms">add</span>Create</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">attach_money</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Actual Costs</div><div class="doc-meta" id="actual-costs-meta">R 0 · 0 entries</div></div>
+          <div class="doc-tag-slot"></div>
           <div class="doc-action" onclick="openActualCostsModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">assignment</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">Jobcard</div><div class="doc-meta" id="jobcard-meta">0 photos · Awaiting signature</div></div>
-          <span class="doc-tag tag-slate" id="jobcard-status-pill">Draft</span>
+          <div class="doc-tag-slot"><span class="doc-tag tag-slate" id="jobcard-status-pill">Draft</span></div>
           <div class="doc-action" onclick="openJobcardModal()"><span class="ms">open_in_new</span>Open</div>
         </div>
         <div class="doc-row">
           <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">health_and_safety</span></div>
           <div style="flex:1;min-width:0"><div class="doc-name">HSE Pack</div><div class="doc-meta" id="hse-meta">Not generated</div></div>
+          <div class="doc-tag-slot"></div>
           <div class="doc-action" id="hse-generate-btn" onclick="generateHSE()"><span class="ms">add</span>Generate</div>
         </div>
       </div>
