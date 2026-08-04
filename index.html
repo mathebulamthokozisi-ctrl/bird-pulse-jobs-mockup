@@ -4975,8 +4975,8 @@ function renderPipeline(){
   const n=PIPELINE_STAGES.length; // 5
   const activeStageIdx=getStageForStatus(currentJobStatus);
   const isDeclined=currentJobStatus==='quote_declined';
-  // Fill % = (activeStageIdx + 0.5) / n  so active stage is centred in the fill
-  const fillPct=Math.round(((activeStageIdx+0.5)/n)*100);
+  // Fill % = (activeStageIdx + 1) / n so the fill covers the entire active stage
+  const fillPct=Math.round(((activeStageIdx+1)/n)*100);
   const trackClass=isDeclined?'pipe-track declined':'pipe-track';
   const stages=PIPELINE_STAGES.map((s,i)=>{
     const isDone=i<activeStageIdx;
