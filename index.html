@@ -180,138 +180,236 @@ td:first-child{padding:8px 6px}
 .detail-meta strong{color:var(--fg-2);font-weight:600}
 
 /* ── Pipeline bar: chevron-ribbon stepper ── */
-/* ── Pipeline stepper — rounded-square icon style ── */
+/* ── Pipeline bar — gradient progress bar ── */
 .pipeline-bar{
   background:var(--white);
   border-bottom:1px solid var(--border);
-  padding:18px 24px 16px;
-  display:flex;
-  align-items:flex-start;
+  padding:14px 20px;
   flex-shrink:0;
-  overflow-x:auto;
-  position:relative;
+  display:block;
 }
-/* The connecting line sits behind everything */
-.pipeline-bar::before{
+/* Track wrapper: grey background rail */
+.pipe-track{
+  position:relative;
+  height:36px;
+  background:#eef0f3;
+  border-radius:99px;
+  overflow:hidden;
+}
+/* Filled gradient fill — width set inline by JS via --pipe-fill */
+.pipe-fill{
+  position:absolute;
+  inset:0;
+  width:var(--pipe-fill,20%);
+  background:linear-gradient(90deg,#bbf7d0 0%,#4ade80 40%,#16a34a 100%);
+  border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+/* Declined state fill */
+.pipe-track.declined .pipe-fill{
+  background:linear-gradient(90deg,#fecaca 0%,#f87171 60%,#dc2626 100%);
+}
+/* Shimmer on the fill */
+.pipe-fill::after{
   content:'';
   position:absolute;
-  top:30px; /* vertically centred on the icon */
-  left:60px;
-  right:60px;
-  height:2px;
-  background:var(--slate-200);
-  z-index:0;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.25) 50%,transparent 100%);
+  background-size:200% 100%;
+  animation:pipe-shimmer 2.2s linear infinite;
+  border-radius:99px;
 }
-/* Each stage column */
+@keyframes pipe-shimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+/* Stage labels row — sits on top of the track */
+.pipe-stages{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:stretch;
+}
 .pipe-stage{
   flex:1;
-  min-width:80px;
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  position:relative;
-  z-index:1;
-  transition:opacity .15s;
-}
-.pipe-stage:hover{opacity:.85}
-/* Progress line fill — drawn as a pseudo on done stages */
-.pipe-stage.done::after{
-  content:'';
-  position:absolute;
-  top:21px;
-  left:50%;
-  right:-50%;
-  height:2px;
-  background:var(--indigo-500);
-  z-index:0;
-}
-.pipe-stage:last-child.done::after{display:none}
-/* Rounded-square icon badge */
-.pipe-icon{
-  width:40px;
-  height:40px;
-  border-radius:10px;
-  display:flex;
+  flex-direction:row;
   align-items:center;
   justify-content:center;
-  flex-shrink:0;
-  transition:all .2s;
+  gap:4px;
+  cursor:pointer;
   position:relative;
-  z-index:2;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  transition:background .15s;
+  border-radius:0;
+  overflow:hidden;
+  flex-wrap:wrap;
 }
-.pipe-icon .ms{font-size:18px;font-weight:400}
-/* State colours */
-.pipe-stage.done .pipe-icon{
-  background:var(--indigo-600);
-  color:#fff;
-  box-shadow:0 4px 12px rgba(79,70,229,.35);
-}
-.pipe-stage.active .pipe-icon{
-  background:var(--white);
-  color:var(--indigo-600);
-  border:2px solid var(--indigo-500);
-  box-shadow:0 4px 14px rgba(79,70,229,.2);
-}
-.pipe-stage.future .pipe-icon{
-  background:#f1f3f7;
-  color:#c4c9d4;
-  border:1.5px solid var(--slate-200);
-  box-shadow:none;
-}
-.pipe-stage.declined .pipe-icon{
-  background:#fef2f2;
-  color:#dc2626;
-  border:2px solid #fecaca;
-  box-shadow:0 2px 8px rgba(220,38,38,.15);
-}
-/* Stage label */
-.pipe-lbl{
-  font-size:12px;
-  font-weight:700;
-  white-space:nowrap;
-  line-height:1.2;
-  text-align:center;
-}
-.pipe-stage.done .pipe-lbl{color:var(--indigo-700)}
-.pipe-stage.active .pipe-lbl{color:var(--indigo-800)}
-.pipe-stage.future .pipe-lbl{color:var(--slate-400)}
-.pipe-stage.declined .pipe-lbl{color:#b91c1c}
-/* Sub-status chip below label */
-.pipe-chip{
-  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-  padding:2px 7px;border-radius:20px;line-height:1;white-space:nowrap;
-}
-.pipe-stage.done .pipe-chip{background:var(--indigo-50);color:var(--indigo-600)}
-.pipe-stage.active .pipe-chip{background:var(--indigo-600);color:#fff}
-.pipe-stage.declined .pipe-chip{background:#fecaca;color:#b91c1c}
-/* Pulse ring on active icon */
-.pipe-pulse{
+.pipe-stage:hover{background:rgba(0,0,0,.04)}
+/* Divider between stages */
+.pipe-stage+.pipe-stage::before{
+  content:'';
   position:absolute;
-  top:-5px;left:-5px;right:-5px;bottom:-5px;
-  border-radius:14px;
-  border:2px solid var(--indigo-300);
-  animation:pipe-pulse-anim 2s ease-in-out infinite;
+  left:0;top:6px;bottom:6px;
+  width:1px;
+  background:rgba(255,255,255,.35);
+}
+/* Label inside bar */
+.pipe-lbl{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  line-height:1;
   pointer-events:none;
-  z-index:1;
+}
+.pipe-stage.done .pipe-lbl{color:rgba(255,255,255,.95)}
+.pipe-stage.active .pipe-lbl{color:rgba(255,255,255,.95)}
+.pipe-stage.future .pipe-lbl{color:#94a3b8}
+.pipe-stage.declined .pipe-lbl{color:rgba(255,255,255,.9)}
+/* Sub-status chip */
+.pipe-chip{
+  font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  padding:1px 6px;border-radius:20px;line-height:1.4;white-space:nowrap;
+  pointer-events:none;
+}
+.pipe-stage.done .pipe-chip{background:rgba(255,255,255,.25);color:rgba(255,255,255,.9)}
+.pipe-stage.active .pipe-chip{background:rgba(255,255,255,.3);color:#fff;font-weight:800}
+.pipe-stage.future .pipe-chip{background:rgba(0,0,0,.06);color:#94a3b8}
+.pipe-stage.declined .pipe-chip{background:rgba(255,255,255,.25);color:#fff}
+/* Pulse dot on active stage — tiny inline dot before the label */
+.pipe-pulse{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(255,255,255,.9);
+  display:inline-block;
+  margin-right:3px;
+  vertical-align:middle;
+  flex-shrink:0;
+  animation:pipe-pulse-anim 1.6s ease-in-out infinite;
 }
 @keyframes pipe-pulse-anim{
-  0%,100%{opacity:.7;transform:scale(1)}
-  50%{opacity:0;transform:scale(1.15)}
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.25;transform:scale(.5)}
 }
 
-.guard-bar{background:var(--white);border-bottom:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+/* ── Guard + Execution bar ── */
+.guard-bar{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:0;
+  display:flex;
+  align-items:stretch;
+  flex-shrink:0;
+  min-height:38px;
+}
+/* Left zone: guard keys */
+.guard-zone{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 14px;
+  flex:1;
+  flex-wrap:wrap;
+  min-width:0;
+}
+/* Kink divider between zones */
+.guard-kink{
+  width:1px;
+  background:var(--border);
+  flex-shrink:0;
+  position:relative;
+  margin:6px 0;
+}
+.guard-kink::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:var(--white);
+  border:1px solid var(--border);
+  z-index:1;
+}
+.guard-kink::after{
+  content:'\e5c3'; /* Material Symbols: more_vert / dots */
+  font-family:'Material Symbols Outlined';
+  font-size:10px;
+  color:var(--slate-400);
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+  line-height:1;
+}
+/* Right zone: job execution */
+.exec-zone{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 14px;
+  flex-shrink:0;
+  background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 40%,#fde68a 100%);
+  border-left:none;
+  position:relative;
+  overflow:hidden;
+}
+/* Subtle shimmer sweep on the exec zone */
+.exec-zone::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);
+  background-size:200% 100%;
+  animation:exec-shimmer 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes exec-shimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+.exec-label{
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  color:#92400e;
+  margin-right:2px;
+  white-space:nowrap;
+  position:relative;
+}
+/* Guard key pills */
 .guard-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-right:4px}
-.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500}
+.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500;transition:opacity .15s}
 .guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
 .guard-key.met .ms{font-size:12px;color:var(--green-500)}
 .guard-key.blocked{background:var(--red-50);color:var(--red-700);border:1px solid var(--red-100)}
 .guard-key.blocked .ms{font-size:12px;color:var(--red-500)}
-.guard-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
-.auto-note{font-size:10px;color:var(--indigo-600);display:flex;align-items:center;gap:3px;font-weight:500}
+/* Pending = not yet required / not yet unlocked — shown but visually disabled */
+.guard-key.pending{
+  background:var(--slate-50);
+  color:var(--slate-400);
+  border:1px dashed var(--slate-200);
+  opacity:.65;
+}
+.guard-key.pending .ms{font-size:12px;color:var(--slate-300)}
+.guard-actions{display:flex;align-items:center;gap:6px}
+.auto-note{font-size:10px;color:#b45309;display:flex;align-items:center;gap:3px;font-weight:500;position:relative}
 .auto-note .ms{font-size:12px}
+/* Exec-zone buttons inherit amber tones */
+.exec-zone .btn{
+  background:#fffbeb;
+  border-color:#d97706;
+  color:#92400e;
+  position:relative;
+}
+.exec-zone .btn:hover{
+  background:#fef3c7;
+  border-color:#b45309;
+  color:#78350f;
+}
 
 .guidance-bar{background:var(--white);border-bottom:1px solid var(--border);border-left:3px solid var(--indigo-500);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .guidance-icon{width:26px;height:26px;border-radius:50%;background:var(--indigo-100);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -320,8 +418,12 @@ td:first-child{padding:8px 6px}
 .guidance-msg{font-size:12px;color:var(--fg-2)}
 
 /* Detail body */
-.detail-body{display:flex;flex:1;overflow:hidden}
-.detail-sidebar{width:268px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.detail-body{display:flex;flex:1;overflow:hidden;flex-direction:row-reverse}
+.detail-sidebar{width:268px;min-width:180px;max-width:520px;flex-shrink:0;background:var(--white);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;position:relative}
+.sidebar-resizer{position:absolute;left:0;top:0;bottom:0;width:5px;cursor:col-resize;z-index:10;background:transparent;transition:background .15s}
+.sidebar-resizer:hover,.sidebar-resizer.dragging{background:var(--indigo-200)}
+.sidebar-resizer::after{content:'';position:absolute;left:2px;top:50%;transform:translateY(-50%);width:1px;height:32px;background:var(--indigo-300);border-radius:1px;opacity:0;transition:opacity .15s}
+.sidebar-resizer:hover::after,.sidebar-resizer.dragging::after{opacity:1}
 .detail-main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
 .sec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
 
@@ -375,7 +477,7 @@ td:first-child{padding:8px 6px}
 .flow-step.manual .ms{color:var(--amber-500)}
 
 /* Cards */
-.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:visible}
 .card-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .card-body{padding:14px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px 20px}
@@ -383,10 +485,10 @@ td:first-child{padding:8px 6px}
 .info-field-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:3px}
 .info-field-value{font-size:13px;font-weight:500;color:var(--fg)}
 .info-field-sub{font-size:11px;color:var(--muted-fg)}
-.desc-box{background:#fafafa;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12.5px;color:var(--fg-2);line-height:1.6;margin-top:10px}
+.desc-box{background:#fafafa;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12.5px;color:var(--fg-2);line-height:1.6;margin-top:10px;white-space:pre-wrap;word-break:break-word;overflow:visible}
 
 /* Tabs */
-.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--white);padding:0 14px}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--white);padding:0 14px;border-radius:var(--radius) var(--radius) 0 0}
 .tab-btn{padding:10px 14px;font-size:12.5px;font-weight:500;color:var(--muted-fg);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:5px;transition:color .12s}
 .tab-btn:hover{color:var(--fg-2)}
 .tab-btn.active{color:var(--indigo-700);border-bottom-color:var(--indigo-600);font-weight:600}
@@ -396,11 +498,40 @@ td:first-child{padding:8px 6px}
 
 /* Overview tab */
 .metric-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.metric-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
-.metric-card.highlight{background:var(--green-50);border-color:var(--green-100)}
-.metric-card.highlight.loss{background:var(--red-50);border-color:var(--red-100)}
-.metric-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:4px}
-.metric-value{font-size:20px;font-weight:700;color:var(--fg)}
+/* Metric cards aligned to UI kit stat-card spec */
+.metric-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-top:2px solid var(--mc-accent,var(--slate-300));
+  border-radius:var(--radius);
+  padding:14px 16px;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow .15s,transform .15s;
+  --mx:50%;--my:50%;
+}
+.metric-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(circle 160px at var(--mx) var(--my),var(--mc-glow,rgba(100,116,139,.07)),transparent 70%);
+  opacity:0;
+  transition:opacity .2s;
+  pointer-events:none;
+}
+.metric-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-2px)}
+.metric-card:hover::before{opacity:1}
+/* Colour variants */
+.metric-card.mc-slate{--mc-accent:var(--slate-300);--mc-glow:rgba(100,116,139,.08)}
+.metric-card.mc-indigo{--mc-accent:var(--indigo-500);--mc-glow:rgba(99,102,241,.1)}
+.metric-card.mc-green{--mc-accent:var(--green-500);--mc-glow:rgba(34,197,94,.1)}
+.metric-card.mc-red{--mc-accent:var(--red-500);--mc-glow:rgba(239,68,68,.1)}
+.metric-card.mc-amber{--mc-accent:#f59e0b;--mc-glow:rgba(245,158,11,.1)}
+/* Legacy highlight aliases */
+.metric-card.highlight{--mc-accent:var(--green-500);--mc-glow:rgba(34,197,94,.1)}
+.metric-card.highlight.loss{--mc-accent:var(--red-500);--mc-glow:rgba(239,68,68,.1)}
+.metric-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+.metric-value{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--mc-accent,var(--fg));line-height:1}
+.metric-value.neutral{color:var(--fg)}
 .metric-value.profit{color:var(--green-600)}
 .metric-value.loss{color:var(--red-600)}
 .chart-area{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px}
@@ -439,15 +570,36 @@ td:first-child{padding:8px 6px}
 .comm-body.open{display:block}
 .comm-msg{background:#fafafa;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--fg-2);line-height:1.6;margin-bottom:10px}
 .comm-msg-from{font-size:10.5px;font-weight:600;color:var(--muted-fg);margin-bottom:4px}
-.comm-reply-box{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.comm-reply-box textarea{width:100%;border:none;outline:none;padding:10px 12px;font-size:12px;font-family:inherit;resize:none;min-height:70px;color:var(--fg)}
-.comm-reply-footer{background:#fafafa;border-top:1px solid var(--border);padding:6px 10px;display:flex;justify-content:flex-end;gap:6px}
+.comm-reply-box{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .15s}
+.comm-reply-box:focus-within{border-color:var(--indigo-400);box-shadow:0 0 0 2px rgba(99,102,241,.1)}
+/* Rich compose toolbar */
+.comm-toolbar{display:flex;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid var(--border);background:#fafafa;flex-wrap:wrap}
+.comm-tb-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:4px;border:none;background:transparent;cursor:pointer;color:var(--fg-2);font-size:13px;font-weight:700;transition:background .1s}
+.comm-tb-btn:hover{background:var(--indigo-50);color:var(--indigo-700)}
+.comm-tb-btn.ms{font-size:16px;font-weight:300}
+.comm-tb-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
+.comm-tb-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:2px 6px;margin-left:auto}
+.comm-tb-badge .ms{font-size:12px}
+/* Editable compose area */
+.comm-compose{width:100%;border:none;outline:none;padding:10px 12px;font-size:12px;font-family:inherit;min-height:72px;color:var(--fg);line-height:1.6}
+.comm-compose[contenteditable]:empty::before{content:attr(data-placeholder);color:var(--slate-400);pointer-events:none}
+/* Attachment chips row */
+.comm-attach-row{display:flex;flex-wrap:wrap;gap:6px;padding:6px 10px;border-top:1px solid var(--border);background:#fafafa;min-height:0}
+.comm-attach-row:empty{display:none}
+.comm-attach-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;background:var(--white);border:1px solid var(--border);font-size:10.5px;font-weight:500;color:var(--fg-2)}
+.comm-attach-chip .ms{font-size:13px;color:var(--indigo-500)}
+.comm-attach-chip .rm{font-size:12px;color:var(--muted-fg);cursor:pointer;margin-left:2px}
+.comm-attach-chip .rm:hover{color:var(--red-500)}
+.comm-reply-footer{background:#fafafa;border-top:1px solid var(--border);padding:6px 10px;display:flex;align-items:center;gap:6px}
+.comm-reply-footer .attach-label{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-fg);cursor:pointer;padding:4px 6px;border-radius:4px;transition:background .1s}
+.comm-reply-footer .attach-label:hover{background:var(--indigo-50);color:var(--indigo-600)}
+.comm-reply-footer .spacer{flex:1}
 
 /* Timeline tab */
 .timeline-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
 .timeline-item:last-child{border-bottom:none}
-.timeline-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.timeline-dot .ms{font-size:14px}
+.timeline-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.timeline-dot .ms{font-size:13px}
 .timeline-dot.status{background:var(--indigo-100)}
 .timeline-dot.status .ms{color:var(--indigo-600)}
 .timeline-dot.email{background:var(--green-100)}
@@ -466,8 +618,8 @@ td:first-child{padding:8px 6px}
 .timeline-email-body.open{display:block}
 
 /* HSE tab */
-.hse-pipeline{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
-.hse-step{flex:1;padding:8px 10px;text-align:center;font-size:11px;font-weight:500;color:var(--muted-fg);cursor:pointer;background:var(--white);border-right:1px solid var(--border);transition:all .12s}
+.hse-pipeline{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:visible;margin-bottom:14px;flex-wrap:nowrap;min-width:0}
+.hse-step{flex:1;min-width:0;padding:8px 6px;text-align:center;font-size:10.5px;font-weight:500;color:var(--muted-fg);cursor:pointer;background:var(--white);border-right:1px solid var(--border);transition:all .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hse-step:last-child{border-right:none}
 .hse-step:hover{background:#fafafa}
 .hse-step.done{background:var(--green-50);color:var(--green-700)}
@@ -571,6 +723,1014 @@ td:first-child{padding:8px 6px}
 .col-resize-handle{position:absolute;top:0;right:-3px;width:6px;height:100%;cursor:col-resize;z-index:10;border-radius:3px;transition:background .15s}
 .col-resize-handle:hover,.col-resize-handle.active{background:var(--indigo-400)}
 .col-resize-handle.active{background:var(--indigo-600)}
+
+/* ══════════════════════════════════════════
+   FULL-SCREEN DOCUMENT EDITORS
+   ══════════════════════════════════════════ */
+
+/* ── Base overlay ── */
+.doc-editor {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: none;
+  flex-direction: column;
+  background: #f0f2f5;
+  font-family: inherit;
+}
+.doc-editor.open { display: flex; }
+
+/* ── Topbar — matches exec-zone exactly ── */
+.de-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 16px;
+  height: 48px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 40%, #fde68a 100%);
+  border-bottom: 1px solid #fcd34d;
+  position: relative;
+  overflow: hidden;
+}
+/* Shimmer sweep — same as exec-zone */
+.de-topbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.45) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: exec-shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+.de-topbar-back, .de-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.6);
+  border: 1px solid #d97706;
+  color: #92400e;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .12s, border-color .12s;
+  white-space: nowrap;
+  position: relative;
+}
+.de-topbar-back:hover, .de-back:hover {
+  background: #fffbeb;
+  border-color: #b45309;
+  color: #78350f;
+}
+.de-topbar-back .ms, .de-back .ms { font-size: 16px; }
+.de-topbar-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(180,83,9,.2);
+  margin: 0 14px;
+  flex-shrink: 0;
+}
+.de-topbar-icon {
+  font-size: 17px;
+  color: #92400e;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+.de-topbar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #78350f;
+  white-space: nowrap;
+  position: relative;
+}
+.de-topbar-sub {
+  font-size: 11.5px;
+  color: #b45309;
+  margin-left: 8px;
+  font-weight: 500;
+  white-space: nowrap;
+  position: relative;
+}
+.de-topbar-spacer { flex: 1; }
+.de-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+/* Topbar action buttons — amber tones */
+.de-topbar-actions .btn {
+  background: rgba(255,255,255,.7);
+  border-color: #d97706;
+  color: #92400e;
+  position: relative;
+}
+.de-topbar-actions .btn:hover {
+  background: #fffbeb;
+  border-color: #b45309;
+  color: #78350f;
+}
+.de-topbar-actions .btn.primary {
+  background: var(--indigo-600);
+  border-color: var(--indigo-700);
+  color: var(--white);
+}
+.de-topbar-actions .btn.primary:hover {
+  background: var(--indigo-700);
+  border-color: var(--indigo-800);
+}
+
+/* ── Breadcrumb bar ── */
+.de-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 20px;
+  font-size: 11.5px;
+  color: var(--muted-fg);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.de-breadcrumb a, .de-breadcrumb span { color: var(--muted-fg); }
+.de-breadcrumb .de-bc-current { color: var(--fg); font-weight: 600; }
+.de-breadcrumb .ms { font-size: 13px; }
+
+/* ── Stage strip ── */
+.de-stage-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 20px;
+  height: 38px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.de-stage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted-fg);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s;
+  position: relative;
+}
+.de-stage::after {
+  content: '›';
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--border);
+  position: absolute;
+  right: -3px;
+  line-height: 1;
+}
+.de-stage:last-child::after { display: none; }
+.de-stage:hover { color: var(--indigo-600); }
+.de-stage.active {
+  color: var(--indigo-600);
+  border-bottom-color: var(--indigo-500);
+}
+.de-stage.done { color: var(--green-600); }
+.de-stage.done::before {
+  content: '✓';
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--green-500);
+  font-weight: 700;
+}
+
+/* ── Body layout ── */
+.de-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.de-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.de-sidebar {
+  width: 280px;
+  min-width: 240px;
+  flex-shrink: 0;
+  background: var(--white);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Cards in main area ── */
+.de-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.de-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid var(--indigo-400);
+  background: var(--white);
+}
+.de-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--fg);
+}
+.de-card-title .ms {
+  font-size: 15px;
+  color: var(--indigo-500);
+}
+.de-card-meta {
+  font-size: 11px;
+  color: var(--muted-fg);
+  font-weight: 500;
+}
+.de-card-body { padding: 0; }
+
+/* ── Line-item table ── */
+.de-line-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.de-line-table thead th {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted-fg);
+  border-bottom: 1px solid var(--border);
+  background: var(--slate-50);
+  white-space: nowrap;
+}
+.de-line-table thead th:last-child { text-align: right; }
+.de-line-table tbody tr {
+  border-bottom: 1px solid var(--slate-100);
+  transition: background .1s;
+}
+.de-line-table tbody tr:hover { background: #f8faff; }
+.de-line-table tbody tr:last-child { border-bottom: none; }
+.de-line-table tbody td {
+  padding: 4px 6px;
+  vertical-align: middle;
+}
+.de-line-table tbody td:first-child { padding-left: 14px; }
+.de-line-table tbody td:last-child { padding-right: 10px; text-align: right; }
+
+/* Inputs inside table cells — transparent until hover/focus */
+.de-line-table tbody td input,
+.de-line-table tbody td select {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--fg);
+  outline: none;
+  box-shadow: none;
+  width: 100%;
+  background: transparent;
+  transition: border-color .12s, background .12s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.de-line-table tbody td input:hover,
+.de-line-table tbody td select:hover {
+  border-color: var(--slate-200);
+  background: var(--white);
+}
+.de-line-table tbody td input:focus,
+.de-line-table tbody td select:focus {
+  border-color: var(--indigo-400);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.08);
+  outline: none;
+}
+.de-line-table tbody td select {
+  cursor: pointer;
+  padding-right: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 8px;
+}
+/* Total column */
+.de-line-table tbody td.de-line-total {
+  text-align: right;
+  font-weight: 600;
+  color: var(--fg);
+  font-size: 12.5px;
+  white-space: nowrap;
+  padding-right: 12px;
+}
+
+/* Footer rows */
+.de-line-table tfoot tr { border-top: 2px solid var(--border); }
+.de-line-table tfoot td {
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: var(--fg-2);
+}
+.de-line-table tfoot tr:last-child td {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--fg);
+}
+.de-line-grand {
+  text-align: right;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: var(--indigo-700) !important;
+  padding-right: 12px !important;
+}
+
+/* ── Delete row button ── */
+.de-del-row {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-fg);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: color .1s, background .1s;
+  opacity: 0;
+}
+.de-line-table tbody tr:hover .de-del-row { opacity: 1; }
+.de-del-row:hover { color: var(--red-600); background: var(--red-50); }
+.de-del-row .ms { font-size: 15px; }
+
+/* ── Add row button ── */
+.de-add-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--indigo-600);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  transition: background .1s;
+}
+.de-add-row:hover { background: var(--indigo-50); }
+.de-add-row .ms { font-size: 15px; }
+
+/* ── Sidebar sections ── */
+.de-sb-section {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.de-sb-section:last-child { border-bottom: none; }
+.de-sb-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted-fg);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.de-sb-label .ms { font-size: 13px; color: var(--indigo-400); }
+.de-big-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--indigo-700);
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+.de-big-sub {
+  font-size: 11px;
+  color: var(--muted-fg);
+  margin-bottom: 12px;
+}
+.de-sb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  color: var(--fg-2);
+}
+.de-sb-row strong {
+  font-weight: 700;
+  color: var(--fg);
+}
+.de-sb-row.profit { color: var(--green-700); font-weight: 700; }
+.de-sb-row.loss { color: var(--red-600); font-weight: 700; }
+.de-sb-row.margin {
+  font-size: 11px;
+  color: var(--green-600);
+  font-weight: 600;
+}
+
+/* ── Category bars ── */
+.de-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  margin-bottom: 6px;
+}
+.de-cat-name { width: 90px; color: var(--fg-2); font-size: 11px; flex-shrink: 0; }
+.de-cat-track {
+  flex: 1;
+  height: 6px;
+  background: var(--slate-100);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.de-cat-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--indigo-400);
+  transition: width .4s ease;
+}
+.de-cat-fill.cat-materials { background: var(--indigo-400); }
+.de-cat-fill.cat-labour    { background: #22c55e; }
+.de-cat-fill.cat-subcon    { background: #f59e0b; }
+.de-cat-fill.cat-travel    { background: #94a3b8; }
+.de-cat-fill.cat-other     { background: #f97316; }
+.de-cat-val { font-size: 11px; color: var(--fg-2); text-align: right; min-width: 56px; }
+
+/* ── Document header (quote/invoice) ── */
+.de-doc-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.de-doc-header-cell {
+  background: var(--white);
+  padding: 12px 16px;
+}
+.de-doc-header-cell label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted-fg);
+  margin-bottom: 4px;
+}
+.de-doc-header-cell input,
+.de-doc-header-cell select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  outline: none;
+  transition: border-color .12s;
+}
+.de-doc-header-cell input:focus,
+.de-doc-header-cell select:focus {
+  border-color: var(--indigo-400);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.08);
+  outline: none;
+}
+
+/* ── Client block ── */
+.de-client-block {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--slate-50);
+}
+.de-client-block h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 2px;
+}
+.de-client-block p {
+  font-size: 11.5px;
+  color: var(--muted-fg);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Invoice due banner ── */
+.de-due-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.de-due-banner.overdue {
+  background: var(--red-50);
+  color: var(--red-700);
+  border: 1px solid var(--red-100);
+}
+.de-due-banner.due-soon {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+.de-due-banner.ok {
+  background: var(--green-50);
+  color: var(--green-700);
+  border: 1px solid var(--green-100);
+}
+.de-due-banner .ms { font-size: 16px; }
+
+/* ── Actual costs filter tabs ── */
+.de-filter-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+.de-filter-tab {
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted-fg);
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: color .1s, background .1s;
+}
+.de-filter-tab:hover { color: var(--indigo-600); }
+.de-filter-tab.active {
+  color: var(--indigo-600);
+  background: var(--white);
+  border-color: var(--border);
+  border-bottom-color: var(--white);
+  margin-bottom: -1px;
+}
+
+/* ── Variance table ── */
+.de-variance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.de-variance-table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted-fg);
+  border-bottom: 1px solid var(--border);
+  background: var(--slate-50);
+}
+.de-variance-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--slate-100);
+  color: var(--fg-2);
+}
+.de-variance-table tr:last-child td {
+  font-weight: 700;
+  color: var(--fg);
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+}
+.de-variance-table .positive { color: var(--green-600); font-weight: 600; }
+.de-variance-table .negative { color: var(--red-600); font-weight: 600; }
+
+/* ── Jobcard tabs ── */
+.de-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  flex-shrink: 0;
+  padding: 0 16px;
+}
+.de-tab {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-fg);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .12s, border-color .12s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.de-tab .ms { font-size: 14px; }
+.de-tab:hover { color: var(--indigo-600); }
+.de-tab.active {
+  color: var(--indigo-600);
+  border-bottom-color: var(--indigo-500);
+}
+.de-tab-panel { display: none; }
+.de-tab-panel.active { display: block; }
+
+/* ── Jobcard form fields ── */
+.de-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  padding: 16px;
+}
+.de-form-group { display: flex; flex-direction: column; gap: 4px; }
+.de-form-group.full { grid-column: 1 / -1; }
+.de-form-group label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted-fg);
+}
+.de-form-group input,
+.de-form-group select,
+.de-form-group textarea {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 10px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  outline: none;
+  transition: border-color .12s;
+}
+.de-form-group input:focus,
+.de-form-group select:focus,
+.de-form-group textarea:focus {
+  border-color: var(--indigo-400);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.08);
+  outline: none;
+}
+.de-form-group textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+/* ── Photo grid ── */
+.de-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  padding: 16px;
+}
+.de-photo-cell {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  border: 2px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+  background: var(--slate-50);
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted-fg);
+  font-size: 11px;
+}
+.de-photo-cell:hover { border-color: var(--indigo-300); background: var(--indigo-50); color: var(--indigo-600); }
+.de-photo-cell .ms { font-size: 24px; }
+
+/* ── Defect rows ── */
+.de-defect-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px 32px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--slate-100);
+  align-items: center;
+}
+.de-defect-row input, .de-defect-row select {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  outline: none;
+  width: 100%;
+}
+.de-defect-row input:focus, .de-defect-row select:focus {
+  border-color: var(--indigo-400);
+  box-shadow: 0 0 0 2px rgba(79,70,229,.08);
+  outline: none;
+}
+
+/* ── Signature pad ── */
+.de-sig-pad {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  cursor: crosshair;
+  display: block;
+}
+.de-sig-pad.signed { border-style: solid; border-color: var(--green-300); }
+
+/* ── HSE checklist ── */
+.de-hse-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--slate-100);
+  transition: background .1s;
+}
+.de-hse-item:hover { background: var(--slate-50); }
+.de-hse-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  accent-color: var(--indigo-500);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.de-hse-item-body { flex: 1; }
+.de-hse-item-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 2px;
+}
+.de-hse-item-desc { font-size: 11.5px; color: var(--muted-fg); }
+.de-hse-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.de-hse-badge.required { background: var(--red-50); color: var(--red-700); border: 1px solid var(--red-100); }
+.de-hse-badge.recommended { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+.de-hse-badge.optional { background: var(--slate-50); color: var(--slate-500); border: 1px solid var(--slate-200); }
+
+/* ── HSE stage bar ── */
+.de-hse-stages {
+  display: flex;
+  gap: 0;
+  padding: 0 20px;
+  height: 38px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+.de-hse-stage {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 12px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted-fg);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s;
+}
+.de-hse-stage:hover { color: var(--indigo-600); }
+.de-hse-stage.active { color: var(--indigo-600); border-bottom-color: var(--indigo-500); }
+.de-hse-stage.done { color: var(--green-600); }
+
+/* ── Signatory rows ── */
+.de-sig-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px 80px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--slate-100);
+  align-items: center;
+}
+.de-sig-row input, .de-sig-row select {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  outline: none;
+  width: 100%;
+}
+.de-sig-row input:focus, .de-sig-row select:focus {
+  border-color: var(--indigo-400);
+  box-shadow: 0 0 0 2px rgba(79,70,229,.08);
+  outline: none;
+}
+
+/* ── Internal notes textarea ── */
+.de-notes-area {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: var(--fg);
+  outline: none;
+  box-shadow: none;
+  resize: vertical;
+  background: var(--white);
+  transition: border-color .12s;
+  line-height: 1.6;
+  min-height: 80px;
+  display: block;
+}
+.de-notes-area:focus {
+  border-color: var(--indigo-400);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.08);
+  outline: none;
+}
+
+/* ── Sidebar status pill ── */
+.de-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.de-status-pill.draft { background: var(--slate-100); color: var(--slate-600); }
+.de-status-pill.in-review { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+.de-status-pill.approved { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+.de-status-pill.finalised { background: var(--indigo-50); color: var(--indigo-700); border: 1px solid var(--indigo-100); }
+.de-status-pill.sent { background: var(--indigo-50); color: var(--indigo-700); border: 1px solid var(--indigo-100); }
+.de-status-pill.paid { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .de-sidebar { display: none; }
+  .de-main { padding: 12px; }
+  .de-doc-header { grid-template-columns: 1fr 1fr; }
+}
+/* ── Status bar (breadcrumb + stage strip combined) ── */
+.de-statusbar {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 36px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  font-size: 11.5px;
+  color: var(--muted-fg);
+  gap: 4px;
+}
+.de-statusbar .sep { color: var(--border); margin: 0 2px; }
+.de-statusbar .current { color: var(--fg); font-weight: 600; }
+.de-statusbar .de-topbar-spacer { flex: 1; }
+.de-statusbar .de-stage-strip {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+  max-width: 60%;
+  scrollbar-width: none;
+}
+.de-statusbar .de-stage-strip::-webkit-scrollbar { display: none; }
+.de-statusbar .de-stage {
+  height: 100%;
+  font-size: 10px;
+  padding: 0 8px;
+  border-bottom-width: 2px;
+  letter-spacing: .04em;
+}
+.de-statusbar .de-stage::after {
+  font-size: 11px;
+  right: -2px;
+}
+/* Fix done stage — tick character (already set above, this is a no-op override) */
+.de-stage.done { color: var(--green-600); }
+/* ── Global focus override inside editors ── */
+.doc-editor *:focus { outline: none !important; box-shadow: none !important; }
+.doc-editor input, .doc-editor select, .doc-editor textarea {
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* Form fields inside editor cards */
+.doc-editor .form-group input,
+.doc-editor .form-group select,
+.doc-editor .form-group textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  transition: border-color .15s;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.doc-editor .form-group input:focus,
+.doc-editor .form-group select:focus,
+.doc-editor .form-group textarea:focus {
+  border-color: var(--indigo-400);
+  outline: none !important;
+  box-shadow: none !important;
+}
+.doc-editor .form-group input[readonly] {
+  background: #fafafa;
+  color: var(--muted-fg);
+  cursor: default;
+}
+.doc-editor .form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted-fg);
+  margin-bottom: 5px;
+}
+.doc-editor .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.doc-editor .form-row.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.doc-editor .form-row.cols-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+/* Notes / terms textarea */
+.doc-editor .de-notes-area,
+.doc-editor textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--white);
+  resize: vertical;
+  line-height: 1.5;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color .15s;
+}
+.doc-editor .de-notes-area:focus,
+.doc-editor textarea:focus {
+  border-color: var(--indigo-400);
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -771,12 +1931,21 @@ td:first-child{padding:8px 6px}
 
   <!-- Guard keys bar -->
   <div class="guard-bar">
-    <span class="guard-label">Guard Keys:</span>
-    <div id="guard-keys-display"></div>
-    <div class="guard-actions">
-      <button class="btn sm" id="btn-wip" onclick="markWIP()"><span class="ms">engineering</span>Mark WIP</button>
-      <button class="btn sm" id="btn-done" onclick="markDone()"><span class="ms">check_circle</span>Mark Done</button>
-      <span class="auto-note" id="auto-note"><span class="ms">bolt</span>Invoice auto-creates on completion</span>
+    <!-- Left zone: Guard Keys -->
+    <div class="guard-zone">
+      <span class="guard-label">Guard Keys:</span>
+      <div id="guard-keys-display"></div>
+    </div>
+    <!-- Kink divider -->
+    <div class="guard-kink"></div>
+    <!-- Right zone: Job Execution -->
+    <div class="exec-zone">
+      <span class="exec-label">Job Execution:</span>
+      <div class="guard-actions">
+        <button class="btn sm" id="btn-onway" onclick="markOnMyWay()"><span class="ms">directions_car</span>On My Way</button>
+        <button class="btn sm" id="btn-wip" onclick="markWIP()"><span class="ms">engineering</span>Work In Progress</button>
+        <button class="btn sm" id="btn-done" onclick="markDone()"><span class="ms">check_circle</span>Mark Done</button>
+      </div>
     </div>
   </div>
 
@@ -794,7 +1963,8 @@ td:first-child{padding:8px 6px}
   <div class="detail-body">
 
     <!-- Left sidebar -->
-    <aside class="detail-sidebar">
+    <aside class="detail-sidebar" id="detail-sidebar">
+      <div class="sidebar-resizer" id="sidebar-resizer" title="Drag to resize"></div>
 
       <!-- Team -->
       <div style="padding:14px 14px 10px">
@@ -914,9 +2084,9 @@ td:first-child{padding:8px 6px}
         <!-- Overview -->
         <div class="tab-content active" id="tab-overview">
           <div class="metric-cards">
-            <div class="metric-card"><div class="metric-label">Quote Value</div><div class="metric-value" id="ov-quote">R 48,500</div></div>
-            <div class="metric-card"><div class="metric-label">Estimated Cost</div><div class="metric-value" id="ov-est">R 36,200</div></div>
-            <div class="metric-card"><div class="metric-label">Actual Cost</div><div class="metric-value" id="ov-actual">R 0</div></div>
+            <div class="metric-card mc-indigo"><div class="metric-label">Quote Value</div><div class="metric-value" id="ov-quote">R 48,500</div></div>
+            <div class="metric-card mc-slate"><div class="metric-label">Estimated Cost</div><div class="metric-value neutral" id="ov-est">R 36,200</div></div>
+            <div class="metric-card mc-amber"><div class="metric-label">Actual Cost</div><div class="metric-value neutral" id="ov-actual">R 0</div></div>
             <div class="metric-card highlight" id="ov-profit-card"><div class="metric-label">Est. Profit</div><div class="metric-value profit" id="ov-profit">+R 12,300</div></div>
           </div>
           <div class="chart-area">
@@ -927,7 +2097,7 @@ td:first-child{padding:8px 6px}
               <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--indigo-600)"></div>Actual</div>
             </div>
           </div>
-          <div class="card" style="border:none;padding:0">
+          <div class="card" style="border:none;padding:0;overflow:hidden">
             <table class="var-table" id="var-table">
               <thead><tr>
                 <th>Category</th>
@@ -950,7 +2120,7 @@ td:first-child{padding:8px 6px}
         <!-- Communication -->
         <div class="tab-content" id="tab-communication">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads</div>
+            <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads &nbsp;<span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:1px 6px"><span class="ms" style="font-size:11px">auto_awesome</span>Rich HTML · Images · Attachments · Client Portal parity</span></div>
             <button class="btn sm primary" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
           </div>
           <div id="comm-threads"></div>
@@ -1099,125 +2269,854 @@ td:first-child{padding:8px 6px}
   </div>
 </div>
 
-<!-- Estimate Modal -->
-<div class="modal-overlay" id="estimate-modal" onclick="if(event.target===this)closeModal('estimate-modal')">
-  <div class="modal modal-xl">
-    <div class="modal-header"><h3>Estimate — JOB-0042</h3><div class="modal-close" onclick="closeModal('estimate-modal')"><span class="ms">close</span></div></div>
-    <div class="modal-body">
-      <table class="est-line-table" id="est-table">
-        <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit Price</th><th>Total</th><th></th></tr></thead>
-        <tbody id="est-tbody"></tbody>
-      </table>
+<!-- ══ ESTIMATE EDITOR ══════════════════════════════════════════ -->
+<div class="doc-editor" id="estimate-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('estimate-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">calculate</span>
+    <span class="de-topbar-title">Estimate</span>
+    <span class="de-topbar-sub" id="est-editor-sub">JOB-0042 · Draft</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
       <button class="btn sm" onclick="addEstimateLine()"><span class="ms">add</span>Add Line</button>
-      <div class="est-total-row">
-        <span>Subtotal:</span><span id="est-subtotal">R 36,200</span>
-        <span>VAT (15%):</span><span id="est-vat">R 5,430</span>
-        <span style="font-size:14px">Total:</span><span id="est-total" style="font-size:14px;color:var(--indigo-600)">R 41,630</span>
+      <button class="btn sm" onclick="toast('Estimate exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn primary sm" onclick="saveEstimate()"><span class="ms">check</span>Save &amp; Finalise</button>
+    </div>
+  </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042 — Electrical Rewiring</span><span class="sep">›</span>
+    <span class="current">Estimate</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-stage-strip" id="est-stage-strip">
+      <div class="de-stage done" onclick="setEstStage(0)">Draft</div>
+      <div class="de-stage active" onclick="setEstStage(1)">In Review</div>
+      <div class="de-stage" onclick="setEstStage(2)">Approved</div>
+      <div class="de-stage" onclick="setEstStage(3)">Finalised</div>
+    </div>
+  </div>
+  <div class="de-body">
+    <div class="de-main">
+      <!-- Line items card -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">list_alt</span>
+          <span class="de-card-title">Line Items</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="est-line-count">12 items</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:35%">Description</th>
+                <th style="width:14%">Category</th>
+                <th style="width:8%">Qty</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:12%">Unit Price (R)</th>
+                <th style="width:11%;text-align:right">Total</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="est-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
+                <td class="de-line-total" id="est-subtotal" style="text-align:right">R 36,200</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
+                <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="est-vat">R 5,430</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="5" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
+                <td class="de-line-grand" id="est-total" style="text-align:right">R 41,630</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="padding:10px 16px 14px">
+          <button class="de-add-row" onclick="addEstimateLine()"><span class="ms">add</span>Add Line Item</button>
+        </div>
+      </div>
+      <!-- Notes card -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">notes</span>
+          <span class="de-card-title">Internal Notes</span>
+        </div>
+        <div class="de-card-body" style="padding:14px 16px">
+          <div class="form-group">
+            <textarea class="de-notes-area" id="est-notes" placeholder="Add internal notes about this estimate (not visible to client)…" style="min-height:80px"></textarea>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('estimate-modal')">Close</button>
-      <button class="btn" onclick="toast('Estimate exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
-      <button class="btn primary" onclick="saveEstimate()"><span class="ms">check</span>Save &amp; Finalise</button>
+    <!-- Sidebar -->
+    <aside class="de-sidebar">
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">summarize</span>Summary</div>
+        <div class="de-big-num" id="est-sb-total">R 36,200</div>
+        <div class="de-big-sub">Estimated cost (excl. VAT)</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">trending_up</span>Margin vs Quote</div>
+        <div class="de-sb-row"><span class="key">Quote value</span><span class="val">R 48,500</span></div>
+        <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val" id="est-sb-cost">R 36,200</span></div>
+        <div class="de-sb-total"><span>Gross Profit</span><span class="val profit" id="est-sb-profit">+R 12,300</span></div>
+        <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px" id="est-sb-margin">25.4% margin</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">donut_large</span>By Category</div>
+        <div class="de-cat-bar" id="est-cat-bar"></div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">info</span>Document Info</div>
+        <div class="de-sb-row"><span class="key">Lines</span><span class="val" id="est-sb-lines">12</span></div>
+        <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate">Draft</span></span></div>
+        <div class="de-sb-row"><span class="key">Last saved</span><span class="val" style="font-weight:400;color:var(--muted-fg)">Not saved</span></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ══ QUOTE EDITOR ═══════════════════════════════════════════ -->
+<div class="doc-editor" id="quote-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('quote-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">description</span>
+    <span class="de-topbar-title">Quote</span>
+    <span class="de-topbar-sub">QUO-0089 · Sent</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
+      <button class="btn sm" onclick="toast('Quote exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn sm" onclick="toast('Quote emailed to client')"><span class="ms">send</span>Send to Client</button>
+      <button class="btn primary sm" onclick="acceptQuote()"><span class="ms">thumb_up</span>Accept Quote</button>
+    </div>
+  </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
+    <span class="current">Quote QUO-0089</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-stage-strip">
+      <div class="de-stage done">Draft</div>
+      <div class="de-stage done">Finalised</div>
+      <div class="de-stage active">Sent</div>
+      <div class="de-stage">Accepted</div>
+      <div class="de-stage">Declined</div>
+    </div>
+  </div>
+  <div class="de-body">
+    <div class="de-main">
+      <!-- Client block -->
+      <div class="de-client-block">
+        <div class="label">Bill To</div>
+        <div class="name">Acme Corp</div>
+        <div class="addr">Main Warehouse · 14 Industrial Rd, Johannesburg</div>
+        <div class="addr" style="margin-top:4px;color:var(--muted-fg)">accounts@acmecorp.co.za · +27 11 555 0100</div>
+      </div>
+      <!-- Quote details -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">receipt</span>
+          <span class="de-card-title">Quote Details</span>
+        </div>
+        <div class="de-card-body">
+          <div class="form-row">
+            <div class="form-group"><label>Quote Number</label><input type="text" value="QUO-0089" readonly style="background:#fafafa"></div>
+            <div class="form-group"><label>Quote Date</label><input type="date" value="2026-07-11"></div>
+            <div class="form-group"><label>Valid Until</label><input type="date" value="2026-07-25"></div>
+            <div class="form-group"><label>Payment Terms</label>
+              <select>
+                <option>30 days from invoice</option>
+                <option>14 days from invoice</option>
+                <option>COD</option>
+                <option>50% upfront / 50% on completion</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Line items -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">list_alt</span>
+          <span class="de-card-title">Line Items</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">34% markup applied</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:40%">Description</th>
+                <th style="width:10%">Qty</th>
+                <th style="width:10%">Unit</th>
+                <th style="width:14%">Unit Price (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="quote-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
+                <td class="de-line-total" id="quote-subtotal" style="text-align:right">R 48,500</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
+                <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="quote-vat">R 7,275</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
+                <td class="de-line-grand" id="quote-total" style="text-align:right">R 55,775</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="padding:10px 16px 14px">
+          <button class="de-add-row" onclick="addQuoteLine()"><span class="ms">add</span>Add Line Item</button>
+        </div>
+      </div>
+      <!-- T&C -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">gavel</span>
+          <span class="de-card-title">Terms &amp; Conditions</span>
+        </div>
+        <div class="de-card-body">
+          <div class="form-group">
+            <textarea class="de-notes-area" id="quote-terms" style="min-height:100px">1. This quotation is valid for 14 days from the date of issue.
+2. Payment is due 30 days from invoice date.
+3. All prices are exclusive of VAT unless stated otherwise.
+4. A Certificate of Compliance (COC) will be issued upon final payment.
+5. Any additional work outside this scope will be quoted separately.</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar -->
+    <aside class="de-sidebar">
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">summarize</span>Quote Summary</div>
+        <div class="de-big-num">R 48,500</div>
+        <div class="de-big-sub">Excl. VAT · R 55,775 incl.</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">trending_up</span>Margin</div>
+        <div class="de-sb-row"><span class="key">Quote (excl.)</span><span class="val">R 48,500</span></div>
+        <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val">R 36,200</span></div>
+        <div class="de-sb-total"><span>Gross Profit</span><span class="val profit">+R 12,300</span></div>
+        <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px">25.4% margin</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">info</span>Document Info</div>
+        <div class="de-sb-row"><span class="key">Number</span><span class="val">QUO-0089</span></div>
+        <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-blue">Sent</span></span></div>
+        <div class="de-sb-row"><span class="key">Valid until</span><span class="val" style="font-weight:400">25 Jul 2026</span></div>
+        <div class="de-sb-row"><span class="key">Terms</span><span class="val" style="font-weight:400">30 days</span></div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">bolt</span>Actions</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn primary sm" style="width:100%;justify-content:center" onclick="acceptQuote()"><span class="ms">thumb_up</span>Accept Quote</button>
+          <button class="btn danger sm" style="width:100%;justify-content:center" onclick="toast('Quote marked as declined','error');closeEditor('quote-editor')"><span class="ms">thumb_down</span>Decline Quote</button>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Quote emailed to client')"><span class="ms">send</span>Resend to Client</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ══ INVOICE EDITOR ═════════════════════════════════════════ -->
+<div class="doc-editor" id="invoice-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('invoice-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">receipt_long</span>
+    <span class="de-topbar-title">Invoice</span>
+    <span class="de-topbar-sub" id="inv-editor-sub">INV-0089 · Draft</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
+      <button class="btn sm" onclick="toast('Invoice exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn sm" onclick="toast('Invoice emailed to client')"><span class="ms">send</span>Send to Client</button>
+      <button class="btn primary sm" onclick="markInvoicePaid()"><span class="ms">check_circle</span>Mark Paid</button>
+    </div>
+  </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
+    <span class="current">Invoice INV-0089</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-stage-strip">
+      <div class="de-stage active">Draft</div>
+      <div class="de-stage">Sent</div>
+      <div class="de-stage">Overdue</div>
+      <div class="de-stage">Paid</div>
+    </div>
+  </div>
+  <div class="de-body">
+    <div class="de-main">
+      <!-- Due banner -->
+      <div class="de-due-banner" id="inv-due-banner">
+        <span class="ms">schedule</span>
+        <span id="inv-due-text">Invoice not yet sent. Due date: <strong id="inv-due-display">—</strong></span>
+      </div>
+      <!-- Billing block -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="de-client-block">
+          <div class="label">Bill To</div>
+          <div class="name">Acme Corp</div>
+          <div class="addr">Main Warehouse · 14 Industrial Rd, Johannesburg</div>
+          <div class="addr" style="margin-top:4px;color:var(--muted-fg)">accounts@acmecorp.co.za</div>
+        </div>
+        <div class="de-card">
+          <div class="de-card-body">
+            <div class="form-row">
+              <div class="form-group"><label>Invoice Number</label><input type="text" id="inv-number" value="INV-0089"></div>
+              <div class="form-group"><label>Invoice Date</label><input type="date" id="inv-date"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Due Date</label><input type="date" id="inv-due"></div>
+              <div class="form-group"><label>Payment Terms</label>
+                <select id="inv-terms">
+                  <option>30 days from invoice</option>
+                  <option>14 days from invoice</option>
+                  <option>COD</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Line items -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">list_alt</span>
+          <span class="de-card-title">Line Items</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Pre-populated from Quote QUO-0089</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:45%">Description</th>
+                <th style="width:10%">Qty</th>
+                <th style="width:10%">Unit</th>
+                <th style="width:14%">Unit Price (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="inv-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
+                <td class="de-line-total" id="inv-subtotal" style="text-align:right">R 48,500</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
+                <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="inv-vat">R 7,275</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Due (incl. VAT)</td>
+                <td class="de-line-grand" id="inv-total" style="text-align:right">R 55,775</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="padding:10px 16px 14px">
+          <button class="de-add-row" onclick="addInvLine()"><span class="ms">add</span>Add Line Item</button>
+        </div>
+      </div>
+      <!-- Payment notes -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">notes</span>
+          <span class="de-card-title">Payment Notes</span>
+        </div>
+        <div class="de-card-body">
+          <div class="form-group">
+            <textarea class="de-notes-area" id="inv-notes" placeholder="Bank details, payment reference, special instructions…" style="min-height:80px">Bank: FNB Business · Account: 62812345678 · Branch: 250655
+Reference: INV-0089 / JOB-0042</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar -->
+    <aside class="de-sidebar">
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">summarize</span>Invoice Summary</div>
+        <div class="de-big-num">R 55,775</div>
+        <div class="de-big-sub">Total due (incl. VAT)</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">info</span>Document Info</div>
+        <div class="de-sb-row"><span class="key">Number</span><span class="val">INV-0089</span></div>
+        <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate" id="inv-status-pill">Draft</span></span></div>
+        <div class="de-sb-row"><span class="key">Invoice date</span><span class="val" style="font-weight:400" id="inv-date-display">—</span></div>
+        <div class="de-sb-row"><span class="key">Due date</span><span class="val" style="font-weight:400" id="inv-due-display2">—</span></div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">bolt</span>Actions</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn primary sm" style="width:100%;justify-content:center" onclick="markInvoicePaid()"><span class="ms">check_circle</span>Mark as Paid</button>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Invoice emailed to client')"><span class="ms">send</span>Send to Client</button>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Payment reminder sent')"><span class="ms">notifications</span>Send Reminder</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ══ ACTUAL COSTS EDITOR ════════════════════════════════════ -->
+<div class="doc-editor" id="actual-costs-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('actual-costs-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">attach_money</span>
+    <span class="de-topbar-title">Actual Costs</span>
+    <span class="de-topbar-sub" id="costs-editor-sub">JOB-0042 · 0 entries</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
+      <button class="btn sm" onclick="addCostLine()"><span class="ms">add</span>Add Entry</button>
+      <button class="btn sm" onclick="toast('Costs exported to CSV')"><span class="ms">download</span>Export CSV</button>
+      <button class="btn primary sm" onclick="saveActualCosts()"><span class="ms">check</span>Save Costs</button>
+    </div>
+  </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
+    <span class="current">Actual Costs</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-cat-tabs" id="costs-cat-tabs" style="margin:0">
+      <div class="de-cat-tab active" onclick="filterCosts('All',this)">All</div>
+      <div class="de-cat-tab" onclick="filterCosts('Materials',this)">Materials</div>
+      <div class="de-cat-tab" onclick="filterCosts('Labour',this)">Labour</div>
+      <div class="de-cat-tab" onclick="filterCosts('Subcontractor',this)">Sub-Con</div>
+      <div class="de-cat-tab" onclick="filterCosts('Travel',this)">Travel</div>
+      <div class="de-cat-tab" onclick="filterCosts('Other',this)">Other</div>
+    </div>
+  </div>
+  <div class="de-body">
+    <div class="de-main">
+      <!-- Cost entries table -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">receipt_long</span>
+          <span class="de-card-title">Cost Entries</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="costs-entry-count">0 entries</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:12%">Date</th>
+                <th style="width:14%">Category</th>
+                <th style="width:28%">Description</th>
+                <th style="width:20%">Supplier / Resource</th>
+                <th style="width:14%;text-align:right">Amount (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="costs-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Actual Cost</td>
+                <td class="de-line-grand" id="costs-total" style="text-align:right">R 0</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="padding:10px 16px 14px">
+          <button class="de-add-row" onclick="addCostLine()"><span class="ms">add</span>Add Cost Entry</button>
+        </div>
+      </div>
+      <!-- Variance table -->
+      <div class="de-card">
+        <div class="de-card-header">
+          <span class="ms">compare_arrows</span>
+          <span class="de-card-title">Variance vs Estimate</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-var-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th style="text-align:right">Estimated</th>
+                <th style="text-align:right">Actual</th>
+                <th style="text-align:right">Variance</th>
+                <th style="text-align:right">%</th>
+              </tr>
+            </thead>
+            <tbody id="var-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar -->
+    <aside class="de-sidebar">
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">summarize</span>Cost Summary</div>
+        <div class="de-big-num" id="costs-sb-total">R 0</div>
+        <div class="de-big-sub">Total actual cost</div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">compare_arrows</span>vs Estimate</div>
+        <div class="de-sb-row"><span class="key">Estimated</span><span class="val">R 36,200</span></div>
+        <div class="de-sb-row"><span class="key">Actual</span><span class="val" id="costs-sb-actual">R 0</span></div>
+        <div class="de-sb-total"><span>Variance</span><span class="val profit" id="costs-sb-variance">+R 36,200</span></div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">donut_large</span>By Category</div>
+        <div class="de-cat-bar" id="costs-cat-bar"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ══ JOBCARD EDITOR ══════════════════════════════════════════ -->
+<div class="doc-editor" id="jobcard-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('jobcard-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">assignment</span>
+    <span class="de-topbar-title">Jobcard</span>
+    <span class="de-topbar-sub" id="jc-editor-sub">JOB-0042 · Draft</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
+      <button class="btn sm" onclick="toast('Jobcard exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn primary sm" onclick="saveJobcard()"><span class="ms">check</span>Save Jobcard</button>
+    </div>
+  </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
+    <span class="current">Jobcard</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-stage-strip">
+      <div class="de-stage active">Draft</div>
+      <div class="de-stage">In Progress</div>
+      <div class="de-stage">Signed</div>
+      <div class="de-stage">Closed</div>
+    </div>
+  </div>
+  <div class="de-tabs" id="jc-tabs">
+    <div class="de-tab-btn active" onclick="switchDeTab('jc','details',this)"><span class="ms">info</span>Details</div>
+    <div class="de-tab-btn" onclick="switchDeTab('jc','photos',this)"><span class="ms">photo_library</span>Photos <span class="tab-badge" id="jc-photo-badge">0</span></div>
+    <div class="de-tab-btn" onclick="switchDeTab('jc','defects',this)"><span class="ms">report</span>Findings &amp; Defects</div>
+    <div class="de-tab-btn" onclick="switchDeTab('jc','signature',this)"><span class="ms">draw</span>Client Signature</div>
+  </div>
+  <div class="de-body" style="flex-direction:column;overflow:hidden">
+    <div style="flex:1;overflow:hidden;display:flex">
+      <div class="de-main" style="overflow-y:auto">
+        <!-- Details tab -->
+        <div class="de-tab-pane active" id="jc-tab-details">
+          <div class="de-card">
+            <div class="de-card-header">
+              <span class="ms">info</span>
+              <span class="de-card-title">Job Details</span>
+            </div>
+            <div class="de-card-body">
+              <div class="form-row">
+                <div class="form-group"><label>Job Number</label><input type="text" value="JOB-0042" readonly style="background:#fafafa"></div>
+                <div class="form-group"><label>Client</label><input type="text" value="Acme Corp" readonly style="background:#fafafa"></div>
+                <div class="form-group"><label>Site</label><input type="text" value="Main Warehouse, 14 Industrial Rd, JHB" readonly style="background:#fafafa"></div>
+                <div class="form-group"><label>Technician</label><input type="text" value="John Smith"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Start Time</label><input type="datetime-local" id="jc-start"></div>
+                <div class="form-group"><label>End Time</label><input type="datetime-local" id="jc-end"></div>
+              </div>
+            </div>
+          </div>
+          <div class="de-card">
+            <div class="de-card-header">
+              <span class="ms">engineering</span>
+              <span class="de-card-title">Work Completed</span>
+            </div>
+            <div class="de-card-body">
+              <div class="form-group">
+                <label>Description of Work Performed</label>
+                <textarea class="de-notes-area" id="jc-work" placeholder="Describe all work completed on site…" style="min-height:120px"></textarea>
+              </div>
+              <div class="form-group" style="margin-top:12px">
+                <label>Materials Used</label>
+                <textarea class="de-notes-area" id="jc-materials" placeholder="List materials used on site (if different from estimate)…" style="min-height:80px"></textarea>
+              </div>
+              <div class="form-group" style="margin-top:12px">
+                <label>Internal Notes</label>
+                <textarea class="de-notes-area" id="jc-notes" placeholder="Internal notes (not visible to client)…" style="min-height:60px"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Photos tab -->
+        <div class="de-tab-pane" id="jc-tab-photos">
+          <div class="de-card">
+            <div class="de-card-header">
+              <span class="ms">photo_library</span>
+              <span class="de-card-title">Site Photos</span>
+              <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-photo-count-label">0 photos</span>
+            </div>
+            <div class="de-card-body">
+              <div class="de-photo-grid" id="jc-photo-grid">
+                <div class="de-photo-slot" onclick="addJcPhoto(this)">
+                  <span class="ms">add_a_photo</span>
+                  <span>Add Photo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Defects tab -->
+        <div class="de-tab-pane" id="jc-tab-defects">
+          <div class="de-card">
+            <div class="de-card-header">
+              <span class="ms">report</span>
+              <span class="de-card-title">Findings &amp; Defects</span>
+              <button class="btn sm" style="margin-left:auto" onclick="addDefectRow()"><span class="ms">add</span>Add Finding</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="de-line-table">
+                <thead>
+                  <tr>
+                    <th style="width:20%">Location</th>
+                    <th style="width:30%">Finding / Defect</th>
+                    <th style="width:15%">Severity</th>
+                    <th style="width:25%">Recommended Action</th>
+                    <th style="width:5%"></th>
+                  </tr>
+                </thead>
+                <tbody id="defects-tbody">
+                  <tr>
+                    <td><input placeholder="e.g. DB Room"></td>
+                    <td><input placeholder="Describe defect…"></td>
+                    <td><select><option>Low</option><option>Medium</option><option selected>High</option><option>Critical</option></select></td>
+                    <td><input placeholder="Recommended fix…"></td>
+                    <td><button class="de-del-row" onclick="this.closest('tr').remove()"><span class="ms">delete</span></button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding:10px 16px 14px">
+              <button class="de-add-row" onclick="addDefectRow()"><span class="ms">add</span>Add Finding</button>
+            </div>
+          </div>
+        </div>
+        <!-- Signature tab -->
+        <div class="de-tab-pane" id="jc-tab-signature">
+          <div class="de-card">
+            <div class="de-card-header">
+              <span class="ms">draw</span>
+              <span class="de-card-title">Client Sign-Off</span>
+            </div>
+            <div class="de-card-body">
+              <div class="form-row">
+                <div class="form-group"><label>Client Name</label><input type="text" id="sig-client-name" value="Acme Corp"></div>
+                <div class="form-group"><label>Signatory Name</label><input type="text" id="sig-person-name" placeholder="Full name of signatory"></div>
+              </div>
+              <div class="form-group" style="margin-bottom:14px">
+                <label>Signature</label>
+                <canvas class="de-sig-canvas" id="jc-sig-canvas" width="800" height="160"></canvas>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn sm" onclick="clearSigCanvas()"><span class="ms">refresh</span>Clear</button>
+                  <button class="btn primary sm" onclick="captureSignature()"><span class="ms">check</span>Confirm Signature</button>
+                </div>
+              </div>
+              <div id="sig-confirmed-msg" style="display:none;background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius);padding:10px 14px;font-size:12.5px;color:var(--green-700);display:none;align-items:center;gap:8px">
+                <span class="ms">verified</span>
+                <span id="sig-confirmed-text">Signature captured</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar -->
+      <aside class="de-sidebar">
+        <div class="de-sb-section">
+          <div class="de-sb-label"><span class="ms">info</span>Jobcard Status</div>
+          <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate" id="jc-status-pill">Draft</span></span></div>
+          <div class="de-sb-row"><span class="key">Signature</span><span class="val" id="jc-sig-status" style="color:var(--muted-fg)">Awaiting</span></div>
+          <div class="de-sb-row"><span class="key">Photos</span><span class="val" id="jc-sb-photos">0</span></div>
+        </div>
+        <div class="de-sb-section">
+          <div class="de-sb-label"><span class="ms">group</span>Team on Site</div>
+          <div class="de-sb-row"><span class="key">Tech Manager</span><span class="val" style="font-weight:400">John Smith</span></div>
+          <div class="de-sb-row"><span class="key">Coordinator</span><span class="val" style="font-weight:400">Sarah Jones</span></div>
+        </div>
+        <div class="de-sb-section">
+          <div class="de-sb-label"><span class="ms">schedule</span>Schedule</div>
+          <div class="de-sb-row"><span class="key">Requested</span><span class="val" style="font-weight:400">18 Jul 2026</span></div>
+          <div class="de-sb-row"><span class="key">Start</span><span class="val" style="font-weight:400" id="jc-sb-start">—</span></div>
+          <div class="de-sb-row"><span class="key">End</span><span class="val" style="font-weight:400" id="jc-sb-end">—</span></div>
+        </div>
+      </aside>
     </div>
   </div>
 </div>
 
-<!-- Quote Modal -->
-<div class="modal-overlay" id="quote-modal" onclick="if(event.target===this)closeModal('quote-modal')">
-  <div class="modal modal-lg">
-    <div class="modal-header"><h3>Quote — QUO-0089</h3><div class="modal-close" onclick="closeModal('quote-modal')"><span class="ms">close</span></div></div>
-    <div class="modal-body">
-      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Quote Value</div><div style="font-size:16px;font-weight:700">R 48,500</div></div>
-        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Status</div><div><span class="pill pill-blue">Sent</span></div></div>
-        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Sent Date</div><div style="font-size:13px;font-weight:600">13 Jul 2026</div></div>
-        <div class="metric-card" style="flex:1;min-width:120px"><div class="metric-label">Expiry</div><div style="font-size:13px;font-weight:600">27 Jul 2026</div></div>
-      </div>
-      <div style="font-size:12px;color:var(--muted-fg);margin-bottom:12px">Quote includes all labour, materials, and subcontractor costs as per the estimate. Excludes permit fees.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn sm" onclick="toast('Quote PDF opened')"><span class="ms">picture_as_pdf</span>View PDF</button>
-        <button class="btn sm" onclick="toast('Quote re-sent to client')"><span class="ms">send</span>Re-send to Client</button>
-        <button class="btn sm primary" onclick="acceptQuote()"><span class="ms">check_circle</span>Mark as Accepted</button>
-        <button class="btn sm danger" onclick="toast('Quote marked as rejected')"><span class="ms">cancel</span>Mark as Rejected</button>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('quote-modal')">Close</button>
+<!-- ══ HSE PACK EDITOR ════════════════════════════════════════ -->
+<div class="doc-editor" id="hse-editor">
+  <div class="de-topbar">
+    <button class="de-back" onclick="closeEditor('hse-editor')"><span class="ms">arrow_back</span>Back to Job</button>
+    <div class="de-topbar-divider"></div>
+    <span class="ms de-topbar-icon">health_and_safety</span>
+    <span class="de-topbar-title">HSE Pack</span>
+    <span class="de-topbar-sub" id="hse-editor-sub">JOB-0042 · Assembling</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-topbar-actions">
+      <button class="btn sm" onclick="toast('HSE Pack exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
+      <button class="btn sm" onclick="toast('HSE Pack sent to client')"><span class="ms">send</span>Send to Client</button>
+      <button class="btn primary sm" onclick="toast('HSE Pack approved','success')"><span class="ms">verified</span>Approve Pack</button>
     </div>
   </div>
-</div>
-
-<!-- Invoice Modal -->
-<div class="modal-overlay" id="invoice-modal" onclick="if(event.target===this)closeModal('invoice-modal')">
-  <div class="modal modal-md">
-    <div class="modal-header"><h3>Create Invoice</h3><div class="modal-close" onclick="closeModal('invoice-modal')"><span class="ms">close</span></div></div>
-    <div class="modal-body">
-      <div style="background:var(--amber-50);border:1px solid var(--amber-100);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--amber-700);margin-bottom:14px;display:flex;align-items:center;gap:6px">
-        <span class="ms" style="font-size:16px">warning</span>
-        Job is not yet completed. Invoice will auto-create when job is marked Done. You can create a manual invoice below.
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Invoice Date</label><input type="date" id="inv-date"></div>
-        <div class="form-group"><label>Due Date</label><input type="date" id="inv-due"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Amount (excl. VAT)</label><input type="text" id="inv-amount" value="48500"></div>
-        <div class="form-group"><label>Reference</label><input type="text" id="inv-ref" placeholder="INV-0089"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('invoice-modal')">Cancel</button>
-      <button class="btn primary" onclick="createInvoice()"><span class="ms">receipt_long</span>Create Invoice</button>
-    </div>
+  <div class="de-statusbar">
+    <span>Jobs</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
+    <span class="current">HSE Pack</span>
+    <div class="de-topbar-spacer"></div>
+    <div class="de-stage-strip" id="hse-stage-strip"></div>
   </div>
-</div>
-
-<!-- Actual Costs Modal -->
-<div class="modal-overlay" id="actual-costs-modal" onclick="if(event.target===this)closeModal('actual-costs-modal')">
-  <div class="modal modal-xl">
-    <div class="modal-header"><h3>Actual Costs — JOB-0042</h3><div class="modal-close" onclick="closeModal('actual-costs-modal')"><span class="ms">close</span></div></div>
-    <div class="modal-body">
-      <table class="cost-entry-table" id="costs-table">
-        <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Supplier / Resource</th><th>Amount (R)</th><th></th></tr></thead>
-        <tbody id="costs-tbody"></tbody>
-      </table>
-      <button class="btn sm" style="margin-top:8px" onclick="addCostLine()"><span class="ms">add</span>Add Entry</button>
-      <div class="est-total-row" style="margin-top:12px">
-        <span>Total Actual Cost:</span><span id="costs-total" style="color:var(--indigo-600)">R 0</span>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('actual-costs-modal')">Close</button>
-      <button class="btn primary" onclick="saveActualCosts()"><span class="ms">check</span>Save Costs</button>
-    </div>
+  <div class="de-tabs">
+    <div class="de-tab-btn active" onclick="switchDeTab('hse','checklist',this)"><span class="ms">checklist</span>Checklist</div>
+    <div class="de-tab-btn" onclick="switchDeTab('hse','risk',this)"><span class="ms">warning</span>Risk Assessment</div>
+    <div class="de-tab-btn" onclick="switchDeTab('hse','docs',this)"><span class="ms">folder</span>Documents</div>
+    <div class="de-tab-btn" onclick="switchDeTab('hse','sigs',this)"><span class="ms">draw</span>Signatories</div>
   </div>
-</div>
-
-<!-- Jobcard Modal -->
-<div class="modal-overlay" id="jobcard-modal" onclick="if(event.target===this)closeModal('jobcard-modal')">
-  <div class="modal modal-lg">
-    <div class="modal-header"><h3>Jobcard — JOB-0042</h3><div class="modal-close" onclick="closeModal('jobcard-modal')"><span class="ms">close</span></div></div>
-    <div class="modal-body">
-      <div class="form-section-title" style="margin-top:0;border-top:none;padding-top:0">Site Photos</div>
-      <div class="photo-grid" id="photo-grid">
-        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
-        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
-        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
-        <div class="photo-slot" onclick="addPhoto(this)"><span class="ms">add_a_photo</span></div>
+  <div class="de-body">
+    <div class="de-main">
+      <!-- Checklist tab -->
+      <div class="de-tab-pane active" id="hse-tab-checklist">
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">checklist</span>
+            <span class="de-card-title">Safety Checklist</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="hse-check-progress">0 / 12 complete</span>
+          </div>
+          <div class="de-card-body" id="hse-checklist-body"></div>
+        </div>
       </div>
-      <div class="form-section-title">Work Completed Notes</div>
-      <div class="form-group"><textarea id="jc-notes" placeholder="Describe work completed on site…" style="min-height:80px"></textarea></div>
-      <div class="form-section-title">Client Signature</div>
-      <div class="sig-box" id="sig-box" onclick="captureSignature()">
-        <span id="sig-label">Click to capture client signature</span>
+      <!-- Risk Assessment tab -->
+      <div class="de-tab-pane" id="hse-tab-risk">
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">warning</span>
+            <span class="de-card-title">Risk Assessment Matrix</span>
+            <button class="btn sm" style="margin-left:auto" onclick="addRiskRow()"><span class="ms">add</span>Add Risk</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="de-risk-table">
+              <thead>
+                <tr>
+                  <th style="width:20%">Hazard</th>
+                  <th style="width:18%">Activity</th>
+                  <th style="width:6%">L</th>
+                  <th style="width:6%">C</th>
+                  <th style="width:8%">Rating</th>
+                  <th style="width:30%">Control Measure</th>
+                  <th style="width:4%"></th>
+                </tr>
+              </thead>
+              <tbody id="risk-tbody"></tbody>
+            </table>
+          </div>
+          <div style="padding:10px 16px 14px">
+            <button class="de-add-row" onclick="addRiskRow()"><span class="ms">add</span>Add Risk Row</button>
+          </div>
+        </div>
+      </div>
+      <!-- Documents tab -->
+      <div class="de-tab-pane" id="hse-tab-docs">
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">folder</span>
+            <span class="de-card-title">HSE Documents</span>
+            <button class="btn sm" style="margin-left:auto" onclick="toast('Document upload coming soon')"><span class="ms">upload</span>Upload</button>
+          </div>
+          <div class="de-card-body">
+            <div id="hse-docs-list">
+              <div class="de-sb-row" style="padding:8px 0;border-bottom:1px solid var(--border)">
+                <span style="display:flex;align-items:center;gap:8px"><span class="ms" style="color:var(--indigo-500)">picture_as_pdf</span>Method Statement — Electrical Works</span>
+                <span class="pill pill-green">Uploaded</span>
+              </div>
+              <div class="de-sb-row" style="padding:8px 0;border-bottom:1px solid var(--border)">
+                <span style="display:flex;align-items:center;gap:8px"><span class="ms" style="color:var(--indigo-500)">picture_as_pdf</span>Risk Assessment — DB Replacement</span>
+                <span class="pill pill-amber">Pending</span>
+              </div>
+              <div class="de-sb-row" style="padding:8px 0;border-bottom:1px solid var(--border)">
+                <span style="display:flex;align-items:center;gap:8px"><span class="ms" style="color:var(--indigo-500)">picture_as_pdf</span>MSDS — Cable Lubricant</span>
+                <span class="pill pill-amber">Pending</span>
+              </div>
+              <div class="de-sb-row" style="padding:8px 0">
+                <span style="display:flex;align-items:center;gap:8px"><span class="ms" style="color:var(--indigo-500)">picture_as_pdf</span>COC Template</span>
+                <span class="pill pill-slate">Not uploaded</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Signatories tab -->
+      <div class="de-tab-pane" id="hse-tab-sigs">
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">draw</span>
+            <span class="de-card-title">Signatories</span>
+            <button class="btn sm" style="margin-left:auto" onclick="toast('Signatory added')"><span class="ms">add</span>Add Signatory</button>
+          </div>
+          <div class="de-card-body">
+            <div class="de-sig-row">
+              <div class="de-sig-avatar" style="background:var(--indigo-600)">JS</div>
+              <div><div class="de-sig-name">John Smith</div><div class="de-sig-role">Tech Manager · Bird Pulse</div></div>
+              <div class="de-sig-status"><span class="pill pill-amber">Pending</span></div>
+            </div>
+            <div class="de-sig-row">
+              <div class="de-sig-avatar" style="background:#7c3aed">SJ</div>
+              <div><div class="de-sig-name">Sarah Jones</div><div class="de-sig-role">Coordinator · Bird Pulse</div></div>
+              <div class="de-sig-status"><span class="pill pill-amber">Pending</span></div>
+            </div>
+            <div class="de-sig-row">
+              <div class="de-sig-avatar" style="background:#0891b2">AC</div>
+              <div><div class="de-sig-name">Acme Corp Representative</div><div class="de-sig-role">Client · Acme Corp</div></div>
+              <div class="de-sig-status"><span class="pill pill-slate">Not sent</span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('jobcard-modal')">Close</button>
-      <button class="btn" onclick="toast('Jobcard exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
-      <button class="btn primary" onclick="saveJobcard()"><span class="ms">check</span>Save Jobcard</button>
-    </div>
+    <!-- Sidebar -->
+    <aside class="de-sidebar">
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">info</span>Pack Status</div>
+        <div class="de-sb-row"><span class="key">Stage</span><span class="val"><span class="pill pill-amber" id="hse-sb-stage">Assembling</span></span></div>
+        <div class="de-sb-row"><span class="key">Checklist</span><span class="val" id="hse-sb-check">0 / 12</span></div>
+        <div class="de-sb-row"><span class="key">Signatories</span><span class="val">3 (0 signed)</span></div>
+        <div class="de-sb-row"><span class="key">Documents</span><span class="val">4 (1 uploaded)</span></div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">bolt</span>Stage Actions</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="advanceHSEStage()"><span class="ms">arrow_forward</span>Advance Stage</button>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('HSE Pack sent to client')"><span class="ms">send</span>Send to Client</button>
+        </div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-label"><span class="ms">schedule</span>Timeline</div>
+        <div class="de-sb-row"><span class="key">Generated</span><span class="val" style="font-weight:400">Today</span></div>
+        <div class="de-sb-row"><span class="key">Last updated</span><span class="val" style="font-weight:400">—</span></div>
+      </div>
+    </aside>
   </div>
 </div>
 
@@ -1243,7 +3142,7 @@ td:first-child{padding:8px 6px}
     <div class="modal-body">
       <div class="form-row">
         <div class="form-group"><label>Client</label><select id="ej-client"><option>Acme Corp</option><option>Globex Ltd</option><option>Initech</option><option>Umbrella Inc</option><option>Wayne Enterprises</option></select></div>
-        <div class="form-group"><label>Site</label><input type="text" id="ej-site" value="Main Warehouse"></div>
+        <div class="form-group"><label>Site</label><select id="ej-site"></select></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>Job Type</label><select id="ej-type"><option>Electrical</option><option>Mechanical</option><option>Plumbing</option><option>Civil</option><option>Installation</option><option>Maintenance</option></select></div>
@@ -1304,6 +3203,56 @@ td:first-child{padding:8px 6px}
   </div>
 </div>
 
+<!-- Comm Popout (free-floating, resizable + draggable) -->
+<div id="comm-popout-modal" style="display:none;position:fixed;z-index:1100;box-shadow:0 8px 40px rgba(0,0,0,.18);border-radius:10px;border:1px solid var(--border);background:var(--white);display:none;flex-direction:column;overflow:hidden;min-width:340px;min-height:280px">
+  <!-- Resize handles -->
+  <div class="cp-rz" data-dir="n"  style="position:absolute;top:0;left:6px;right:6px;height:5px;cursor:n-resize;z-index:5"></div>
+  <div class="cp-rz" data-dir="s"  style="position:absolute;bottom:0;left:6px;right:6px;height:5px;cursor:s-resize;z-index:5"></div>
+  <div class="cp-rz" data-dir="w"  style="position:absolute;left:0;top:6px;bottom:6px;width:5px;cursor:w-resize;z-index:5"></div>
+  <div class="cp-rz" data-dir="e"  style="position:absolute;right:0;top:6px;bottom:6px;width:5px;cursor:e-resize;z-index:5"></div>
+  <div class="cp-rz" data-dir="nw" style="position:absolute;top:0;left:0;width:10px;height:10px;cursor:nw-resize;z-index:6"></div>
+  <div class="cp-rz" data-dir="ne" style="position:absolute;top:0;right:0;width:10px;height:10px;cursor:ne-resize;z-index:6"></div>
+  <div class="cp-rz" data-dir="sw" style="position:absolute;bottom:0;left:0;width:10px;height:10px;cursor:sw-resize;z-index:6"></div>
+  <div class="cp-rz" data-dir="se" style="position:absolute;bottom:0;right:0;width:10px;height:10px;cursor:se-resize;z-index:6"></div>
+  <!-- Header (drag handle) -->
+  <div class="modal-header" id="cp-drag-handle" style="flex-shrink:0;cursor:move;user-select:none">
+    <div style="display:flex;flex-direction:column;gap:2px;flex:1">
+      <h3 id="cp-subject" style="margin:0">Thread</h3>
+      <div id="cp-meta" style="font-size:11px;color:var(--muted-fg);font-weight:400"></div>
+    </div>
+    <span id="cp-status-badge" style="margin-right:8px"></span>
+    <div class="modal-close" onclick="closeCommPopout()" style="cursor:pointer"><span class="ms">close</span></div>
+  </div>
+  <!-- Message history -->
+  <div id="cp-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:var(--slate-50)"></div>
+  <!-- Rich compose -->
+  <div style="flex-shrink:0;border-top:1px solid var(--border);background:var(--white)">
+    <div class="comm-toolbar">
+      <button class="comm-tb-btn" title="Bold" onclick="execFmt('bold')"><b>B</b></button>
+      <button class="comm-tb-btn" title="Italic" onclick="execFmt('italic')"><i>I</i></button>
+      <button class="comm-tb-btn" title="Underline" onclick="execFmt('underline')"><u>U</u></button>
+      <div class="comm-tb-sep"></div>
+      <button class="comm-tb-btn ms" title="Bulleted list" onclick="execFmt('insertUnorderedList')">format_list_bulleted</button>
+      <button class="comm-tb-btn ms" title="Numbered list" onclick="execFmt('insertOrderedList')">format_list_numbered</button>
+      <button class="comm-tb-btn ms" title="Blockquote" onclick="execFmt('formatBlock','blockquote')">format_quote</button>
+      <div class="comm-tb-sep"></div>
+      <button class="comm-tb-btn ms" title="Insert link" onclick="insertPopoutLink()">link</button>
+      <button class="comm-tb-btn ms" title="Insert image" onclick="insertPopoutImage()">image</button>
+      <span class="comm-tb-badge"><span class="ms">auto_awesome</span>Rich HTML · Client Portal parity</span>
+    </div>
+    <div class="comm-compose" contenteditable="true" data-placeholder="Type your reply… supports bold, lists, links, inline images" id="cp-compose" style="min-height:80px;overflow-y:auto"></div>
+    <div class="comm-attach-row" id="cp-attach-row"></div>
+    <div class="comm-reply-footer">
+      <label class="attach-label" onclick="mockAttachPopout()">
+        <span class="ms" style="font-size:15px">attach_file</span>Attach
+      </label>
+      <span class="spacer"></span>
+      <button class="btn sm" onclick="markCommResolvedPopout()"><span class="ms">check</span>Mark Resolved</button>
+      <button class="btn sm primary" onclick="sendCommReplyPopout()"><span class="ms">send</span>Send Reply</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast container -->
 <div class="toast-container" id="toast-container"></div>
 
@@ -1311,6 +3260,14 @@ td:first-child{padding:8px 6px}
 // ═══════════════════════════════════════════════════════════
 // DATA
 // ═══════════════════════════════════════════════════════════
+const CLIENT_SITES = {
+  'Acme Corp':       ['Canteen','Dispatch Bay','Main Warehouse','Parking Structure','Roof'],
+  'Globex Ltd':      ['Canteen','Head Office','Loading Bay','Substation','Warehouse B'],
+  'Initech':         ['Comms Room','Data Centre','Entrance','Office Block C','Server Room'],
+  'Umbrella Inc':    ['Cold Storage','Factory Floor A','Lab 3','Roof Plant Room','Security Post'],
+  'Wayne Enterprises':['Basement','Boardroom','Gym','R&D Lab'],
+};
+
 const JOBS = [
   {num:'JOB-0042',client:'Acme Corp',site:'Main Warehouse',desc:'Electrical Rewiring — DB replacement & conduit runs',priority:'High',status:'work_in_progress',finance:'quoted',team:['JS','SJ'],value:48500,date:'12 Jul 2026',assignee:'JS',type:'install'},
   {num:'JOB-0041',client:'Globex Ltd',site:'Head Office',desc:'HVAC Maintenance — quarterly service all units',priority:'Normal',status:'job_completed',finance:'invoiced',team:['SJ'],value:12200,date:'10 Jul 2026',assignee:'SJ',type:'maintenance'},
@@ -1863,23 +3820,27 @@ function openDetail(num){
 }
 function renderPipeline(){
   const bar=document.getElementById('pipeline-bar');
+  const n=PIPELINE_STAGES.length; // 5
   const activeStageIdx=getStageForStatus(currentJobStatus);
   const isDeclined=currentJobStatus==='quote_declined';
-  bar.innerHTML=PIPELINE_STAGES.map((s,i)=>{
+  // Fill % = (activeStageIdx + 0.5) / n  so active stage is centred in the fill
+  const fillPct=Math.round(((activeStageIdx+0.5)/n)*100);
+  const trackClass=isDeclined?'pipe-track declined':'pipe-track';
+  const stages=PIPELINE_STAGES.map((s,i)=>{
     const isDone=i<activeStageIdx;
     const isActive=i===activeStageIdx;
     const stateClass=isDone?'done':isActive?(isDeclined&&s.key==='quote'?'declined':'active'):'future';
-    const iconName=isDone?'check':s.icon;
     const sub=isActive?getSubStatus(s.key,currentJobStatus):null;
     const subChip=sub?`<span class="pipe-chip">${sub}</span>`:'';
-    // Pulse ring only on active non-declined
     const pulse=(isActive&&!isDeclined)?'<span class="pipe-pulse"></span>':'';
     return `<div class="pipe-stage ${stateClass}" onclick="clickPipelineStage(${i})">
-      <div class="pipe-icon">${pulse}<span class="ms">${iconName}</span></div>
-      <span class="pipe-lbl">${s.label}</span>
-      ${subChip}
+      ${pulse}<span class="pipe-lbl">${s.label}</span>${subChip}
     </div>`;
   }).join('');
+  bar.innerHTML=`<div class="${trackClass}" style="--pipe-fill:${fillPct}%">
+    <div class="pipe-fill"></div>
+    <div class="pipe-stages">${stages}</div>
+  </div>`;
 }
 function clickPipelineStage(idx){
   const activeStageIdx=getStageForStatus(currentJobStatus);
@@ -1918,15 +3879,43 @@ function updateJobStatus(){
 function renderGuardKeys(){
   const guards=GUARD_KEYS[currentJobStatus]||[];
   const display=document.getElementById('guard-keys-display');
-  if(guards.length===0){display.innerHTML='<span style="font-size:11px;color:var(--muted-fg)">No guard keys for this stage</span>';return;}
-  display.innerHTML=guards.map(g=>{
-    const def=GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key,desc:''};
+  // Always show ALL defined guard keys; colour by state
+  display.innerHTML=GUARD_KEY_DEFS.map(def=>{
+    const g=guards.find(x=>x.key===def.key);
+    if(!g){
+      // Not required at this stage — show as pending/dimmed
+      return `<span class="guard-key pending" title="Not required at this stage"><span class="ms">radio_button_unchecked</span>${def.label}</span>`;
+    }
     return `<span class="guard-key ${g.met?'met':'blocked'}" title="${def.desc}"><span class="ms">${g.met?'check':'close'}</span>${def.label}</span>`;
   }).join(' ');
+  // Work stage statuses — determines which execution buttons are relevant
+  const workStage=['on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved'];
+  const preWork=['job_booked','estimate_done','quote_drafted','quote_sent','quote_finalized','quote_accepted'];
+  const postWork=['invoiced','paid','commission_paid','cancelled'];
+  const btnOnWay=document.getElementById('btn-onway');
+  const btnWIP=document.getElementById('btn-wip');
   const btnDone=document.getElementById('btn-done');
-  const allMet=guards.every(g=>g.met);
-  btnDone.disabled=!allMet;
-  btnDone.title=allMet?'':'Requires: '+guards.filter(g=>!g.met).map(g=>(GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key}).label).join(', ');
+  const autoNote=null; // removed from UI
+  // All buttons always visible — disable irrelevant ones per stage
+  // On My Way: only active at quote_accepted
+  const onWayActive = currentJobStatus==='quote_accepted';
+  btnOnWay.disabled = !onWayActive;
+  btnOnWay.title = onWayActive ? '' : 'Only available once quote is accepted';
+
+  // Mark WIP: active in pre-work stages (not yet on site)
+  const wipActive = preWork.includes(currentJobStatus) && currentJobStatus!=='quote_accepted';
+  btnWIP.disabled = !wipActive;
+  btnWIP.title = wipActive ? '' : 'Only available in pre-work stages';
+
+  // Mark Done: active in work stage, guard-gated
+  const allMet = guards.every(g=>g.met);
+  const doneActive = workStage.includes(currentJobStatus) && allMet;
+  btnDone.disabled = !doneActive;
+  btnDone.title = !workStage.includes(currentJobStatus)
+    ? 'Only available during active work stage'
+    : !allMet
+      ? 'Blocked by: '+guards.filter(g=>!g.met).map(g=>(GUARD_KEY_DEFS.find(d=>d.key===g.key)||{label:g.key}).label).join(', ')
+      : '';
 }
 function renderGuidance(){
   const g=GUIDANCE[currentJobStatus]||{icon:'info',label:'Stage: '+currentJobStatus,msg:'',action:'Continue',module:null};
@@ -1945,6 +3934,11 @@ function handleGuidanceAction(){
     commissions:()=>toast('Opening commission record…'),
   };
   (moduleActions[g.module]||(() => toast('Action triggered')))();
+}
+function markOnMyWay(){
+  const pre=['quote_accepted','work_in_progress','job_in_progress','job_completed','work_client_approved','invoiced','paid','commission_paid','on_my_way'];
+  if(pre.includes(currentJobStatus)){toast('Already past On My Way stage','error');return;}
+  currentJobStatus='on_my_way';updateJobStatus();
 }
 function markWIP(){
   const wip=['on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved','invoiced','paid','commission_paid'];
@@ -2029,13 +4023,32 @@ function renderCommThreads(){
           <div class="comm-meta">${t.from} · ${t.date}</div>
         </div>
         <span class="comm-status ${t.status}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span>
-        <span class="ms" style="font-size:16px;color:var(--muted-fg);margin-left:8px">expand_more</span>
+        <button class="comm-tb-btn ms" title="Open in full view" onclick="event.stopPropagation();openCommPopout(${t.id})" style="margin-left:6px;color:var(--indigo-500)">open_in_full</button>
+        <span class="ms" style="font-size:16px;color:var(--muted-fg);margin-left:4px">expand_more</span>
       </div>
       <div class="comm-body" id="comm-body-${t.id}">
         ${t.messages.map(m=>`<div class="comm-msg"><div class="comm-msg-from">${m.from} · ${m.time}</div>${m.body}</div>`).join('')}
         <div class="comm-reply-box">
-          <textarea placeholder="Type your reply…" id="comm-reply-${t.id}"></textarea>
+          <div class="comm-toolbar">
+            <button class="comm-tb-btn" title="Bold" onclick="execFmt('bold')"><b>B</b></button>
+            <button class="comm-tb-btn" title="Italic" onclick="execFmt('italic')"><i>I</i></button>
+            <button class="comm-tb-btn" title="Underline" onclick="execFmt('underline')"><u>U</u></button>
+            <div class="comm-tb-sep"></div>
+            <button class="comm-tb-btn ms" title="Bulleted list" onclick="execFmt('insertUnorderedList')">format_list_bulleted</button>
+            <button class="comm-tb-btn ms" title="Numbered list" onclick="execFmt('insertOrderedList')">format_list_numbered</button>
+            <button class="comm-tb-btn ms" title="Blockquote" onclick="execFmt('formatBlock','blockquote')">format_quote</button>
+            <div class="comm-tb-sep"></div>
+            <button class="comm-tb-btn ms" title="Insert link" onclick="insertCommLink(${t.id})">link</button>
+            <button class="comm-tb-btn ms" title="Insert image" onclick="insertCommImage(${t.id})">image</button>
+            <span class="comm-tb-badge"><span class="ms">auto_awesome</span>Rich HTML · Client Portal parity</span>
+          </div>
+          <div class="comm-compose" contenteditable="true" data-placeholder="Type your reply… supports bold, lists, links, inline images" id="comm-reply-${t.id}"></div>
+          <div class="comm-attach-row" id="comm-attach-${t.id}"></div>
           <div class="comm-reply-footer">
+            <label class="attach-label" title="Attach file (PDF, Excel, ZIP…)" onclick="mockAttach(${t.id})">
+              <span class="ms" style="font-size:15px">attach_file</span>Attach
+            </label>
+            <span class="spacer"></span>
             <button class="btn sm" onclick="markCommResolved(${t.id})"><span class="ms">check</span>Mark Resolved</button>
             <button class="btn sm primary" onclick="sendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
           </div>
@@ -2047,15 +4060,41 @@ function toggleCommThread(id){
   const b=document.getElementById('comm-body-'+id);
   b.classList.toggle('open');
 }
+function execFmt(cmd,val){
+  document.execCommand(cmd,false,val||null);
+}
+function insertCommLink(id){
+  const url=prompt('Enter URL:','https://');
+  if(url) document.execCommand('createLink',false,url);
+}
+function insertCommImage(id){
+  const url=prompt('Image URL (or paste a public link):','https://');
+  if(url) document.execCommand('insertImage',false,url);
+}
+function mockAttach(id){
+  const row=document.getElementById('comm-attach-'+id);
+  if(!row) return;
+  const names=['Site_Photos.zip','COC_Draft.pdf','Quote_Revision.xlsx'];
+  const name=names[row.children.length%names.length];
+  const icons={'zip':'folder_zip','pdf':'picture_as_pdf','xlsx':'table_chart'};
+  const ext=name.split('.').pop();
+  const icon=icons[ext]||'attach_file';
+  const chip=document.createElement('span');
+  chip.className='comm-attach-chip';
+  chip.innerHTML=`<span class="ms">${icon}</span>${name}<span class="ms rm" onclick="this.parentElement.remove()">close</span>`;
+  row.appendChild(chip);
+}
 function sendCommReply(id){
-  const ta=document.getElementById('comm-reply-'+id);
-  const body=ta.value.trim();
-  if(!body){toast('Please type a reply','error');return;}
+  const div=document.getElementById('comm-reply-'+id);
+  const body=(div.innerHTML||'').trim();
+  if(!body||body==='<br>'){toast('Please type a reply','error');return;}
   const t=commThreads.find(t=>t.id===id);
   if(t){
     t.messages.push({from:'You',time:new Date().toLocaleString(),body});
     t.status='replied';
-    ta.value='';
+    div.innerHTML='';
+    const row=document.getElementById('comm-attach-'+id);
+    if(row) row.innerHTML='';
     renderCommThreads();
     document.getElementById('comm-body-'+id).classList.add('open');
     toast('Reply sent','success');
@@ -2066,6 +4105,250 @@ function markCommResolved(id){
   const t=commThreads.find(t=>t.id===id);
   if(t){t.status='resolved';renderCommThreads();toast('Thread marked as resolved','success');}
 }
+
+// ── Comm Popout (free-floating, draggable, resizable) ──────────────
+let commPopoutId = null;
+function openCommPopout(id){
+  commPopoutId = id;
+  const t = commThreads.find(t=>t.id===id);
+  if(!t) return;
+  document.getElementById('cp-subject').textContent = t.subject;
+  document.getElementById('cp-meta').textContent = t.from + ' · ' + t.date;
+  const badge = document.getElementById('cp-status-badge');
+  badge.className = 'comm-status ' + t.status;
+  badge.textContent = t.status.charAt(0).toUpperCase() + t.status.slice(1);
+  renderPopoutMessages(t);
+  document.getElementById('cp-compose').innerHTML = '';
+  document.getElementById('cp-attach-row').innerHTML = '';
+  // Show and position the dialog
+  const dlg = document.getElementById('comm-popout-modal');
+  dlg.style.display = 'flex';
+  // Restore saved prefs, or default to centred
+  const savedPrefs = localStorage.getItem('bp_popout_prefs');
+  if(savedPrefs){
+    try{
+      const p = JSON.parse(savedPrefs);
+      dlg.style.width  = p.width  || '860px';
+      dlg.style.height = p.height || '600px';
+      // Re-clamp position to current viewport in case screen size changed
+      const pw = parseInt(p.width)  || 860;
+      const ph = parseInt(p.height) || 600;
+      const pl = Math.max(0, Math.min(window.innerWidth  - pw, parseInt(p.left) || 0));
+      const pt = Math.max(0, Math.min(window.innerHeight - ph, parseInt(p.top)  || 0));
+      dlg.style.left = pl + 'px';
+      dlg.style.top  = pt + 'px';
+    }catch(e){
+      // fallback to centred
+      const W = Math.min(860, window.innerWidth * 0.9);
+      const H = Math.min(600, window.innerHeight * 0.85);
+      dlg.style.width  = W + 'px'; dlg.style.height = H + 'px';
+      dlg.style.left   = Math.round((window.innerWidth  - W) / 2) + 'px';
+      dlg.style.top    = Math.round((window.innerHeight - H) / 2) + 'px';
+    }
+  } else {
+    const W = Math.min(860, window.innerWidth * 0.9);
+    const H = Math.min(600, window.innerHeight * 0.85);
+    dlg.style.width  = W + 'px'; dlg.style.height = H + 'px';
+    dlg.style.left   = Math.round((window.innerWidth  - W) / 2) + 'px';
+    dlg.style.top    = Math.round((window.innerHeight - H) / 2) + 'px';
+  }
+  // Scroll messages to bottom
+  setTimeout(()=>{
+    const msgs = document.getElementById('cp-messages');
+    if(msgs) msgs.scrollTop = msgs.scrollHeight;
+  }, 50);
+}
+function renderPopoutMessages(t){
+  const el = document.getElementById('cp-messages');
+  el.innerHTML = t.messages.map(m=>{
+    const isMe = m.from === 'You';
+    return `<div style="display:flex;flex-direction:column;align-items:${isMe?'flex-end':'flex-start'}">
+      <div style="max-width:80%;background:${isMe?'var(--indigo-50)':'var(--white)'};border:1px solid ${isMe?'var(--indigo-100)':'var(--border)'};border-radius:10px;padding:10px 14px;font-size:12.5px;color:var(--fg);line-height:1.6">${m.body}</div>
+      <div style="font-size:10px;color:var(--muted-fg);margin-top:3px;padding:0 4px">${m.from} · ${m.time}</div>
+    </div>`;
+  }).join('');
+}
+function closeCommPopout(){
+  document.getElementById('comm-popout-modal').style.display = 'none';
+  commPopoutId = null;
+}
+function sendCommReplyPopout(){
+  const div = document.getElementById('cp-compose');
+  const body = (div.innerHTML||'').trim();
+  if(!body||body==='<br>'){toast('Please type a reply','error');return;}
+  const t = commThreads.find(t=>t.id===commPopoutId);
+  if(t){
+    t.messages.push({from:'You',time:new Date().toLocaleString(),body});
+    t.status = 'replied';
+    div.innerHTML = '';
+    document.getElementById('cp-attach-row').innerHTML = '';
+    renderPopoutMessages(t);
+    renderCommThreads();
+    // Update badge
+    const badge = document.getElementById('cp-status-badge');
+    badge.className = 'comm-status replied';
+    badge.textContent = 'Replied';
+    // Scroll to bottom
+    setTimeout(()=>{
+      const msgs = document.getElementById('cp-messages');
+      if(msgs) msgs.scrollTop = msgs.scrollHeight;
+    }, 30);
+    toast('Reply sent','success');
+    addTimelineItem('email','email','Reply sent: '+t.subject,'Sent to '+t.from,new Date().toLocaleString());
+  }
+}
+function markCommResolvedPopout(){
+  const t = commThreads.find(t=>t.id===commPopoutId);
+  if(t){
+    t.status = 'resolved';
+    const badge = document.getElementById('cp-status-badge');
+    badge.className = 'comm-status resolved';
+    badge.textContent = 'Resolved';
+    renderCommThreads();
+    toast('Thread marked as resolved','success');
+  }
+}
+function mockAttachPopout(){
+  const row = document.getElementById('cp-attach-row');
+  if(!row) return;
+  const names = ['Site_Photos.zip','COC_Draft.pdf','Quote_Revision.xlsx'];
+  const name = names[row.children.length % names.length];
+  const icons = {zip:'folder_zip',pdf:'picture_as_pdf',xlsx:'table_chart'};
+  const ext = name.split('.').pop();
+  const chip = document.createElement('span');
+  chip.className = 'comm-attach-chip';
+  chip.innerHTML = `<span class="ms">${icons[ext]||'attach_file'}</span>${name}<span class="ms rm" onclick="this.parentElement.remove()">close</span>`;
+  row.appendChild(chip);
+}
+function insertPopoutLink(){
+  const url = prompt('Enter URL:','https://');
+  if(url) document.execCommand('createLink',false,url);
+}
+function insertPopoutImage(){
+  const url = prompt('Image URL:','https://');
+  if(url) document.execCommand('insertImage',false,url);
+}
+
+// ── Sidebar Resize ───────────────────────────────────────────
+(function(){
+  const resizer = document.getElementById('sidebar-resizer');
+  const sidebar = document.getElementById('detail-sidebar');
+  if(!resizer || !sidebar) return;
+  let startX, startW;
+  resizer.addEventListener('mousedown', e=>{
+    e.preventDefault();
+    startX = e.clientX;
+    startW = sidebar.offsetWidth;
+    resizer.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    function onMove(e){
+      // sidebar is on the right, so dragging left = bigger, right = smaller
+      const delta = startX - e.clientX;
+      const newW = Math.min(520, Math.max(180, startW + delta));
+      sidebar.style.width = newW + 'px';
+    }
+    function onUp(){
+      resizer.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+  // Restore saved sidebar width
+  const savedSW = localStorage.getItem('bp_sidebar_width');
+  if(savedSW) sidebar.style.width = savedSW;
+
+  // Save on drag end — patch onUp
+  const _origAddEvent = resizer.addEventListener.bind(resizer);
+  resizer.addEventListener('mousedown', e=>{
+    function saveOnUp(){
+      localStorage.setItem('bp_sidebar_width', sidebar.style.width);
+      document.removeEventListener('mouseup', saveOnUp);
+    }
+    document.addEventListener('mouseup', saveOnUp);
+  });
+
+  // Double-click to reset to default width
+  resizer.addEventListener('dblclick', ()=>{
+    sidebar.style.width = '268px';
+    localStorage.removeItem('bp_sidebar_width');
+  });
+})();
+
+// ── Comm Popout: drag + resize ─────────────────────────────────
+(function(){
+  const dlg = document.getElementById('comm-popout-modal');
+  if(!dlg) return;
+
+  // — Drag to move via header —
+  const handle = document.getElementById('cp-drag-handle');
+  handle.addEventListener('mousedown', e=>{
+    if(e.target.closest('.modal-close')) return;
+    e.preventDefault();
+    const ox = e.clientX - dlg.offsetLeft;
+    const oy = e.clientY - dlg.offsetTop;
+    function onMove(e){
+      dlg.style.left = Math.max(0, Math.min(window.innerWidth  - dlg.offsetWidth,  e.clientX - ox)) + 'px';
+      dlg.style.top  = Math.max(0, Math.min(window.innerHeight - dlg.offsetHeight, e.clientY - oy)) + 'px';
+    }
+    function onUp(){
+      document.removeEventListener('mousemove',onMove);
+      document.removeEventListener('mouseup',onUp);
+      savePopoutPrefs();
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  });
+
+  // — Resize via edge/corner handles —
+  dlg.querySelectorAll('.cp-rz').forEach(rz=>{
+    rz.addEventListener('mousedown', e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const dir  = rz.dataset.dir;
+      const sx   = e.clientX, sy = e.clientY;
+      const sl   = dlg.offsetLeft, st = dlg.offsetTop;
+      const sw   = dlg.offsetWidth, sh = dlg.offsetHeight;
+      const minW = 340, minH = 280;
+      document.body.style.cursor = getComputedStyle(rz).cursor;
+      document.body.style.userSelect = 'none';
+      function onMove(e){
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        let l=sl,t=st,w=sw,h=sh;
+        if(dir.includes('e')) w = Math.max(minW, sw + dx);
+        if(dir.includes('s')) h = Math.max(minH, sh + dy);
+        if(dir.includes('w')){ w = Math.max(minW, sw - dx); l = sl + sw - w; }
+        if(dir.includes('n')){ h = Math.max(minH, sh - dy); t = st + sh - h; }
+        dlg.style.left   = l + 'px';
+        dlg.style.top    = t + 'px';
+        dlg.style.width  = w + 'px';
+        dlg.style.height = h + 'px';
+      }
+      function onUp(){
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+        savePopoutPrefs();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    });
+  });
+
+  function savePopoutPrefs(){
+    localStorage.setItem('bp_popout_prefs', JSON.stringify({
+      left:   dlg.style.left,
+      top:    dlg.style.top,
+      width:  dlg.style.width,
+      height: dlg.style.height
+    }));
+  }
+})();
 function openNewCommModal(){openModal('new-comm-modal');}
 function sendNewComm(){
   const subj=document.getElementById('nc-subject').value.trim();
@@ -2099,32 +4382,514 @@ function addTimelineItem(type,icon,title,sub,time){
   if(document.getElementById('tab-timeline').classList.contains('active'))renderTimeline();
 }
 // HSE
-function renderHSEPipeline(){
-  const p=document.getElementById('hse-pipeline');
-  p.innerHTML=HSE_STAGES.map((s,i)=>`<div class="hse-step ${i<hseStageIdx?'done':i===hseStageIdx?'active':''}" onclick="setHSEStage(${i})">${s}</div>`).join('');
+
+// ═══════════════════════════════════════════════════════════
+// DOCUMENT EDITORS — open / close
+// ═══════════════════════════════════════════════════════════
+function openEditor(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
 }
-function setHSEStage(i){hseStageIdx=i;renderHSEPipeline();toast('HSE pack moved to "'+HSE_STAGES[i]+'"','success');}
+function closeEditor(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── Generic tab switcher for editors ──────────────────────
+function switchDeTab(prefix,tab,btn){
+  // deactivate all panes and buttons in this editor
+  const editor=btn.closest('.doc-editor');
+  editor.querySelectorAll('.de-tab-pane').forEach(p=>p.classList.remove('active'));
+  editor.querySelectorAll('.de-tab-btn').forEach(b=>b.classList.remove('active'));
+  const pane=document.getElementById(prefix+'-tab-'+tab);
+  if(pane)pane.classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════
+// ESTIMATE EDITOR
+// ═══════════════════════════════════════════════════════════
+function openEstimateModal(){
+  renderEstimateTable();
+  recalcEst();
+  renderEstCatBar();
+  openEditor('estimate-editor');
+}
+function renderEstimateTable(){
+  const tbody=document.getElementById('est-tbody');
+  if(!tbody)return;
+  tbody.innerHTML=estLines.map((l,i)=>`<tr>
+    <td><input value="${l.desc}" onchange="estLines[${i}].desc=this.value;recalcEst()"></td>
+    <td><select onchange="estLines[${i}].cat=this.value;recalcEst()">
+      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===l.cat?'selected':''}>${c}</option>`).join('')}
+    </select></td>
+    <td><input type="number" value="${l.qty}" style="width:60px" onchange="estLines[${i}].qty=+this.value;recalcEst()"></td>
+    <td><input value="${l.unit}" style="width:50px" onchange="estLines[${i}].unit=this.value"></td>
+    <td><input type="number" value="${l.price}" onchange="estLines[${i}].price=+this.value;recalcEst()"></td>
+    <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--fg)">${fmt(l.qty*l.price)}</td>
+    <td><button class="de-del-row" onclick="removeEstLine(${i})"><span class="ms">delete</span></button></td>
+  </tr>`).join('');
+  recalcEst();
+  const lc=document.getElementById('est-line-count');
+  if(lc)lc.textContent=estLines.length+' items';
+  const sb=document.getElementById('est-sb-lines');
+  if(sb)sb.textContent=estLines.length;
+}
+function recalcEst(){
+  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
+  const vat=Math.round(sub*0.15);
+  const el_sub=document.getElementById('est-subtotal');
+  const el_vat=document.getElementById('est-vat');
+  const el_tot=document.getElementById('est-total');
+  const el_sbt=document.getElementById('est-sb-total');
+  const el_sbc=document.getElementById('est-sb-cost');
+  const el_sbp=document.getElementById('est-sb-profit');
+  const el_sbm=document.getElementById('est-sb-margin');
+  if(el_sub)el_sub.textContent=fmt(sub);
+  if(el_vat)el_vat.textContent=fmt(vat);
+  if(el_tot)el_tot.textContent=fmt(sub+vat);
+  if(el_sbt)el_sbt.textContent=fmt(sub);
+  if(el_sbc)el_sbc.textContent=fmt(sub);
+  const quote=48500;const profit=quote-sub;
+  if(el_sbp){el_sbp.textContent=(profit>=0?'+':'')+fmt(profit);el_sbp.className='val '+(profit>=0?'profit':'loss');}
+  if(el_sbm){el_sbm.textContent=((profit/quote)*100).toFixed(1)+'% margin';el_sbm.style.color=profit>=0?'var(--green-600)':'var(--red-600)';}
+  renderEstCatBar();
+}
+function renderEstCatBar(){
+  const bar=document.getElementById('est-cat-bar');
+  if(!bar)return;
+  const cats={};
+  estLines.forEach(l=>{cats[l.cat]=(cats[l.cat]||0)+l.qty*l.price;});
+  const total=Object.values(cats).reduce((a,b)=>a+b,0)||1;
+  const catClass={'Materials':'cat-materials','Labour':'cat-labour','Subcontractor':'cat-subcon','Travel':'cat-travel','Other':'cat-other'};
+  bar.innerHTML=Object.entries(cats).map(([k,v])=>`
+    <div class="de-cat-row">
+      <span class="de-cat-name">${k}</span>
+      <div class="de-cat-track"><div class="de-cat-fill ${catClass[k]||'cat-materials'}" style="width:${(v/total*100).toFixed(1)}%"></div></div>
+      <span class="de-cat-val">${fmt(v)}</span>
+    </div>`).join('');
+}
+function addEstimateLine(){
+  estLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+  renderEstimateTable();
+}
+function removeEstLine(i){estLines.splice(i,1);renderEstimateTable();}
+function setEstStage(i){
+  const stages=['Draft','In Review','Approved','Finalised'];
+  const strip=document.getElementById('est-stage-strip');
+  if(strip){strip.querySelectorAll('.de-stage').forEach((s,idx)=>{s.className='de-stage'+(idx<i?' done':idx===i?' active':'');});}
+  const sub=document.getElementById('est-editor-sub');
+  if(sub)sub.textContent='JOB-0042 · '+stages[i];
+  toast('Estimate moved to "'+stages[i]+'"','success');
+}
+function saveEstimate(){
+  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
+  // Update sidebar P/L
+  const el=document.getElementById('pl-est');if(el)el.textContent=fmt(sub);
+  const quote=48500;const profit=quote-sub;
+  const elp=document.getElementById('pl-profit');if(elp)elp.textContent=(profit>=0?'+':'')+fmt(profit);
+  const ela=document.getElementById('pl-amount');if(ela)ela.textContent=(profit>=0?'+':'')+fmt(profit);
+  const elm=document.getElementById('pl-margin');if(elm)elm.textContent=((profit/quote)*100).toFixed(1)+'% margin';
+  // Update doc meta in sidebar
+  const em=document.getElementById('estimate-meta');if(em)em.textContent=estLines.length+' items · '+fmt(sub);
+  closeEditor('estimate-editor');
+  toast('Estimate saved and finalised','success');
+  addTimelineItem('doc','calculate','Estimate updated',estLines.length+' items · '+fmt(sub),new Date().toLocaleString());
+}
+
+// ═══════════════════════════════════════════════════════════
+// QUOTE EDITOR
+// ═══════════════════════════════════════════════════════════
+let quoteLines=[];
+function openQuoteModal(){
+  // Build quote lines from estimate with 34% markup
+  if(quoteLines.length===0){
+    quoteLines=estLines.map(l=>({...l,price:Math.round(l.price*1.34)}));
+  }
+  renderQuoteTable();
+  openEditor('quote-editor');
+}
+function renderQuoteTable(){
+  const tbody=document.getElementById('quote-tbody');
+  if(!tbody)return;
+  tbody.innerHTML=quoteLines.map((l,i)=>`<tr>
+    <td>${l.desc}</td>
+    <td><input type="number" value="${l.qty}" style="width:60px" onchange="quoteLines[${i}].qty=+this.value;recalcQuote()"></td>
+    <td>${l.unit}</td>
+    <td><input type="number" value="${l.price}" onchange="quoteLines[${i}].price=+this.value;recalcQuote()"></td>
+    <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
+    <td><button class="de-del-row" onclick="quoteLines.splice(${i},1);renderQuoteTable()"><span class="ms">delete</span></button></td>
+  </tr>`).join('');
+  recalcQuote();
+}
+function addQuoteLine(){
+  quoteLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+  renderQuoteTable();
+}
+function recalcQuote(){
+  const sub=quoteLines.reduce((s,l)=>s+l.qty*l.price,0);
+  const vat=Math.round(sub*0.15);
+  const el_sub=document.getElementById('quote-subtotal');
+  const el_vat=document.getElementById('quote-vat');
+  const el_tot=document.getElementById('quote-total');
+  if(el_sub)el_sub.textContent=fmt(sub);
+  if(el_vat)el_vat.textContent=fmt(vat);
+  if(el_tot)el_tot.textContent=fmt(sub+vat);
+}
+function acceptQuote(){
+  closeEditor('quote-editor');
+  if(currentStageIdx<3){currentStageIdx=3;updateJobStatus();}
+  toast('Quote marked as accepted. Job moved to Quote Accepted.','success');
+  addTimelineItem('doc','description','Quote accepted','QUO-0089 accepted by Acme Corp',new Date().toLocaleString());
+}
+
+// ═══════════════════════════════════════════════════════════
+// INVOICE EDITOR
+// ═══════════════════════════════════════════════════════════
+let invLines=[];
+function openInvoiceModal(){
+  const today=new Date();
+  const due=new Date(today);due.setDate(due.getDate()+30);
+  const d=document.getElementById('inv-date');if(d)d.value=today.toISOString().split('T')[0];
+  const dv=document.getElementById('inv-due');if(dv)dv.value=due.toISOString().split('T')[0];
+  const dd=document.getElementById('inv-due-display');if(dd)dd.textContent=due.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});
+  const dd2=document.getElementById('inv-due-display2');if(dd2)dd2.textContent=due.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});
+  const id=document.getElementById('inv-date-display');if(id)id.textContent=today.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});
+  // Pre-populate from quote lines
+  if(invLines.length===0){
+    invLines=quoteLines.length>0?quoteLines.map(l=>({...l})):estLines.map(l=>({...l,price:Math.round(l.price*1.34)}));
+  }
+  renderInvTable();
+  openEditor('invoice-editor');
+}
+function renderInvTable(){
+  const tbody=document.getElementById('inv-tbody');
+  if(!tbody)return;
+  tbody.innerHTML=invLines.map((l,i)=>`<tr>
+    <td>${l.desc}</td>
+    <td><input type="number" value="${l.qty}" style="width:60px" onchange="invLines[${i}].qty=+this.value;recalcInv()"></td>
+    <td>${l.unit}</td>
+    <td><input type="number" value="${l.price}" onchange="invLines[${i}].price=+this.value;recalcInv()"></td>
+    <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
+    <td><button class="de-del-row" onclick="invLines.splice(${i},1);renderInvTable()"><span class="ms">delete</span></button></td>
+  </tr>`).join('');
+  recalcInv();
+}
+function addInvLine(){
+  invLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+  renderInvTable();
+}
+function recalcInv(){
+  const sub=invLines.reduce((s,l)=>s+l.qty*l.price,0);
+  const vat=Math.round(sub*0.15);
+  const el_sub=document.getElementById('inv-subtotal');
+  const el_vat=document.getElementById('inv-vat');
+  const el_tot=document.getElementById('inv-total');
+  if(el_sub)el_sub.textContent=fmt(sub);
+  if(el_vat)el_vat.textContent=fmt(vat);
+  if(el_tot)el_tot.textContent=fmt(sub+vat);
+}
+function markInvoicePaid(){
+  const pill=document.getElementById('inv-status-pill');
+  if(pill){pill.className='pill pill-green';pill.textContent='Paid';}
+  closeEditor('invoice-editor');
+  toast('Invoice marked as paid','success');
+  addTimelineItem('doc','receipt_long','Invoice paid','INV-0089 · Payment received',new Date().toLocaleString());
+}
+function createInvoice(){
+  // Legacy call from sidebar — just open the editor
+  openInvoiceModal();
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTUAL COSTS EDITOR
+// ═══════════════════════════════════════════════════════════
+let costsCatFilter='All';
+function openActualCostsModal(){
+  renderCostTable();
+  renderVarianceTable();
+  renderCostsCatBar();
+  openEditor('actual-costs-editor');
+}
+function renderCostTable(){
+  const tbody=document.getElementById('costs-tbody');
+  if(!tbody)return;
+  const filtered=costsCatFilter==='All'?actualCostEntries:actualCostEntries.filter(e=>e.cat===costsCatFilter);
+  tbody.innerHTML=filtered.map((e,i)=>{
+    const realIdx=actualCostEntries.indexOf(e);
+    return `<tr>
+      <td><input type="date" value="${e.date}" onchange="actualCostEntries[${realIdx}].date=this.value;recalcCosts()"></td>
+      <td><select onchange="actualCostEntries[${realIdx}].cat=this.value;recalcCosts()">
+        ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===e.cat?'selected':''}>${c}</option>`).join('')}
+      </select></td>
+      <td><input value="${e.desc}" onchange="actualCostEntries[${realIdx}].desc=this.value"></td>
+      <td><input value="${e.supplier}" onchange="actualCostEntries[${realIdx}].supplier=this.value"></td>
+      <td style="text-align:right"><input type="number" value="${e.amount}" style="text-align:right" onchange="actualCostEntries[${realIdx}].amount=+this.value;recalcCosts()"></td>
+      <td><button class="de-del-row" onclick="removeCostLine(${realIdx})"><span class="ms">delete</span></button></td>
+    </tr>`;
+  }).join('');
+  recalcCosts();
+  const ec=document.getElementById('costs-entry-count');
+  if(ec)ec.textContent=actualCostEntries.length+' entries';
+  const sub=document.getElementById('costs-editor-sub');
+  if(sub)sub.textContent='JOB-0042 · '+actualCostEntries.length+' entries';
+}
+function filterCosts(cat,btn){
+  costsCatFilter=cat;
+  document.querySelectorAll('.de-cat-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCostTable();
+}
+function addCostLine(){
+  actualCostEntries.push({date:new Date().toISOString().split('T')[0],cat:'Materials',desc:'',supplier:'',amount:0});
+  renderCostTable();
+  renderVarianceTable();
+}
+function removeCostLine(i){actualCostEntries.splice(i,1);renderCostTable();renderVarianceTable();}
+function recalcCosts(){
+  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
+  const el=document.getElementById('costs-total');if(el)el.textContent=fmt(total);
+  const sb=document.getElementById('costs-sb-total');if(sb)sb.textContent=fmt(total);
+  const sba=document.getElementById('costs-sb-actual');if(sba)sba.textContent=fmt(total);
+  const sbv=document.getElementById('costs-sb-variance');
+  if(sbv){const v=36200-total;sbv.textContent=(v>=0?'+':'')+fmt(v);sbv.className='val '+(v>=0?'profit':'loss');}
+  renderVarianceTable();
+  renderCostsCatBar();
+}
+function renderVarianceTable(){
+  const tbody=document.getElementById('var-tbody');
+  if(!tbody)return;
+  const EST_CATS={Materials:26200,Labour:10000,Subcontractor:0,Travel:0,Other:0};
+  const actCats={};
+  actualCostEntries.forEach(e=>{actCats[e.cat]=(actCats[e.cat]||0)+e.amount;});
+  const rows=Object.keys(EST_CATS).map(cat=>{
+    const est=EST_CATS[cat];const act=actCats[cat]||0;const v=est-act;
+    const pct=est>0?((v/est)*100).toFixed(0)+'%':'—';
+    return `<tr>
+      <td>${cat}</td>
+      <td style="text-align:right">${fmt(est)}</td>
+      <td style="text-align:right">${act>0?fmt(act):'—'}</td>
+      <td style="text-align:right" class="${v>=0?'var-pos':'var-neg'}">${act>0?(v>=0?'+':'')+fmt(v):'—'}</td>
+      <td style="text-align:right">${act>0?pct:'—'}</td>
+    </tr>`;
+  });
+  const totEst=36200;const totAct=actualCostEntries.reduce((s,e)=>s+e.amount,0);const totV=totEst-totAct;
+  rows.push(`<tr>
+    <td>Total</td>
+    <td style="text-align:right">${fmt(totEst)}</td>
+    <td style="text-align:right">${totAct>0?fmt(totAct):'—'}</td>
+    <td style="text-align:right" class="${totV>=0?'var-pos':'var-neg'}">${totAct>0?(totV>=0?'+':'')+fmt(totV):'—'}</td>
+    <td style="text-align:right">${totAct>0?((totV/totEst)*100).toFixed(0)+'%':'—'}</td>
+  </tr>`);
+  tbody.innerHTML=rows.join('');
+}
+function renderCostsCatBar(){
+  const bar=document.getElementById('costs-cat-bar');
+  if(!bar)return;
+  const cats={};
+  actualCostEntries.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount;});
+  const total=Object.values(cats).reduce((a,b)=>a+b,0)||1;
+  const catClass={'Materials':'cat-materials','Labour':'cat-labour','Subcontractor':'cat-subcon','Travel':'cat-travel','Other':'cat-other'};
+  if(Object.keys(cats).length===0){bar.innerHTML='<div style="font-size:11.5px;color:var(--muted-fg)">No entries yet</div>';return;}
+  bar.innerHTML=Object.entries(cats).map(([k,v])=>`
+    <div class="de-cat-row">
+      <span class="de-cat-name">${k}</span>
+      <div class="de-cat-track"><div class="de-cat-fill ${catClass[k]||'cat-materials'}" style="width:${(v/total*100).toFixed(1)}%"></div></div>
+      <span class="de-cat-val">${fmt(v)}</span>
+    </div>`).join('');
+}
+function saveActualCosts(){
+  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
+  const em=document.getElementById('actual-costs-meta');if(em)em.textContent=fmt(total)+' · '+actualCostEntries.length+' entries';
+  const pl=document.getElementById('pl-actual');if(pl){pl.textContent=fmt(total);pl.style.color='var(--fg-2)';}
+  const gk=GUARD_KEYS['In Progress'];
+  if(gk){const ir=gk.find(g=>g.key==='Invoice Ready');if(ir&&total>0)ir.met=true;}
+  renderGuardKeys();
+  closeEditor('actual-costs-editor');
+  toast('Actual costs saved','success');
+  addTimelineItem('doc','attach_money','Actual costs updated',fmt(total)+' · '+actualCostEntries.length+' entries',new Date().toLocaleString());
+}
+
+// ═══════════════════════════════════════════════════════════
+// JOBCARD EDITOR
+// ═══════════════════════════════════════════════════════════
+let jcSigDrawing=false;let jcSigLastX=0;let jcSigLastY=0;
+function openJobcardModal(){
+  initSigCanvas();
+  openEditor('jobcard-editor');
+}
+function addJcPhoto(slot){
+  const colors=['#ddd6fe','#bfdbfe','#bbf7d0','#fde68a','#fecaca','#fed7aa'];
+  const c=colors[photoCount%colors.length];
+  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</div>`;
+  slot.onclick=null;
+  photoCount++;
+  // Update counts
+  const lbl=document.getElementById('jc-photo-count-label');if(lbl)lbl.textContent=photoCount+' photo'+(photoCount!==1?'s':'');
+  const badge=document.getElementById('jc-photo-badge');if(badge)badge.textContent=photoCount;
+  const sb=document.getElementById('jc-sb-photos');if(sb)sb.textContent=photoCount;
+  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · '+(jobcardSigned?'Signed':'Awaiting signature');
+  // Add new empty slot
+  const grid=document.getElementById('jc-photo-grid');
+  if(grid&&!grid.querySelector('.de-photo-slot[onclick]')){
+    const ns=document.createElement('div');ns.className='de-photo-slot';
+    ns.innerHTML='<span class="ms">add_a_photo</span><span>Add Photo</span>';
+    ns.onclick=()=>addJcPhoto(ns);grid.appendChild(ns);
+  }
+}
+function addDefectRow(){
+  const tbody=document.getElementById('defects-tbody');
+  if(!tbody)return;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input placeholder="Location"></td>
+    <td><input placeholder="Describe defect…"></td>
+    <td><select><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></td>
+    <td><input placeholder="Recommended fix…"></td>
+    <td><button class="btn ghost sm" onclick="this.closest('tr').remove()"><span class="ms" style="font-size:13px">delete</span></button></td>`;
+  tbody.appendChild(tr);
+}
+function initSigCanvas(){
+  const canvas=document.getElementById('jc-sig-canvas');
+  if(!canvas||canvas._inited)return;
+  canvas._inited=true;
+  const ctx=canvas.getContext('2d');
+  ctx.strokeStyle='#0f172a';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+  canvas.addEventListener('mousedown',e=>{jcSigDrawing=true;const r=canvas.getBoundingClientRect();jcSigLastX=e.clientX-r.left;jcSigLastY=e.clientY-r.top;});
+  canvas.addEventListener('mousemove',e=>{
+    if(!jcSigDrawing)return;
+    const r=canvas.getBoundingClientRect();
+    const x=e.clientX-r.left;const y=e.clientY-r.top;
+    ctx.beginPath();ctx.moveTo(jcSigLastX,jcSigLastY);ctx.lineTo(x,y);ctx.stroke();
+    jcSigLastX=x;jcSigLastY=y;
+  });
+  canvas.addEventListener('mouseup',()=>jcSigDrawing=false);
+  canvas.addEventListener('mouseleave',()=>jcSigDrawing=false);
+  // Touch
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();jcSigDrawing=true;jcSigLastX=t.clientX-r.left;jcSigLastY=t.clientY-r.top;});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!jcSigDrawing)return;const t=e.touches[0];const r=canvas.getBoundingClientRect();const x=t.clientX-r.left;const y=t.clientY-r.top;ctx.beginPath();ctx.moveTo(jcSigLastX,jcSigLastY);ctx.lineTo(x,y);ctx.stroke();jcSigLastX=x;jcSigLastY=y;});
+  canvas.addEventListener('touchend',()=>jcSigDrawing=false);
+}
+function clearSigCanvas(){
+  const canvas=document.getElementById('jc-sig-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  canvas.classList.remove('signed');
+  jobcardSigned=false;
+  const msg=document.getElementById('sig-confirmed-msg');if(msg)msg.style.display='none';
+  const ss=document.getElementById('jc-sig-status');if(ss){ss.textContent='Awaiting';ss.style.color='var(--muted-fg)';}
+}
+function captureSignature(){
+  const canvas=document.getElementById('jc-sig-canvas');
+  if(!canvas)return;
+  canvas.classList.add('signed');
+  jobcardSigned=true;
+  const name=document.getElementById('sig-person-name');const n=name?name.value||'Client':'Client';
+  const msg=document.getElementById('sig-confirmed-msg');
+  if(msg){msg.style.display='flex';const t=document.getElementById('sig-confirmed-text');if(t)t.textContent='Signed by '+n+' — '+new Date().toLocaleString();}
+  const ss=document.getElementById('jc-sig-status');if(ss){ss.textContent='Signed';ss.style.color='var(--green-600)';}
+  const pill=document.getElementById('jc-status-pill');if(pill){pill.className='pill pill-green';pill.textContent='Signed';}
+  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · Signed';
+  document.getElementById('jobcard-status-pill').innerHTML='<span class="pill pill-green" style="font-size:9.5px">Signed</span>';
+  const gk=GUARD_KEYS['In Progress'];
+  if(gk){const js=gk.find(g=>g.key==='Jobcard Signed');if(js)js.met=true;}
+  renderGuardKeys();
+  toast('Signature captured','success');
+}
+function saveJobcard(){
+  // Sync start/end times to sidebar
+  const s=document.getElementById('jc-start');const e=document.getElementById('jc-end');
+  const sbs=document.getElementById('jc-sb-start');const sbe=document.getElementById('jc-sb-end');
+  if(s&&sbs&&s.value)sbs.textContent=new Date(s.value).toLocaleString('en-ZA',{dateStyle:'short',timeStyle:'short'});
+  if(e&&sbe&&e.value)sbe.textContent=new Date(e.value).toLocaleString('en-ZA',{dateStyle:'short',timeStyle:'short'});
+  closeEditor('jobcard-editor');
+  toast('Jobcard saved','success');
+  addTimelineItem('doc','assignment','Jobcard updated',photoCount+' photos · '+(jobcardSigned?'Signed':'Unsigned'),new Date().toLocaleString());
+}
+
+// ═══════════════════════════════════════════════════════════
+// HSE PACK EDITOR
+// ═══════════════════════════════════════════════════════════
+const HSE_CHECKLIST_ITEMS = [
+  {label:'Method Statement reviewed and approved',tag:'req',done:false},
+  {label:'Risk Assessment completed and signed',tag:'req',done:false},
+  {label:'Permit to Work issued',tag:'req',done:false},
+  {label:'PPE inspection completed (all team)',tag:'req',done:false},
+  {label:'Electrical isolation confirmed and tested dead',tag:'req',done:false},
+  {label:'Fire extinguisher on site',tag:'req',done:false},
+  {label:'First aid kit available',tag:'rec',done:false},
+  {label:'Emergency contacts posted on site',tag:'rec',done:false},
+  {label:'Toolbox talk conducted',tag:'rec',done:false},
+  {label:'Site induction completed',tag:'rec',done:false},
+  {label:'Incident reporting procedure communicated',tag:'opt',done:false},
+  {label:'Environmental impact assessment',tag:'opt',done:false},
+];
+function openHSEEditor(){
+  renderHSEStageStrip();
+  renderHSEChecklist();
+  renderRiskTable();
+  openEditor('hse-editor');
+}
+function renderHSEStageStrip(){
+  const strip=document.getElementById('hse-stage-strip');
+  if(!strip)return;
+  strip.innerHTML=HSE_STAGES.map((s,i)=>`<div class="de-stage ${i<hseStageIdx?'done':i===hseStageIdx?'active':''}" onclick="setHSEStage(${i})">${s}</div>`).join('');
+  const sub=document.getElementById('hse-editor-sub');
+  if(sub)sub.textContent='JOB-0042 · '+HSE_STAGES[hseStageIdx];
+  const sbstage=document.getElementById('hse-sb-stage');
+  if(sbstage)sbstage.textContent=HSE_STAGES[hseStageIdx];
+}
+function renderHSEChecklist(){
+  const body=document.getElementById('hse-checklist-body');
+  if(!body)return;
+  body.innerHTML=HSE_CHECKLIST_ITEMS.map((item,i)=>`
+    <div class="de-check-item">
+      <input type="checkbox" ${item.done?'checked':''} onchange="HSE_CHECKLIST_ITEMS[${i}].done=this.checked;updateHSECheckProgress()">
+      <span class="de-check-label">${item.label}</span>
+      <span class="de-check-tag ${item.tag}">${item.tag==='req'?'Required':item.tag==='rec'?'Recommended':'Optional'}</span>
+    </div>`).join('');
+  updateHSECheckProgress();
+}
+function updateHSECheckProgress(){
+  const done=HSE_CHECKLIST_ITEMS.filter(i=>i.done).length;
+  const total=HSE_CHECKLIST_ITEMS.length;
+  const el=document.getElementById('hse-check-progress');if(el)el.textContent=done+' / '+total+' complete';
+  const sb=document.getElementById('hse-sb-check');if(sb)sb.textContent=done+' / '+total;
+}
+function setHSEStage(i){
+  hseStageIdx=i;
+  renderHSEStageStrip();
+  // Also update the tab-based HSE pipeline if visible
+  renderHSEPipeline();
+  toast('HSE pack moved to "'+HSE_STAGES[i]+'"','success');
+}
+function advanceHSEStage(){
+  if(hseStageIdx<HSE_STAGES.length-1){setHSEStage(hseStageIdx+1);}
+  else{toast('HSE Pack is already at the final stage','');}
+}
 function generateHSE(){
-  if(hseStageIdx===0){hseStageIdx=1;renderHSEPipeline();}
-  document.getElementById('hse-meta').textContent='Assembling';
-  document.getElementById('hse-generate-btn').innerHTML='<span class="ms">open_in_new</span>Open';
+  if(hseStageIdx===0){hseStageIdx=1;}
+  const em=document.getElementById('hse-meta');if(em)em.textContent=HSE_STAGES[hseStageIdx];
+  const gb=document.getElementById('hse-generate-btn');
+  if(gb){gb.innerHTML='<span class="ms">open_in_new</span>Open';gb.onclick=openHSEEditor;}
   toast('HSE pack generated and now assembling','success');
-  switchTab('hse',null);
-  document.querySelector('.tab-btn[onclick*="hse"]').classList.add('active');
+  openHSEEditor();
 }
 function renderRiskTable(){
   const tbody=document.getElementById('risk-tbody');
+  if(!tbody)return;
   tbody.innerHTML=RISK_ROWS.map((r,i)=>{
     const rating=r.l*r.c;
     const cls=rating>=10?'risk-high':rating>=6?'risk-med':'risk-low';
     return `<tr>
       <td><input value="${r.hazard}" onchange="RISK_ROWS[${i}].hazard=this.value"></td>
       <td><input value="${r.activity}" onchange="RISK_ROWS[${i}].activity=this.value"></td>
-      <td><input type="number" value="${r.l}" min="1" max="5" style="width:40px" onchange="RISK_ROWS[${i}].l=+this.value;updateRiskRating(${i})"></td>
-      <td><input type="number" value="${r.c}" min="1" max="5" style="width:40px" onchange="RISK_ROWS[${i}].c=+this.value;updateRiskRating(${i})"></td>
+      <td><input type="number" value="${r.l}" min="1" max="5" style="width:50px" onchange="RISK_ROWS[${i}].l=+this.value;updateRiskRating(${i})"></td>
+      <td><input type="number" value="${r.c}" min="1" max="5" style="width:50px" onchange="RISK_ROWS[${i}].c=+this.value;updateRiskRating(${i})"></td>
       <td><span class="risk-badge ${cls}" id="risk-rating-${i}">${rating}</span></td>
       <td><input value="${r.control}" onchange="RISK_ROWS[${i}].control=this.value"></td>
-      <td><button class="btn ghost sm" onclick="removeRiskRow(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
+      <td><button class="de-del-row" onclick="removeRiskRow(${i})"><span class="ms">delete</span></button></td>
     </tr>`;
   }).join('');
 }
@@ -2134,144 +4899,15 @@ function updateRiskRating(i){
   const el=document.getElementById('risk-rating-'+i);
   if(el){el.textContent=rating;el.className='risk-badge '+cls;}
 }
-function addRiskRow(){
-  RISK_ROWS.push({hazard:'New hazard',activity:'',l:1,c:1,control:''});
-  renderRiskTable();
-}
+function addRiskRow(){RISK_ROWS.push({hazard:'New hazard',activity:'',l:1,c:1,control:''});renderRiskTable();}
 function removeRiskRow(i){RISK_ROWS.splice(i,1);renderRiskTable();}
-// Estimate
-function renderEstimateTable(){
-  const tbody=document.getElementById('est-tbody');
-  tbody.innerHTML=estLines.map((l,i)=>`<tr>
-    <td><input value="${l.desc}" onchange="estLines[${i}].desc=this.value;recalcEst()"></td>
-    <td><select onchange="estLines[${i}].cat=this.value">
-      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===l.cat?'selected':''}>${c}</option>`).join('')}
-    </select></td>
-    <td><input type="number" value="${l.qty}" style="width:60px" onchange="estLines[${i}].qty=+this.value;recalcEst()"></td>
-    <td><input value="${l.unit}" style="width:50px" onchange="estLines[${i}].unit=this.value"></td>
-    <td><input type="number" value="${l.price}" style="width:80px" onchange="estLines[${i}].price=+this.value;recalcEst()"></td>
-    <td style="font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
-    <td><button class="btn ghost sm" onclick="removeEstLine(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
-  </tr>`).join('');
-  recalcEst();
+// Keep the old HSE pipeline renderer for the tab view
+function renderHSEPipeline(){
+  const p=document.getElementById('hse-pipeline');
+  if(!p)return;
+  p.innerHTML=HSE_STAGES.map((s,i)=>`<div class="hse-step ${i<hseStageIdx?'done':i===hseStageIdx?'active':''}" onclick="setHSEStage(${i})">${s}</div>`).join('');
 }
-function recalcEst(){
-  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
-  const vat=sub*0.15;
-  document.getElementById('est-subtotal').textContent=fmt(sub);
-  document.getElementById('est-vat').textContent=fmt(Math.round(vat));
-  document.getElementById('est-total').textContent=fmt(Math.round(sub+vat));
-}
-function addEstimateLine(){estLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});renderEstimateTable();}
-function removeEstLine(i){estLines.splice(i,1);renderEstimateTable();}
-function saveEstimate(){
-  const sub=estLines.reduce((s,l)=>s+l.qty*l.price,0);
-  document.getElementById('pl-est').textContent=fmt(sub);
-  const quote=48500;const profit=quote-sub;
-  document.getElementById('pl-profit').textContent=(profit>=0?'+':'')+fmt(profit);
-  document.getElementById('pl-amount').textContent=(profit>=0?'+':'')+fmt(profit);
-  document.getElementById('pl-margin').textContent=((profit/quote)*100).toFixed(1)+'% margin';
-  closeModal('estimate-modal');
-  toast('Estimate saved and finalised','success');
-  addTimelineItem('doc','calculate','Estimate updated',estLines.length+' items · '+fmt(sub),new Date().toLocaleString());
-}
-function openEstimateModal(){renderEstimateTable();openModal('estimate-modal');}
-function openQuoteModal(){openModal('quote-modal');}
-function acceptQuote(){
-  closeModal('quote-modal');
-  if(currentStageIdx<3){currentStageIdx=3;updateJobStatus();}
-  toast('Quote marked as accepted. Job moved to Quote Accepted.','success');
-}
-function openInvoiceModal(){
-  const today=new Date();
-  const due=new Date(today);due.setDate(due.getDate()+30);
-  document.getElementById('inv-date').value=today.toISOString().split('T')[0];
-  document.getElementById('inv-due').value=due.toISOString().split('T')[0];
-  openModal('invoice-modal');
-}
-function createInvoice(){
-  closeModal('invoice-modal');
-  document.getElementById('invoice-meta').textContent='INV-0089 · R 48,500';
-  document.getElementById('invoice-create-btn').innerHTML='<span class="ms">open_in_new</span>Open';
-  document.getElementById('invoice-create-btn').className='doc-action';
-  toast('Invoice INV-0089 created','success');
-  addTimelineItem('doc','receipt_long','Invoice created','INV-0089 · R 48,500',new Date().toLocaleString());
-}
-function openActualCostsModal(){
-  renderCostTable();
-  openModal('actual-costs-modal');
-}
-function renderCostTable(){
-  const tbody=document.getElementById('costs-tbody');
-  tbody.innerHTML=actualCostEntries.map((e,i)=>`<tr>
-    <td><input type="date" value="${e.date}" onchange="actualCostEntries[${i}].date=this.value;recalcCosts()"></td>
-    <td><select onchange="actualCostEntries[${i}].cat=this.value">
-      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===e.cat?'selected':''}>${c}</option>`).join('')}
-    </select></td>
-    <td><input value="${e.desc}" onchange="actualCostEntries[${i}].desc=this.value"></td>
-    <td><input value="${e.supplier}" onchange="actualCostEntries[${i}].supplier=this.value"></td>
-    <td><input type="number" value="${e.amount}" onchange="actualCostEntries[${i}].amount=+this.value;recalcCosts()"></td>
-    <td><button class="btn ghost sm" onclick="removeCostLine(${i})"><span class="ms" style="font-size:13px">delete</span></button></td>
-  </tr>`).join('');
-  recalcCosts();
-}
-function addCostLine(){
-  actualCostEntries.push({date:new Date().toISOString().split('T')[0],cat:'Materials',desc:'',supplier:'',amount:0});
-  renderCostTable();
-}
-function removeCostLine(i){actualCostEntries.splice(i,1);renderCostTable();}
-function recalcCosts(){
-  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
-  document.getElementById('costs-total').textContent=fmt(total);
-}
-function saveActualCosts(){
-  const total=actualCostEntries.reduce((s,e)=>s+e.amount,0);
-  document.getElementById('actual-costs-meta').textContent=fmt(total)+' · '+actualCostEntries.length+' entries';
-  document.getElementById('pl-actual').textContent=fmt(total);
-  document.getElementById('pl-actual').style.color='var(--fg-2)';
-  // Update guard key
-  const gk=GUARD_KEYS['In Progress'];
-  if(gk){const ir=gk.find(g=>g.key==='Invoice Ready');if(ir&&total>0)ir.met=true;}
-  renderGuardKeys();
-  closeModal('actual-costs-modal');
-  toast('Actual costs saved','success');
-  addTimelineItem('doc','attach_money','Actual costs updated',fmt(total)+' · '+actualCostEntries.length+' entries',new Date().toLocaleString());
-}
-// Jobcard
-function openJobcardModal(){openModal('jobcard-modal');}
-function addPhoto(slot){
-  // Simulate adding a photo with a coloured placeholder
-  const colors=['#ddd6fe','#bfdbfe','#bbf7d0','#fde68a','#fecaca'];
-  const c=colors[photoCount%colors.length];
-  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</div>`;
-  slot.onclick=null;
-  photoCount++;
-  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · '+(jobcardSigned?'Signed':'Awaiting signature');
-  // Add new empty slot if all filled
-  const grid=document.getElementById('photo-grid');
-  if(!grid.querySelector('.photo-slot[onclick]')){
-    const ns=document.createElement('div');ns.className='photo-slot';ns.innerHTML='<span class="ms">add_a_photo</span>';ns.onclick=()=>addPhoto(ns);grid.appendChild(ns);
-  }
-}
-function captureSignature(){
-  const box=document.getElementById('sig-box');
-  box.classList.add('signed');
-  document.getElementById('sig-label').textContent='✓ Signed by client — '+new Date().toLocaleString();
-  jobcardSigned=true;
-  // Update guard key
-  const gk=GUARD_KEYS['In Progress'];
-  if(gk){const js=gk.find(g=>g.key==='Jobcard Signed');if(js)js.met=true;}
-  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · Signed';
-  document.getElementById('jobcard-status-pill').innerHTML='<span class="pill pill-green" style="font-size:9.5px">Signed</span>';
-  renderGuardKeys();
-  toast('Signature captured','success');
-}
-function saveJobcard(){
-  closeModal('jobcard-modal');
-  toast('Jobcard saved','success');
-  addTimelineItem('doc','assignment','Jobcard updated',photoCount+' photos · '+(jobcardSigned?'Signed':'Unsigned'),new Date().toLocaleString());
-}
-// Unlock
+
 function openUnlockModal(){openModal('unlock-modal');}
 function confirmUnlock(){
   const reason=document.getElementById('unlock-reason').value.trim();
@@ -2298,7 +4934,35 @@ function openDeleteConfirm(){
   openModal('delete-confirm-modal');
 }
 // Edit job
-function openEditJobModal(){openModal('edit-job-modal');}
+function populateSiteDropdown(client, selectedSite){
+  const sel = document.getElementById('ej-site');
+  const sites = CLIENT_SITES[client] || [];
+  sel.innerHTML = sites.map(s=>`<option${s===selectedSite?' selected':''}>${s}</option>`).join('');
+  // If current site not in list, add it as first option
+  if(selectedSite && !sites.includes(selectedSite)){
+    sel.insertAdjacentHTML('afterbegin',`<option selected>${selectedSite}</option>`);
+  }
+}
+function openEditJobModal(){
+  const j = JOBS.find(j=>j.num===currentJobNum);
+  if(!j) return;
+  // Pre-fill client
+  const clientSel = document.getElementById('ej-client');
+  clientSel.value = j.client;
+  // Populate site dropdown for this client
+  populateSiteDropdown(j.client, j.site);
+  // Wire client change to refresh site dropdown
+  clientSel.onchange = ()=> populateSiteDropdown(clientSel.value, '');
+  // Pre-fill other fields
+  const setVal = (id,v)=>{ const el=document.getElementById(id); if(el) el.value=v; };
+  setVal('ej-type', j.type||'');
+  setVal('ej-nature', j.nature||'To Be Done');
+  setVal('ej-priority', j.priority||'Normal');
+  setVal('ej-req-date', j.reqDate||'2026-07-18');
+  setVal('ej-ref', j.ref||'');
+  setVal('ej-desc', j.desc||'');
+  openModal('edit-job-modal');
+}
 function saveJobEdit(){
   const j=JOBS.find(j=>j.num===currentJobNum);
   if(j){
@@ -2345,6 +5009,21 @@ function initColResize(tableId){
 // ═══════════════════════════════════════════════════════════
 applyFilters();
 renderChart();
+
+// ═══════════════════════════════════════════════════════════
+// METRIC CARD REACTIVE GRADIENT (matches UI kit stat-card)
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('mousemove',e=>{
+  const card=e.target.closest('.metric-card');
+  if(!card)return;
+  const r=card.getBoundingClientRect();
+  card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+  card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+});
+document.addEventListener('mouseleave',e=>{
+  const card=e.target.closest('.metric-card');
+  if(card){card.style.setProperty('--mx','50%');card.style.setProperty('--my','50%');}
+},true);
 </script>
 </body>
 </html>
