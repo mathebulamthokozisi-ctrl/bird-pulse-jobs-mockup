@@ -818,12 +818,85 @@ td:first-child{padding:8px 8px}
 .risk-med{background:var(--amber-100);color:var(--amber-700)}
 .risk-low{background:var(--green-100);color:var(--green-700)}
 
-/* Modals */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(2px);opacity:0;transition:opacity .18s ease}
-.modal-overlay.open{display:flex;animation:modal-backdrop-in .18s ease forwards}
-@keyframes modal-backdrop-in{from{opacity:0}to{opacity:1}}
-.modal{background:var(--white);border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);width:100%;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;border:1px solid var(--border);animation:modal-panel-in .2s cubic-bezier(.34,1.3,.64,1) both}
-@keyframes modal-panel-in{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:none}}
+/* ── Apple-style Modal System ──────────────────────────────
+   Enter: scale .88→1 + opacity 0→1, Apple decel curve 320ms
+   Exit:  scale 1→.92 + opacity 1→0, fast ease-in 200ms
+   Backdrop: blur 0→8px + dim 0→.5, same timing
+   ────────────────────────────────────────────────────────── */
+
+/* Timing tokens */
+:root{
+  --apple-enter: 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  --apple-exit:  200ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Overlay — hidden by default via opacity+pointer-events, NOT display:none
+   so we can animate the exit before removing .open */
+.modal-overlay{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:20px;
+  /* backdrop */
+  background:rgba(0,0,0,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  /* hidden state */
+  opacity:0;
+  pointer-events:none;
+  transition:
+    opacity      var(--apple-enter),
+    background   var(--apple-enter),
+    backdrop-filter var(--apple-enter),
+    -webkit-backdrop-filter var(--apple-enter);
+}
+.modal-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.modal-overlay.closing{
+  opacity:0;
+  pointer-events:none;
+  background:rgba(0,0,0,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:
+    opacity      var(--apple-exit),
+    background   var(--apple-exit),
+    backdrop-filter var(--apple-exit),
+    -webkit-backdrop-filter var(--apple-exit);
+}
+
+/* Panel */
+.modal{
+  background:var(--white);
+  border-radius:var(--radius-xl);
+  box-shadow:0 24px 60px rgba(0,0,0,.22), 0 4px 16px rgba(0,0,0,.1);
+  width:100%;max-height:90vh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  border:1px solid rgba(255,255,255,.15);
+  /* enter state */
+  transform:scale(.88);
+  opacity:0;
+  transition:
+    transform var(--apple-enter),
+    opacity  var(--apple-enter);
+  will-change:transform,opacity;
+}
+.modal-overlay.open .modal{
+  transform:scale(1);
+  opacity:1;
+}
+.modal-overlay.closing .modal{
+  transform:scale(.92);
+  opacity:0;
+  transition:
+    transform var(--apple-exit),
+    opacity  var(--apple-exit);
+}
 .modal-sm{max-width:420px}
 .modal-md{max-width:560px}
 .modal-lg{max-width:720px}
@@ -915,6 +988,7 @@ td:first-child{padding:8px 8px}
    ══════════════════════════════════════════ */
 
 /* ── Base overlay ── */
+/* Doc editors — Apple sheet-style: slide up from bottom */
 .doc-editor {
   position: fixed;
   inset: 0;
@@ -923,12 +997,28 @@ td:first-child{padding:8px 8px}
   flex-direction: column;
   background: #f0f2f5;
   font-family: inherit;
+  /* hidden state: pushed down + invisible */
   opacity: 0;
   pointer-events: none;
-  transform: translateY(12px);
-  transition: opacity .2s ease, transform .2s cubic-bezier(.4,0,.2,1);
+  transform: translateY(40px);
+  transition:
+    opacity    var(--apple-enter),
+    transform  var(--apple-enter);
+  will-change: transform, opacity;
 }
-.doc-editor.open { opacity: 1; pointer-events: auto; transform: none; }
+.doc-editor.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.doc-editor.closing {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(24px);
+  transition:
+    opacity    var(--apple-exit),
+    transform  var(--apple-exit);
+}
 
 /* ── Topbar — clean white, professional ── */
 .de-topbar {
@@ -4433,8 +4523,26 @@ function toast(msg,type=''){
   c.appendChild(t);
   setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300)},3000);
 }
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openModal(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  // Cancel any in-progress close
+  el.classList.remove('closing');
+  // Force a reflow so the transition fires from the hidden state
+  void el.offsetWidth;
+  el.classList.add('open');
+}
+function closeModal(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.add('closing');
+  el.classList.remove('open');
+  // Remove .closing after exit animation completes (200ms)
+  const cleanup=()=>{ el.classList.remove('closing'); };
+  el.addEventListener('transitionend', cleanup, {once:true});
+  // Fallback in case transitionend doesn't fire
+  setTimeout(cleanup, 250);
+}
 function statusPill(s){
   const LABELS={job_booked:'Job Booked',estimate_done:'Estimate Done',quote_drafted:'Quote Drafted',quote_sent:'Quote Sent',quote_finalized:'Quote Finalized',quote_accepted:'Quote Accepted',quote_declined:'Quote Declined',on_my_way:'On My Way',work_in_progress:'Work In Progress',job_in_progress:'Job In Progress',job_completed:'Job Completed',work_client_approved:'Client Approved',invoiced:'Invoiced',paid:'Paid',commission_paid:'Commission Paid',cancelled:'Cancelled'};
   const VARIANTS={job_booked:'badge-slate',estimate_done:'badge-slate',quote_drafted:'badge-slate',quote_sent:'badge-amber',quote_finalized:'badge-amber',quote_accepted:'badge-indigo',quote_declined:'badge-red',on_my_way:'badge-indigo',work_in_progress:'badge-indigo',job_in_progress:'badge-indigo',job_completed:'badge-green',work_client_approved:'badge-green',invoiced:'badge-green',paid:'badge-green',commission_paid:'badge-green',cancelled:'badge-red'};
@@ -5140,16 +5248,23 @@ function openCommPopout(id){
   renderPopoutMessages(t);
   document.getElementById('cp-compose').innerHTML = '';
   document.getElementById('cp-attach-row').innerHTML = '';
-  // Show and position the dialog
+  // Show and position the dialog — Apple spring entrance
   const dlg = document.getElementById('comm-popout-modal');
   dlg.style.display = 'flex';
   dlg.style.opacity = '0';
-  dlg.style.transform = 'scale(.96) translateY(8px)';
-  dlg.style.transition = 'opacity .18s ease, transform .2s cubic-bezier(.34,1.3,.64,1)';
+  dlg.style.transform = 'scale(0.88)';
+  dlg.style.transition = 'none';
+  // Force reflow so the initial state is painted before animating
+  void dlg.offsetWidth;
+  dlg.style.transition = 'opacity var(--apple-enter), transform var(--apple-enter)';
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     dlg.style.opacity = '1';
-    dlg.style.transform = 'none';
-    setTimeout(()=>{dlg.style.transition='';},220);
+    dlg.style.transform = 'scale(1)';
+    setTimeout(()=>{
+      dlg.style.transition='';
+      dlg.style.transform='';
+      dlg.style.opacity='';
+    }, 340);
   }));
   // Restore saved prefs, or default to centred
   const savedPrefs = localStorage.getItem('bp_popout_prefs');
@@ -5198,16 +5313,17 @@ function renderPopoutMessages(t){
 }
 function closeCommPopout(){
   const dlg = document.getElementById('comm-popout-modal');
-  dlg.style.transition = 'opacity .15s ease, transform .15s ease';
+  // Apple exit: scale down + fade, fast ease-in
+  dlg.style.transition = 'opacity var(--apple-exit), transform var(--apple-exit)';
   dlg.style.opacity = '0';
-  dlg.style.transform = 'scale(.97) translateY(4px)';
+  dlg.style.transform = 'scale(0.92)';
   setTimeout(()=>{
     dlg.style.display = 'none';
     dlg.style.opacity = '';
     dlg.style.transform = '';
     dlg.style.transition = '';
     commPopoutId = null;
-  }, 160);
+  }, 220);
 }
 function sendCommReplyPopout(){
   const div = document.getElementById('cp-compose');
@@ -5424,12 +5540,22 @@ function addTimelineItem(type,icon,title,sub,time){
 // DOCUMENT EDITORS — open / close
 // ═══════════════════════════════════════════════════════════
 function openEditor(id){
-  document.getElementById(id).classList.add('open');
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('closing');
+  void el.offsetWidth;
+  el.classList.add('open');
   document.body.style.overflow='hidden';
 }
 function closeEditor(id){
-  document.getElementById(id).classList.remove('open');
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.add('closing');
+  el.classList.remove('open');
   document.body.style.overflow='';
+  const cleanup=()=>{ el.classList.remove('closing'); };
+  el.addEventListener('transitionend', cleanup, {once:true});
+  setTimeout(cleanup, 250);
 }
 
 // ── Generic tab switcher for editors ──────────────────────
