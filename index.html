@@ -748,20 +748,10 @@ td:first-child{padding:8px 6px}
   padding: 0 16px;
   height: 48px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 40%, #fde68a 100%);
-  border-bottom: 1px solid #fcd34d;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
-}
-/* Shimmer sweep — same as exec-zone */
-.de-topbar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.45) 50%, transparent 60%);
-  background-size: 200% 100%;
-  animation: exec-shimmer 3s ease-in-out infinite;
-  pointer-events: none;
 }
 .de-topbar-back, .de-back {
   display: inline-flex;
@@ -972,6 +962,8 @@ td:first-child{padding:8px 6px}
   font-weight: 500;
 }
 .de-card-body { padding: 0; }
+.doc-editor .de-card-body { padding: 16px; }
+.doc-editor .de-card-body .form-group + .form-group { margin-top: 14px; }
 
 /* ── Line-item table ── */
 .de-line-table {
@@ -1017,6 +1009,7 @@ td:first-child{padding:8px 6px}
   outline: none;
   box-shadow: none;
   width: 100%;
+  min-width: 80px;
   background: transparent;
   transition: border-color .12s, background .12s;
   -webkit-appearance: none;
@@ -1638,7 +1631,7 @@ td:first-child{padding:8px 6px}
   overflow-x: auto;
   overflow-y: hidden;
   flex-shrink: 0;
-  max-width: 60%;
+  max-width: 480px;
   scrollbar-width: none;
 }
 .de-statusbar .de-stage-strip::-webkit-scrollbar { display: none; }
@@ -2313,11 +2306,11 @@ td:first-child{padding:8px 6px}
             <label>Job Description</label>
             <textarea class="de-notes-area" id="est-scope" placeholder="Describe the work to be performed (this populates the estimate PDF scope section)…" style="min-height:90px">Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.</textarea>
           </div>
-          <div class="form-group" style="margin-top:12px">
+          <div class="form-group">
             <label>Method Statement <span style="font-weight:400;color:var(--muted-fg);text-transform:none">(optional)</span></label>
             <textarea class="de-notes-area" id="est-method" placeholder="How the work will be carried out…" style="min-height:70px"></textarea>
           </div>
-          <div class="form-group" style="margin-top:12px">
+          <div class="form-group">
             <label>Assumptions <span style="font-weight:400;color:var(--muted-fg);text-transform:none">(optional)</span></label>
             <textarea class="de-notes-area" id="est-assumptions" placeholder="List any assumptions made in this estimate…" style="min-height:60px"></textarea>
           </div>
@@ -2353,7 +2346,7 @@ td:first-child{padding:8px 6px}
         </div>
       </div>
 
-      <!-- Section: Equipment -->
+          <!-- Section: Equipment -->
       <div class="de-card">
         <div class="de-card-header" style="background:#fef3c7;border-bottom:1px solid #fde68a">
           <span class="ms" style="color:#d97706">construction</span>
@@ -2366,7 +2359,7 @@ td:first-child{padding:8px 6px}
             <thead>
               <tr>
                 <th style="width:36%">Description</th>
-                <th style="width:13%">Type</th>
+                <th style="width:13%">Category</th>
                 <th style="width:7%">Qty</th>
                 <th style="width:8%">Unit</th>
                 <th style="width:13%">Unit Cost (R)</th>
@@ -2397,7 +2390,7 @@ td:first-child{padding:8px 6px}
             <thead>
               <tr>
                 <th style="width:36%">Description</th>
-                <th style="width:13%">Type</th>
+                <th style="width:13%">Category</th>
                 <th style="width:7%">Qty</th>
                 <th style="width:8%">Unit</th>
                 <th style="width:13%">Unit Cost (R)</th>
@@ -4735,10 +4728,11 @@ function renderEstCatBar(){
   const cats={};
   estLines.forEach(l=>{cats[l.cat]=(cats[l.cat]||0)+l.qty*l.price;});
   const total=Object.values(cats).reduce((a,b)=>a+b,0)||1;
-  const catClass={'Materials':'cat-materials','Labour':'cat-labour','Subcontractor':'cat-subcon','Travel':'cat-travel','Other':'cat-other'};
+  const catClass={materials:'cat-materials',labour:'cat-labour',subcontractor:'cat-subcon',travel:'cat-travel',plant_equipment:'cat-materials',waste_disposal:'cat-other',site_establishment:'cat-other',hse_safety:'cat-other',other:'cat-other'};
+  const catLabel={materials:'Materials',labour:'Labour',subcontractor:'Subcontractor',travel:'Travel',plant_equipment:'Equipment',waste_disposal:'Waste',site_establishment:'Site Est.',hse_safety:'HSE',other:'Other'};
   bar.innerHTML=Object.entries(cats).map(([k,v])=>`
     <div class="de-cat-row">
-      <span class="de-cat-name">${k}</span>
+      <span class="de-cat-name">${catLabel[k]||k}</span>
       <div class="de-cat-track"><div class="de-cat-fill ${catClass[k]||'cat-materials'}" style="width:${(v/total*100).toFixed(1)}%"></div></div>
       <span class="de-cat-val">${fmt(v)}</span>
     </div>`).join('');
@@ -4806,7 +4800,7 @@ function renderQuoteTable(){
   recalcQuote();
 }
 function addQuoteLine(){
-  quoteLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+  quoteLines.push({desc:'New item',cat:'materials',qty:1,unit:'ea',price:0});
   renderQuoteTable();
 }
 function recalcQuote(){
@@ -4818,6 +4812,17 @@ function recalcQuote(){
   if(el_sub)el_sub.textContent=fmt(sub);
   if(el_vat)el_vat.textContent=fmt(vat);
   if(el_tot)el_tot.textContent=fmt(sub+vat);
+  // Sync sidebar
+  const sbBig=document.querySelector('#quote-editor .de-big-num');
+  const sbSub=document.querySelector('#quote-editor .de-big-sub');
+  if(sbBig)sbBig.textContent=fmt(sub);
+  if(sbSub)sbSub.textContent='Excl. VAT · '+fmt(sub+vat)+' incl.';
+  const estCost=estLines.reduce((s,l)=>s+l.qty*l.price,0);
+  const profit=sub-estCost;
+  const sbProfit=document.querySelector('#quote-editor .de-sb-total .val');
+  const sbMargin=document.querySelector('#quote-editor .de-sb-section:nth-child(2) div[style*="green"]');
+  if(sbProfit){sbProfit.textContent=(profit>=0?'+':'')+fmt(profit);sbProfit.className='val '+(profit>=0?'profit':'loss');}
+  if(sbMargin&&sub>0)sbMargin.textContent=((profit/sub)*100).toFixed(1)+'% margin';
 }
 function acceptQuote(){
   closeEditor('quote-editor');
@@ -4859,7 +4864,7 @@ function renderInvTable(){
   recalcInv();
 }
 function addInvLine(){
-  invLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+  invLines.push({desc:'New item',cat:'materials',qty:1,unit:'ea',price:0});
   renderInvTable();
 }
 function recalcInv(){
@@ -4871,6 +4876,11 @@ function recalcInv(){
   if(el_sub)el_sub.textContent=fmt(sub);
   if(el_vat)el_vat.textContent=fmt(vat);
   if(el_tot)el_tot.textContent=fmt(sub+vat);
+  // Sync sidebar
+  const sbBig=document.querySelector('#invoice-editor .de-big-num');
+  const sbSub=document.querySelector('#invoice-editor .de-big-sub');
+  if(sbBig)sbBig.textContent=fmt(sub+vat);
+  if(sbSub)sbSub.textContent='Total due (incl. VAT)';
 }
 function markInvoicePaid(){
   const pill=document.getElementById('inv-status-pill');
@@ -4982,11 +4992,12 @@ function renderCostsCatBar(){
   const cats={};
   actualCostEntries.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount;});
   const total=Object.values(cats).reduce((a,b)=>a+b,0)||1;
-  const catClass={'Materials':'cat-materials','Labour':'cat-labour','Subcontractor':'cat-subcon','Travel':'cat-travel','Other':'cat-other'};
+  const catClass={materials:'cat-materials',labour:'cat-labour',subcontractor:'cat-subcon',travel:'cat-travel',plant_equipment:'cat-materials',waste_disposal:'cat-other',site_establishment:'cat-other',hse_safety:'cat-other',asset_recoupment:'cat-other',other:'cat-other'};
+  const catLabel={materials:'Materials',labour:'Labour',subcontractor:'Subcontractor',travel:'Travel',plant_equipment:'Equipment',waste_disposal:'Waste',site_establishment:'Site Est.',hse_safety:'HSE',asset_recoupment:'Asset Rec.',other:'Other'};
   if(Object.keys(cats).length===0){bar.innerHTML='<div style="font-size:11.5px;color:var(--muted-fg)">No entries yet</div>';return;}
   bar.innerHTML=Object.entries(cats).map(([k,v])=>`
     <div class="de-cat-row">
-      <span class="de-cat-name">${k}</span>
+      <span class="de-cat-name">${catLabel[k]||k}</span>
       <div class="de-cat-track"><div class="de-cat-fill ${catClass[k]||'cat-materials'}" style="width:${(v/total*100).toFixed(1)}%"></div></div>
       <span class="de-cat-val">${fmt(v)}</span>
     </div>`).join('');
