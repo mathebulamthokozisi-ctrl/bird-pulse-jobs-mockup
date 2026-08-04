@@ -1,1151 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bird Pulse — UI Kit</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-<style>
-/* ── Tokens (exact match with index.html) ── */
-:root{
-  --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-200:#c7d2fe;--indigo-300:#a5b4fc;
-  --indigo-400:#818cf8;--indigo-500:#6366f1;--indigo-600:#4f46e5;--indigo-700:#4338ca;
-  --indigo-800:#3730a3;--indigo-900:#312e81;
-  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;
-  --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;
-  --slate-800:#1e293b;--slate-900:#0f172a;
-  --green-50:#f0fdf4;--green-100:#dcfce7;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;
-  --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;--red-700:#b91c1c;
-  --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-600:#d97706;--amber-700:#b45309;
-  --orange-500:#f97316;--orange-600:#ea580c;
-  --bg:#f0f2f5;--white:#ffffff;--border:#e8eaed;
-  --row-alt:#fafafa;
-  --fg:#0f172a;--fg-2:#334155;--muted-fg:#64748b;--muted:#f8fafc;
-  --radius:6px;--shadow:0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --shadow-lg:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-size:14px;line-height:1.5}
-.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:18px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:'liga';-webkit-font-smoothing:antialiased}
-
-/* ── Page layout ── */
-.kit-header{background:var(--indigo-600);padding:48px 64px 40px;color:#fff}
-.kit-header-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;opacity:.7;margin-bottom:10px}
-.kit-header-title{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:12px}
-.kit-header-sub{font-size:15px;opacity:.75;max-width:520px;line-height:1.6}
-.kit-header-meta{display:flex;gap:32px;margin-top:28px}
-.kit-header-meta-item{display:flex;flex-direction:column;gap:2px}
-.kit-header-meta-item .val{font-size:22px;font-weight:700}
-.kit-header-meta-item .lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.08em}
-
-.kit-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 64px;display:flex;gap:0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.kit-nav a{display:block;padding:14px 16px;font-size:12.5px;font-weight:600;color:var(--muted-fg);text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
-.kit-nav a:hover{color:var(--fg)}
-.kit-nav a.active{color:var(--indigo-600);border-bottom-color:var(--indigo-600)}
-
-.kit-body{max-width:1200px;margin:0 auto;padding:48px 64px 80px}
-.kit-section{margin-bottom:64px}
-.kit-section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.kit-section-title{font-size:20px;font-weight:700;letter-spacing:-.01em}
-.kit-section-num{font-size:12px;font-weight:700;color:var(--indigo-500);background:var(--indigo-50);padding:2px 8px;border-radius:20px}
-.kit-section-desc{font-size:13px;color:var(--muted-fg);margin-left:auto}
-
-/* ── Swatch grid ── */
-.swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px}
-.swatch{border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
-.swatch-color{height:52px}
-.swatch-info{background:var(--white);padding:6px 8px;border-top:1px solid var(--border)}
-.swatch-name{font-size:10px;font-weight:700;color:var(--fg-2)}
-.swatch-hex{font-size:9.5px;color:var(--muted-fg);font-family:monospace}
-
-/* ── Component rows ── */
-.comp-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:20px}
-.comp-group{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:16px}
-.comp-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted-fg);margin-bottom:16px}
-
-/* ── Annotation ── */
-.anno{font-size:10px;color:var(--muted-fg);background:var(--slate-50);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:monospace;white-space:nowrap}
-
-/* ── Buttons ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;font-family:'Inter',sans-serif;white-space:nowrap}
-.btn .ms{font-size:15px}
-.btn-primary{background:var(--indigo-600);color:#fff}
-.btn-primary:hover{background:var(--indigo-700)}
-.btn-secondary{background:var(--white);color:var(--fg);border:1px solid var(--border);box-shadow:var(--shadow)}
-.btn-secondary:hover{background:var(--slate-50);border-color:var(--slate-300)}
-.btn-ghost{background:transparent;color:var(--fg-2);border:1px solid transparent}
-.btn-ghost:hover{background:var(--slate-100)}
-.btn-danger{background:var(--red-600);color:#fff}
-.btn-danger:hover{background:var(--red-700)}
-.btn-success{background:var(--green-600);color:#fff}
-.btn-success:hover{background:var(--green-700)}
-.btn-indigo-soft{background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-100)}
-.btn-indigo-soft:hover{background:var(--indigo-100)}
-.btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:5px}
-.btn-lg{height:42px;padding:0 20px;font-size:14px}
-.btn-icon{width:34px;padding:0;justify-content:center}
-.btn-icon.btn-sm{width:28px}
-.btn-icon.btn-lg{width:42px}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-
-/* ── Status badges ── */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid transparent;white-space:nowrap}
-.badge .ms{font-size:11px}
-.badge-booked{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
-.badge-estimated{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-quoted{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-sent{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-finalized{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-accepted{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-enroute{background:#fffbeb;color:#b45309;border-color:#fde68a}
-.badge-wip{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
-.badge-inprogress{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
-.badge-completed{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-approved{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-invoiced{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-paid{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-commission{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff}
-.badge-declined{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
-.badge-cancelled{background:#f8fafc;color:#64748b;border-color:#e2e8f0}
-
-/* ── Finance badges ── */
-.badge-finance-estimated{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-finance-quoted{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-finance-invoiced{background:#fffbeb;color:#b45309;border-color:#fde68a}
-.badge-finance-paid{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-
-/* ── Priority pills ── */
-.priority{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent}
-.priority-urgent{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
-.priority-high{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
-.priority-normal{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.priority-low{background:#f8fafc;color:#64748b;border-color:#e2e8f0}
-
-/* ── Avatar ── */
-.avatar{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0;border:2px solid var(--white)}
-.avatar-sm{width:26px;height:26px;font-size:10px}
-.avatar-md{width:32px;height:32px;font-size:12px}
-.avatar-lg{width:40px;height:40px;font-size:14px}
-.avatar-xl{width:52px;height:52px;font-size:17px}
-.av-indigo{background:var(--indigo-100);color:var(--indigo-700)}
-.av-green{background:var(--green-100);color:var(--green-700)}
-.av-amber{background:var(--amber-100);color:var(--amber-700)}
-.av-red{background:var(--red-100);color:var(--red-700)}
-.av-slate{background:var(--slate-100);color:var(--slate-700)}
-.avatar-stack{display:flex;flex-direction:row-reverse}
-.avatar-stack .avatar{margin-left:-8px}
-.avatar-stack .avatar:last-child{margin-left:0}
-
-/* ── Guard keys ── */
-.guard-key{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:600}
-.guard-key .ms{font-size:12px}
-.guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
-.guard-key.blocked{background:var(--red-50);color:var(--red-600);border:1px solid var(--red-100)}
-.guard-key.pending{background:var(--slate-50);color:var(--muted-fg);border:1px solid var(--border)}
-
-/* ── Pipeline stepper — rounded-square icon style ── */
-.pipe-demo{
-  background:var(--white);border:1px solid var(--border);border-radius:10px;
-  padding:20px 24px 18px;display:flex;align-items:flex-start;
-  overflow:hidden;position:relative;
-}
-/* Grey connecting line behind icons */
-.pipe-demo::before{
-  content:'';position:absolute;top:40px;left:60px;right:60px;
-  height:2px;background:var(--slate-200);z-index:0;
-}
-.pipe-seg{
-  flex:1;min-width:80px;display:flex;flex-direction:column;
-  align-items:center;gap:8px;cursor:default;position:relative;z-index:1;
-}
-/* Indigo progress fill line on done stages */
-.pipe-seg.done::after{
-  content:'';position:absolute;top:21px;left:50%;right:-50%;
-  height:2px;background:var(--indigo-500);z-index:0;
-}
-.pipe-seg:last-child.done::after{display:none}
-/* Rounded-square icon */
-.pipe-icon-c{
-  width:42px;height:42px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;position:relative;z-index:2;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-.pipe-icon-c .ms{font-size:18px;font-weight:400}
-.pipe-seg.done .pipe-icon-c{background:var(--indigo-600);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.35)}
-.pipe-seg.active .pipe-icon-c{background:var(--white);color:var(--indigo-600);border:2px solid var(--indigo-500);box-shadow:0 4px 14px rgba(79,70,229,.2)}
-.pipe-seg.future .pipe-icon-c{background:#f1f3f7;color:#c4c9d4;border:1.5px solid var(--slate-200);box-shadow:none}
-.pipe-seg.declined .pipe-icon-c{background:#fef2f2;color:#dc2626;border:2px solid #fecaca;box-shadow:0 2px 8px rgba(220,38,38,.15)}
-/* Label */
-.pipe-seg-lbl{font-size:12px;font-weight:700;white-space:nowrap;text-align:center;line-height:1.2}
-.pipe-seg.done .pipe-seg-lbl{color:var(--indigo-700)}
-.pipe-seg.active .pipe-seg-lbl{color:var(--indigo-800)}
-.pipe-seg.future .pipe-seg-lbl{color:var(--slate-400)}
-.pipe-seg.declined .pipe-seg-lbl{color:#b91c1c}
-/* Sub-status chip */
-.pipe-chip-s{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;line-height:1;white-space:nowrap}
-.pipe-seg.done .pipe-chip-s{background:var(--indigo-50);color:var(--indigo-600)}
-.pipe-seg.active .pipe-chip-s{background:var(--indigo-600);color:#fff}
-.pipe-seg.declined .pipe-chip-s{background:#fecaca;color:#b91c1c}
-/* Pulse ring on active icon */
-.pipe-pulse-s{
-  position:absolute;top:-5px;left:-5px;right:-5px;bottom:-5px;
-  border-radius:14px;border:2px solid var(--indigo-300);
-  animation:ppulse 2s ease-in-out infinite;pointer-events:none;z-index:1;
-}
-@keyframes ppulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:0;transform:scale(1.15)}}
-
-/* ── Form controls ── */
-.input{height:34px;border:1px solid var(--border);border-radius:var(--radius);padding:0 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
-.input:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.input::placeholder{color:var(--slate-400)}
-.input-with-icon{position:relative;display:inline-flex;align-items:center}
-.input-with-icon .ms{position:absolute;left:9px;color:var(--slate-400);font-size:16px;pointer-events:none}
-.input-with-icon .input{padding-left:32px}
-.select{height:34px;border:1px solid var(--border);border-radius:var(--radius);padding:0 28px 0 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;outline:none;cursor:pointer;transition:border-color .15s}
-.select:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.textarea{border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white);outline:none;transition:border-color .15s;resize:vertical;width:100%}
-.textarea:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.label{font-size:11.5px;font-weight:600;color:var(--fg-2);display:block;margin-bottom:5px}
-.field{display:flex;flex-direction:column;gap:0}
-.field-hint{font-size:11px;color:var(--muted-fg);margin-top:4px}
-.field-error{font-size:11px;color:var(--red-600);margin-top:4px}
-.input.error{border-color:var(--red-400);box-shadow:0 0 0 3px var(--red-50)}
-
-/* ── Checkbox & Radio ── */
-.check-label{display:inline-flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;user-select:none}
-.check-label input[type=checkbox],.check-label input[type=radio]{accent-color:var(--indigo-600);width:15px;height:15px;cursor:pointer}
-
-/* ── Toggle ── */
-.toggle{position:relative;display:inline-block;width:36px;height:20px}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:var(--slate-200);border-radius:20px;transition:.2s;cursor:pointer}
-.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle input:checked+.toggle-slider{background:var(--indigo-600)}
-.toggle input:checked+.toggle-slider:before{transform:translateX(16px)}
-
-/* ── Cards ── */
-.card{background:var(--white);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:13.5px;font-weight:700;color:var(--fg)}
-.card-body{padding:20px}
-/* ── Stat cards — production style with reactive gradient hover ── */
-.stat-card{
-  position:relative;
-  background:var(--white);
-  border:1px solid var(--border);
-  border-top:2px solid var(--sc-accent,var(--slate-300));
-  border-radius:10px;
-  padding:20px 22px 18px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:box-shadow .2s,transform .18s;
-  cursor:default;
-  --mx:50%;--my:50%;
-}
-.stat-card::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle 180px at var(--mx) var(--my),var(--sc-glow,rgba(99,102,241,.07)),transparent 70%);
-  opacity:0;
-  transition:opacity .25s;
-  pointer-events:none;
-  border-radius:inherit;
-}
-.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.stat-card:hover::before{opacity:1}
-/* accent variants */
-.sc-slate{--sc-accent:var(--slate-300);--sc-glow:rgba(100,116,139,.08)}
-.sc-amber{--sc-accent:#f59e0b;--sc-glow:rgba(245,158,11,.1)}
-.sc-red{--sc-accent:var(--red-500);--sc-glow:rgba(239,68,68,.1)}
-.sc-green{--sc-accent:var(--green-500);--sc-glow:rgba(34,197,94,.1)}
-.sc-indigo{--sc-accent:var(--indigo-500);--sc-glow:rgba(99,102,241,.1)}
-.stat-card-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
-.stat-card-value{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--sc-accent,var(--fg));line-height:1}
-.stat-card-value.neutral{color:var(--fg)}
-.stat-card-sub{font-size:11.5px;color:var(--muted-fg);margin-top:5px}
-.stat-card-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:10px}
-.delta-up{background:var(--green-50);color:var(--green-700)}
-.delta-down{background:var(--red-50);color:var(--red-600)}
-
-/* ── Toast ── */
-.toast-demo{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);max-width:320px}
-.toast-demo .ms{font-size:17px;flex-shrink:0}
-.toast-success{background:#fff;border:1px solid var(--green-100);color:var(--green-700)}
-.toast-error{background:#fff;border:1px solid var(--red-100);color:var(--red-600)}
-.toast-info{background:#fff;border:1px solid var(--indigo-100);color:var(--indigo-700)}
-.toast-warn{background:#fff;border:1px solid var(--amber-100);color:var(--amber-700)}
-
-/* ── Chips ── */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid transparent}
-.chip-default{background:var(--slate-100);color:var(--slate-700);border-color:var(--slate-200)}
-.chip-indigo{background:var(--indigo-50);color:var(--indigo-700);border-color:var(--indigo-100)}
-.chip-green{background:var(--green-50);color:var(--green-700);border-color:var(--green-100)}
-.chip-red{background:var(--red-50);color:var(--red-600);border-color:var(--red-100)}
-.chip-amber{background:var(--amber-50);color:var(--amber-700);border-color:var(--amber-100)}
-.chip .ms{font-size:12px;cursor:pointer}
-
-/* ── Table preview ── */
-.table-preview{width:100%;border-collapse:collapse;font-size:12.5px}
-.table-preview th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:var(--white)}
-.table-preview td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--fg-2)}
-.table-preview tr:last-child td{border-bottom:none}
-.table-preview tr:nth-child(even) td{background:var(--row-alt)}
-
-/* ── Typography ── */
-.type-sample{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.type-sample:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.type-meta{font-size:10.5px;color:var(--muted-fg);font-family:monospace;margin-top:4px}
-
-/* ── Icon grid ── */
-.icon-grid{display:flex;flex-wrap:wrap;gap:8px}
-.icon-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 10px;background:var(--white);border:1px solid var(--border);border-radius:8px;min-width:68px}
-.icon-item .ms{font-size:22px;color:var(--indigo-600)}
-.icon-item span:last-child{font-size:9px;color:var(--muted-fg);text-align:center}
-
-/* ── Spacing ── */
-.space-row{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
-.space-block{display:flex;flex-direction:column;align-items:center;gap:6px}
-.space-block .bar{background:var(--indigo-200);border-radius:3px;width:32px}
-.space-block .lbl{font-size:9.5px;color:var(--muted-fg);font-family:monospace}
-
-/* ── Divider ── */
-.divider{height:1px;background:var(--border);margin:8px 0}
-
-/* ── Two-col layout ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-
-/* ── Section anchor offset ── */
-.anchor{scroll-margin-top:60px}
-</style>
+  <meta charset="UTF-8">
+  <title>Bird Pulse — Locked UI Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            workspace: {
+              bg: '#F7F8FA',
+              surface: '#ffffff',
+              border: '#E5E7EB',
+              fg: '#111827',
+              'fg-muted': '#6B7280',
+              'fg-subtle': '#9CA3AF'
+            },
+            accent: {
+              indigo: '#4F46E5',
+              'indigo-soft': '#818CF8',
+              'indigo-wash': '#EEF2FF',
+              green: '#059669',
+              'green-soft': '#6EE7B7',
+              'green-wash': '#ECFDF5',
+              red: '#DC2626',
+              'red-soft': '#FCA5A5',
+              'red-wash': '#FEF2F2',
+              amber: '#D97706',
+              'amber-soft': '#FCD34D',
+              'amber-wash': '#FFFBEB'
+            }
+          },
+          borderRadius: {
+            card: '8px',
+            control: '4px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F7F8FA; color: #111827; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    
+    /* Typography Primitives */
+    .text-ws-title { font-size: 14px; font-weight: 700; letter-spacing: -0.2px; color: #111827; }
+    .text-ws-eyebrow { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #9CA3AF; }
+    .text-ws-body { font-size: 13px; font-weight: 400; color: #374151; }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+  </style>
 </head>
-<body>
+<body class="p-8">
+  <div class="max-w-5xl mx-auto space-y-12">
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold mb-2">Bird Pulse Locked UI Kit</h1>
+      <p class="text-workspace-fg-muted">This is the canonical reference for the CRM locked theme. The mockup MUST use these primitives.</p>
+    </header>
 
-<!-- ── Header ── -->
-<div class="kit-header">
-  <div class="kit-header-eyebrow">Design System</div>
-  <div class="kit-header-title">Bird Pulse UI Kit</div>
-  <div class="kit-header-sub">The single source of truth for all visual components used across the Bird Pulse Jobs Module. Use these tokens, patterns, and components to keep every screen consistent.</div>
-  <div class="kit-header-meta">
-    <div class="kit-header-meta-item"><span class="val">Indigo</span><span class="lbl">Primary accent</span></div>
-    <div class="kit-header-meta-item"><span class="val">Inter</span><span class="lbl">Typeface</span></div>
-    <div class="kit-header-meta-item"><span class="val">6px</span><span class="lbl">Base radius</span></div>
-    <div class="kit-header-meta-item"><span class="val">14px</span><span class="lbl">Base font</span></div>
-    <div class="kit-header-meta-item"><span class="val">Material Symbols</span><span class="lbl">Icon set</span></div>
+    <!-- 1. Topbar -->
+    <section>
+      <h2 class="text-ws-eyebrow mb-4">1. Topbar (Detail Pages)</h2>
+      <div class="bg-white h-[52px] border-b border-workspace-border flex items-center justify-between px-4">
+        <div class="flex items-center gap-2">
+          <button class="text-workspace-fg-muted hover:text-workspace-fg flex items-center">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          </button>
+          <div class="w-7 h-7 rounded-full bg-accent-indigo-wash text-accent-indigo flex items-center justify-center text-xs font-bold">M</div>
+          <span class="text-ws-title">JOB-2026-089</span>
+          <span class="w-1 h-1 rounded-full bg-workspace-border"></span>
+          <span class="text-[12px] text-workspace-fg-muted">Maintenance</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-green-wash text-accent-green">In Progress</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="h-[30px] px-3 rounded-control border border-workspace-border text-[12px] font-medium hover:bg-workspace-bg">Edit</button>
+          <button class="h-[30px] px-3 rounded-control bg-accent-indigo text-white text-[12px] font-medium hover:bg-accent-indigo/90">Save</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. KPI Cards -->
+    <section>
+      <h2 class="text-ws-eyebrow mb-4">2. KPI Cards (3px Accent)</h2>
+      <div class="grid grid-cols-4 gap-3">
+        <!-- Indigo -->
+        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-indigo-soft p-[14px_16px] hover:-translate-y-px hover:shadow-sm transition-all">
+          <div class="text-ws-eyebrow mb-1">Expected Profit</div>
+          <div class="text-[22px] font-bold tabular-nums text-workspace-fg">R 4,500.00</div>
+          <div class="text-[11px] text-workspace-fg-muted mt-1">45% margin</div>
+        </div>
+        <!-- Green -->
+        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-green-soft p-[14px_16px]">
+          <div class="text-ws-eyebrow mb-1">Actual Profit</div>
+          <div class="text-[22px] font-bold tabular-nums text-accent-green">R 5,200.00</div>
+          <div class="text-[11px] text-workspace-fg-muted mt-1">+R 700 variance</div>
+        </div>
+        <!-- Red -->
+        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-red-soft p-[14px_16px]">
+          <div class="text-ws-eyebrow mb-1">Cost Overrun</div>
+          <div class="text-[22px] font-bold tabular-nums text-accent-red">-R 1,200.00</div>
+          <div class="text-[11px] text-workspace-fg-muted mt-1">Materials exceeded estimate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Tables -->
+    <section>
+      <h2 class="text-ws-eyebrow mb-4">3. Tables (Edge-to-Edge inside Card)</h2>
+      <div class="bg-white border border-workspace-border rounded-card overflow-hidden">
+        <!-- Filter Bar INSIDE Card -->
+        <div class="px-4 py-[10px] border-b border-workspace-border flex items-center justify-between bg-white">
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-[16px] text-workspace-fg-muted">search</span>
+              <input type="text" placeholder="Search..." class="h-[30px] pl-8 pr-3 text-[13px] border border-workspace-border rounded-control w-[240px] focus:outline-none focus:border-accent-indigo">
+            </div>
+            <select class="h-[30px] px-2 text-[13px] border border-workspace-border rounded-control bg-white">
+              <option>All Statuses</option>
+            </select>
+          </div>
+          <div class="text-[12px] text-workspace-fg-muted">12 records</div>
+        </div>
+        
+        <!-- Table -->
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-workspace-border">
+              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Ref #</th>
+              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Description</th>
+              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Status</th>
+              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody class="text-[13px]">
+            <tr class="border-b border-workspace-bg hover:bg-workspace-bg">
+              <td class="py-3 px-4 font-mono text-[12px] text-accent-indigo font-medium">INV-001</td>
+              <td class="py-3 px-4 text-workspace-fg font-medium">Plumbing repairs</td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-amber-wash text-accent-amber">Sent</span>
+              </td>
+              <td class="py-3 px-4 text-right tabular-nums font-medium">R 1,250.00</td>
+            </tr>
+            <tr class="hover:bg-workspace-bg">
+              <td class="py-3 px-4 font-mono text-[12px] text-accent-indigo font-medium">INV-002</td>
+              <td class="py-3 px-4 text-workspace-fg font-medium">Electrical compliance</td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-green-wash text-accent-green">Paid</span>
+              </td>
+              <td class="py-3 px-4 text-right tabular-nums font-medium">R 4,500.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Tabs -->
+    <section>
+      <h2 class="text-ws-eyebrow mb-4">4. Tabs (Underline Style)</h2>
+      <div class="flex items-center border-b border-workspace-border">
+        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-accent-indigo text-accent-indigo flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">grid_view</span> Overview
+        </button>
+        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-workspace-fg-muted hover:text-workspace-fg flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">forum</span> Communication
+        </button>
+        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-workspace-fg-muted hover:text-workspace-fg flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">history</span> Timeline
+        </button>
+      </div>
+    </section>
+
   </div>
-</div>
-
-<!-- ── Nav ── -->
-<nav class="kit-nav">
-  <a href="#colours" class="active">Colours</a>
-  <a href="#typography">Typography</a>
-  <a href="#buttons">Buttons</a>
-  <a href="#badges">Badges</a>
-  <a href="#pipeline">Pipeline</a>
-  <a href="#forms">Forms</a>
-  <a href="#avatars">Avatars</a>
-  <a href="#cards">Cards</a>
-  <a href="#chips">Chips &amp; Toasts</a>
-  <a href="#icons">Icons</a>
-  <a href="#spacing">Spacing</a>
-  <a href="#tables">Tables</a>
-</nav>
-
-<div class="kit-body">
-
-  <!-- ── 1. Colours ── -->
-  <section class="kit-section anchor" id="colours">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Colour Tokens</span>
-      <span class="kit-section-num">01</span>
-      <span class="kit-section-desc">All colours are CSS custom properties defined in <code>:root</code></span>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Primary — Indigo</div>
-      <div class="swatch-grid">
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#eef2ff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#e0e7ff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-200)"></div><div class="swatch-info"><div class="swatch-name">200</div><div class="swatch-hex">#c7d2fe</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-300)"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#a5b4fc</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-400)"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#818cf8</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#6366f1</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#4f46e5</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#4338ca</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-800)"></div><div class="swatch-info"><div class="swatch-name">800</div><div class="swatch-hex">#3730a3</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-900)"></div><div class="swatch-info"><div class="swatch-name">900</div><div class="swatch-hex">#312e81</div></div></div>
-      </div>
-    </div>
-
-    <div class="three-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Green (Success)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#f0fdf4</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#dcfce7</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#22c55e</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#16a34a</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#15803d</div></div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Red (Danger)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#fef2f2</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#fee2e2</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#ef4444</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#dc2626</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#b91c1c</div></div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Amber (Warning)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#fffbeb</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#fef3c7</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#f59e0b</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#d97706</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#b45309</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group" style="margin-top:16px">
-      <div class="comp-group-label">Neutral — Slate + Surface tokens</div>
-      <div class="swatch-grid">
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-50)"></div><div class="swatch-info"><div class="swatch-name">slate-50</div><div class="swatch-hex">#f8fafc</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-100)"></div><div class="swatch-info"><div class="swatch-name">slate-100</div><div class="swatch-hex">#f1f5f9</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-200)"></div><div class="swatch-info"><div class="swatch-name">slate-200</div><div class="swatch-hex">#e2e8f0</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-300)"></div><div class="swatch-info"><div class="swatch-name">slate-300</div><div class="swatch-hex">#cbd5e1</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-400)"></div><div class="swatch-info"><div class="swatch-name">slate-400</div><div class="swatch-hex">#94a3b8</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-500)"></div><div class="swatch-info"><div class="swatch-name">slate-500</div><div class="swatch-hex">#64748b</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-600)"></div><div class="swatch-info"><div class="swatch-name">slate-600</div><div class="swatch-hex">#475569</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-700)"></div><div class="swatch-info"><div class="swatch-name">slate-700</div><div class="swatch-hex">#334155</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-800)"></div><div class="swatch-info"><div class="swatch-name">slate-800</div><div class="swatch-hex">#1e293b</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-900)"></div><div class="swatch-info"><div class="swatch-name">slate-900</div><div class="swatch-hex">#0f172a</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--bg);border:1px solid var(--border)"></div><div class="swatch-info"><div class="swatch-name">--bg</div><div class="swatch-hex">#f0f2f5</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--white);border:1px solid var(--border)"></div><div class="swatch-info"><div class="swatch-name">--white</div><div class="swatch-hex">#ffffff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--border)"></div><div class="swatch-info"><div class="swatch-name">--border</div><div class="swatch-hex">#e8eaed</div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 2. Typography ── -->
-  <section class="kit-section anchor" id="typography">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Typography</span>
-      <span class="kit-section-num">02</span>
-      <span class="kit-section-desc">Inter — all weights. No other typeface.</span>
-    </div>
-    <div class="comp-group">
-      <div class="type-sample">
-        <div style="font-size:32px;font-weight:800;letter-spacing:-.02em;line-height:1.1">Page Title — 32px / 800</div>
-        <div class="type-meta">font-size:32px · font-weight:800 · letter-spacing:-.02em · Used: module headings</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:20px;font-weight:700;letter-spacing:-.01em">Section Title — 20px / 700</div>
-        <div class="type-meta">font-size:20px · font-weight:700 · letter-spacing:-.01em · Used: card headers, panel titles</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:15px;font-weight:600">Sub-heading — 15px / 600</div>
-        <div class="type-meta">font-size:15px · font-weight:600 · Used: group labels, sidebar section titles</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:13.5px;font-weight:600">Card Title — 13.5px / 600</div>
-        <div class="type-meta">font-size:13.5px · font-weight:600 · Used: card headers, table column names</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:14px;font-weight:400;color:var(--fg)">Body — 14px / 400 — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-        <div class="type-meta">font-size:14px · font-weight:400 · color:--fg · Used: default body text</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:13px;font-weight:400;color:var(--fg-2)">Body Small — 13px / 400 — Secondary content, descriptions, helper text.</div>
-        <div class="type-meta">font-size:13px · font-weight:400 · color:--fg-2 · Used: table cells, detail fields</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:12px;font-weight:400;color:var(--muted-fg)">Caption — 12px / 400 — Muted supporting text, timestamps, metadata.</div>
-        <div class="type-meta">font-size:12px · font-weight:400 · color:--muted-fg</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg)">LABEL / EYEBROW — 10.5px / 700 UPPERCASE</div>
-        <div class="type-meta">font-size:10.5px · font-weight:700 · text-transform:uppercase · letter-spacing:.08em · Used: column headers, section labels</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 3. Buttons ── -->
-  <section class="kit-section anchor" id="buttons">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Buttons</span>
-      <span class="kit-section-num">03</span>
-      <span class="kit-section-desc">All buttons use class <code>.btn</code> + variant modifier</span>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Variants — Default size (34px)</div>
-      <div class="comp-row">
-        <button class="btn btn-primary"><span class="ms">add</span> New Job</button>
-        <button class="btn btn-secondary"><span class="ms">filter_list</span> Filters</button>
-        <button class="btn btn-ghost"><span class="ms">more_horiz</span> More</button>
-        <button class="btn btn-danger"><span class="ms">delete</span> Delete</button>
-        <button class="btn btn-success"><span class="ms">check_circle</span> Mark Done</button>
-        <button class="btn btn-indigo-soft"><span class="ms">open_in_new</span> Open</button>
-      </div>
-      <div class="comp-row" style="margin-top:4px">
-        <span class="anno">.btn-primary</span>
-        <span class="anno">.btn-secondary</span>
-        <span class="anno">.btn-ghost</span>
-        <span class="anno">.btn-danger</span>
-        <span class="anno">.btn-success</span>
-        <span class="anno">.btn-indigo-soft</span>
-      </div>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Sizes</div>
-        <div class="comp-row" style="align-items:center">
-          <button class="btn btn-primary btn-sm"><span class="ms">add</span> Small</button>
-          <button class="btn btn-primary">Default</button>
-          <button class="btn btn-primary btn-lg">Large</button>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.btn-sm (28px)</span>
-          <span class="anno">default (34px)</span>
-          <span class="anno">.btn-lg (42px)</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Icon-only buttons</div>
-        <div class="comp-row">
-          <button class="btn btn-primary btn-icon"><span class="ms">add</span></button>
-          <button class="btn btn-secondary btn-icon"><span class="ms">filter_list</span></button>
-          <button class="btn btn-ghost btn-icon"><span class="ms">more_vert</span></button>
-          <button class="btn btn-danger btn-icon"><span class="ms">delete</span></button>
-          <button class="btn btn-secondary btn-icon btn-sm"><span class="ms">edit</span></button>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.btn-icon</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">States</div>
-      <div class="comp-row">
-        <button class="btn btn-primary">Normal</button>
-        <button class="btn btn-primary" disabled>Disabled</button>
-        <button class="btn btn-secondary">Normal</button>
-        <button class="btn btn-secondary" disabled>Disabled</button>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Workflow action buttons (Detail page)</div>
-      <div class="comp-row">
-        <button class="btn btn-secondary btn-sm"><span class="ms">engineering</span> Mark WIP</button>
-        <button class="btn btn-success btn-sm"><span class="ms">check_circle</span> Mark Done</button>
-        <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open Jobcard</button>
-        <button class="btn btn-ghost btn-sm"><span class="ms">lock_open</span> Unlock</button>
-        <button class="btn btn-ghost btn-sm"><span class="ms">content_copy</span> Duplicate</button>
-        <button class="btn btn-danger btn-sm"><span class="ms">delete</span> Delete</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 4. Badges ── -->
-  <section class="kit-section anchor" id="badges">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Status Badges &amp; Priority Pills</span>
-      <span class="kit-section-num">04</span>
-      <span class="kit-section-desc">Exact values from <code>JOB_STATUS_LABELS</code> in production backend</span>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Workflow Status Badges — all 16 real statuses</div>
-      <div class="comp-row">
-        <span class="badge badge-booked">Job Booked</span>
-        <span class="badge badge-estimated">Estimate Done</span>
-        <span class="badge badge-quoted">Quote Drafted</span>
-        <span class="badge badge-sent">Quote Sent</span>
-        <span class="badge badge-finalized">Quote Finalized</span>
-        <span class="badge badge-accepted">Quote Accepted</span>
-        <span class="badge badge-enroute">On My Way</span>
-        <span class="badge badge-wip">Work In Progress</span>
-        <span class="badge badge-inprogress">Job In Progress</span>
-        <span class="badge badge-completed">Job Completed</span>
-        <span class="badge badge-approved">Client Approved</span>
-        <span class="badge badge-invoiced">Invoiced</span>
-        <span class="badge badge-paid">Paid</span>
-        <span class="badge badge-commission">Commission Paid</span>
-        <span class="badge badge-declined">Quote Declined</span>
-        <span class="badge badge-cancelled">Cancelled</span>
-      </div>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Finance Status Badges</div>
-        <div class="comp-row">
-          <span class="badge badge-finance-estimated">Estimated</span>
-          <span class="badge badge-finance-quoted">Quoted</span>
-          <span class="badge badge-finance-invoiced">Invoiced</span>
-          <span class="badge badge-finance-paid">Paid</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Priority Pills</div>
-        <div class="comp-row">
-          <span class="priority priority-urgent">🔴 Urgent</span>
-          <span class="priority priority-high">🟠 High</span>
-          <span class="priority priority-normal">🔵 Normal</span>
-          <span class="priority priority-low">⚪ Low</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Badge anatomy</div>
-      <div style="font-size:12.5px;color:var(--fg-2);line-height:1.8">
-        <strong>Structure:</strong> 1px coloured border · background tint · uppercase text · 10.5px · weight 700 · letter-spacing .06em · border-radius 4px · padding 3px 8px<br>
-        <strong>Rule:</strong> Badge colour = semantic colour of the stage group (blue=quote, purple=work, green=done/paid, red=declined, grey=cancelled)
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 5. Pipeline Bar ── -->
-  <section class="kit-section anchor" id="pipeline">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Pipeline Bar</span>
-      <span class="kit-section-num">05</span>
-      <span class="kit-section-desc">Rounded-square icon stepper — 5 stages from <code>JobProgressPipeline.tsx</code></span>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Work In Progress (stages 1–2 done, stage 3 active)</div>
-      <div class="pipe-demo">
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Estimate</span></div>
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Quote</span></div>
-        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="pipe-pulse-s"></span><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span><span class="pipe-chip-s">In Progress</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">receipt_long</span></div><span class="pipe-seg-lbl">Invoice</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">payments</span></div><span class="pipe-seg-lbl">Paid</span></div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Job Booked (stage 1 active, all others future)</div>
-      <div class="pipe-demo">
-        <div class="pipe-seg active"><div class="pipe-icon-c"><span class="pipe-pulse-s"></span><span class="ms">calculate</span></div><span class="pipe-seg-lbl">Estimate</span><span class="pipe-chip-s">Booked</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">description</span></div><span class="pipe-seg-lbl">Quote</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">receipt_long</span></div><span class="pipe-seg-lbl">Invoice</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">payments</span></div><span class="pipe-seg-lbl">Paid</span></div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Fully Paid (all stages done)</div>
-      <div class="pipe-demo">
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Estimate</span></div>
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Quote</span></div>
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Work</span></div>
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Invoice</span></div>
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Paid</span></div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Quote Declined</div>
-      <div class="pipe-demo">
-        <div class="pipe-seg done"><div class="pipe-icon-c"><span class="ms">check</span></div><span class="pipe-seg-lbl">Estimate</span></div>
-        <div class="pipe-seg declined"><div class="pipe-icon-c"><span class="ms">cancel</span></div><span class="pipe-seg-lbl">Quote</span><span class="pipe-chip-s">Declined</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">construction</span></div><span class="pipe-seg-lbl">Work</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">receipt_long</span></div><span class="pipe-seg-lbl">Invoice</span></div>
-        <div class="pipe-seg future"><div class="pipe-icon-c"><span class="ms">payments</span></div><span class="pipe-seg-lbl">Paid</span></div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Stage mapping (from production <code>JobProgressPipeline.tsx</code>)</div>
-      <table class="table-preview">
-        <thead><tr><th>Stage</th><th>Icon</th><th>Statuses included</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Estimate</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">calculate</span></td><td><span class="anno">job_booked</span> <span class="anno">estimate_done</span></td></tr>
-          <tr><td><strong>Quote</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">description</span></td><td><span class="anno">quote_drafted</span> <span class="anno">quote_sent</span> <span class="anno">quote_finalized</span> <span class="anno">quote_accepted</span> <span class="anno">quote_declined</span></td></tr>
-          <tr><td><strong>Work</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">construction</span></td><td><span class="anno">on_my_way</span> <span class="anno">work_in_progress</span> <span class="anno">job_in_progress</span> <span class="anno">job_completed</span> <span class="anno">work_client_approved</span></td></tr>
-          <tr><td><strong>Invoice</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">receipt_long</span></td><td><span class="anno">invoiced</span></td></tr>
-          <tr><td><strong>Paid</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">payments</span></td><td><span class="anno">paid</span> <span class="anno">commission_paid</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ── 6. Forms ── -->
-  <section class="kit-section anchor" id="forms">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Form Controls</span>
-      <span class="kit-section-num">06</span>
-    </div>
-
-    <div class="three-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Text Input</div>
-        <div class="field">
-          <label class="label">Job Reference</label>
-          <input class="input" type="text" placeholder="e.g. PO-2026-4421">
-          <span class="field-hint">Client's purchase order number</span>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label class="label">Error state</label>
-          <input class="input error" type="text" value="invalid value">
-          <span class="field-error">This field is required</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Input with icon</div>
-        <div class="field">
-          <label class="label">Search</label>
-          <div class="input-with-icon">
-            <span class="ms">search</span>
-            <input class="input" type="text" placeholder="Search jobs, clients, sites…">
-          </div>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label class="label">Select</label>
-          <select class="select">
-            <option>Job Type</option>
-            <option>repair</option>
-            <option>maintenance</option>
-            <option>install</option>
-            <option>new_build</option>
-          </select>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Textarea</div>
-        <div class="field">
-          <label class="label">Description</label>
-          <textarea class="textarea" rows="4" placeholder="Describe the scope of work…"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Checkboxes, Radios &amp; Toggles</div>
-      <div class="comp-row" style="gap:24px;flex-wrap:wrap">
-        <label class="check-label"><input type="checkbox" checked> Quote Approved</label>
-        <label class="check-label"><input type="checkbox"> Payment Recorded</label>
-        <label class="check-label"><input type="radio" name="r1" checked> To Be Done</label>
-        <label class="check-label"><input type="radio" name="r1"> Done Already</label>
-        <div style="display:flex;align-items:center;gap:10px">
-          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-          <span style="font-size:13px">Auto-transitions on</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
-          <span style="font-size:13px">Auto-transitions off</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 7. Avatars ── -->
-  <section class="kit-section anchor" id="avatars">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Avatars &amp; Team</span>
-      <span class="kit-section-num">07</span>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Sizes</div>
-        <div class="comp-row" style="align-items:center">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-          <span class="avatar avatar-lg av-amber">MD</span>
-          <span class="avatar avatar-xl av-red">KL</span>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.avatar-sm (26px)</span>
-          <span class="anno">.avatar-md (32px)</span>
-          <span class="anno">.avatar-lg (40px)</span>
-          <span class="anno">.avatar-xl (52px)</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Colour variants</div>
-        <div class="comp-row">
-          <span class="avatar avatar-md av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-          <span class="avatar avatar-md av-amber">MD</span>
-          <span class="avatar avatar-md av-red">KL</span>
-          <span class="avatar avatar-md av-slate">?</span>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">av-indigo</span>
-          <span class="anno">av-green</span>
-          <span class="anno">av-amber</span>
-          <span class="anno">av-red</span>
-          <span class="anno">av-slate (unassigned)</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Avatar stack (team display in table rows)</div>
-      <div class="comp-row">
-        <div class="avatar-stack">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-          <span class="avatar avatar-sm av-green">SJ</span>
-          <span class="avatar avatar-sm av-amber">MD</span>
-        </div>
-        <div class="avatar-stack">
-          <span class="avatar avatar-md av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-        </div>
-        <div class="avatar-stack">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Assignment roles (from <code>JobAssignmentPanel.tsx</code>)</div>
-      <table class="table-preview">
-        <thead><tr><th>Role</th><th>Backend key</th><th>Avatar colour</th></tr></thead>
-        <tbody>
-          <tr><td>Tech Manager</td><td><span class="anno">technical</span></td><td><span class="avatar avatar-sm av-indigo">JS</span></td></tr>
-          <tr><td>Coordinator</td><td><span class="anno">coordinator</span></td><td><span class="avatar avatar-sm av-green">SJ</span></td></tr>
-          <tr><td>Sales Rep</td><td><span class="anno">sales</span></td><td><span class="avatar avatar-sm av-amber">MD</span></td></tr>
-          <tr><td>Job Owner</td><td><span class="anno">job_owner</span></td><td><span class="avatar avatar-sm av-red">KL</span></td></tr>
-          <tr><td>Unassigned</td><td>—</td><td><span class="avatar avatar-sm av-slate">?</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ── 8. Cards ── -->
-  <section class="kit-section anchor" id="cards">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Cards &amp; Stat Tiles</span>
-      <span class="kit-section-num">08</span>
-    </div>
-
-    <!-- 5-card row matching production Finance dashboard -->
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
-
-      <!-- Drafts — slate -->
-      <div class="stat-card sc-slate">
-        <div class="stat-card-label">Drafts</div>
-        <div class="stat-card-value neutral" style="font-size:32px">1</div>
-        <div class="stat-card-sub">Not yet sent</div>
-      </div>
-
-      <!-- Outstanding — amber -->
-      <div class="stat-card sc-amber">
-        <div class="stat-card-label">Outstanding</div>
-        <div class="stat-card-value">R 261 490</div>
-        <div class="stat-card-sub">16 awaiting payment</div>
-      </div>
-
-      <!-- Overdue — red -->
-      <div class="stat-card sc-red">
-        <div class="stat-card-label">Overdue</div>
-        <div class="stat-card-value" style="font-size:32px">4</div>
-        <div class="stat-card-sub">R 25 136 at risk</div>
-      </div>
-
-      <!-- Collected — green -->
-      <div class="stat-card sc-green">
-        <div class="stat-card-label">Collected</div>
-        <div class="stat-card-value">R 1 071 725</div>
-        <div class="stat-card-sub">45 paid</div>
-      </div>
-
-      <!-- Collection Rate — indigo -->
-      <div class="stat-card sc-indigo">
-        <div class="stat-card-label">Collection Rate</div>
-        <div class="stat-card-value" style="font-size:32px">78%</div>
-        <div class="stat-card-sub">0 part paid</div>
-      </div>
-
-    </div>
-
-    <div class="comp-group" style="margin-top:16px">
-      <div class="comp-group-label">Stat card anatomy</div>
-      <div style="font-size:12.5px;color:var(--fg-2);line-height:2">
-        <strong>Structure:</strong> white bg · 3px coloured top border · 1px slate border sides/bottom · 10px radius · 20px 22px padding<br>
-        <strong>Hover:</strong> translateY(-2px) · shadow-md · radial gradient glow follows mouse cursor (JS-driven <code>--mx</code> / <code>--my</code> CSS vars)<br>
-        <strong>Variants:</strong> <span class="anno">.sc-slate</span> <span class="anno">.sc-amber</span> <span class="anno">.sc-red</span> <span class="anno">.sc-green</span> <span class="anno">.sc-indigo</span>
-      </div>
-    </div>
-
-    <div class="two-col" style="margin-top:16px">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Guard Keys</span>
-          <span class="badge badge-wip">Work In Progress</span>
-        </div>
-        <div class="card-body">
-          <div class="comp-row" style="flex-wrap:wrap">
-            <span class="guard-key met"><span class="ms">check</span> Quote Approved</span>
-            <span class="guard-key blocked"><span class="ms">close</span> Jobcard Signed</span>
-            <span class="guard-key pending"><span class="ms">schedule</span> Invoice Ready</span>
-            <span class="guard-key met"><span class="ms">check</span> Client Contact</span>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Document row</span>
-        </div>
-        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:6px">
-            <span class="ms" style="color:var(--indigo-500)">calculate</span>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600">Estimate</div>
-              <div style="font-size:11px;color:var(--muted-fg)">12 items · R 36,200</div>
-            </div>
-            <span class="badge badge-quoted">Draft</span>
-            <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open</button>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:6px">
-            <span class="ms" style="color:var(--indigo-500)">description</span>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600">Quote</div>
-              <div style="font-size:11px;color:var(--muted-fg)">QUO-0089 · R 48,500</div>
-            </div>
-            <span class="badge badge-sent">Sent</span>
-            <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 9. Chips & Toasts ── -->
-  <section class="kit-section anchor" id="chips">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Chips, Filter Tags &amp; Toasts</span>
-      <span class="kit-section-num">09</span>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Chips</div>
-        <div class="comp-row">
-          <span class="chip chip-default">My jobs <span class="ms">close</span></span>
-          <span class="chip chip-indigo">Active only <span class="ms">close</span></span>
-          <span class="chip chip-green">This week <span class="ms">close</span></span>
-          <span class="chip chip-red">Urgent <span class="ms">close</span></span>
-          <span class="chip chip-amber">High <span class="ms">close</span></span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Toasts (notification feedback)</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="toast-demo toast-success"><span class="ms">check_circle</span> Stage advanced to "Invoice"</div>
-          <div class="toast-demo toast-error"><span class="ms">error</span> Blocked by: Quote Approved</div>
-          <div class="toast-demo toast-info"><span class="ms">info</span> Auto-transitions are enabled</div>
-          <div class="toast-demo toast-warn"><span class="ms">warning</span> Cannot skip stages</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 10. Icons ── -->
-  <section class="kit-section anchor" id="icons">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Icon Set</span>
-      <span class="kit-section-num">10</span>
-      <span class="kit-section-desc">Material Symbols Rounded — all icons used in the project</span>
-    </div>
-    <div class="comp-group">
-      <div class="comp-group-label">Navigation</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">dashboard</span><span>dashboard</span></div>
-        <div class="icon-item"><span class="ms">work</span><span>work</span></div>
-        <div class="icon-item"><span class="ms">people</span><span>people</span></div>
-        <div class="icon-item"><span class="ms">receipt_long</span><span>receipt_long</span></div>
-        <div class="icon-item"><span class="ms">health_and_safety</span><span>health_and_safety</span></div>
-        <div class="icon-item"><span class="ms">hub</span><span>hub</span></div>
-        <div class="icon-item"><span class="ms">contacts</span><span>contacts</span></div>
-        <div class="icon-item"><span class="ms">business</span><span>business</span></div>
-        <div class="icon-item"><span class="ms">handshake</span><span>handshake</span></div>
-      </div>
-    </div>
-    <div class="comp-group" style="margin-top:12px">
-      <div class="comp-group-label">Actions</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">add</span><span>add</span></div>
-        <div class="icon-item"><span class="ms">edit</span><span>edit</span></div>
-        <div class="icon-item"><span class="ms">delete</span><span>delete</span></div>
-        <div class="icon-item"><span class="ms">search</span><span>search</span></div>
-        <div class="icon-item"><span class="ms">filter_list</span><span>filter_list</span></div>
-        <div class="icon-item"><span class="ms">download</span><span>download</span></div>
-        <div class="icon-item"><span class="ms">open_in_new</span><span>open_in_new</span></div>
-        <div class="icon-item"><span class="ms">content_copy</span><span>content_copy</span></div>
-        <div class="icon-item"><span class="ms">lock_open</span><span>lock_open</span></div>
-        <div class="icon-item"><span class="ms">more_vert</span><span>more_vert</span></div>
-        <div class="icon-item"><span class="ms">check_circle</span><span>check_circle</span></div>
-        <div class="icon-item"><span class="ms">close</span><span>close</span></div>
-      </div>
-    </div>
-    <div class="comp-group" style="margin-top:12px">
-      <div class="comp-group-label">Workflow / Pipeline</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">calculate</span><span>calculate</span></div>
-        <div class="icon-item"><span class="ms">description</span><span>description</span></div>
-        <div class="icon-item"><span class="ms">construction</span><span>construction</span></div>
-        <div class="icon-item"><span class="ms">engineering</span><span>engineering</span></div>
-        <div class="icon-item"><span class="ms">receipt_long</span><span>receipt_long</span></div>
-        <div class="icon-item"><span class="ms">payments</span><span>payments</span></div>
-        <div class="icon-item"><span class="ms">bolt</span><span>bolt</span></div>
-        <div class="icon-item"><span class="ms">check</span><span>check</span></div>
-        <div class="icon-item"><span class="ms">cancel</span><span>cancel</span></div>
-        <div class="icon-item"><span class="ms">schedule</span><span>schedule</span></div>
-        <div class="icon-item"><span class="ms">trending_up</span><span>trending_up</span></div>
-        <div class="icon-item"><span class="ms">bar_chart</span><span>bar_chart</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 11. Spacing ── -->
-  <section class="kit-section anchor" id="spacing">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Spacing &amp; Radius</span>
-      <span class="kit-section-num">11</span>
-    </div>
-    <div class="comp-group">
-      <div class="comp-group-label">Spacing scale</div>
-      <div class="space-row">
-        <div class="space-block"><div class="bar" style="height:4px"></div><div class="lbl">4px</div></div>
-        <div class="space-block"><div class="bar" style="height:6px"></div><div class="lbl">6px</div></div>
-        <div class="space-block"><div class="bar" style="height:8px"></div><div class="lbl">8px</div></div>
-        <div class="space-block"><div class="bar" style="height:10px"></div><div class="lbl">10px</div></div>
-        <div class="space-block"><div class="bar" style="height:12px"></div><div class="lbl">12px</div></div>
-        <div class="space-block"><div class="bar" style="height:16px"></div><div class="lbl">16px</div></div>
-        <div class="space-block"><div class="bar" style="height:20px"></div><div class="lbl">20px</div></div>
-        <div class="space-block"><div class="bar" style="height:24px"></div><div class="lbl">24px</div></div>
-        <div class="space-block"><div class="bar" style="height:32px"></div><div class="lbl">32px</div></div>
-        <div class="space-block"><div class="bar" style="height:40px"></div><div class="lbl">40px</div></div>
-        <div class="space-block"><div class="bar" style="height:48px"></div><div class="lbl">48px</div></div>
-        <div class="space-block"><div class="bar" style="height:64px"></div><div class="lbl">64px</div></div>
-      </div>
-    </div>
-    <div class="two-col" style="margin-top:16px">
-      <div class="comp-group">
-        <div class="comp-group-label">Border radius</div>
-        <div class="comp-row" style="align-items:flex-end;gap:16px">
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:4px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">4px<br>sm</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:6px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">6px ★<br>--radius</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:8px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">8px<br>card</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:10px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">10px<br>panel</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:50%;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">50%<br>avatar</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:99px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">99px<br>pill/chip</div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Shadow tokens</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);font-size:12.5px;color:var(--fg-2)"><strong>--shadow</strong> — 0 1px 2px rgba(0,0,0,.05)<br><span style="color:var(--muted-fg)">Used: table rows, small elements</span></div>
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow-md);font-size:12.5px;color:var(--fg-2)"><strong>--shadow-md</strong> — 0 2px 8px rgba(0,0,0,.06)<br><span style="color:var(--muted-fg)">Used: cards, panels, dropdowns</span></div>
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow-lg);font-size:12.5px;color:var(--fg-2)"><strong>--shadow-lg</strong> — 0 4px 16px rgba(0,0,0,.07)<br><span style="color:var(--muted-fg)">Used: modals, toasts, popovers</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 12. Tables ── -->
-  <section class="kit-section anchor" id="tables">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Table Anatomy</span>
-      <span class="kit-section-num">12</span>
-      <span class="kit-section-desc">All columns left-aligned. Alternating row: <code>--row-alt (#fafafa)</code></span>
-    </div>
-    <div class="comp-group">
-      <div class="comp-group-label">Jobs table — sample rows</div>
-      <table class="table-preview">
-        <thead>
-          <tr>
-            <th>Job #</th>
-            <th>Client / Site</th>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Finance</th>
-            <th>Team</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>JOB-0042</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Acme Corp</div><div style="font-size:11px;color:var(--muted-fg)">Main Warehouse</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Electrical Rewiring — DB replacement</td>
-            <td><span class="priority priority-high">🟠 High</span></td>
-            <td><span class="badge badge-wip">Work In Progress</span></td>
-            <td><span class="badge badge-finance-quoted">Quoted</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-indigo">JS</span><span class="avatar avatar-sm av-green">SJ</span></div></td>
-            <td><strong>R 48,500</strong></td>
-          </tr>
-          <tr>
-            <td><strong>JOB-0041</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Globex Ltd</div><div style="font-size:11px;color:var(--muted-fg)">Head Office</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">HVAC Maintenance — quarterly service</td>
-            <td><span class="priority priority-normal">🔵 Normal</span></td>
-            <td><span class="badge badge-completed">Job Completed</span></td>
-            <td><span class="badge badge-finance-invoiced">Invoiced</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-green">SJ</span></div></td>
-            <td><strong>R 12,200</strong></td>
-          </tr>
-          <tr>
-            <td><strong>JOB-0040</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Initech</div><div style="font-size:11px;color:var(--muted-fg)">Server Room</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">UPS Installation — 20kVA system</td>
-            <td><span class="priority priority-urgent">🔴 Urgent</span></td>
-            <td><span class="badge badge-sent">Quote Sent</span></td>
-            <td><span class="badge badge-finance-quoted">Quoted</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-amber">MD</span></div></td>
-            <td><strong>R 95,000</strong></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-</div>
-
-<script>
-// ── Reactive gradient on stat cards ──
-document.querySelectorAll('.stat-card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=((e.clientX-r.left)/r.width*100).toFixed(1)+'%';
-    const y=((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
-    card.style.setProperty('--mx',x);
-    card.style.setProperty('--my',y);
-  });
-  card.addEventListener('mouseleave',()=>{
-    card.style.setProperty('--mx','50%');
-    card.style.setProperty('--my','50%');
-  });
-});
-
-// Highlight active nav link on scroll
-const sections=document.querySelectorAll('.anchor');
-const navLinks=document.querySelectorAll('.kit-nav a');
-window.addEventListener('scroll',()=>{
-  let current='';
-  sections.forEach(s=>{if(s.getBoundingClientRect().top<=80)current=s.id;});
-  navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+current);});
-});
-</script>
 </body>
 </html>
