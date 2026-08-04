@@ -3200,21 +3200,33 @@ td:first-child{padding:8px 8px}
                 <td style="text-align:right;font-weight:600;color:var(--indigo-600)" id="quote-deposit-amt">R 16,732</td>
                 <td></td>
               </tr>
-              <tr>
-                <td colspan="8" style="text-align:right;color:var(--green-700);font-size:11.5px;font-weight:600">Profit</td>
-                <td style="text-align:right;font-weight:700;color:var(--green-600)" id="quote-profit">R 12,300</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td colspan="8" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Commission (total)</td>
-                <td style="text-align:right;font-weight:600;color:var(--muted-fg)" id="quote-commission-total">R 3,850</td>
-                <td></td>
-              </tr>
             </tfoot>
           </table>
         </div>
         <div style="padding:10px 16px 14px">
           <button class="de-add-row" onclick="addQuoteLine()"><span class="ms">add</span>Add Line Item</button>
+        </div>
+      </div>
+
+      <!-- Margin summary card -->
+      <div class="de-card" style="margin-top:0">
+        <div class="de-card-body" style="padding:12px 20px">
+          <div style="display:flex;justify-content:flex-end;gap:40px;align-items:center">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12.5px;color:var(--green-700);font-weight:600">Profit</span>
+              <span style="font-size:14px;font-weight:700;color:var(--green-600)" id="quote-profit">+R 12,300</span>
+            </div>
+            <div style="width:1px;height:24px;background:var(--border)"></div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12.5px;color:var(--muted-fg);font-weight:500">Commission (total)</span>
+              <span style="font-size:14px;font-weight:600;color:var(--fg-2)" id="quote-commission-total">R 3,850</span>
+            </div>
+            <div style="width:1px;height:24px;background:var(--border)"></div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12.5px;color:var(--muted-fg);font-weight:500">Margin</span>
+              <span style="font-size:13px;font-weight:700;color:var(--green-600)" id="quote-margin-inline">25.4%</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -5944,6 +5956,8 @@ function recalcQuote(){
   const elSbTotal=document.getElementById('quote-sb-total');
   if(elSbVat)elSbVat.textContent=fmt(vat);
   if(elSbTotal)elSbTotal.textContent=fmt(total);
+  const elMarginInline=document.getElementById('quote-margin-inline');
+  if(elMarginInline&&subAfterDisc>0){const m=((profit/subAfterDisc)*100).toFixed(1);elMarginInline.textContent=m+'%';elMarginInline.style.color=profit>=0?'var(--green-600)':'var(--red-600)';}
   // Also update the job detail P/L banner
   const plBanner=document.getElementById('pl-banner');
   const plAmt=document.getElementById('pl-amount');
