@@ -1023,15 +1023,15 @@ td:first-child{padding:8px 8px}
   font-size: 12.5px;
 }
 .de-line-table thead th {
-  padding: 9px 10px;
+  padding: 8px 10px;
   text-align: left;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .07em;
-  color: var(--slate-400);
-  border-bottom: 2px solid var(--border);
-  background: var(--surface-2);
+  letter-spacing: .08em;
+  color: var(--slate-500);
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--slate-50, #f8fafc);
   white-space: nowrap;
   position: sticky;
   top: 0;
@@ -1175,17 +1175,18 @@ td:first-child{padding:8px 8px}
 }
 .de-sb-label .ms { font-size: 13px; color: var(--indigo-400); }
 .de-big-num {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--fg);
   line-height: 1.1;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   letter-spacing: -.03em;
 }
 .de-big-sub {
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--muted-fg);
   margin-bottom: 10px;
+  font-weight: 500;
 }
 .de-sb-row {
   display: flex;
@@ -1213,6 +1214,19 @@ td:first-child{padding:8px 8px}
   align-self: flex-start;
   margin-top: 2px;
 }
+.de-sb-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--fg);
+  padding: 6px 0 3px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+}
+.de-sb-total .val.profit { color: var(--green-600); }
+.de-sb-total .val.loss { color: var(--red-600); }
 
 /* ── Category bars ── */
 .de-cat-row {
@@ -2761,14 +2775,14 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:28%">Description</th>
+                <th style="width:24%">Description</th>
                 <th style="width:5%">Qty</th>
-                <th style="width:6%">Unit</th>
+                <th style="width:5%">Unit</th>
                 <th style="width:9%">Unit Price (R)</th>
                 <th style="width:6%">Comm %</th>
                 <th style="width:7%">Comm (R)</th>
                 <th style="width:5%">Disc %</th>
-                <th style="width:8%">Tax Type</th>
+                <th style="width:11%">Tax Type</th>
                 <th style="width:9%;text-align:right">Total (R)</th>
                 <th style="width:3%"></th>
               </tr>
@@ -4136,19 +4150,19 @@ const TEAM_DATA = [
 ];
 
 const EST_LINES = [
-  {desc:'20mm conduit (white) 3m',cat:'materials',section:'materials',qty:24,unit:'ea',price:85},
-  {desc:'20mm conduit (white) 1m',cat:'materials',section:'materials',qty:12,unit:'ea',price:42},
-  {desc:'Conduit fittings & clips',cat:'materials',section:'materials',qty:1,unit:'lot',price:1200},
-  {desc:'6mm\u00b2 TW copper cable (50m)',cat:'materials',section:'materials',qty:3,unit:'ea',price:980},
-  {desc:'2.5mm\u00b2 TW copper cable (100m)',cat:'materials',section:'materials',qty:2,unit:'ea',price:650},
-  {desc:'DB board 3-phase 24-way',cat:'materials',section:'materials',qty:1,unit:'ea',price:3800},
-  {desc:'3-phase isolators 63A',cat:'materials',section:'materials',qty:4,unit:'ea',price:1250},
-  {desc:'MCB 20A single phase',cat:'materials',section:'materials',qty:12,unit:'ea',price:185},
-  {desc:'Electrician 40h',cat:'labour',section:'labour',qty:40,unit:'hr',price:95},
-  {desc:'Apprentice 20h',cat:'labour',section:'labour',qty:20,unit:'hr',price:55},
-  {desc:'Inspection & COC',cat:'subcontractor',section:'labour',qty:1,unit:'ea',price:1800},
-  {desc:'Transport & fuel',cat:'travel',section:'preliminaries',qty:1,unit:'lot',price:600},
-  {desc:'Consumables & misc',cat:'materials',section:'materials',qty:1,unit:'lot',price:950},
+  {desc:'20mm conduit (white) 3m',cat:'materials',section:'materials',qty:24,unit:'ea',price:85,commPct:8,taxType:'standard'},
+  {desc:'20mm conduit (white) 1m',cat:'materials',section:'materials',qty:12,unit:'ea',price:42,commPct:8,taxType:'standard'},
+  {desc:'Conduit fittings & clips',cat:'materials',section:'materials',qty:1,unit:'lot',price:1200,commPct:8,taxType:'standard'},
+  {desc:'6mm\u00b2 TW copper cable (50m)',cat:'materials',section:'materials',qty:3,unit:'ea',price:980,commPct:8,taxType:'standard'},
+  {desc:'2.5mm\u00b2 TW copper cable (100m)',cat:'materials',section:'materials',qty:2,unit:'ea',price:650,commPct:8,taxType:'standard'},
+  {desc:'DB board 3-phase 24-way',cat:'materials',section:'materials',qty:1,unit:'ea',price:3800,commPct:10,taxType:'standard'},
+  {desc:'3-phase isolators 63A',cat:'materials',section:'materials',qty:4,unit:'ea',price:1250,commPct:10,taxType:'standard'},
+  {desc:'MCB 20A single phase',cat:'materials',section:'materials',qty:12,unit:'ea',price:185,commPct:8,taxType:'standard'},
+  {desc:'Electrician 40h',cat:'labour',section:'labour',qty:40,unit:'hr',price:95,commPct:5,taxType:'standard'},
+  {desc:'Apprentice 20h',cat:'labour',section:'labour',qty:20,unit:'hr',price:55,commPct:5,taxType:'standard'},
+  {desc:'Inspection & COC',cat:'subcontractor',section:'labour',qty:1,unit:'ea',price:1800,commPct:5,taxType:'standard'},
+  {desc:'Transport & fuel',cat:'travel',section:'preliminaries',qty:1,unit:'lot',price:600,commPct:0,taxType:'zero_rated'},
+  {desc:'Consumables & misc',cat:'materials',section:'materials',qty:1,unit:'lot',price:950,commPct:8,taxType:'standard'},
 ];
 
 const COMM_THREADS = [
