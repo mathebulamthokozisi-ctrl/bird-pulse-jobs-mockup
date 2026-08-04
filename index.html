@@ -2298,50 +2298,169 @@ td:first-child{padding:8px 6px}
   </div>
   <div class="de-body">
     <div class="de-main">
-      <!-- Line items card -->
+      <!-- Scope card -->
       <div class="de-card">
         <div class="de-card-header">
-          <span class="ms">list_alt</span>
-          <span class="de-card-title">Line Items</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="est-line-count">12 items</span>
+          <span class="ms">manage_search</span>
+          <span class="de-card-title">Scope of Work</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Required before adding line items</span>
+        </div>
+        <div class="de-card-body">
+          <div class="form-group">
+            <label>Job Description</label>
+            <textarea class="de-notes-area" id="est-scope" placeholder="Describe the work to be performed (this populates the estimate PDF scope section)…" style="min-height:90px">Complete rewiring of the main warehouse electrical distribution board, including installation of 3-phase isolators, sub-distribution boards on each floor, and replacement of all conduit runs from DB to final sub-circuits. Scope includes COC on completion.</textarea>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label>Method Statement <span style="font-weight:400;color:var(--muted-fg);text-transform:none">(optional)</span></label>
+            <textarea class="de-notes-area" id="est-method" placeholder="How the work will be carried out…" style="min-height:70px"></textarea>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label>Assumptions <span style="font-weight:400;color:var(--muted-fg);text-transform:none">(optional)</span></label>
+            <textarea class="de-notes-area" id="est-assumptions" placeholder="List any assumptions made in this estimate…" style="min-height:60px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Materials -->
+      <div class="de-card">
+        <div class="de-card-header" style="background:var(--indigo-50);border-bottom:1px solid var(--indigo-100)">
+          <span class="ms" style="color:var(--indigo-600)">inventory_2</span>
+          <span class="de-card-title" style="color:var(--indigo-700)">Materials</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--indigo-500)" id="est-sec-materials-total">R 22,400</span>
+          <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('materials')"><span class="ms">add</span>Add</button>
         </div>
         <div style="overflow-x:auto">
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:35%">Description</th>
-                <th style="width:14%">Category</th>
-                <th style="width:8%">Qty</th>
+                <th style="width:36%">Description</th>
+                <th style="width:13%">Category</th>
+                <th style="width:7%">Qty</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:12%">Unit Price (R)</th>
-                <th style="width:11%;text-align:right">Total</th>
+                <th style="width:13%">Unit Cost (R)</th>
+                <th style="width:11%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
-            <tbody id="est-tbody"></tbody>
-            <tfoot>
-              <tr>
-                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
-                <td class="de-line-total" id="est-subtotal" style="text-align:right">R 36,200</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
-                <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="est-vat">R 5,430</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td colspan="5" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
-                <td class="de-line-grand" id="est-total" style="text-align:right">R 41,630</td>
-                <td></td>
-              </tr>
-            </tfoot>
+            <tbody id="est-tbody-materials"></tbody>
           </table>
         </div>
-        <div style="padding:10px 16px 14px">
-          <button class="de-add-row" onclick="addEstimateLine()"><span class="ms">add</span>Add Line Item</button>
+        <div style="padding:8px 16px 12px">
+          <button class="de-add-row" onclick="addEstimateLine('materials')"><span class="ms">add</span>Add Materials Line</button>
         </div>
       </div>
+
+      <!-- Section: Equipment -->
+      <div class="de-card">
+        <div class="de-card-header" style="background:#fef3c7;border-bottom:1px solid #fde68a">
+          <span class="ms" style="color:#d97706">construction</span>
+          <span class="de-card-title" style="color:#92400e">Equipment</span>
+          <span style="margin-left:auto;font-size:11px;color:#b45309" id="est-sec-equipment-total">R 0</span>
+          <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('equipment')"><span class="ms">add</span>Add</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:36%">Description</th>
+                <th style="width:13%">Type</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Unit Cost (R)</th>
+                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="est-tbody-equipment">
+              <tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No equipment lines — click Add to include plant/equipment costs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:8px 16px 12px">
+          <button class="de-add-row" onclick="addEstimateLine('equipment')"><span class="ms">add</span>Add Equipment Line</button>
+        </div>
+      </div>
+
+      <!-- Section: Labour -->
+      <div class="de-card">
+        <div class="de-card-header" style="background:#f0fdf4;border-bottom:1px solid #bbf7d0">
+          <span class="ms" style="color:#16a34a">engineering</span>
+          <span class="de-card-title" style="color:#15803d">Labour</span>
+          <span style="margin-left:auto;font-size:11px;color:#16a34a" id="est-sec-labour-total">R 13,800</span>
+          <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:36%">Description</th>
+                <th style="width:13%">Type</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Unit Cost (R)</th>
+                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="est-tbody-labour"></tbody>
+          </table>
+        </div>
+        <div style="padding:8px 16px 12px">
+          <button class="de-add-row" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add Labour Line</button>
+        </div>
+      </div>
+
+      <!-- Section: Preliminaries -->
+      <div class="de-card">
+        <div class="de-card-header" style="background:#fdf4ff;border-bottom:1px solid #f0abfc">
+          <span class="ms" style="color:#9333ea">checklist</span>
+          <span class="de-card-title" style="color:#7e22ce">Preliminaries</span>
+          <span style="margin-left:auto;font-size:11px;color:#9333ea" id="est-sec-prelim-total">R 0</span>
+          <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('preliminaries')"><span class="ms">add</span>Add</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="de-line-table">
+            <thead>
+              <tr>
+                <th style="width:36%">Description</th>
+                <th style="width:13%">Category</th>
+                <th style="width:7%">Qty</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Unit Cost (R)</th>
+                <th style="width:11%;text-align:right">Total (R)</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="est-tbody-prelim">
+              <tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:8px 16px 12px">
+          <button class="de-add-row" onclick="addEstimateLine('preliminaries')"><span class="ms">add</span>Add Preliminaries Line</button>
+        </div>
+      </div>
+
+      <!-- Grand total footer -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:14px 16px">
+          <table style="width:100%;font-size:13px">
+            <tr>
+              <td style="color:var(--muted-fg);padding:4px 0">Subtotal (excl. VAT)</td>
+              <td style="text-align:right;font-weight:600" id="est-subtotal">R 36,200</td>
+            </tr>
+            <tr>
+              <td style="color:var(--muted-fg);padding:4px 0">VAT (15%)</td>
+              <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="est-vat">R 5,430</td>
+            </tr>
+            <tr style="border-top:2px solid var(--border)">
+              <td style="padding-top:8px;font-size:14px;font-weight:700">Total (incl. VAT)</td>
+              <td style="text-align:right;padding-top:8px" class="de-line-grand" id="est-total">R 41,630</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
       <!-- Notes card -->
       <div class="de-card">
         <div class="de-card-header">
@@ -2413,31 +2532,67 @@ td:first-child{padding:8px 6px}
   </div>
   <div class="de-body">
     <div class="de-main">
-      <!-- Client block -->
-      <div class="de-client-block">
-        <div class="label">Bill To</div>
-        <div class="name">Acme Corp</div>
-        <div class="addr">Main Warehouse · 14 Industrial Rd, Johannesburg</div>
-        <div class="addr" style="margin-top:4px;color:var(--muted-fg)">accounts@acmecorp.co.za · +27 11 555 0100</div>
-      </div>
-      <!-- Quote details -->
+      <!-- 3-column header: Bill To / Ship To / Quote Details -->
       <div class="de-card">
-        <div class="de-card-header">
-          <span class="ms">receipt</span>
-          <span class="de-card-title">Quote Details</span>
+        <div class="de-card-body" style="padding:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <!-- Bill To -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Bill To</div>
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <span class="ms" style="font-size:16px;color:var(--indigo-500);margin-top:1px">business</span>
+                <div>
+                  <div style="font-weight:600;font-size:14px;color:var(--indigo-600)">Acme Corp</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:4px;line-height:1.5">14 Industrial Rd<br>Johannesburg, 2001<br>Gauteng, South Africa</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:6px">Attn: John Doe</div>
+                </div>
+              </div>
+            </div>
+            <!-- Ship To / Site -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Ship To / Site</div>
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <span class="ms" style="font-size:16px;color:var(--indigo-500);margin-top:1px">location_on</span>
+                <div>
+                  <div style="font-weight:600;font-size:14px">Main Warehouse</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:4px;line-height:1.5">14 Industrial Rd, JHB<br>Johannesburg, 2001</div>
+                </div>
+              </div>
+            </div>
+            <!-- Quote Details -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Quote Details</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12.5px">
+                <span style="color:var(--muted-fg)">Quote #:</span><span style="font-weight:600">QUO-0089</span>
+                <span style="color:var(--muted-fg)">Date:</span><span style="font-weight:500">11 Jul 2026</span>
+                <span style="color:var(--muted-fg)">Valid Until:</span><span style="font-weight:500">25 Jul 2026</span>
+                <span style="color:var(--muted-fg)">Job #:</span><span style="font-weight:500;color:var(--indigo-600)">JOB-0042</span>
+                <span style="color:var(--muted-fg)">Site:</span><span style="font-weight:500">Main Warehouse</span>
+              </div>
+            </div>
+          </div>
+          <!-- Client PO Number -->
+          <div style="margin-top:14px">
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:6px">Client PO Number <span style="font-weight:400;text-transform:none;color:var(--muted-fg)">(optional)</span></label>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input type="text" id="quote-po" placeholder="e.g. PO-2026-00123" style="max-width:280px;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+              <span style="font-size:11px;color:var(--muted-fg)">Auto-filled when a client PO is uploaded under Attachments. Flows through to the invoice.</span>
+            </div>
+          </div>
         </div>
-        <div class="de-card-body">
-          <div class="form-row">
-            <div class="form-group"><label>Quote Number</label><input type="text" value="QUO-0089" readonly style="background:#fafafa"></div>
-            <div class="form-group"><label>Quote Date</label><input type="date" value="2026-07-11"></div>
-            <div class="form-group"><label>Valid Until</label><input type="date" value="2026-07-25"></div>
-            <div class="form-group"><label>Payment Terms</label>
-              <select>
-                <option>30 days from invoice</option>
-                <option>14 days from invoice</option>
-                <option>COD</option>
-                <option>50% upfront / 50% on completion</option>
-              </select>
+      </div>
+      <!-- PDF Options bar -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:10px 16px">
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="pdf-show-lines" checked style="accent-color:var(--indigo-600)"> Show line items for sections
+            </label>
+            <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="pdf-show-subtotals" checked style="accent-color:var(--indigo-600)"> Display subtotals
+            </label>
+            <div style="margin-left:auto">
+              <button class="btn sm"><span class="ms">settings</span>PDF Preferences</button>
             </div>
           </div>
         </div>
@@ -2569,29 +2724,68 @@ td:first-child{padding:8px 6px}
         <span class="ms">schedule</span>
         <span id="inv-due-text">Invoice not yet sent. Due date: <strong id="inv-due-display">—</strong></span>
       </div>
-      <!-- Billing block -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="de-client-block">
-          <div class="label">Bill To</div>
-          <div class="name">Acme Corp</div>
-          <div class="addr">Main Warehouse · 14 Industrial Rd, Johannesburg</div>
-          <div class="addr" style="margin-top:4px;color:var(--muted-fg)">accounts@acmecorp.co.za</div>
-        </div>
-        <div class="de-card">
-          <div class="de-card-body">
-            <div class="form-row">
-              <div class="form-group"><label>Invoice Number</label><input type="text" id="inv-number" value="INV-0089"></div>
-              <div class="form-group"><label>Invoice Date</label><input type="date" id="inv-date"></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label>Due Date</label><input type="date" id="inv-due"></div>
-              <div class="form-group"><label>Payment Terms</label>
-                <select id="inv-terms">
-                  <option>30 days from invoice</option>
-                  <option>14 days from invoice</option>
-                  <option>COD</option>
-                </select>
+      <!-- Billing block: Bill To + Invoice Details -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <!-- Bill To -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Bill To</div>
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <span class="ms" style="font-size:16px;color:var(--indigo-500);margin-top:1px">business</span>
+                <div>
+                  <div style="font-weight:600;font-size:14px;color:var(--indigo-600)">Acme Corp</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:4px;line-height:1.5">14 Industrial Rd<br>Johannesburg, 2001<br>Gauteng, South Africa</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:4px">accounts@acmecorp.co.za</div>
+                </div>
               </div>
+            </div>
+            <!-- Service Location -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Service Location</div>
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <span class="ms" style="font-size:16px;color:var(--indigo-500);margin-top:1px">location_on</span>
+                <div>
+                  <div style="font-weight:600;font-size:14px">Main Warehouse</div>
+                  <div style="font-size:12px;color:var(--muted-fg);margin-top:4px;line-height:1.5">14 Industrial Rd, JHB<br>Johannesburg, 2001</div>
+                </div>
+              </div>
+            </div>
+            <!-- Invoice Details -->
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:10px">Invoice Details</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12.5px">
+                <span style="color:var(--muted-fg)">Invoice #:</span><span style="font-weight:600">INV-0089</span>
+                <span style="color:var(--muted-fg)">Job #:</span><span style="font-weight:500;color:var(--indigo-600)">JOB-0042</span>
+                <span style="color:var(--muted-fg)">Invoice Date:</span>
+                <span><input type="date" id="inv-date" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer"></span>
+                <span style="color:var(--muted-fg)">Due Date:</span>
+                <span><input type="date" id="inv-due" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer"></span>
+                <span style="color:var(--muted-fg)">Terms:</span>
+                <span>
+                  <select id="inv-terms" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer">
+                    <option>30 days from invoice</option>
+                    <option>14 days from invoice</option>
+                    <option>COD</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Progress Claim row -->
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:10px">
+              <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);white-space:nowrap">Claim #</label>
+              <input type="number" id="inv-claim-no" value="1" min="1" style="width:60px;padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);white-space:nowrap">Claim %</label>
+              <input type="number" id="inv-claim-pct" value="100" min="1" max="100" style="width:70px;padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
+              <span style="font-size:12px;color:var(--muted-fg)">% of quote value</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);white-space:nowrap">Client PO #</label>
+              <input type="text" id="inv-po" placeholder="PO-2026-00123" style="width:160px;padding:5px 8px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--fg);background:var(--white);outline:none">
             </div>
           </div>
         </div>
@@ -2675,6 +2869,12 @@ Reference: INV-0089 / JOB-0042</textarea>
           <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Payment reminder sent')"><span class="ms">notifications</span>Send Reminder</button>
         </div>
       </div>
+      <!-- [NEW SUGGESTION] QBO Push -->
+      <div class="de-sb-section" style="border:1px dashed #fbbf24;border-radius:var(--radius);padding:10px;background:#fffbeb">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#92400e;margin-bottom:8px">&#x1F4A1; NEW SUGGESTION</div>
+        <div style="font-size:12px;color:#78350f;margin-bottom:8px;line-height:1.4"><strong>QuickBooks Online Push</strong> — Sync this invoice to QBO once sent. Requires QBO integration to be enabled under Settings &gt; Integrations.</div>
+        <button class="btn sm" style="width:100%;justify-content:center;opacity:.5;cursor:not-allowed" disabled><span class="ms">sync</span>Push to QBO</button>
+      </div>
     </aside>
   </div>
 </div>
@@ -2699,13 +2899,18 @@ Reference: INV-0089 / JOB-0042</textarea>
     <span>JOB-0042</span><span class="sep">›</span>
     <span class="current">Actual Costs</span>
     <div class="de-topbar-spacer"></div>
-    <div class="de-cat-tabs" id="costs-cat-tabs" style="margin:0">
-      <div class="de-cat-tab active" onclick="filterCosts('All',this)">All</div>
-      <div class="de-cat-tab" onclick="filterCosts('Materials',this)">Materials</div>
-      <div class="de-cat-tab" onclick="filterCosts('Labour',this)">Labour</div>
-      <div class="de-cat-tab" onclick="filterCosts('Subcontractor',this)">Sub-Con</div>
-      <div class="de-cat-tab" onclick="filterCosts('Travel',this)">Travel</div>
-      <div class="de-cat-tab" onclick="filterCosts('Other',this)">Other</div>
+    <div class="de-filter-tabs" id="costs-cat-tabs" style="margin:0;padding:0;border:none;gap:2px">
+      <div class="de-filter-tab active" onclick="filterCosts('all',this)">All</div>
+      <div class="de-filter-tab" onclick="filterCosts('materials',this)">Materials</div>
+      <div class="de-filter-tab" onclick="filterCosts('labour',this)">Labour</div>
+      <div class="de-filter-tab" onclick="filterCosts('subcontractor',this)">Sub-Con</div>
+      <div class="de-filter-tab" onclick="filterCosts('plant_equipment',this)">Plant/Equip</div>
+      <div class="de-filter-tab" onclick="filterCosts('travel',this)">Travel</div>
+      <div class="de-filter-tab" onclick="filterCosts('waste_disposal',this)">Waste</div>
+      <div class="de-filter-tab" onclick="filterCosts('site_establishment',this)">Site Est.</div>
+      <div class="de-filter-tab" onclick="filterCosts('hse_safety',this)">HSE</div>
+      <div class="de-filter-tab" onclick="filterCosts('asset_recoupment',this)">Asset Rec.</div>
+      <div class="de-filter-tab" onclick="filterCosts('other',this)">Other</div>
     </div>
   </div>
   <div class="de-body">
@@ -2721,18 +2926,20 @@ Reference: INV-0089 / JOB-0042</textarea>
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:12%">Date</th>
-                <th style="width:14%">Category</th>
-                <th style="width:28%">Description</th>
-                <th style="width:20%">Supplier / Resource</th>
-                <th style="width:14%;text-align:right">Amount (R)</th>
+                <th style="width:10%">Date</th>
+                <th style="width:13%">Category</th>
+                <th style="width:22%">Description</th>
+                <th style="width:14%">Supplier / Resource</th>
+                <th style="width:11%">Reference No.</th>
+                <th style="width:12%">Proof Type</th>
+                <th style="width:10%;text-align:right">Amount (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="costs-tbody"></tbody>
             <tfoot>
               <tr>
-                <td colspan="4" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Actual Cost</td>
+                <td colspan="6" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Actual Cost</td>
                 <td class="de-line-grand" id="costs-total" style="text-align:right">R 0</td>
                 <td></td>
               </tr>
@@ -2807,141 +3014,184 @@ Reference: INV-0089 / JOB-0042</textarea>
     <div class="de-topbar-spacer"></div>
     <div class="de-stage-strip">
       <div class="de-stage active">Draft</div>
-      <div class="de-stage">In Progress</div>
+      <div class="de-stage">Awaiting Signature</div>
       <div class="de-stage">Signed</div>
-      <div class="de-stage">Closed</div>
+      <div class="de-stage">Refused</div>
     </div>
-  </div>
-  <div class="de-tabs" id="jc-tabs">
-    <div class="de-tab-btn active" onclick="switchDeTab('jc','details',this)"><span class="ms">info</span>Details</div>
-    <div class="de-tab-btn" onclick="switchDeTab('jc','photos',this)"><span class="ms">photo_library</span>Photos <span class="tab-badge" id="jc-photo-badge">0</span></div>
-    <div class="de-tab-btn" onclick="switchDeTab('jc','defects',this)"><span class="ms">report</span>Findings &amp; Defects</div>
-    <div class="de-tab-btn" onclick="switchDeTab('jc','signature',this)"><span class="ms">draw</span>Client Signature</div>
   </div>
   <div class="de-body" style="flex-direction:column;overflow:hidden">
     <div style="flex:1;overflow:hidden;display:flex">
       <div class="de-main" style="overflow-y:auto">
-        <!-- Details tab -->
-        <div class="de-tab-pane active" id="jc-tab-details">
-          <div class="de-card">
-            <div class="de-card-header">
-              <span class="ms">info</span>
-              <span class="de-card-title">Job Details</span>
-            </div>
-            <div class="de-card-body">
-              <div class="form-row">
-                <div class="form-group"><label>Job Number</label><input type="text" value="JOB-0042" readonly style="background:#fafafa"></div>
-                <div class="form-group"><label>Client</label><input type="text" value="Acme Corp" readonly style="background:#fafafa"></div>
-                <div class="form-group"><label>Site</label><input type="text" value="Main Warehouse, 14 Industrial Rd, JHB" readonly style="background:#fafafa"></div>
-                <div class="form-group"><label>Technician</label><input type="text" value="John Smith"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group"><label>Start Time</label><input type="datetime-local" id="jc-start"></div>
-                <div class="form-group"><label>End Time</label><input type="datetime-local" id="jc-end"></div>
-              </div>
+
+        <!-- ═══ BEFORE SECTION ═══ -->
+        <div style="padding:10px 16px 4px;background:var(--slate-50);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+          <span class="ms" style="color:var(--indigo-600)">manage_search</span>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo-700)">Before Section</span>
+        </div>
+
+        <!-- Scope of Work (scope_html) -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">manage_search</span>
+            <span class="de-card-title">Scope of Work</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-group">
+              <textarea class="de-notes-area" id="jc-scope" placeholder="Describe the work to be performed…" style="min-height:100px"></textarea>
             </div>
           </div>
-          <div class="de-card">
-            <div class="de-card-header">
-              <span class="ms">engineering</span>
-              <span class="de-card-title">Work Completed</span>
+        </div>
+
+        <!-- Findings & Root Cause (findings_html) -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">report_problem</span>
+            <span class="de-card-title">Findings &amp; Root Cause</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-group">
+              <textarea class="de-notes-area" id="jc-findings" placeholder="Document findings and root cause analysis…" style="min-height:90px"></textarea>
             </div>
-            <div class="de-card-body">
-              <div class="form-group">
-                <label>Description of Work Performed</label>
-                <textarea class="de-notes-area" id="jc-work" placeholder="Describe all work completed on site…" style="min-height:120px"></textarea>
-              </div>
-              <div class="form-group" style="margin-top:12px">
-                <label>Materials Used</label>
-                <textarea class="de-notes-area" id="jc-materials" placeholder="List materials used on site (if different from estimate)…" style="min-height:80px"></textarea>
-              </div>
-              <div class="form-group" style="margin-top:12px">
-                <label>Internal Notes</label>
-                <textarea class="de-notes-area" id="jc-notes" placeholder="Internal notes (not visible to client)…" style="min-height:60px"></textarea>
+          </div>
+        </div>
+
+        <!-- Before Photos -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">photo_camera</span>
+            <span class="de-card-title">Before Photos</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-before-photo-count">0 photos</span>
+            <span style="font-size:11px;color:var(--red-500);font-weight:600;margin-left:8px">Required</span>
+          </div>
+          <div class="de-card-body">
+            <div class="de-photo-grid" id="jc-photo-grid-before">
+              <div class="de-photo-slot" onclick="addJcPhoto('before',this)">
+                <span class="ms">add_a_photo</span>
+                <span>Add Before Photo</span>
               </div>
             </div>
           </div>
         </div>
-        <!-- Photos tab -->
-        <div class="de-tab-pane" id="jc-tab-photos">
-          <div class="de-card">
-            <div class="de-card-header">
-              <span class="ms">photo_library</span>
-              <span class="de-card-title">Site Photos</span>
-              <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-photo-count-label">0 photos</span>
+
+        <!-- Recommendations (recommendations_html) -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">lightbulb</span>
+            <span class="de-card-title">Recommendations</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Optional</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-group">
+              <textarea class="de-notes-area" id="jc-recommendations" placeholder="Suggestions for future work or maintenance…" style="min-height:80px"></textarea>
             </div>
-            <div class="de-card-body">
-              <div class="de-photo-grid" id="jc-photo-grid">
-                <div class="de-photo-slot" onclick="addJcPhoto(this)">
-                  <span class="ms">add_a_photo</span>
-                  <span>Add Photo</span>
-                </div>
+          </div>
+        </div>
+
+        <!-- ═══ AFTER SECTION ═══ -->
+        <div style="padding:10px 16px 4px;background:#f0fdf4;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+          <span class="ms" style="color:#16a34a">build</span>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#15803d">After Section</span>
+        </div>
+
+        <!-- Work Performed (work_performed_html) -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">engineering</span>
+            <span class="de-card-title">Work Performed</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-group">
+              <textarea class="de-notes-area" id="jc-work" placeholder="Describe the work that was completed…" style="min-height:120px"></textarea>
+            </div>
+            <div class="form-group" style="margin-top:12px">
+              <label>Materials Used <span style="font-weight:400;text-transform:none;color:var(--muted-fg)">(optional)</span></label>
+              <textarea class="de-notes-area" id="jc-materials" placeholder="List materials used on site (if different from estimate)…" style="min-height:70px"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- After Photos -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">add_photo_alternate</span>
+            <span class="de-card-title">After Photos</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-after-photo-count">0 photos</span>
+            <span style="font-size:11px;color:var(--red-500);font-weight:600;margin-left:8px">Required</span>
+          </div>
+          <div class="de-card-body">
+            <div class="de-photo-grid" id="jc-photo-grid-after">
+              <div class="de-photo-slot" onclick="addJcPhoto('after',this)">
+                <span class="ms">add_a_photo</span>
+                <span>Add After Photo</span>
               </div>
             </div>
           </div>
         </div>
-        <!-- Defects tab -->
-        <div class="de-tab-pane" id="jc-tab-defects">
-          <div class="de-card">
-            <div class="de-card-header">
-              <span class="ms">report</span>
-              <span class="de-card-title">Findings &amp; Defects</span>
-              <button class="btn sm" style="margin-left:auto" onclick="addDefectRow()"><span class="ms">add</span>Add Finding</button>
-            </div>
-            <div style="overflow-x:auto">
-              <table class="de-line-table">
-                <thead>
-                  <tr>
-                    <th style="width:20%">Location</th>
-                    <th style="width:30%">Finding / Defect</th>
-                    <th style="width:15%">Severity</th>
-                    <th style="width:25%">Recommended Action</th>
-                    <th style="width:5%"></th>
-                  </tr>
-                </thead>
-                <tbody id="defects-tbody">
-                  <tr>
-                    <td><input placeholder="e.g. DB Room"></td>
-                    <td><input placeholder="Describe defect…"></td>
-                    <td><select><option>Low</option><option>Medium</option><option selected>High</option><option>Critical</option></select></td>
-                    <td><input placeholder="Recommended fix…"></td>
-                    <td><button class="de-del-row" onclick="this.closest('tr').remove()"><span class="ms">delete</span></button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="padding:10px 16px 14px">
-              <button class="de-add-row" onclick="addDefectRow()"><span class="ms">add</span>Add Finding</button>
-            </div>
-          </div>
+
+        <!-- ═══ CLIENT ACCEPTANCE ═══ -->
+        <div style="padding:10px 16px 4px;background:#fdf4ff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+          <span class="ms" style="color:#9333ea">how_to_reg</span>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7e22ce">Client Acceptance</span>
         </div>
-        <!-- Signature tab -->
-        <div class="de-tab-pane" id="jc-tab-signature">
-          <div class="de-card">
-            <div class="de-card-header">
-              <span class="ms">draw</span>
-              <span class="de-card-title">Client Sign-Off</span>
+
+        <!-- Technician Signature -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">edit</span>
+            <span class="de-card-title">Technician Signature</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Sign off to confirm work completed</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-group" style="margin-bottom:10px">
+              <label>Technician Name</label>
+              <input type="text" id="jc-tech-name" value="John Smith" style="max-width:280px">
             </div>
-            <div class="de-card-body">
-              <div class="form-row">
-                <div class="form-group"><label>Client Name</label><input type="text" id="sig-client-name" value="Acme Corp"></div>
-                <div class="form-group"><label>Signatory Name</label><input type="text" id="sig-person-name" placeholder="Full name of signatory"></div>
-              </div>
-              <div class="form-group" style="margin-bottom:14px">
-                <label>Signature</label>
-                <canvas class="de-sig-canvas" id="jc-sig-canvas" width="800" height="160"></canvas>
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <button class="btn sm" onclick="clearSigCanvas()"><span class="ms">refresh</span>Clear</button>
-                  <button class="btn primary sm" onclick="captureSignature()"><span class="ms">check</span>Confirm Signature</button>
-                </div>
-              </div>
-              <div id="sig-confirmed-msg" style="display:none;background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius);padding:10px 14px;font-size:12.5px;color:var(--green-700);display:none;align-items:center;gap:8px">
-                <span class="ms">verified</span>
-                <span id="sig-confirmed-text">Signature captured</span>
+            <div class="form-group">
+              <label>Technician Signature</label>
+              <canvas class="de-sig-canvas" id="jc-tech-sig-canvas" width="800" height="130"></canvas>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button class="btn sm" onclick="clearCanvas('jc-tech-sig-canvas')"><span class="ms">refresh</span>Clear</button>
+                <button class="btn sm" onclick="toast('Technician signature saved')"><span class="ms">check</span>Save Signature</button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Client Signature -->
+        <div class="de-card">
+          <div class="de-card-header">
+            <span class="ms">draw</span>
+            <span class="de-card-title">Client Sign-Off</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Client acceptance of completed work</span>
+          </div>
+          <div class="de-card-body">
+            <div class="form-row">
+              <div class="form-group"><label>Client Name</label><input type="text" id="sig-client-name" value="Acme Corp" readonly style="background:#fafafa"></div>
+              <div class="form-group"><label>Signatory Name</label><input type="text" id="sig-person-name" placeholder="Full name of signatory"></div>
+            </div>
+            <div class="form-group" style="margin-bottom:14px">
+              <label>Client Signature</label>
+              <canvas class="de-sig-canvas" id="jc-sig-canvas" width="800" height="160"></canvas>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button class="btn sm" onclick="clearSigCanvas()"><span class="ms">refresh</span>Clear</button>
+                <button class="btn primary sm" onclick="captureSignature()"><span class="ms">check</span>Confirm Signature</button>
+              </div>
+            </div>
+            <div id="sig-confirmed-msg" style="display:none;background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius);padding:10px 14px;font-size:12.5px;color:var(--green-700);align-items:center;gap:8px">
+              <span class="ms">verified</span>
+              <span id="sig-confirmed-text">Signature captured</span>
+            </div>
+            <!-- Refusal option -->
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+              <button class="btn danger sm" onclick="toast('Refusal recorded','error')"><span class="ms">thumb_down</span>Client Refuses to Sign</button>
+              <span style="font-size:11px;color:var(--muted-fg);margin-left:10px">Records refusal reason and locks the jobcard</span>
+            </div>
+          </div>
+        </div>
+
       </div>
       <!-- Sidebar -->
       <aside class="de-sidebar">
@@ -3378,18 +3628,19 @@ const TEAM_DATA = [
 ];
 
 const EST_LINES = [
-  {desc:'DB Board 3-phase 400A',cat:'Materials',qty:1,unit:'ea',price:8500},
-  {desc:'Sub-distribution boards (×3)',cat:'Materials',qty:3,unit:'ea',price:2200},
-  {desc:'3-phase isolators (×6)',cat:'Materials',qty:6,unit:'ea',price:450},
-  {desc:'Conduit 20mm (×50m)',cat:'Materials',qty:50,unit:'m',price:45},
-  {desc:'Cable NYY 4mm (×200m)',cat:'Materials',qty:200,unit:'m',price:38},
-  {desc:'Cable trays & brackets',cat:'Materials',qty:1,unit:'lot',price:3200},
-  {desc:'Electrician (senior) 40h',cat:'Labour',qty:40,unit:'h',price:145},
-  {desc:'Electrician (junior) 30h',cat:'Labour',qty:30,unit:'h',price:95},
-  {desc:'Apprentice 20h',cat:'Labour',qty:20,unit:'h',price:55},
-  {desc:'Inspection & COC',cat:'Subcontractor',qty:1,unit:'ea',price:1800},
-  {desc:'Transport & fuel',cat:'Travel',qty:1,unit:'lot',price:600},
-  {desc:'Consumables & misc',cat:'Materials',qty:1,unit:'lot',price:950},
+  {desc:'20mm conduit (white) 3m',cat:'materials',section:'materials',qty:24,unit:'ea',price:85},
+  {desc:'20mm conduit (white) 1m',cat:'materials',section:'materials',qty:12,unit:'ea',price:42},
+  {desc:'Conduit fittings & clips',cat:'materials',section:'materials',qty:1,unit:'lot',price:1200},
+  {desc:'6mm\u00b2 TW copper cable (50m)',cat:'materials',section:'materials',qty:3,unit:'ea',price:980},
+  {desc:'2.5mm\u00b2 TW copper cable (100m)',cat:'materials',section:'materials',qty:2,unit:'ea',price:650},
+  {desc:'DB board 3-phase 24-way',cat:'materials',section:'materials',qty:1,unit:'ea',price:3800},
+  {desc:'3-phase isolators 63A',cat:'materials',section:'materials',qty:4,unit:'ea',price:1250},
+  {desc:'MCB 20A single phase',cat:'materials',section:'materials',qty:12,unit:'ea',price:185},
+  {desc:'Electrician 40h',cat:'labour',section:'labour',qty:40,unit:'hr',price:95},
+  {desc:'Apprentice 20h',cat:'labour',section:'labour',qty:20,unit:'hr',price:55},
+  {desc:'Inspection & COC',cat:'subcontractor',section:'labour',qty:1,unit:'ea',price:1800},
+  {desc:'Transport & fuel',cat:'travel',section:'preliminaries',qty:1,unit:'lot',price:600},
+  {desc:'Consumables & misc',cat:'materials',section:'materials',qty:1,unit:'lot',price:950},
 ];
 
 const COMM_THREADS = [
@@ -4416,19 +4667,39 @@ function openEstimateModal(){
   openEditor('estimate-editor');
 }
 function renderEstimateTable(){
-  const tbody=document.getElementById('est-tbody');
-  if(!tbody)return;
-  tbody.innerHTML=estLines.map((l,i)=>`<tr>
-    <td><input value="${l.desc}" onchange="estLines[${i}].desc=this.value;recalcEst()"></td>
-    <td><select onchange="estLines[${i}].cat=this.value;recalcEst()">
-      ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===l.cat?'selected':''}>${c}</option>`).join('')}
-    </select></td>
-    <td><input type="number" value="${l.qty}" style="width:60px" onchange="estLines[${i}].qty=+this.value;recalcEst()"></td>
-    <td><input value="${l.unit}" style="width:50px" onchange="estLines[${i}].unit=this.value"></td>
-    <td><input type="number" value="${l.price}" onchange="estLines[${i}].price=+this.value;recalcEst()"></td>
-    <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--fg)">${fmt(l.qty*l.price)}</td>
-    <td><button class="de-del-row" onclick="removeEstLine(${i})"><span class="ms">delete</span></button></td>
-  </tr>`).join('');
+  // Render each section's tbody separately
+  const sections=['materials','equipment','labour','preliminaries'];
+  sections.forEach(sec=>{
+    const tbody=document.getElementById('est-tbody-'+sec);
+    if(!tbody)return;
+    const lines=estLines.filter(l=>(l.section||'materials')===sec);
+    if(lines.length===0){
+      const emptyMsg={materials:'No materials lines — click Add to start',equipment:'No equipment lines — click Add to include plant/equipment costs',labour:'No labour lines — click Add to add labour costs',preliminaries:'No preliminaries — click Add for travel, waste, site establishment, HSE costs'};
+      tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">${emptyMsg[sec]}</td></tr>`;
+      return;
+    }
+    const cats=SECTION_CATEGORIES[sec]||SECTION_CATEGORIES.materials;
+    tbody.innerHTML=lines.map((l)=>{
+      const i=estLines.indexOf(l);
+      return `<tr>
+        <td><input value="${l.desc}" onchange="estLines[${i}].desc=this.value"></td>
+        <td><select onchange="estLines[${i}].cat=this.value;recalcEst()">
+          ${cats.map(c=>`<option value="${c.cat}" ${c.cat===l.cat?'selected':''}>${c.label}</option>`).join('')}
+        </select></td>
+        <td><input type="number" value="${l.qty}" style="width:60px" onchange="estLines[${i}].qty=+this.value;recalcEst()"></td>
+        <td><select onchange="estLines[${i}].unit=this.value">
+          ${Object.entries(ESTIMATE_UNIT_LABELS).map(([k,v])=>`<option value="${k}" ${k===l.unit?'selected':''}>${v}</option>`).join('')}
+        </select></td>
+        <td><input type="number" value="${l.price}" onchange="estLines[${i}].price=+this.value;recalcEst()"></td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--fg)">${fmt(l.qty*l.price)}</td>
+        <td><button class="de-del-row" onclick="removeEstLine(${i})"><span class="ms">delete</span></button></td>
+      </tr>`;
+    }).join('');
+    // Update section total
+    const secTotal=lines.reduce((s,l)=>s+l.qty*l.price,0);
+    const secEl=document.getElementById('est-sec-'+sec+'-total');
+    if(secEl)secEl.textContent=fmt(secTotal);
+  });
   recalcEst();
   const lc=document.getElementById('est-line-count');
   if(lc)lc.textContent=estLines.length+' items';
@@ -4469,8 +4740,17 @@ function renderEstCatBar(){
       <span class="de-cat-val">${fmt(v)}</span>
     </div>`).join('');
 }
-function addEstimateLine(){
-  estLines.push({desc:'New item',cat:'Materials',qty:1,unit:'ea',price:0});
+const SECTION_CATEGORIES={
+  materials:[{label:'Materials',cat:'materials'},{label:'Other',cat:'other'}],
+  equipment:[{label:'Owned',cat:'plant_equipment'},{label:'Hired',cat:'other'}],
+  labour:[{label:'Internal',cat:'labour'},{label:'Tradesmen',cat:'subcontractor'},{label:'Subcontractor',cat:'other'}],
+  preliminaries:[{label:'Travel',cat:'travel'},{label:'Waste',cat:'waste_disposal'},{label:'Site Est.',cat:'site_establishment'},{label:'HSE',cat:'hse_safety'},{label:'Other',cat:'other'}]
+};
+const ESTIMATE_UNIT_LABELS={ea:'Each',m:'Metre',m2:'m²',m3:'m³',hr:'Hour',day:'Day',lot:'Lot'};
+function addEstimateLine(section){
+  const sec=section||'materials';
+  const defaultCat=SECTION_CATEGORIES[sec]?SECTION_CATEGORIES[sec][0].cat:'materials';
+  estLines.push({desc:'New item',cat:defaultCat,section:sec,qty:1,unit:'ea',price:0});
   renderEstimateTable();
 }
 function removeEstLine(i){estLines.splice(i,1);renderEstimateTable();}
@@ -4604,26 +4884,34 @@ function createInvoice(){
 // ═══════════════════════════════════════════════════════════
 // ACTUAL COSTS EDITOR
 // ═══════════════════════════════════════════════════════════
-let costsCatFilter='All';
+let costsCatFilter='all';
 function openActualCostsModal(){
   renderCostTable();
   renderVarianceTable();
   renderCostsCatBar();
   openEditor('actual-costs-editor');
 }
+const COST_CAT_LABELS={'materials':'Materials','labour':'Labour','subcontractor':'Subcontractor','plant_equipment':'Plant/Equipment','travel':'Travel/Mobilisation','waste_disposal':'Waste Disposal','site_establishment':'Site Establishment','hse_safety':'HSE/Safety','asset_recoupment':'Asset Recoupment','other':'Other'};
+const PROOF_TYPE_LABELS={'invoice':'Invoice','receipt':'Receipt','withdrawal_slip':'Withdrawal Slip','bank_transfer':'Bank Transfer','petty_cash_voucher':'Petty Cash Voucher','credit_note':'Credit Note','other':'Other'};
 function renderCostTable(){
   const tbody=document.getElementById('costs-tbody');
   if(!tbody)return;
-  const filtered=costsCatFilter==='All'?actualCostEntries:actualCostEntries.filter(e=>e.cat===costsCatFilter);
-  tbody.innerHTML=filtered.map((e,i)=>{
+  const filtered=costsCatFilter==='all'?actualCostEntries:actualCostEntries.filter(e=>e.cat===costsCatFilter);
+  tbody.innerHTML=filtered.length===0
+    ?`<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted-fg);font-size:12px">No cost entries yet — click Add Cost Entry to start capturing</td></tr>`
+    :filtered.map((e,i)=>{
     const realIdx=actualCostEntries.indexOf(e);
     return `<tr>
       <td><input type="date" value="${e.date}" onchange="actualCostEntries[${realIdx}].date=this.value;recalcCosts()"></td>
       <td><select onchange="actualCostEntries[${realIdx}].cat=this.value;recalcCosts()">
-        ${['Materials','Labour','Subcontractor','Travel','Other'].map(c=>`<option ${c===e.cat?'selected':''}>${c}</option>`).join('')}
+        ${Object.entries(COST_CAT_LABELS).map(([k,v])=>`<option value="${k}" ${k===e.cat?'selected':''}>${v}</option>`).join('')}
       </select></td>
-      <td><input value="${e.desc}" onchange="actualCostEntries[${realIdx}].desc=this.value"></td>
-      <td><input value="${e.supplier}" onchange="actualCostEntries[${realIdx}].supplier=this.value"></td>
+      <td><input value="${e.desc||''}" onchange="actualCostEntries[${realIdx}].desc=this.value"></td>
+      <td><input value="${e.supplier||''}" onchange="actualCostEntries[${realIdx}].supplier=this.value"></td>
+      <td><input value="${e.reference_no||''}" placeholder="e.g. INV-001" onchange="actualCostEntries[${realIdx}].reference_no=this.value"></td>
+      <td><select onchange="actualCostEntries[${realIdx}].proof_type=this.value">
+        ${Object.entries(PROOF_TYPE_LABELS).map(([k,v])=>`<option value="${k}" ${k===(e.proof_type||'invoice')?'selected':''}>${v}</option>`).join('')}
+      </select></td>
       <td style="text-align:right"><input type="number" value="${e.amount}" style="text-align:right" onchange="actualCostEntries[${realIdx}].amount=+this.value;recalcCosts()"></td>
       <td><button class="de-del-row" onclick="removeCostLine(${realIdx})"><span class="ms">delete</span></button></td>
     </tr>`;
@@ -4636,12 +4924,12 @@ function renderCostTable(){
 }
 function filterCosts(cat,btn){
   costsCatFilter=cat;
-  document.querySelectorAll('.de-cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.de-filter-tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   renderCostTable();
 }
 function addCostLine(){
-  actualCostEntries.push({date:new Date().toISOString().split('T')[0],cat:'Materials',desc:'',supplier:'',amount:0});
+  actualCostEntries.push({date:new Date().toISOString().split('T')[0],cat:'materials',desc:'',supplier:'',reference_no:'',proof_type:'invoice',amount:0});
   renderCostTable();
   renderVarianceTable();
 }
@@ -4718,24 +5006,35 @@ function openJobcardModal(){
   initSigCanvas();
   openEditor('jobcard-editor');
 }
-function addJcPhoto(slot){
+let jcBeforePhotoCount=0;let jcAfterPhotoCount=0;
+function addJcPhoto(phase,slot){
   const colors=['#ddd6fe','#bfdbfe','#bbf7d0','#fde68a','#fecaca','#fed7aa'];
   const c=colors[photoCount%colors.length];
-  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</div>`;
+  const label=phase==='before'?'Before':'After';
+  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">${label}</span><span style="font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</span></div>`;
   slot.onclick=null;
   photoCount++;
-  // Update counts
-  const lbl=document.getElementById('jc-photo-count-label');if(lbl)lbl.textContent=photoCount+' photo'+(photoCount!==1?'s':'');
-  const badge=document.getElementById('jc-photo-badge');if(badge)badge.textContent=photoCount;
-  const sb=document.getElementById('jc-sb-photos');if(sb)sb.textContent=photoCount;
-  document.getElementById('jobcard-meta').textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · '+(jobcardSigned?'Signed':'Awaiting signature');
-  // Add new empty slot
-  const grid=document.getElementById('jc-photo-grid');
-  if(grid&&!grid.querySelector('.de-photo-slot[onclick]')){
-    const ns=document.createElement('div');ns.className='de-photo-slot';
-    ns.innerHTML='<span class="ms">add_a_photo</span><span>Add Photo</span>';
-    ns.onclick=()=>addJcPhoto(ns);grid.appendChild(ns);
+  if(phase==='before'){
+    jcBeforePhotoCount++;
+    const lbl=document.getElementById('jc-before-photo-count');if(lbl)lbl.textContent=jcBeforePhotoCount+' photo'+(jcBeforePhotoCount!==1?'s':'');
+    const grid=document.getElementById('jc-photo-grid-before');
+    if(grid){
+      const ns=document.createElement('div');ns.className='de-photo-slot';
+      ns.innerHTML='<span class="ms">add_a_photo</span><span>Add Before Photo</span>';
+      ns.onclick=()=>addJcPhoto('before',ns);grid.appendChild(ns);
+    }
+  } else {
+    jcAfterPhotoCount++;
+    const lbl=document.getElementById('jc-after-photo-count');if(lbl)lbl.textContent=jcAfterPhotoCount+' photo'+(jcAfterPhotoCount!==1?'s':'');
+    const grid=document.getElementById('jc-photo-grid-after');
+    if(grid){
+      const ns=document.createElement('div');ns.className='de-photo-slot';
+      ns.innerHTML='<span class="ms">add_a_photo</span><span>Add After Photo</span>';
+      ns.onclick=()=>addJcPhoto('after',ns);grid.appendChild(ns);
+    }
   }
+  const sb=document.getElementById('jc-sb-photos');if(sb)sb.textContent=photoCount;
+  const meta=document.getElementById('jobcard-meta');if(meta)meta.textContent=photoCount+' photo'+(photoCount!==1?'s':'')+' · '+(jobcardSigned?'Signed':'Awaiting signature');
 }
 function addDefectRow(){
   const tbody=document.getElementById('defects-tbody');
@@ -4769,6 +5068,13 @@ function initSigCanvas(){
   canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();jcSigDrawing=true;jcSigLastX=t.clientX-r.left;jcSigLastY=t.clientY-r.top;});
   canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!jcSigDrawing)return;const t=e.touches[0];const r=canvas.getBoundingClientRect();const x=t.clientX-r.left;const y=t.clientY-r.top;ctx.beginPath();ctx.moveTo(jcSigLastX,jcSigLastY);ctx.lineTo(x,y);ctx.stroke();jcSigLastX=x;jcSigLastY=y;});
   canvas.addEventListener('touchend',()=>jcSigDrawing=false);
+}
+function clearCanvas(id){
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  canvas.classList.remove('signed');
 }
 function clearSigCanvas(){
   const canvas=document.getElementById('jc-sig-canvas');
