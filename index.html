@@ -17,7 +17,7 @@
   --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;
   --slate-800:#1e293b;--slate-900:#0f172a;
   /* Semantic */
-  --green-50:#f0fdfa;--green-100:#ccfbf1;--green-500:#14b8a6;--green-600:#0d9488;--green-700:#0f766e;
+  --green-50:#effffe;--green-100:#b2f5f0;--green-500:#00CED1;--green-600:#00B5B8;--green-700:#008B8B;
   --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;--red-700:#b91c1c;
   --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-600:#d97706;--amber-700:#b45309;
   --orange-500:#f97316;--orange-600:#ea580c;
@@ -84,7 +84,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 .btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
 .btn.primary{background:var(--indigo-600);border-color:var(--indigo-600);color:#fff;box-shadow:0 1px 3px rgba(79,70,229,.3)}
 .btn.primary:hover{background:var(--indigo-700);border-color:var(--indigo-700);box-shadow:0 2px 6px rgba(79,70,229,.35)}
-.btn.success{background:var(--green-600);border-color:var(--green-600);color:#fff;box-shadow:0 1px 3px rgba(13,148,136,.3)}
+.btn.success{background:var(--green-600);border-color:var(--green-600);color:#fff;box-shadow:0 1px 3px rgba(0,181,184,.3)}
 .btn.success:hover{background:var(--green-700);border-color:var(--green-700)}
 .btn.danger{color:var(--red-600);border-color:var(--red-200);background:var(--white)}
 .btn.danger:hover{background:var(--red-50);border-color:var(--red-300)}
@@ -150,7 +150,7 @@ td:first-child{padding:8px 8px}
 /* blue */
 .pill-blue{background:#f0f5ff;color:#2563eb;border-color:#bfdbfe}
 /* green */
-.pill-green{background:#f0fdfa;color:#0d9488;border-color:#99f6e4}
+.pill-green{background:#effffe;color:#00B5B8;border-color:#b2f5f0}
 /* amber */
 .pill-amber{background:#fffbf0;color:#b45309;border-color:#fde68a}
 /* red */
@@ -228,7 +228,7 @@ td:first-child{padding:8px 8px}
   position:absolute;
   inset:0;
   width:var(--pipe-fill,20%);
-  background:linear-gradient(90deg,#0d9488 0%,#2dd4bf 60%,#99f6e4 100%);
+  background:linear-gradient(90deg,#008B8B 0%,#00CED1 60%,#b2f5f0 100%);
   border-radius:99px;
   transition:width .5s cubic-bezier(.4,0,.2,1);
 }
@@ -543,11 +543,11 @@ td:first-child{padding:8px 8px}
 /* Colour variants */
 .metric-card.mc-slate{--mc-accent:var(--slate-300);--mc-glow:rgba(100,116,139,.06)}
 .metric-card.mc-indigo{--mc-accent:var(--indigo-500);--mc-glow:rgba(99,102,241,.08)}
-.metric-card.mc-green{--mc-accent:var(--green-500);--mc-glow:rgba(20,184,166,.08)}
+.metric-card.mc-green{--mc-accent:var(--green-500);--mc-glow:rgba(0,206,209,.08)}
 .metric-card.mc-red{--mc-accent:var(--red-500);--mc-glow:rgba(239,68,68,.08)}
 .metric-card.mc-amber{--mc-accent:#f59e0b;--mc-glow:rgba(245,158,11,.08)}
 /* Legacy highlight aliases */
-.metric-card.highlight{--mc-accent:var(--green-500);--mc-glow:rgba(20,184,166,.08)}
+.metric-card.highlight{--mc-accent:var(--green-500);--mc-glow:rgba(0,206,209,.08)}
 .metric-card.highlight.loss{--mc-accent:var(--red-500);--mc-glow:rgba(239,68,68,.08)}
 .metric-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-400);margin-bottom:6px}
 .metric-value{font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--mc-accent,var(--fg));line-height:1}
@@ -854,7 +854,7 @@ td:first-child{padding:8px 8px}
   background: var(--green-600);
   border-color: var(--green-600);
   color: var(--white);
-  box-shadow: 0 1px 3px rgba(13,148,136,.3);
+  box-shadow: 0 1px 3px rgba(0,181,184,.3);
 }
 .de-topbar-actions .btn.success:hover {
   background: var(--green-700);
@@ -1250,7 +1250,7 @@ td:first-child{padding:8px 8px}
   transition: width .4s ease;
 }
 .de-cat-fill.cat-materials { background: var(--indigo-400); }
-.de-cat-fill.cat-labour    { background: #14b8a6; }
+.de-cat-fill.cat-labour    { background: #00CED1; }
 .de-cat-fill.cat-subcon    { background: #f59e0b; }
 .de-cat-fill.cat-travel    { background: #94a3b8; }
 .de-cat-fill.cat-other     { background: #f97316; }
@@ -2499,10 +2499,10 @@ td:first-child{padding:8px 8px}
 
       <!-- Section: Labour -->
       <div class="de-card">
-        <div class="de-card-header" style="background:#f0fdfa;border-bottom:1px solid #99f6e4">
-          <span class="ms" style="color:#0d9488">engineering</span>
-          <span class="de-card-title" style="color:#0f766e">Labour</span>
-          <span style="margin-left:auto;font-size:11px;color:#0d9488" id="est-sec-labour-total">R 0</span>
+        <div class="de-card-header" style="background:#effffe;border-bottom:1px solid #b2f5f0">
+          <span class="ms" style="color:#00B5B8">engineering</span>
+          <span class="de-card-title" style="color:#008B8B">Labour</span>
+          <span style="margin-left:auto;font-size:11px;color:#00B5B8" id="est-sec-labour-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add</button>
         </div>
         <div class="de-table-wrap">
@@ -3348,9 +3348,9 @@ EFT payments preferred.</textarea>
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg);margin-bottom:4px">Total Actual</div>
               <div style="font-size:18px;font-weight:700" id="costs-metric-total">R 0</div>
             </div>
-            <div style="border:1px solid #99f6e4;border-radius:var(--radius);padding:12px;text-align:center;background:#f0fdfa">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#0d9488;margin-bottom:4px">Confirmed</div>
-              <div style="font-size:18px;font-weight:700;color:#0f766e" id="costs-metric-confirmed">R 0</div>
+            <div style="border:1px solid #b2f5f0;border-radius:var(--radius);padding:12px;text-align:center;background:#effffe">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#00B5B8;margin-bottom:4px">Confirmed</div>
+              <div style="font-size:18px;font-weight:700;color:#008B8B" id="costs-metric-confirmed">R 0</div>
             </div>
             <div style="border:1px solid #fde68a;border-radius:var(--radius);padding:12px;text-align:center;background:#fffbeb">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#d97706;margin-bottom:4px">Provisional</div>
@@ -3554,9 +3554,9 @@ EFT payments preferred.</textarea>
         </div>
 
         <!-- ═══ AFTER SECTION ═══ -->
-        <div style="padding:10px 16px 4px;background:#f0fdfa;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-          <span class="ms" style="color:#0d9488">build</span>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0f766e">After Section</span>
+        <div style="padding:10px 16px 4px;background:#effffe;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+          <span class="ms" style="color:#00B5B8">build</span>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#008B8B">After Section</span>
         </div>
 
         <!-- Work Performed (work_performed_html) -->
@@ -4402,7 +4402,7 @@ function renderBoard(){
     {key:'quoting',label:'Quoting',statuses:['quote_drafted','quote_sent','quote_finalized'],accent:'#f59e0b'},
     {key:'accepted',label:'Accepted',statuses:['quote_accepted'],accent:'#6366f1'},
     {key:'in_progress',label:'In Progress',statuses:['on_my_way','work_in_progress','job_in_progress'],accent:'#0ea5e9'},
-    {key:'completed',label:'Completed',statuses:['job_completed','work_client_approved'],accent:'#14b8a6'},
+    {key:'completed',label:'Completed',statuses:['job_completed','work_client_approved'],accent:'#00CED1'},
     {key:'invoiced',label:'Invoiced',statuses:['invoiced','paid','commission_paid'],accent:'#10b981'},
     {key:'declined_cancelled',label:'Declined / Cancelled',statuses:['quote_declined','cancelled'],accent:'#ef4444'},
   ];
@@ -4415,7 +4415,7 @@ function renderBoard(){
     return `<div class="board-col">
       <div class="board-col-header" style="--col-accent:${accent}">${s}<span class="count">${jobs.length}</span></div>
       <div class="board-cards">${emptyMsg}${jobs.map(j=>{
-        const SL={job_booked:'#6b7280',estimate_done:'#6b7280',quote_drafted:'#b45309',quote_sent:'#b45309',quote_finalized:'#b45309',quote_accepted:'#0d9488',quote_declined:'#dc2626',on_my_way:'#2563eb',work_in_progress:'#2563eb',job_in_progress:'#2563eb',job_completed:'#0d9488',work_client_approved:'#0f766e',invoiced:'#7c3aed',paid:'#0d9488',commission_paid:'#0d9488',cancelled:'#dc2626'};
+        const SL={job_booked:'#6b7280',estimate_done:'#6b7280',quote_drafted:'#b45309',quote_sent:'#b45309',quote_finalized:'#b45309',quote_accepted:'#00B5B8',quote_declined:'#dc2626',on_my_way:'#2563eb',work_in_progress:'#2563eb',job_in_progress:'#2563eb',job_completed:'#00B5B8',work_client_approved:'#008B8B',invoiced:'#7c3aed',paid:'#00B5B8',commission_paid:'#00B5B8',cancelled:'#dc2626'};
         const SN={job_booked:'JOB BOOKED',estimate_done:'ESTIMATE DONE',quote_drafted:'QUOTE DRAFTED',quote_sent:'QUOTE SENT',quote_finalized:'QUOTE FINALIZED',quote_accepted:'QUOTE ACCEPTED',quote_declined:'QUOTE DECLINED',on_my_way:'EN ROUTE',work_in_progress:'IN PROGRESS',job_in_progress:'IN PROGRESS',job_completed:'COMPLETED',work_client_approved:'CLIENT APPROVED',invoiced:'INVOICED',paid:'PAID',commission_paid:'COMMISSION PAID',cancelled:'CANCELLED'};
         return `<div class="board-card" onclick="openDetail('${j.num}')">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px">
@@ -5681,7 +5681,7 @@ function openJobcardModal(){
 }
 let jcBeforePhotoCount=0;let jcAfterPhotoCount=0;
 function addJcPhoto(phase,slot){
-  const colors=['#ddd6fe','#bfdbfe','#99f6e4','#fde68a','#fecaca','#fed7aa'];
+  const colors=['#ddd6fe','#bfdbfe','#b2f5f0','#fde68a','#fecaca','#fed7aa'];
   const c=colors[photoCount%colors.length];
   const label=phase==='before'?'Before':'After';
   slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">${label}</span><span style="font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</span></div>`;
