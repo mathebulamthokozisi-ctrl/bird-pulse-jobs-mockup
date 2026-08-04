@@ -200,3 +200,39 @@ These are opportunities to surface real backend data in the mockup. Each is anno
 | `client-centric-stats/src/components/jobs/tabs/JobTimelineTab.tsx` | Timeline tab data structure |
 | `client-centric-stats/src/components/jobs/tabs/JobCommunicationTab.tsx` | Communication tab — portal actions |
 | `client-centric-stats/src/hooks/useJobPortalActions.ts` | Portal action data shape |
+
+---
+
+## 7. Design Flow Clarification (Session 17 — 4 Aug 2026)
+
+The following rules were explicitly confirmed and must not be forgotten:
+
+### The Two Repos — Roles
+- **`client-centric-stats` (Production):** The live React/TypeScript app. We read it as the source of truth. We NEVER touch it.
+- **`bird-pulse-jobs-mockup` (This Repo):** Our working canvas. We build the UI here as a pixel-perfect, fully interactive HTML prototype.
+
+### The Three Content Categories
+1. **Real and Surfaced:** Features already working in production, rendered faithfully in the mockup.
+2. **Real but Hidden/Broken:** Features that exist in the backend but are not yet surfaced or are broken in the UI. Shown in the mockup with a `<!-- [FIX PROPOSAL] -->` annotation explaining what is broken and how Lovable should fix it.
+3. **New Feature Proposals:** Genuinely new ideas, fully documented with rationale, backend requirements, and implementation notes. Annotated with `<!-- [NEW SUGGESTION] -->` so Claude and Lovable can agree or disagree.
+
+### No-Drift Rules
+- The UI must not drift from the current CRM style unless explicitly requested.
+- Every design token, component, and pattern must match the locked theme from `client-centric-stats/.lovable/memories/style/locked-theme-v1.md`.
+- The `ui-kit.html` is the visual contract. If a token or component changes in `index.html`, `ui-kit.html` must be updated in the same commit.
+
+### Undo / Redo Discipline
+- We rely strictly on Git for state management. We do NOT manually delete code.
+- Before any large refactor, create a snapshot commit.
+- To undo: `git revert HEAD --no-edit` (safe, creates new commit) or `git reset --hard HEAD~1` (destructive, use with caution).
+- To restore a specific file: `git checkout <commit-hash> -- index.html`.
+
+### Audit Findings (from Session 17 deep read)
+Key gaps found between production and mockup:
+1. **Jobs List:** Missing columns (`job_nature`, `progress`, `created_by`). Timer indicator and "DA" badge on job number are missing. Quick chips should be `mine`, `unassigned`, `active`, `thisWeek`. Deleted jobs toggle is missing.
+2. **Detail Page Layout:** Production uses: Breadcrumb → Pipeline → Header (with stat chips) → Progress Controls → Guidance Banner → optional Helpdesk Ticket Banner → Left Rail + Main Content.
+3. **Communication Tab:** Production is a read-only Client Portal activity feed, NOT a threaded helpdesk UI.
+4. **Overview Tab:** Production only shows `VarianceAnalysis` (profit summary + category cost bar chart).
+5. **Documents:** Production uses a specific `DocumentRow` pattern with optional `EmailStatusBadge` slot.
+6. **Guard Keys:** Production has 7 real keys. `jobcard_signed` is NOT a guard key — it is a jobcard field.
+7. **Auto-transitions toggle:** This is an invented feature. It should be annotated as `[NEW SUGGESTION]`.
