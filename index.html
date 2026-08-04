@@ -3313,11 +3313,14 @@ td:first-child{padding:8px 8px}
         <div class="de-big-sub">Excl. VAT · R 55,775 incl.</div>
       </div>
       <div class="de-sb-section">
-        <div class="de-sb-label"><span class="ms">trending_up</span>Margin</div>
-        <div class="de-sb-row"><span class="key">Quote (excl.)</span><span class="val" id="quote-sb-quote">R 48,500</span></div>
-        <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val" id="quote-sb-est">R 36,200</span></div>
+        <div class="de-sb-label"><span class="ms">receipt_long</span>Summary</div>
+        <div class="de-sb-row"><span class="key">Estimate (Cost of Job)</span><span class="val" id="quote-sb-est">R 36,200</span></div>
+        <div class="de-sb-row"><span class="key">Subtotal (Excl VAT)</span><span class="val" id="quote-sb-quote">R 48,500</span></div>
+        <div class="de-sb-row"><span class="key">VAT (15%)</span><span class="val" id="quote-sb-vat">R 7,275</span></div>
+        <div class="de-sb-total" style="margin-top:4px"><span>Total Incl VAT</span><span class="val" id="quote-sb-total">R 55,775</span></div>
+        <div style="height:1px;background:var(--border);margin:8px 0"></div>
+        <div class="de-sb-row"><span class="key" style="color:var(--green-700)">Profit</span><span class="val profit" id="quote-sb-profit">+R 12,300</span></div>
         <div class="de-sb-row"><span class="key">Commission</span><span class="val" id="quote-sb-comm">R 3,850</span></div>
-        <div class="de-sb-total"><span>Gross Profit</span><span class="val profit" id="quote-sb-profit">+R 12,300</span></div>
         <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px" id="quote-sb-margin">25.4% margin</div>
       </div>
       <div class="de-sb-section">
@@ -5937,6 +5940,10 @@ function recalcQuote(){
   if(elSbC)elSbC.textContent=fmt(totalComm);
   if(elSbP){elSbP.textContent=(profit>=0?'+':'')+fmt(profit);elSbP.className='val '+(profit>=0?'profit':'loss');}
   if(elSbM&&subAfterDisc>0)elSbM.textContent=((profit/subAfterDisc)*100).toFixed(1)+'% margin';
+  const elSbVat=document.getElementById('quote-sb-vat');
+  const elSbTotal=document.getElementById('quote-sb-total');
+  if(elSbVat)elSbVat.textContent=fmt(vat);
+  if(elSbTotal)elSbTotal.textContent=fmt(total);
   // Also update the job detail P/L banner
   const plBanner=document.getElementById('pl-banner');
   const plAmt=document.getElementById('pl-amount');
