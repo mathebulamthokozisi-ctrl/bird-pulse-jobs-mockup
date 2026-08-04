@@ -211,6 +211,16 @@ The following rules were explicitly confirmed and must not be forgotten:
 - **`client-centric-stats` (Production):** The live React/TypeScript app. We read it as the source of truth. We NEVER touch it.
 - **`bird-pulse-jobs-mockup` (This Repo):** Our working canvas. We build the UI here as a pixel-perfect, fully interactive HTML prototype.
 
+### CRITICAL: The Mockup IS the Standard
+**The mockup (`index.html`) is the design authority. The notes (`CONVERSATION_NOTES.md`) and the UI Kit (`ui-kit.html`) exist to DOCUMENT what the mockup already does — not to dictate changes to it.**
+
+When we do a production code audit, the findings go into the notes as observations and opportunities. We NEVER change the mockup to match an audit report without the user explicitly approving each change. The correct flow is:
+1. Audit production → write findings in notes
+2. Present findings to user
+3. User decides what to change
+4. We change the mockup per user instruction
+5. Update notes and UI Kit to document the new state
+
 ### The Three Content Categories
 1. **Real and Surfaced:** Features already working in production, rendered faithfully in the mockup.
 2. **Real but Hidden/Broken:** Features that exist in the backend but are not yet surfaced or are broken in the UI. Shown in the mockup with a `<!-- [FIX PROPOSAL] -->` annotation explaining what is broken and how Lovable should fix it.
@@ -219,20 +229,21 @@ The following rules were explicitly confirmed and must not be forgotten:
 ### No-Drift Rules
 - The UI must not drift from the current CRM style unless explicitly requested.
 - Every design token, component, and pattern must match the locked theme from `client-centric-stats/.lovable/memories/style/locked-theme-v1.md`.
-- The `ui-kit.html` is the visual contract. If a token or component changes in `index.html`, `ui-kit.html` must be updated in the same commit.
+- The `ui-kit.html` is the visual contract. It documents what IS in the mockup. If a token or component changes in `index.html`, `ui-kit.html` must be updated in the same commit.
 
 ### Undo / Redo Discipline
 - We rely strictly on Git for state management. We do NOT manually delete code.
 - Before any large refactor, create a snapshot commit.
 - To undo: `git revert HEAD --no-edit` (safe, creates new commit) or `git reset --hard HEAD~1` (destructive, use with caution).
 - To restore a specific file: `git checkout <commit-hash> -- index.html`.
+- **Rollback rule:** If a session makes changes the user did not approve, restore with `git checkout <last-good-hash> -- index.html ui-kit.html` and commit the revert immediately.
 
-### Audit Findings (from Session 17 deep read)
-Key gaps found between production and mockup:
-1. **Jobs List:** Missing columns (`job_nature`, `progress`, `created_by`). Timer indicator and "DA" badge on job number are missing. Quick chips should be `mine`, `unassigned`, `active`, `thisWeek`. Deleted jobs toggle is missing.
-2. **Detail Page Layout:** Production uses: Breadcrumb → Pipeline → Header (with stat chips) → Progress Controls → Guidance Banner → optional Helpdesk Ticket Banner → Left Rail + Main Content.
-3. **Communication Tab:** Production is a read-only Client Portal activity feed, NOT a threaded helpdesk UI.
-4. **Overview Tab:** Production only shows `VarianceAnalysis` (profit summary + category cost bar chart).
+### Audit Findings (from Session 17 deep read — for user review, NOT auto-applied)
+Key observations comparing production to mockup. These are presented for the user to decide on — not automatically applied:
+1. **Jobs List:** `job_nature`, `progress`, `created_by` columns exist in production but not in mockup. Timer indicator and "DA" badge on job number are in production.
+2. **Detail Page Layout:** Production layout order: Breadcrumb → Pipeline → Header → Progress Controls → Guidance Banner → optional Helpdesk Ticket Banner → Left Rail + Main Content.
+3. **Communication Tab:** Production is a read-only Client Portal activity feed. Mockup has a threaded helpdesk UI — this is a design choice to discuss.
+4. **Overview Tab:** Production only shows `VarianceAnalysis`. Mockup has 4 KPI stat cards — this may be an intentional enhancement.
 5. **Documents:** Production uses a specific `DocumentRow` pattern with optional `EmailStatusBadge` slot.
 6. **Guard Keys:** Production has 7 real keys. `jobcard_signed` is NOT a guard key — it is a jobcard field.
-7. **Auto-transitions toggle:** This is an invented feature. It should be annotated as `[NEW SUGGESTION]`.
+7. **Auto-transitions toggle:** Not in production. Currently in mockup — annotate as `[NEW SUGGESTION]` when user agrees.
