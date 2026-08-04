@@ -1178,7 +1178,7 @@ td:first-child{padding:8px 8px}
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 .de-sidebar {
   width: 272px;
@@ -1197,7 +1197,7 @@ td:first-child{padding:8px 8px}
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   overflow: visible;
-  box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.03);
+  box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03);
 }
 /* Clip only the scrollable table wrappers, not the card itself */
 .de-card .de-table-wrap {
@@ -1210,7 +1210,7 @@ td:first-child{padding:8px 8px}
   justify-content: space-between;
   padding: 10px 16px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
+  background: var(--slate-50);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   gap: 8px;
 }
@@ -1234,6 +1234,37 @@ td:first-child{padding:8px 8px}
   font-weight: 500;
   margin-left: auto;
 }
+/* ── Grand total row ── */
+.de-grand-total-row {
+  border-top: 2px solid var(--border-strong);
+  background: var(--indigo-50);
+}
+.de-grand-total-row td {
+  padding: 10px 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg);
+}
+.de-grand-total-row td:last-child {
+  text-align: right;
+}
+
+/* ── Required badge (amber, replaces harsh red) ── */
+.de-required-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 4px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ── Utility classes to replace repeated inline styles ── */
 .sec-label {
   font-size: 10px;
@@ -1654,6 +1685,44 @@ td:first-child{padding:8px 8px}
 }
 .de-due-banner .ms { font-size: 16px; }
 
+/* ── QBO sync banner ── */
+.de-qbo-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  background: #eff6ff;
+  border-bottom: 1px solid #bfdbfe;
+  font-size: 12px;
+}
+.de-qbo-banner .ms { color: #3b82f6; font-size: 15px; }
+
+/* ── Jobcard section dividers ── */
+.de-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.de-section-divider .ms { font-size: 14px; }
+.de-section-divider--before {
+  background: var(--indigo-50);
+  color: var(--indigo-700);
+  border-top: none;
+}
+.de-section-divider--before .ms { color: var(--indigo-500); }
+.de-section-divider--after {
+  background: #effffe;
+  color: #007a7a;
+}
+.de-section-divider--after .ms { color: #00B5B8; }
+
 /* ── Actual costs filter tabs ── */
 .de-filter-tabs {
   display: flex;
@@ -1980,14 +2049,13 @@ td:first-child{padding:8px 8px}
   outline: none;
   box-shadow: none;
   resize: vertical;
-  background: var(--surface-2);
-  transition: border-color var(--t-fast), background var(--t-fast);
+  background: var(--white);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
   line-height: 1.6;
   min-height: 80px;
   display: block;
 }
 .de-notes-area:hover:not(:focus) {
-  background: var(--white);
   border-color: var(--border-strong);
 }
 .de-notes-area:focus {
@@ -2746,7 +2814,7 @@ td:first-child{padding:8px 8px}
         <div class="de-card-header">
           <span class="ms">manage_search</span>
           <span class="de-card-title">Scope of Work</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required before adding line items</span>
+          <span class="de-required-badge" style="margin-left:auto">Required before adding line items</span>
         </div>
         <div class="de-card-body">
           <div class="form-group">
@@ -2912,9 +2980,9 @@ td:first-child{padding:8px 8px}
               <td style="color:var(--muted-fg);padding:4px 0">VAT (15%)</td>
               <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="est-vat">R 5,430</td>
             </tr>
-            <tr style="border-top:2px solid var(--border)">
-              <td style="padding-top:8px;font-size:14px;font-weight:700">Total (incl. VAT)</td>
-              <td style="text-align:right;padding-top:8px" class="de-line-grand" id="est-total">R 41,630</td>
+            <tr class="de-grand-total-row">
+              <td>Total (incl. VAT)</td>
+              <td class="de-line-grand" id="est-total">R 41,630</td>
             </tr>
           </table>
         </div>
@@ -3142,9 +3210,9 @@ td:first-child{padding:8px 8px}
                 <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="quote-vat">R 7,275</td>
                 <td></td>
               </tr>
-              <tr>
-                <td colspan="8" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total (incl. VAT)</td>
-                <td class="de-line-grand" id="quote-total" style="text-align:right">R 55,775</td>
+              <tr class="de-grand-total-row">
+                <td colspan="8">Total (incl. VAT)</td>
+                <td class="de-line-grand" id="quote-total">R 55,775</td>
                 <td></td>
               </tr>
               <tr id="quote-row-deposit" style="display:none">
@@ -3325,7 +3393,7 @@ td:first-child{padding:8px 8px}
   <div class="de-body">
     <div class="de-main">
       <!-- QBO sync status banner -->
-      <div style="padding:6px 16px;background:#eff6ff;border-bottom:1px solid #bfdbfe;display:flex;align-items:center;gap:10px;font-size:12px" id="inv-qbo-banner">
+      <div class="de-qbo-banner" id="inv-qbo-banner">
         <span class="ms" style="font-size:15px;color:#3b82f6">cloud_sync</span>
         <span style="color:#1d4ed8;font-weight:500">QuickBooks:</span>
         <span style="color:#1e40af" id="inv-qbo-status">Not synced — approve and send to push this invoice to QuickBooks Online</span>
@@ -3436,9 +3504,9 @@ td:first-child{padding:8px 8px}
                 <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="inv-vat">R 7,275</td>
                 <td></td>
               </tr>
-              <tr>
-                <td colspan="5" style="text-align:right;font-size:13px;font-weight:700;color:var(--fg)">Total Due (incl. VAT)</td>
-                <td class="de-line-grand" id="inv-total" style="text-align:right">R 55,775</td>
+              <tr class="de-grand-total-row">
+                <td colspan="5">Total Due (incl. VAT)</td>
+                <td class="de-line-grand" id="inv-total">R 55,775</td>
                 <td></td>
               </tr>
             </tfoot>
@@ -3825,9 +3893,9 @@ EFT payments preferred.</textarea>
       <div class="de-main" style="overflow-y:auto">
 
         <!-- ═══ BEFORE SECTION ═══ -->
-        <div style="padding:10px 16px 4px;background:var(--slate-50);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-          <span class="ms" style="color:var(--indigo-600)">manage_search</span>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo-700)">Before Section</span>
+        <div class="de-section-divider de-section-divider--before">
+          <span class="ms">manage_search</span>
+          <span>Before Section</span>
         </div>
 
         <!-- Scope of Work (scope_html) -->
@@ -3835,7 +3903,7 @@ EFT payments preferred.</textarea>
           <div class="de-card-header">
             <span class="ms">manage_search</span>
             <span class="de-card-title">Scope of Work</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+            <span class="de-required-badge" style="margin-left:auto">Required</span>
           </div>
           <div class="de-card-body">
             <div class="form-group">
@@ -3849,7 +3917,7 @@ EFT payments preferred.</textarea>
           <div class="de-card-header">
             <span class="ms">report_problem</span>
             <span class="de-card-title">Findings &amp; Root Cause</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+            <span class="de-required-badge" style="margin-left:auto">Required</span>
           </div>
           <div class="de-card-body">
             <div class="form-group">
@@ -3864,7 +3932,7 @@ EFT payments preferred.</textarea>
             <span class="ms">photo_camera</span>
             <span class="de-card-title">Before Photos</span>
             <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-before-photo-count">0 photos</span>
-            <span style="font-size:11px;color:var(--red-500);font-weight:600;margin-left:8px">Required</span>
+            <span class="de-required-badge" style="margin-left:8px">Required</span>
           </div>
           <div class="de-card-body">
             <div class="de-photo-grid" id="jc-photo-grid-before">
@@ -3891,9 +3959,9 @@ EFT payments preferred.</textarea>
         </div>
 
         <!-- ═══ AFTER SECTION ═══ -->
-        <div style="padding:10px 16px 4px;background:#effffe;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-          <span class="ms" style="color:#00B5B8">build</span>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#008B8B">After Section</span>
+        <div class="de-section-divider de-section-divider--after">
+          <span class="ms">build</span>
+          <span>After Section</span>
         </div>
 
         <!-- Work Performed (work_performed_html) -->
@@ -3901,7 +3969,7 @@ EFT payments preferred.</textarea>
           <div class="de-card-header">
             <span class="ms">engineering</span>
             <span class="de-card-title">Work Performed</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--red-500);font-weight:600">Required</span>
+            <span class="de-required-badge" style="margin-left:auto">Required</span>
           </div>
           <div class="de-card-body">
             <div class="form-group">
@@ -3946,7 +4014,7 @@ EFT payments preferred.</textarea>
             <span class="ms">add_photo_alternate</span>
             <span class="de-card-title">After Photos</span>
             <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="jc-after-photo-count">0 photos</span>
-            <span style="font-size:11px;color:var(--red-500);font-weight:600;margin-left:8px">Required</span>
+            <span class="de-required-badge" style="margin-left:8px">Required</span>
           </div>
           <div class="de-card-body">
             <div class="de-photo-grid" id="jc-photo-grid-after">
