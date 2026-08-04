@@ -1149,7 +1149,7 @@ td:first-child{padding:8px 8px}
   line-height: 1;
 }
 .de-stage:last-child::after { display: none; }
-.de-stage:hover { color: var(--indigo-600); background: var(--indigo-50); }
+.de-stage:hover { color: var(--indigo-600); background: none; }
 .de-stage.active {
   color: var(--indigo-700);
   border-bottom-color: var(--indigo-600);
@@ -1157,6 +1157,7 @@ td:first-child{padding:8px 8px}
   font-weight: 700;
   border-bottom-width: 3px;
 }
+.de-stage.active:hover { background: var(--indigo-100); }
 .de-stage.done { color: var(--green-700); }
 .de-stage.done::before {
   content: '✓';
@@ -2099,7 +2100,7 @@ td:first-child{padding:8px 8px}
   align-items: center;
   padding: 0 16px;
   height: 36px;
-  background: var(--surface-2);
+  background: var(--white);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   font-size: 11.5px;
@@ -2112,6 +2113,7 @@ td:first-child{padding:8px 8px}
 .de-statusbar .de-stage-strip {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
   gap: 0;
   padding: 0;
@@ -2119,8 +2121,7 @@ td:first-child{padding:8px 8px}
   border: none;
   overflow-x: auto;
   overflow-y: hidden;
-  flex-shrink: 0;
-  max-width: 480px;
+  flex: 1;
   scrollbar-width: none;
 }
 .de-statusbar .de-stage-strip::-webkit-scrollbar { display: none; }
