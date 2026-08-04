@@ -1,182 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bird Pulse — Locked UI Kit</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            workspace: {
-              bg: '#F7F8FA',
-              surface: '#ffffff',
-              border: '#E5E7EB',
-              fg: '#111827',
-              'fg-muted': '#6B7280',
-              'fg-subtle': '#9CA3AF'
-            },
-            accent: {
-              indigo: '#4F46E5',
-              'indigo-soft': '#818CF8',
-              'indigo-wash': '#EEF2FF',
-              green: '#059669',
-              'green-soft': '#6EE7B7',
-              'green-wash': '#ECFDF5',
-              red: '#DC2626',
-              'red-soft': '#FCA5A5',
-              'red-wash': '#FEF2F2',
-              amber: '#D97706',
-              'amber-soft': '#FCD34D',
-              'amber-wash': '#FFFBEB'
-            }
-          },
-          borderRadius: {
-            card: '8px',
-            control: '4px'
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #F7F8FA; color: #111827; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    
-    /* Typography Primitives */
-    .text-ws-title { font-size: 14px; font-weight: 700; letter-spacing: -0.2px; color: #111827; }
-    .text-ws-eyebrow { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #9CA3AF; }
-    .text-ws-body { font-size: 13px; font-weight: 400; color: #374151; }
-    .tabular-nums { font-variant-numeric: tabular-nums; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bird Pulse — Locked UI Kit v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+<style>
+:root{
+  /* ── Colour tokens (exact match with index.html) ── */
+  --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-200:#c7d2fe;--indigo-300:#a5b4fc;
+  --indigo-400:#818cf8;--indigo-500:#6366f1;--indigo-600:#4f46e5;--indigo-700:#4338ca;
+  --green-50:#f0fdf4;--green-100:#dcfce7;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;
+  --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;--red-700:#b91c1c;
+  --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-600:#d97706;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;
+  --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;
+  /* ── Surface tokens ── */
+  --bg:#f0f2f5;         /* canvas / page background ONLY */
+  --white:#ffffff;      /* ALL surfaces: cards, sidebar, toolbar, modals */
+  --border:#e8eaed;     /* all dividers and card borders */
+  --row-alt:#fafafa;    /* subtle table row alternation */
+  --fg:#0f172a;         /* primary text */
+  --fg-2:#334155;       /* secondary text */
+  --muted-fg:#64748b;   /* muted/placeholder text */
+  --radius:6px;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-size:14px;line-height:1.5}
+.ms{font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;font-size:16px;line-height:1;display:inline-block;vertical-align:middle}
+
+/* Kit layout */
+.kit-header{background:var(--indigo-600);padding:40px 64px 32px;color:#fff}
+.kit-header h1{font-size:32px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.kit-header p{font-size:14px;opacity:.75;max-width:560px}
+.kit-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 64px;display:flex;gap:0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.kit-nav a{display:block;padding:14px 16px;font-size:12.5px;font-weight:600;color:var(--muted-fg);text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.kit-nav a:hover{color:var(--fg)}
+.kit-nav a.active{color:var(--indigo-600);border-bottom-color:var(--indigo-600)}
+.kit-body{max-width:1100px;margin:0 auto;padding:48px 64px 80px}
+.kit-section{margin-bottom:56px}
+.kit-section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.kit-section-title{font-size:18px;font-weight:700}
+.kit-section-num{font-size:11px;font-weight:700;color:var(--indigo-500);background:var(--indigo-50);padding:2px 8px;border-radius:20px}
+.kit-section-desc{font-size:12px;color:var(--muted-fg);margin-left:auto}
+.comp-group{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:12px}
+.comp-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted-fg);margin-bottom:14px}
+.comp-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+.anno{font-size:10px;color:var(--muted-fg);background:var(--slate-50);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:monospace;white-space:nowrap}
+.rule{font-size:12px;color:var(--fg-2);background:var(--amber-50);border:1px solid var(--amber-100);border-radius:6px;padding:10px 14px;margin-bottom:12px}
+.rule strong{color:var(--amber-700)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:0 10px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);color:var(--fg-2);font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif}
+.btn.primary{background:var(--indigo-600);border-color:var(--indigo-600);color:#fff}
+.btn.danger{color:var(--red-600);border-color:#fecaca}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.sm{height:24px;font-size:10.5px;padding:0 8px}
+.btn .ms{font-size:13px}
+
+/* Status pills */
+.pill{display:inline-flex;align-items:center;padding:1px 6px;border-radius:20px;font-size:9px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent}
+.pill-blue{background:#f0f5ff;color:#2563eb;border-color:#bfdbfe}
+.pill-green{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0}
+.pill-amber{background:#fffbf0;color:#b45309;border-color:#fde68a}
+.pill-red{background:#fff5f5;color:#dc2626;border-color:#fecaca}
+.pill-orange{background:#fff7f0;color:#ea580c;border-color:#fed7aa}
+.pill-slate{background:#f8f9fa;color:#6b7280;border-color:#e5e7eb}
+.pill-purple{background:#faf5ff;color:#7c3aed;border-color:#ddd6fe}
+.pill-teal{background:#f0fffe;color:#0f766e;border-color:#99f6e4}
+
+/* Guard keys */
+.guard-key{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:600}
+.guard-key .ms{font-size:12px}
+.guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
+.guard-key.blocked{background:var(--red-50);color:var(--red-600);border:1px solid var(--red-100)}
+.guard-key.pending{background:var(--slate-50);color:var(--muted-fg);border:1px solid var(--border)}
+
+/* Pipeline stepper */
+.pipe-demo{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px 24px 18px;display:flex;align-items:flex-start;overflow:hidden;position:relative}
+.pipe-demo::before{content:'';position:absolute;top:40px;left:60px;right:60px;height:2px;background:var(--slate-200);z-index:0}
+.pipe-seg{flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:default;position:relative;z-index:1}
+.pipe-seg.done::after{content:'';position:absolute;top:21px;left:50%;right:-50%;height:2px;background:var(--indigo-500);z-index:0}
+.pipe-seg:last-child.done::after{display:none}
+.pipe-icon-c{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.pipe-icon-c .ms{font-size:18px}
+.pipe-seg.done .pipe-icon-c{background:var(--indigo-600);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.35)}
+.pipe-seg.active .pipe-icon-c{background:var(--white);color:var(--indigo-600);border:2px solid var(--indigo-500);box-shadow:0 4px 14px rgba(79,70,229,.2)}
+.pipe-seg.future .pipe-icon-c{background:#f1f3f7;color:#c4c9d4;border:1.5px solid var(--slate-200);box-shadow:none}
+.pipe-seg-lbl{font-size:12px;font-weight:700;white-space:nowrap;text-align:center;line-height:1.2}
+.pipe-seg.done .pipe-seg-lbl{color:var(--indigo-700)}
+.pipe-seg.active .pipe-seg-lbl{color:var(--indigo-800)}
+.pipe-seg.future .pipe-seg-lbl{color:var(--slate-400)}
+.pipe-chip-s{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;line-height:1;white-space:nowrap}
+.pipe-seg.done .pipe-chip-s{background:var(--indigo-50);color:var(--indigo-600)}
+.pipe-seg.active .pipe-chip-s{background:var(--indigo-600);color:#fff}
+
+/* Tabs */
+.tabs-demo{border-bottom:1px solid var(--border);display:flex}
+.tab-btn-demo{padding:10px 16px;font-size:13px;font-weight:500;border-bottom:2px solid transparent;color:var(--muted-fg);cursor:pointer}
+.tab-btn-demo.active{color:var(--indigo-600);border-bottom-color:var(--indigo-600);font-weight:600}
+
+/* Avatar */
+.avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--white)}
+.av-indigo{background:#4f46e5}.av-green{background:#16a34a}.av-amber{background:#d97706}.av-red{background:#dc2626}.av-slate{background:#64748b}
+
+/* Portal action card */
+.portal-card{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.portal-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
 </head>
-<body class="p-8">
-  <div class="max-w-5xl mx-auto space-y-12">
-    <header class="mb-8">
-      <h1 class="text-2xl font-bold mb-2">Bird Pulse Locked UI Kit</h1>
-      <p class="text-workspace-fg-muted">This is the canonical reference for the CRM locked theme. The mockup MUST use these primitives.</p>
-    </header>
+<body>
 
-    <!-- 1. Topbar -->
-    <section>
-      <h2 class="text-ws-eyebrow mb-4">1. Topbar (Detail Pages)</h2>
-      <div class="bg-white h-[52px] border-b border-workspace-border flex items-center justify-between px-4">
-        <div class="flex items-center gap-2">
-          <button class="text-workspace-fg-muted hover:text-workspace-fg flex items-center">
-            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-          </button>
-          <div class="w-7 h-7 rounded-full bg-accent-indigo-wash text-accent-indigo flex items-center justify-center text-xs font-bold">M</div>
-          <span class="text-ws-title">JOB-2026-089</span>
-          <span class="w-1 h-1 rounded-full bg-workspace-border"></span>
-          <span class="text-[12px] text-workspace-fg-muted">Maintenance</span>
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-green-wash text-accent-green">In Progress</span>
+<div class="kit-header">
+  <h1>Bird Pulse — Locked UI Kit</h1>
+  <p>Version 2 — updated 4 Aug 2026. This is the canonical reference for all design tokens, components, and rules used in the Jobs Module mockup. The mockup MUST NOT drift from these primitives.</p>
+</div>
+
+<nav class="kit-nav">
+  <a href="#tokens" class="active">Tokens</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#pills">Pills & Guards</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#tabs">Tabs</a>
+  <a href="#portal">Portal Feed</a>
+  <a href="#rules">Rules</a>
+</nav>
+
+<div class="kit-body">
+
+  <!-- ── 1. Tokens ── -->
+  <section class="kit-section" id="tokens">
+    <div class="kit-section-header">
+      <span class="kit-section-num">01</span>
+      <span class="kit-section-title">Design Tokens</span>
+      <span class="kit-section-desc">These are locked. Do not introduce new colours.</span>
+    </div>
+
+    <div class="rule"><strong>Surface Rule:</strong> <code>--bg</code> (#f0f2f5) is for the canvas/page background ONLY. Every surface — sidebar, toolbar, cards, modals, panels — must be <code>--white</code> (#ffffff).</div>
+
+    <div class="comp-group">
+      <div class="comp-group-label">Surfaces</div>
+      <div class="comp-row">
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+          <div style="width:80px;height:40px;background:#f0f2f5;border:1px solid var(--border);border-radius:6px"></div>
+          <span class="anno">--bg · Canvas only</span>
         </div>
-        <div class="flex items-center gap-2">
-          <button class="h-[30px] px-3 rounded-control border border-workspace-border text-[12px] font-medium hover:bg-workspace-bg">Edit</button>
-          <button class="h-[30px] px-3 rounded-control bg-accent-indigo text-white text-[12px] font-medium hover:bg-accent-indigo/90">Save</button>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+          <div style="width:80px;height:40px;background:#ffffff;border:1px solid var(--border);border-radius:6px"></div>
+          <span class="anno">--white · All surfaces</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+          <div style="width:80px;height:40px;background:#e8eaed;border:1px solid var(--border);border-radius:6px"></div>
+          <span class="anno">--border · Dividers</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+          <div style="width:80px;height:40px;background:#fafafa;border:1px solid var(--border);border-radius:6px"></div>
+          <span class="anno">--row-alt · Table rows</span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- 2. KPI Cards -->
-    <section>
-      <h2 class="text-ws-eyebrow mb-4">2. KPI Cards (3px Accent)</h2>
-      <div class="grid grid-cols-4 gap-3">
-        <!-- Indigo -->
-        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-indigo-soft p-[14px_16px] hover:-translate-y-px hover:shadow-sm transition-all">
-          <div class="text-ws-eyebrow mb-1">Expected Profit</div>
-          <div class="text-[22px] font-bold tabular-nums text-workspace-fg">R 4,500.00</div>
-          <div class="text-[11px] text-workspace-fg-muted mt-1">45% margin</div>
+    <div class="comp-group">
+      <div class="comp-group-label">Accent — Indigo (Primary)</div>
+      <div class="comp-row">
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#eef2ff;border-radius:6px;border:1px solid var(--border)"></div><span class="anno">50</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#c7d2fe;border-radius:6px"></div><span class="anno">200</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#818cf8;border-radius:6px"></div><span class="anno">400</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#6366f1;border-radius:6px"></div><span class="anno">500</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#4f46e5;border-radius:6px"></div><span class="anno">600 · Primary</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:60px;height:36px;background:#4338ca;border-radius:6px"></div><span class="anno">700 · Hover</span></div>
+      </div>
+    </div>
+
+    <div class="comp-group">
+      <div class="comp-group-label">Typography</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><span style="font-size:18px;font-weight:700;color:var(--fg)">Page Title — 18px/700</span> <span class="anno">detail-title</span></div>
+        <div><span style="font-size:13.5px;font-weight:700;color:var(--fg)">Card Title — 13.5px/700</span> <span class="anno">card-title</span></div>
+        <div><span style="font-size:13px;font-weight:400;color:var(--fg-2)">Body text — 13px/400</span> <span class="anno">body</span></div>
+        <div><span style="font-size:12px;font-weight:500;color:var(--muted-fg)">Meta / secondary — 12px/500</span> <span class="anno">meta</span></div>
+        <div><span style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">SECTION LABEL — 9.5px/700/uppercase</span> <span class="anno">sec-label</span></div>
+        <div><span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">COLUMN HEADER — 9px/600/uppercase</span> <span class="anno">thead th</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. Buttons ── -->
+  <section class="kit-section" id="buttons">
+    <div class="kit-section-header">
+      <span class="kit-section-num">02</span>
+      <span class="kit-section-title">Buttons</span>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Variants</div>
+      <div class="comp-row">
+        <button class="btn primary"><span class="ms">add</span>Primary</button>
+        <button class="btn"><span class="ms">filter_list</span>Secondary</button>
+        <button class="btn ghost"><span class="ms">more_vert</span>Ghost</button>
+        <button class="btn danger"><span class="ms">delete</span>Danger</button>
+        <button class="btn" disabled>Disabled</button>
+      </div>
+      <div class="comp-group-label" style="margin-top:16px">Sizes</div>
+      <div class="comp-row">
+        <button class="btn primary" style="height:34px;font-size:13px;padding:0 14px">Large</button>
+        <button class="btn primary">Default (28px)</button>
+        <button class="btn primary sm">Small (24px)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. Pills & Guard Keys ── -->
+  <section class="kit-section" id="pills">
+    <div class="kit-section-header">
+      <span class="kit-section-num">03</span>
+      <span class="kit-section-title">Status Pills &amp; Guard Keys</span>
+    </div>
+    <div class="rule"><strong>Status Keys Rule:</strong> All status values in the mockup MUST use the real backend snake_case keys from <code>job-workflow-types.ts</code>. Never use human labels like "Booked" or "In Progress" as data values.</div>
+    <div class="comp-group">
+      <div class="comp-group-label">Workflow Status Pills (real backend keys)</div>
+      <div class="comp-row">
+        <span class="pill pill-slate">job_booked</span>
+        <span class="pill pill-slate">estimate_done</span>
+        <span class="pill pill-slate">quote_drafted</span>
+        <span class="pill pill-amber">quote_sent</span>
+        <span class="pill pill-amber">quote_finalized</span>
+        <span class="pill pill-blue">quote_accepted</span>
+        <span class="pill pill-red">quote_declined</span>
+        <span class="pill pill-blue">on_my_way</span>
+        <span class="pill pill-blue">work_in_progress</span>
+        <span class="pill pill-blue">job_in_progress</span>
+        <span class="pill pill-green">job_completed</span>
+        <span class="pill pill-teal">work_client_approved</span>
+        <span class="pill pill-green">invoiced</span>
+        <span class="pill pill-green">paid</span>
+        <span class="pill pill-green">commission_paid</span>
+        <span class="pill pill-red">cancelled</span>
+      </div>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Finance Pills (real backend keys — lowercase)</div>
+      <div class="comp-row">
+        <span class="pill pill-slate">estimated</span>
+        <span class="pill pill-blue">quoted</span>
+        <span class="pill pill-amber">invoiced</span>
+        <span class="pill pill-green">paid</span>
+      </div>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Priority Pills</div>
+      <div class="comp-row">
+        <span class="pill pill-red">Urgent</span>
+        <span class="pill pill-orange">High</span>
+        <span class="pill pill-blue">Normal</span>
+        <span class="pill pill-slate">Low</span>
+      </div>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Guard Keys — 7 real keys from production <code>useWorkflowGuardKeys.ts</code></div>
+      <div class="rule"><strong>Guard Key Rule:</strong> Only these 7 keys exist. <code>jobcard_signed</code> is NOT a guard key — it is a jobcard field. Do not add invented guard keys.</div>
+      <div class="comp-row">
+        <span class="guard-key met"><span class="ms">check</span>Estimate Finalized</span>
+        <span class="guard-key met"><span class="ms">check</span>Quote Ready</span>
+        <span class="guard-key met"><span class="ms">check</span>Client Contact</span>
+        <span class="guard-key blocked"><span class="ms">close</span>Quote Approved</span>
+        <span class="guard-key pending"><span class="ms">radio_button_unchecked</span>Invoice Ready</span>
+        <span class="guard-key pending"><span class="ms">radio_button_unchecked</span>Payment Recorded</span>
+        <span class="guard-key pending"><span class="ms">radio_button_unchecked</span>Commission Enabled</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. Pipeline Stepper ── -->
+  <section class="kit-section" id="pipeline">
+    <div class="kit-section-header">
+      <span class="kit-section-num">04</span>
+      <span class="kit-section-title">Pipeline Stepper</span>
+    </div>
+    <div class="rule"><strong>Pipeline Rule:</strong> Exactly 5 stages matching production <code>JobProgressPipeline.tsx</code>. Rounded-square icon badges. Done = indigo fill. Active = white with indigo border + pulse ring. Future = grey.</div>
+    <div class="comp-group">
+      <div class="pipe-demo">
+        <!-- Done -->
+        <div class="pipe-seg done">
+          <div class="pipe-icon-c"><span class="ms">check</span></div>
+          <span class="pipe-seg-lbl">Estimate</span>
+          <span class="pipe-chip-s">Done</span>
         </div>
-        <!-- Green -->
-        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-green-soft p-[14px_16px]">
-          <div class="text-ws-eyebrow mb-1">Actual Profit</div>
-          <div class="text-[22px] font-bold tabular-nums text-accent-green">R 5,200.00</div>
-          <div class="text-[11px] text-workspace-fg-muted mt-1">+R 700 variance</div>
+        <!-- Done -->
+        <div class="pipe-seg done">
+          <div class="pipe-icon-c"><span class="ms">check</span></div>
+          <span class="pipe-seg-lbl">Quote</span>
+          <span class="pipe-chip-s">Approved</span>
         </div>
-        <!-- Red -->
-        <div class="bg-white border border-workspace-border rounded-card border-t-[3px] border-t-accent-red-soft p-[14px_16px]">
-          <div class="text-ws-eyebrow mb-1">Cost Overrun</div>
-          <div class="text-[22px] font-bold tabular-nums text-accent-red">-R 1,200.00</div>
-          <div class="text-[11px] text-workspace-fg-muted mt-1">Materials exceeded estimate</div>
+        <!-- Active -->
+        <div class="pipe-seg active">
+          <div class="pipe-icon-c"><span class="ms">construction</span></div>
+          <span class="pipe-seg-lbl">Work</span>
+          <span class="pipe-chip-s">In Progress</span>
+        </div>
+        <!-- Future -->
+        <div class="pipe-seg future">
+          <div class="pipe-icon-c"><span class="ms">receipt_long</span></div>
+          <span class="pipe-seg-lbl">Invoice</span>
+        </div>
+        <!-- Future -->
+        <div class="pipe-seg future">
+          <div class="pipe-icon-c"><span class="ms">payments</span></div>
+          <span class="pipe-seg-lbl">Paid</span>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 3. Tables -->
-    <section>
-      <h2 class="text-ws-eyebrow mb-4">3. Tables (Edge-to-Edge inside Card)</h2>
-      <div class="bg-white border border-workspace-border rounded-card overflow-hidden">
-        <!-- Filter Bar INSIDE Card -->
-        <div class="px-4 py-[10px] border-b border-workspace-border flex items-center justify-between bg-white">
-          <div class="flex items-center gap-2">
-            <div class="relative">
-              <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-[16px] text-workspace-fg-muted">search</span>
-              <input type="text" placeholder="Search..." class="h-[30px] pl-8 pr-3 text-[13px] border border-workspace-border rounded-control w-[240px] focus:outline-none focus:border-accent-indigo">
-            </div>
-            <select class="h-[30px] px-2 text-[13px] border border-workspace-border rounded-control bg-white">
-              <option>All Statuses</option>
-            </select>
-          </div>
-          <div class="text-[12px] text-workspace-fg-muted">12 records</div>
+  <!-- ── 5. Tabs ── -->
+  <section class="kit-section" id="tabs">
+    <div class="kit-section-header">
+      <span class="kit-section-num">05</span>
+      <span class="kit-section-title">Tabs</span>
+    </div>
+    <div class="rule"><strong>Tab Rule:</strong> Underline style only. Active tab: indigo-600 text + 2px indigo-600 bottom border. Inactive: muted-fg text + transparent border. Font: 13px/500.</div>
+    <div class="comp-group">
+      <div class="tabs-demo">
+        <div class="tab-btn-demo active"><span class="ms" style="font-size:14px;margin-right:4px">bar_chart</span>Overview</div>
+        <div class="tab-btn-demo"><span class="ms" style="font-size:14px;margin-right:4px">forum</span>Communication <span style="background:var(--indigo-100);color:var(--indigo-700);font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;margin-left:4px">4</span></div>
+        <div class="tab-btn-demo"><span class="ms" style="font-size:14px;margin-right:4px">history</span>Timeline</div>
+        <div class="tab-btn-demo"><span class="ms" style="font-size:14px;margin-right:4px">health_and_safety</span>HSE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. Portal Activity Feed ── -->
+  <section class="kit-section" id="portal">
+    <div class="kit-section-header">
+      <span class="kit-section-num">06</span>
+      <span class="kit-section-title">Communication Tab — Portal Activity Feed</span>
+    </div>
+    <div class="rule"><strong>Communication Rule:</strong> This tab is a <strong>read-only</strong> feed of client portal actions from the <code>client_portal_actions</code> table. It is NOT a threaded helpdesk/reply UI. Action types: <code>quote_approved</code>, <code>quote_revision</code>, <code>po_uploaded</code>, <code>jobcard_viewed</code>, <code>jobcard_signed</code>, <code>jobcard_refused</code>.</div>
+    <div class="comp-group">
+      <div class="portal-card">
+        <div class="portal-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600);font-size:18px">check_circle</span></div>
+        <div style="flex:1">
+          <div style="font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:2px">Quote Approved</div>
+          <div style="font-size:11.5px;color:var(--fg-2);margin-bottom:4px">Client approved the quote via portal.</div>
+          <div style="font-size:11px;color:var(--muted-fg)">Acme Corp (portal) · 12 Jul 2026 08:00 · <span style="font-family:monospace;font-size:10.5px;color:var(--indigo-600)">QUO-0089</span></div>
         </div>
-        
-        <!-- Table -->
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="border-b border-workspace-border">
-              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Ref #</th>
-              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Description</th>
-              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold">Status</th>
-              <th class="py-[10px] px-4 text-ws-eyebrow font-semibold text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody class="text-[13px]">
-            <tr class="border-b border-workspace-bg hover:bg-workspace-bg">
-              <td class="py-3 px-4 font-mono text-[12px] text-accent-indigo font-medium">INV-001</td>
-              <td class="py-3 px-4 text-workspace-fg font-medium">Plumbing repairs</td>
-              <td class="py-3 px-4">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-amber-wash text-accent-amber">Sent</span>
-              </td>
-              <td class="py-3 px-4 text-right tabular-nums font-medium">R 1,250.00</td>
-            </tr>
-            <tr class="hover:bg-workspace-bg">
-              <td class="py-3 px-4 font-mono text-[12px] text-accent-indigo font-medium">INV-002</td>
-              <td class="py-3 px-4 text-workspace-fg font-medium">Electrical compliance</td>
-              <td class="py-3 px-4">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-green-wash text-accent-green">Paid</span>
-              </td>
-              <td class="py-3 px-4 text-right tabular-nums font-medium">R 4,500.00</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-    </section>
-
-    <!-- 4. Tabs -->
-    <section>
-      <h2 class="text-ws-eyebrow mb-4">4. Tabs (Underline Style)</h2>
-      <div class="flex items-center border-b border-workspace-border">
-        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-accent-indigo text-accent-indigo flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-[16px]">grid_view</span> Overview
-        </button>
-        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-workspace-fg-muted hover:text-workspace-fg flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-[16px]">forum</span> Communication
-        </button>
-        <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-workspace-fg-muted hover:text-workspace-fg flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-[16px]">history</span> Timeline
-        </button>
+      <div class="portal-card">
+        <div class="portal-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600);font-size:18px">edit</span></div>
+        <div style="flex:1">
+          <div style="font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:2px">Revision Requested</div>
+          <div style="font-size:11.5px;color:var(--fg-2);margin-bottom:4px">Client requested a revision: "Please include the level 2 sub-board in scope."</div>
+          <div style="font-size:11px;color:var(--muted-fg)">Acme Corp (portal) · 11 Jul 2026 15:45 · <span style="font-family:monospace;font-size:10.5px;color:var(--indigo-600)">QUO-0089</span></div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </div>
+  <!-- ── 7. Rules ── -->
+  <section class="kit-section" id="rules">
+    <div class="kit-section-header">
+      <span class="kit-section-num">07</span>
+      <span class="kit-section-title">Non-Negotiable Rules</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="rule"><strong>No Drift:</strong> The mockup must not drift from this UI Kit. If a component changes in <code>index.html</code>, this file must be updated in the same commit.</div>
+      <div class="rule"><strong>Backend-First:</strong> Every status, role, type, and metric must map to a real field in <code>client-centric-stats</code>. No invented data shapes.</div>
+      <div class="rule"><strong>Three Content Categories:</strong> (1) Real &amp; surfaced — render faithfully. (2) Real but hidden/broken — annotate with <code>&lt;!-- [FIX PROPOSAL] --&gt;</code>. (3) New features — annotate with <code>&lt;!-- [NEW SUGGESTION] --&gt;</code>.</div>
+      <div class="rule"><strong>Undo/Redo:</strong> Use Git for all state management. Never manually delete code. Before risky changes, create a snapshot commit. To undo: <code>git revert HEAD --no-edit</code>.</div>
+      <div class="rule"><strong>Job Types (real values from JOB_TYPE_LABELS):</strong> repair · maintenance · install (Installation) · new_installation · new_build · reinstatement · supply_and_deliver · other. Never use "Electrical", "Plumbing", "HVAC" etc. as job types.</div>
+      <div class="rule"><strong>Job Nature (real values):</strong> <code>to_be_done</code> (To Be Done) · <code>done_already</code> (Done Already). No other values.</div>
+      <div class="rule"><strong>Assignment Roles (real values from JobAssignmentPanel.tsx):</strong> Tech Manager · Coordinator · Sales Rep · Job Owner. Job Owner must be one of Tech Manager or Coordinator.</div>
+    </div>
+  </section>
+
+</div>
 </body>
 </html>
