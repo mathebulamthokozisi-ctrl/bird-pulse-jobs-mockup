@@ -931,7 +931,12 @@ td:first-child{padding:8px 6px}
   background: var(--white);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  overflow: hidden;
+  overflow: visible;
+}
+/* Clip only the scrollable table wrappers, not the card itself */
+.de-card .de-table-wrap {
+  overflow-x: auto;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 .de-card-header {
   display: flex;
@@ -2325,7 +2330,7 @@ td:first-child{padding:8px 6px}
           <span style="margin-left:auto;font-size:11px;color:var(--indigo-500)" id="est-sec-materials-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('materials')"><span class="ms">add</span>Add</button>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2354,7 +2359,7 @@ td:first-child{padding:8px 6px}
           <span style="margin-left:auto;font-size:11px;color:#b45309" id="est-sec-equipment-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('equipment')"><span class="ms">add</span>Add</button>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2385,7 +2390,7 @@ td:first-child{padding:8px 6px}
           <span style="margin-left:auto;font-size:11px;color:#16a34a" id="est-sec-labour-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add</button>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2414,7 +2419,7 @@ td:first-child{padding:8px 6px}
           <span style="margin-left:auto;font-size:11px;color:#9333ea" id="est-sec-preliminaries-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('preliminaries')"><span class="ms">add</span>Add</button>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2600,7 +2605,7 @@ td:first-child{padding:8px 6px}
           <span class="de-card-title">Line Items</span>
           <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">34% markup applied</span>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2793,7 +2798,7 @@ td:first-child{padding:8px 6px}
           <span class="de-card-title">Line Items</span>
           <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">Pre-populated from Quote QUO-0089</span>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2918,7 +2923,7 @@ Reference: INV-0089 / JOB-0042</textarea>
           <span class="de-card-title">Cost Entries</span>
           <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)" id="costs-entry-count">0 entries</span>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-line-table">
             <thead>
               <tr>
@@ -2952,7 +2957,7 @@ Reference: INV-0089 / JOB-0042</textarea>
           <span class="ms">compare_arrows</span>
           <span class="de-card-title">Variance vs Estimate</span>
         </div>
-        <div style="overflow-x:auto">
+        <div class="de-table-wrap">
           <table class="de-var-table">
             <thead>
               <tr>
@@ -3262,7 +3267,7 @@ Reference: INV-0089 / JOB-0042</textarea>
             <span class="de-card-title">Risk Assessment Matrix</span>
             <button class="btn sm" style="margin-left:auto" onclick="addRiskRow()"><span class="ms">add</span>Add Risk</button>
           </div>
-          <div style="overflow-x:auto">
+          <div class="de-table-wrap">
             <table class="de-risk-table">
               <thead>
                 <tr>
