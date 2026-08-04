@@ -455,14 +455,13 @@ td:first-child{padding:8px 8px}
 .team-edit:hover{color:var(--indigo-600)}
 
 /* P/L */
-.pl-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.pl-amount{font-size:20px;font-weight:800;letter-spacing:-.02em}
-.pl-amount.profit{color:var(--green-600)}
-.pl-amount.loss{color:var(--red-600)}
-.pl-margin{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
-.pl-margin.profit{color:var(--green-700);background:var(--green-50);border:1px solid var(--green-100)}
-.pl-margin.loss{color:var(--red-700);background:var(--red-50);border:1px solid var(--red-100)}
-.pl-body{padding:10px 14px}
+.pl-banner{border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px;transition:background var(--t-base)}
+.pl-banner.profit{background:var(--green-600)}
+.pl-banner.loss{background:var(--red-600)}
+.pl-banner-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.75);margin-bottom:4px}
+.pl-amount{font-size:24px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1.1}
+.pl-margin{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);margin-top:3px}
+.pl-body{}
 .pl-row{display:flex;justify-content:space-between;padding:3.5px 0;font-size:12px;color:var(--fg-2)}
 .pl-row .key{color:var(--muted-fg)}
 .pl-row .val{font-weight:500;font-variant-numeric:tabular-nums}
@@ -2062,20 +2061,19 @@ td:first-child{padding:8px 8px}
       <!-- P/L Widget -->
       <div style="padding:14px;border-top:1px solid var(--border)">
         <div class="sec-label">Financials</div>
-        <div class="pl-header">
-          <span class="ms" id="pl-icon" style="font-size:20px;color:var(--green-500)">trending_up</span>
-          <div>
-            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)">Estimated P/L</div>
-            <div class="pl-amount profit" id="pl-amount">+R 12,300</div>
-            <div class="pl-margin profit" id="pl-margin">25.4% margin</div>
-          </div>
+        <!-- Banner card -->
+        <div class="pl-banner profit" id="pl-banner">
+          <div class="pl-banner-label">Expected P/L</div>
+          <div class="pl-amount" id="pl-amount">+R 12,300</div>
+          <div class="pl-margin" id="pl-margin">34% markup / 25.4% margin</div>
         </div>
+        <!-- Detail rows -->
         <div class="pl-body">
           <div class="pl-row"><span class="key">Quote (excl. VAT)</span><span class="val" id="pl-quote">R 48,500</span></div>
           <div class="pl-row"><span class="key">Estimate Cost</span><span class="val" id="pl-est">R 36,200</span></div>
           <div class="pl-row"><span class="key">Actual Cost</span><span class="val" id="pl-actual" style="color:var(--muted-fg)">R 0 (pending)</span></div>
           <div class="pl-row"><span class="key">Commission</span><span class="val" id="pl-comm">R 0</span></div>
-          <div class="pl-row"><span class="key">Est. Profit</span><span class="val" id="pl-profit" style="color:var(--green-600)">+R 12,300</span></div>
+          <div class="pl-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px"><span class="key" style="font-weight:600;color:var(--fg)">Est. Profit</span><span class="val" id="pl-profit" style="color:var(--green-600);font-weight:700">+R 12,300</span></div>
         </div>
       </div>
 
@@ -5312,9 +5310,12 @@ function saveEstimate(){
   // Update sidebar P/L
   const el=document.getElementById('pl-est');if(el)el.textContent=fmt(sub);
   const quote=48500;const profit=quote-sub;
-  const elp=document.getElementById('pl-profit');if(elp)elp.textContent=(profit>=0?'+':'')+fmt(profit);
+  const elp=document.getElementById('pl-profit');if(elp){elp.textContent=(profit>=0?'+':'')+fmt(profit);elp.style.color=profit>=0?'var(--green-600)':'var(--red-600)';}
   const ela=document.getElementById('pl-amount');if(ela)ela.textContent=(profit>=0?'+':'')+fmt(profit);
-  const elm=document.getElementById('pl-margin');if(elm)elm.textContent=((profit/quote)*100).toFixed(1)+'% margin';
+  const markup=sub>0?((quote-sub)/sub*100).toFixed(0):0;
+  const margin=quote>0?((profit/quote)*100).toFixed(1):0;
+  const elm=document.getElementById('pl-margin');if(elm)elm.textContent=markup+'% markup / '+margin+'% margin';
+  const banner=document.getElementById('pl-banner');if(banner){banner.className='pl-banner '+(profit>=0?'profit':'loss');}
   // Update doc meta in sidebar
   const em=document.getElementById('estimate-meta');if(em)em.textContent=estLines.length+' items · '+fmt(sub);
   closeEditor('estimate-editor');
@@ -5441,6 +5442,26 @@ function recalcQuote(){
   if(elSbC)elSbC.textContent=fmt(totalComm);
   if(elSbP){elSbP.textContent=(profit>=0?'+':'')+fmt(profit);elSbP.className='val '+(profit>=0?'profit':'loss');}
   if(elSbM&&subAfterDisc>0)elSbM.textContent=((profit/subAfterDisc)*100).toFixed(1)+'% margin';
+  // Also update the job detail P/L banner
+  const plBanner=document.getElementById('pl-banner');
+  const plAmt=document.getElementById('pl-amount');
+  const plMarg=document.getElementById('pl-margin');
+  const plProfit=document.getElementById('pl-profit');
+  const plComm=document.getElementById('pl-comm');
+  const plQuote=document.getElementById('pl-quote');
+  if(plBanner)plBanner.className='pl-banner '+(profit>=0?'profit':'loss');
+  if(plAmt)plAmt.textContent=(profit>=0?'+':'')+fmt(profit);
+  const mkup=estCost>0?((subAfterDisc-estCost)/estCost*100).toFixed(0):0;
+  const marg=subAfterDisc>0?(profit/subAfterDisc*100).toFixed(1):0;
+  if(plMarg)plMarg.textContent=mkup+'% markup / '+marg+'% margin';
+  if(plProfit){plProfit.textContent=(profit>=0?'+':'')+fmt(profit);plProfit.style.color=profit>=0?'var(--green-600)':'var(--red-600)';}
+  if(plComm)plComm.textContent=fmt(totalComm);
+  if(plQuote)plQuote.textContent=fmt(subAfterDisc);
+  // Update overview metric card
+  const ovProfit=document.getElementById('ov-profit');
+  const ovCard=document.getElementById('ov-profit-card');
+  if(ovProfit){ovProfit.textContent=(profit>=0?'+':'')+fmt(profit);ovProfit.className='metric-value '+(profit>=0?'profit':'loss');}
+  if(ovCard){ovCard.className='metric-card highlight '+(profit>=0?'':'loss');}
 }
 function acceptQuote(){
   closeEditor('quote-editor');
