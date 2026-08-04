@@ -1128,10 +1128,9 @@ td:first-child{padding:8px 8px}
   gap: 6px;
   padding: 0 14px;
   height: 100%;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .06em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .01em;
   color: var(--muted-fg);
   cursor: pointer;
   border-bottom: 2px solid transparent;
@@ -1154,11 +1153,11 @@ td:first-child{padding:8px 8px}
 .de-stage.active {
   color: var(--indigo-700);
   border-bottom-color: var(--indigo-600);
-  background: var(--indigo-50);
+  background: none;
   font-weight: 700;
   border-bottom-width: 3px;
 }
-.de-stage.active:hover { background: var(--indigo-100); }
+.de-stage.active:hover { background: none; }
 .de-stage.done { color: var(--green-700); }
 .de-stage.done::before {
   content: '✓';
@@ -1665,45 +1664,22 @@ td:first-child{padding:8px 8px}
   line-height: 1.5;
 }
 
-/* ── Invoice due banner ── */
-.de-due-banner {
-  display: flex;
+/* ── Invoice due status pill (inline in Invoice Details) ── */
+.inv-due-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  font-size: 12px;
+  gap: 4px;
+  font-size: 10.5px;
   font-weight: 600;
-  margin-bottom: 4px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
-.de-due-banner.overdue {
-  background: var(--red-50);
-  color: var(--red-700);
-  border: 1px solid var(--red-100);
-}
-.de-due-banner.due-soon {
-  background: #fffbeb;
-  color: #b45309;
-  border: 1px solid #fcd34d;
-}
-.de-due-banner.ok {
-  background: var(--green-50);
-  color: var(--green-700);
-  border: 1px solid var(--green-100);
-}
-.de-due-banner .ms { font-size: 16px; }
-
-/* ── QBO sync banner ── */
-.de-qbo-banner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 16px;
-  background: #eff6ff;
-  border-bottom: 1px solid #bfdbfe;
-  font-size: 12px;
-}
-.de-qbo-banner .ms { color: #3b82f6; font-size: 15px; }
+.inv-due-pill.overdue { background: var(--red-50); color: var(--red-700); border: 1px solid var(--red-100); }
+.inv-due-pill.due-soon { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+.inv-due-pill.ok { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+.inv-due-pill.unsent { background: var(--slate-100); color: var(--muted-fg); border: 1px solid var(--border); }
 
 /* ── Jobcard section dividers ── */
 .de-section-divider {
@@ -2852,14 +2828,13 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:5%">#</th>
-                <th style="width:11%">Category</th>
-                <th style="width:30%">Description</th>
-                <th style="width:8%">Unit</th>
+                <th style="width:4%">#</th>
+                <th style="width:35%">Description</th>
+                <th style="width:13%">Category</th>
                 <th style="width:7%">Qty</th>
-                <th style="width:11%">Unit Cost (R)</th>
-                <th style="width:10%;text-align:right">Total (R)</th>
-                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
+                <th style="width:7%">Unit</th>
+                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
@@ -2884,19 +2859,18 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:5%">#</th>
-                <th style="width:11%">Owned/Hired</th>
-                <th style="width:30%">Description / Asset</th>
-                <th style="width:8%">Unit</th>
+                <th style="width:4%">#</th>
+                <th style="width:35%">Description / Asset</th>
+                <th style="width:13%">Owned/Hired</th>
                 <th style="width:7%">Qty</th>
-                <th style="width:11%">Unit Cost (R)</th>
-                <th style="width:10%;text-align:right">Total (R)</th>
-                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
+                <th style="width:7%">Unit</th>
+                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-equipment">
-              <tr><td colspan="9" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No equipment lines — click Add to include plant/equipment costs</td></tr>
+              <tr><td colspan="8" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No equipment lines — click Add to include plant/equipment costs</td></tr>
             </tbody>
           </table>
         </div>
@@ -2918,14 +2892,13 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:5%">#</th>
-                <th style="width:11%">Type</th>
-                <th style="width:30%">Description / Resource</th>
-                <th style="width:8%">Unit</th>
+                <th style="width:4%">#</th>
+                <th style="width:35%">Description / Resource</th>
+                <th style="width:13%">Type</th>
                 <th style="width:7%">Qty</th>
-                <th style="width:11%">Unit Cost (R)</th>
-                <th style="width:10%;text-align:right">Total (R)</th>
-                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
+                <th style="width:7%">Unit</th>
+                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
@@ -2951,19 +2924,18 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:5%">#</th>
-                <th style="width:11%">Category</th>
-                <th style="width:30%">Description</th>
-                <th style="width:8%">Unit</th>
+                <th style="width:4%">#</th>
+                <th style="width:35%">Description</th>
+                <th style="width:13%">Category</th>
                 <th style="width:7%">Qty</th>
-                <th style="width:11%">Unit Cost (R)</th>
-                <th style="width:10%;text-align:right">Total (R)</th>
-                <th style="width:4%"><span class="ms" style="font-size:13px;color:var(--muted-fg)">notes</span></th>
+                <th style="width:7%">Unit</th>
+                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
             </thead>
             <tbody id="est-tbody-preliminaries">
-              <tr><td colspan="9" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
+              <tr><td colspan="8" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
             </tbody>
           </table>
         </div>
@@ -3400,20 +3372,6 @@ td:first-child{padding:8px 8px}
   </div>
   <div class="de-body">
     <div class="de-main-col">
-      <!-- QBO sync status banner -->
-      <div class="de-qbo-banner" id="inv-qbo-banner">
-        <span class="ms" style="font-size:15px;color:#3b82f6">cloud_sync</span>
-        <span style="color:#1d4ed8;font-weight:500">QuickBooks:</span>
-        <span style="color:#1e40af" id="inv-qbo-status">Not synced — approve and send to push this invoice to QuickBooks Online</span>
-        <span style="margin-left:auto">
-          <button class="btn sm" style="font-size:11px;padding:3px 10px" onclick="document.getElementById('inv-qbo-status').textContent='Synced ✔';toast('Pushed to QuickBooks Online','success')">Push to QBO</button>
-        </span>
-      </div>
-      <!-- Due banner -->
-      <div class="de-due-banner" id="inv-due-banner">
-        <span class="ms">schedule</span>
-        <span id="inv-due-text">Invoice not yet sent. Due date: <strong id="inv-due-display">—</strong></span>
-      </div>
       <div class="de-main">
       <!-- Billing block: Bill To + Invoice Details -->
       <div class="de-card">
@@ -3451,7 +3409,10 @@ td:first-child{padding:8px 8px}
                 <span style="color:var(--muted-fg)">Invoice Date:</span>
                 <span><input type="date" id="inv-date" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer"></span>
                 <span style="color:var(--muted-fg)">Due Date:</span>
-                <span><input type="date" id="inv-due" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer"></span>
+                <span style="display:flex;align-items:center;justify-content:space-between">
+                  <input type="date" id="inv-due" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer" onchange="updateInvDuePill()">
+                  <span class="inv-due-pill unsent" id="inv-due-pill">Not sent</span>
+                </span>
                 <span style="color:var(--muted-fg)">Terms:</span>
                 <span>
                   <select id="inv-terms" style="border:none;background:none;font-size:12.5px;font-family:inherit;color:var(--fg);padding:0;outline:none;cursor:pointer">
@@ -5730,7 +5691,7 @@ function renderEstimateTable(){
     const cols=colSpans[sec]||8;
     if(lines.length===0){
       const emptyMsg={materials:'No materials — click Add Material to start',equipment:'No equipment — click Add to include plant/equipment costs',labour:'No labour — click Add to add labour costs',preliminaries:'No preliminaries — click Add for travel, waste, site, HSE costs'};
-      tbody.innerHTML=`<tr><td colspan="${cols}" style="text-align:center;padding:18px;color:var(--muted-fg);font-size:12px">${emptyMsg[sec]}</td></tr>`;
+      tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:18px;color:var(--muted-fg);font-size:12px">${emptyMsg[sec]}</td></tr>`;
       return;
     }
     const cats=SECTION_CATEGORIES[sec]||SECTION_CATEGORIES.materials;
