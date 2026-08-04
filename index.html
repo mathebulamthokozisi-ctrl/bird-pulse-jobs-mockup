@@ -4387,6 +4387,28 @@ function getSubStatus(stageKey, status){
   };
   return (sub[stageKey]||{})[status]||null;
 }
+// Full human-readable label for the current status — shown on the active pipeline stage
+function getFullStatusLabel(status){
+  const labels = {
+    job_booked:           'Job Booked',
+    estimate_done:        'Estimate Done',
+    quote_drafted:        'Quote Drafted',
+    quote_sent:           'Quote Sent',
+    quote_finalized:      'Quote Finalized',
+    quote_accepted:       'Quote Accepted',
+    quote_declined:       'Quote Declined',
+    on_my_way:            'On My Way',
+    work_in_progress:     'Work In Progress',
+    job_in_progress:      'Job In Progress',
+    job_completed:        'Job Completed',
+    work_client_approved: 'Client Approved',
+    invoiced:             'Invoiced',
+    paid:                 'Paid',
+    commission_paid:      'Commission Paid',
+    cancelled:            'Cancelled',
+  };
+  return labels[status] || status.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
 // Real guard keys from production useWorkflowGuardKeys.ts — GUARD_KEY_LABELS
 // Keys: estimate_finalized, quote_ready, client_contact_present, quote_approval_present,
 //       invoice_ready, payment_recorded, commission_enabled
@@ -4960,11 +4982,12 @@ function renderPipeline(){
     const isDone=i<activeStageIdx;
     const isActive=i===activeStageIdx;
     const stateClass=isDone?'done':isActive?(isDeclined&&s.key==='quote'?'declined':'active'):'future';
-    const sub=isActive?getSubStatus(s.key,currentJobStatus):null;
-    const subChip=sub?`<span class="pipe-chip">${sub}</span>`:'';
+    // Active stage: show full status label (e.g. "Work In Progress", "Quote Sent")
+    // Done/future stages: show the short stage name (e.g. "Estimate", "Quote")
+    const displayLabel = isActive ? getFullStatusLabel(currentJobStatus) : s.label;
     const pulse=(isActive&&!isDeclined)?'<span class="pipe-pulse"></span>':'';
     return `<div class="pipe-stage ${stateClass}" onclick="clickPipelineStage(${i})">
-      ${pulse}<span class="pipe-lbl">${s.label}</span>${subChip}
+      ${pulse}<span class="pipe-lbl">${displayLabel}</span>
     </div>`;
   }).join('');
   bar.innerHTML=`<div class="${trackClass}" style="--pipe-fill:${fillPct}%">
