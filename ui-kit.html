@@ -615,11 +615,25 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:#0f172a;background:#f0f
     <div class="comp-group">
       <div class="comp-group-label">Document Editors Present in Mockup</div>
       <ul style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
-        <li><strong>Estimate Editor</strong> — Line item table: Description, Qty, Unit Cost, Markup %, Unit Price, Total. Add/remove rows. Running total.</li>
-        <li><strong>Quote Editor</strong> — Same structure as Estimate. Quote number, validity date, notes.</li>
-        <li><strong>Invoice Editor</strong> — Same structure. Invoice number, due date.</li>
-        <li><strong>Actual Costs Editor</strong> — Entry table: Date, Supplier, Category, Reference, Amount. Running total.</li>
-        <li><strong>Jobcard Editor</strong> — 4×4 photo grid slots + signature capture box. Signed state: green border.</li>
+        <li><strong>Estimate Editor</strong> — Line item table organized by real cost categories (Materials, Equipment, Labour, Preliminaries, Travel, Subcontractor, Sundries).</li>
+        <li><strong>Quote Editor</strong> — Header card (Bill To, Ship To, Details), editable line item table, sidebar sync.</li>
+        <li><strong>Invoice Editor</strong> — Header card, editable line item table, sidebar sync.</li>
+        <li><strong>Actual Costs Editor</strong> — Entry table (Date, Supplier, Category, Reference, Amount). Running total.</li>
+        <li><strong>Jobcard Editor</strong> — Scope, Findings, Before Photos, Work Performed, After Photos, and dual signature capture (Technician & Client).</li>
+      </ul>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Editor UI Standards</div>
+      <ul style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
+        <li>All editors use <code>.doc-editor</code> which covers the screen with a white background.</li>
+        <li>Editor topbars have a solid white background (no amber gradients).</li>
+        <li>Cards inside editors use <code>.de-card</code> with <code>overflow: visible</code> to prevent clipping of multi-line content (textareas, signature canvases).</li>
+        <li>Scrollable tables inside cards MUST be wrapped in <code>&lt;div class="de-table-wrap"&gt;</code> to ensure border-radius is applied correctly without clipping the card body.</li>
+      </ul>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Other Modals</div>
+      <ul style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
         <li><strong>New Job Wizard</strong> — Client, Site, Description, Type, Nature, Priority, Requested Date, Reference.</li>
         <li><strong>Edit Job Modal</strong> — Same fields as New Job.</li>
         <li><strong>Team Assign Modal</strong> — Assignee list with selection state.</li>

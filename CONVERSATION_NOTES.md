@@ -62,14 +62,20 @@ This section documents the exact state of the UI as currently built in `index.ht
 
 ### 2.4 Document Editors (Modals)
 The mockup includes fully functional modal editors for:
-- **Estimate:** Line item table (Desc, Qty, Unit Cost, Markup, Unit Price, Total).
-- **Quote:** Line item table (same as estimate).
-- **Invoice:** Line item table (same as estimate).
+- **Estimate:** Line item table organized by real cost categories (Materials, Equipment, Labour, Preliminaries, Travel, Subcontractor, Sundries).
+- **Quote:** Header card (Bill To, Ship To, Details), editable line item table, sidebar sync.
+- **Invoice:** Header card, editable line item table, sidebar sync.
 - **Actual Costs:** Entry table (Date, Supplier, Category, Ref, Amount).
-- **Jobcard:** 4x4 photo grid slot and signature capture box.
+- **Jobcard:** Scope, Findings, Before Photos, Work Performed, After Photos, and dual signature capture (Technician & Client).
+
+**Editor UI Standards:**
+- All editors use `.doc-editor` which covers the screen with a white background.
+- Editor topbars have a solid white background (no amber gradients).
+- Cards inside editors use `.de-card` with `overflow: visible` to prevent clipping of multi-line content (textareas, signature canvases).
+- Scrollable tables inside cards MUST be wrapped in `<div class="de-table-wrap">` to ensure border-radius is applied correctly without clipping the card body.
 
 ### 2.5 Status & Field Data
-The mockup currently uses a mix of production backend keys and human-readable strings.
+The mockup strictly maps to production backend keys from `client-centric-stats`.
 - **Statuses:** `job_booked`, `estimate_done`, `quote_drafted`, `quote_sent`, `quote_finalized`, `quote_accepted`, `quote_declined`, `on_my_way`, `work_in_progress`, `job_in_progress`, `job_completed`, `work_client_approved`, `invoiced`, `paid`, `commission_paid`, `cancelled`.
 - **Job Types:** Electrical, Plumbing, HVAC, General, Security, Cleaning, Landscaping.
 - **Job Nature:** To Be Done, Done Already.
@@ -87,3 +93,4 @@ The mockup currently uses a mix of production backend keys and human-readable st
 | Session 15 | Added Document Editors (Estimate, Quote, Invoice, Actual Costs, Jobcard) |
 | Session 16 | Added HSE tab and risk matrix, finalized green pipeline bar and right-side panel |
 | Session 17 (Rollback) | Wrong branch was edited. Fully rolled back to the correct task state (`qnEiEnf2baqVStUL8Mdnyc`). Mockup IS the standard rule locked. |
+| Session 18 (Editor Fixes) | Synced editors with real production backend keys. Fixed `.de-card` overflow clipping bug across all editors. Introduced `.de-table-wrap` for proper table scrolling. Removed amber gradient from editor topbars. |
