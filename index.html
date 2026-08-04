@@ -2775,9 +2775,9 @@ td:first-child{padding:8px 8px}
           <table class="de-line-table">
             <thead>
               <tr>
-                <th style="width:24%">Description</th>
+                <th style="width:23%">Description</th>
                 <th style="width:5%">Qty</th>
-                <th style="width:5%">Unit</th>
+                <th style="width:6%">Unit</th>
                 <th style="width:9%">Unit Price (R)</th>
                 <th style="width:6%">Comm %</th>
                 <th style="width:7%">Comm (R)</th>
@@ -2933,11 +2933,11 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">trending_up</span>Margin</div>
-        <div class="de-sb-row"><span class="key">Quote (excl.)</span><span class="val">R 48,500</span></div>
-        <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val">R 36,200</span></div>
-        <div class="de-sb-row"><span class="key">Commission</span><span class="val">R 3,850</span></div>
-        <div class="de-sb-total"><span>Gross Profit</span><span class="val profit">+R 12,300</span></div>
-        <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px">25.4% margin</div>
+        <div class="de-sb-row"><span class="key">Quote (excl.)</span><span class="val" id="quote-sb-quote">R 48,500</span></div>
+        <div class="de-sb-row"><span class="key">Estimate cost</span><span class="val" id="quote-sb-est">R 36,200</span></div>
+        <div class="de-sb-row"><span class="key">Commission</span><span class="val" id="quote-sb-comm">R 3,850</span></div>
+        <div class="de-sb-total"><span>Gross Profit</span><span class="val profit" id="quote-sb-profit">+R 12,300</span></div>
+        <div style="font-size:11px;color:var(--green-600);font-weight:600;margin-top:4px" id="quote-sb-margin">25.4% margin</div>
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">info</span>Document Info</div>
@@ -5214,7 +5214,7 @@ function renderEstimateTable(){
         <td><input value="${l.desc}" style="width:100%" onchange="estLines[${i}].desc=this.value"></td>
         <td>${cat2}</td>
         <td><input type="number" value="${l.qty}" style="width:52px;text-align:right" onchange="estLines[${i}].qty=+this.value;renderEstimateTable()"></td>
-        <td><select style="font-size:11.5px" onchange="estLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
+        <td><select style="font-size:11.5px;min-width:44px" onchange="estLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
         <td><input type="number" value="${l.price}" style="text-align:right" onchange="estLines[${i}].price=+this.value;renderEstimateTable()"></td>
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--fg)">${fmt(total)}</td>
         <td><button class="de-del-row" onclick="removeEstLine(${i})"><span class="ms">delete</span></button></td>
@@ -5355,7 +5355,7 @@ function renderQuoteTable(){
     return `<tr>
     <td><input value="${l.desc}" style="width:100%" onchange="quoteLines[${i}].desc=this.value"></td>
     <td><input type="number" value="${l.qty}" style="width:52px;text-align:right" onchange="quoteLines[${i}].qty=+this.value;renderQuoteTable()"></td>
-    <td><select style="font-size:11.5px" onchange="quoteLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
+    <td><select style="font-size:11.5px;min-width:44px" onchange="quoteLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
     <td><input type="number" value="${l.price}" style="text-align:right" onchange="quoteLines[${i}].price=+this.value;renderQuoteTable()"></td>
     <td><input type="number" value="${commPct}" min="0" max="100" step="0.5" style="width:52px;text-align:right" onchange="quoteLines[${i}].commPct=+this.value;renderQuoteTable()"></td>
     <td style="text-align:right;color:var(--muted-fg);font-size:12px;font-variant-numeric:tabular-nums">${fmt(commR)}</td>
@@ -5417,7 +5417,7 @@ function recalcQuote(){
   if(el('quote-total'))el('quote-total').textContent=fmt(total);
   if(el('quote-deposit-amt'))el('quote-deposit-amt').textContent=fmt(depAmt);
   if(rowDeposit)rowDeposit.querySelector('td:first-child').textContent=`Deposit (${quoteDepositPct}%)`;
-  if(el('quote-profit'))el('quote-profit').textContent=fmt(subAfterDisc-estLines.reduce((s,l)=>s+l.qty*l.price,0));
+  if(el('quote-profit')){const p=subAfterDisc-estLines.reduce((s,l)=>s+l.qty*l.price,0)-totalComm;el('quote-profit').textContent=(p>=0?'+':'')+fmt(p);el('quote-profit').style.color=p>=0?'var(--green-600)':'var(--red-600)';}
   if(el('quote-commission-total'))el('quote-commission-total').textContent=fmt(totalComm);
   // Discount display label
   const discDisp=document.getElementById('quote-disc-display');
@@ -5430,11 +5430,17 @@ function recalcQuote(){
   if(sbBig)sbBig.textContent=fmt(subAfterDisc);
   if(sbSub)sbSub.textContent='Excl. VAT · '+fmt(total)+' incl.';
   const estCost=estLines.reduce((s,l)=>s+l.qty*l.price,0);
-  const profit=subAfterDisc-estCost;
-  const sbProfit=document.querySelector('#quote-editor .de-sb-total .val');
-  const sbMargin=document.querySelector('#quote-editor .de-sb-section:nth-child(2) div[style*="green"]');
-  if(sbProfit){sbProfit.textContent=(profit>=0?'+':'')+fmt(profit);sbProfit.className='val '+(profit>=0?'profit':'loss');}
-  if(sbMargin&&subAfterDisc>0)sbMargin.textContent=((profit/subAfterDisc)*100).toFixed(1)+'% margin';
+  const profit=subAfterDisc-estCost-totalComm;
+  const elSbQ=document.getElementById('quote-sb-quote');
+  const elSbE=document.getElementById('quote-sb-est');
+  const elSbC=document.getElementById('quote-sb-comm');
+  const elSbP=document.getElementById('quote-sb-profit');
+  const elSbM=document.getElementById('quote-sb-margin');
+  if(elSbQ)elSbQ.textContent=fmt(subAfterDisc);
+  if(elSbE)elSbE.textContent=fmt(estCost);
+  if(elSbC)elSbC.textContent=fmt(totalComm);
+  if(elSbP){elSbP.textContent=(profit>=0?'+':'')+fmt(profit);elSbP.className='val '+(profit>=0?'profit':'loss');}
+  if(elSbM&&subAfterDisc>0)elSbM.textContent=((profit/subAfterDisc)*100).toFixed(1)+'% margin';
 }
 function acceptQuote(){
   closeEditor('quote-editor');
@@ -5474,7 +5480,7 @@ function renderInvTable(){
     return `<tr>
     <td><input value="${l.desc}" style="width:100%" onchange="invLines[${i}].desc=this.value"></td>
     <td><input type="number" value="${l.qty}" style="width:52px;text-align:right" onchange="invLines[${i}].qty=+this.value;renderInvTable()"></td>
-    <td><select style="font-size:11.5px" onchange="invLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
+    <td><select style="font-size:11.5px;min-width:44px" onchange="invLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
     <td><input type="number" value="${l.price}" style="text-align:right" onchange="invLines[${i}].price=+this.value;renderInvTable()"></td>
     <td><select style="font-size:11.5px" onchange="invLines[${i}].taxType=this.value;renderInvTable()">${taxOpts}</select></td>
     <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(lineExcl)}</td>
