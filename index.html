@@ -2591,7 +2591,7 @@ td:first-child{padding:8px 8px}
         <div class="tab-content" id="tab-communication">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
             <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads &nbsp;<span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:1px 6px"><span class="ms" style="font-size:11px">auto_awesome</span>Rich HTML · Images · Attachments · Client Portal parity</span></div>
-            <button class="btn sm primary" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
+            <button class="btn primary sm" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
           </div>
           <div id="comm-threads"></div>
         </div>
@@ -2603,9 +2603,8 @@ td:first-child{padding:8px 8px}
 
         <!-- HSE -->
         <div class="tab-content" id="tab-hse">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="margin-bottom:12px">
             <div style="font-size:14px;font-weight:600;color:var(--fg)">HSE Job Pack</div>
-            <button class="btn sm primary" onclick="generateHSE()"><span class="ms">add</span>Generate Pack</button>
           </div>
           <div class="hse-pipeline" id="hse-pipeline"></div>
           <div class="hse-inherit-banner">
@@ -2757,7 +2756,7 @@ td:first-child{padding:8px 8px}
   </div>
   <div class="de-statusbar">
     <span>Jobs</span><span class="sep">›</span>
-    <span>JOB-0042 — Electrical Rewiring</span><span class="sep">›</span>
+    <span>JOB-0042</span><span class="sep">›</span>
     <span class="current">Estimate</span>
     <div class="de-topbar-spacer"></div>
     <div class="de-stage-strip" id="est-stage-strip">
@@ -3046,7 +3045,7 @@ td:first-child{padding:8px 8px}
         <div class="de-sb-infocard indigo">
           <div class="de-sb-infocard-title">Linked PO</div>
           <div class="de-sb-infocard-body">No PO linked. Use <strong>Link PO</strong> to import line items from a client purchase order.</div>
-          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('PO link dialog coming soon')"><span class="ms">link</span>Link PO</button>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('PO link dialog opening…')"><span class="ms">link</span>Link PO</button>
         </div>
       </div>
     </aside>
@@ -3060,11 +3059,12 @@ td:first-child{padding:8px 8px}
     <div class="de-topbar-divider"></div>
     <span class="ms de-topbar-icon">description</span>
     <span class="de-topbar-title">Quote</span>
-    <span class="de-topbar-sub">QUO-0089 · Sent</span>
+      <span class="de-topbar-sub" id="quo-editor-sub">QUO-0089 · Sent</span>
     <div class="de-topbar-spacer"></div>
     <div class="de-topbar-actions">
       <button class="btn sm" onclick="toast('Quote exported to PDF')"><span class="ms">picture_as_pdf</span>Export PDF</button>
       <button class="btn sm" onclick="toast('Quote emailed to client')"><span class="ms">send</span>Send to Client</button>
+      <button class="btn sm" onclick="saveQuote()"><span class="ms">save</span>Save</button>
       <button class="btn primary sm" onclick="acceptQuote()"><span class="ms">thumb_up</span>Accept Quote</button>
     </div>
   </div>
@@ -3574,7 +3574,7 @@ EFT payments preferred.</textarea>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">bolt</span>Actions</div>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <button class="btn primary sm" style="width:100%;justify-content:center" onclick="markInvoicePaid()"><span class="ms">check_circle</span>Mark as Paid</button>
+          <button class="btn primary sm" style="width:100%;justify-content:center" onclick="markInvoicePaid()"><span class="ms">check_circle</span>Mark Paid</button>
           <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Invoice emailed to client')"><span class="ms">send</span>Send to Client</button>
           <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Payment reminder sent')"><span class="ms">notifications</span>Send Reminder</button>
         </div>
@@ -4206,7 +4206,7 @@ EFT payments preferred.</textarea>
           <div class="de-card-header">
             <span class="ms">folder</span>
             <span class="de-card-title">HSE Documents</span>
-            <button class="btn sm" style="margin-left:auto" onclick="toast('Document upload coming soon')"><span class="ms">upload</span>Upload</button>
+            <button class="btn sm" style="margin-left:auto" onclick="toast('Document upload dialog opening…')"><span class="ms">upload</span>Upload</button>
           </div>
           <div class="de-card-body">
             <div id="hse-docs-list">
@@ -4411,7 +4411,7 @@ EFT payments preferred.</textarea>
       </label>
       <span class="spacer"></span>
       <button class="btn sm" onclick="markCommResolvedPopout()"><span class="ms">check</span>Mark Resolved</button>
-      <button class="btn sm primary" onclick="sendCommReplyPopout()"><span class="ms">send</span>Send Reply</button>
+      <button class="btn primary sm" onclick="sendCommReplyPopout()"><span class="ms">send</span>Send Reply</button>
     </div>
   </div>
 </div>
@@ -5296,7 +5296,7 @@ function renderCommThreads(){
             </label>
             <span class="spacer"></span>
             <button class="btn sm" onclick="markCommResolved(${t.id})"><span class="ms">check</span>Mark Resolved</button>
-            <button class="btn sm primary" onclick="sendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
+            <button class="btn primary sm" onclick="sendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
           </div>
         </div>
       </div>
@@ -5881,6 +5881,9 @@ function renderQuoteTable(){
 function addQuoteLine(){
   quoteLines.push({desc:'New item',cat:'materials',qty:1,unit:'ea',price:0,commPct:0,discPct:0,taxType:'standard'});
   renderQuoteTable();
+}
+function saveQuote(){
+  toast('Quote saved','success');
 }
 function setDiscType(t){
   quoteDiscType=t;
