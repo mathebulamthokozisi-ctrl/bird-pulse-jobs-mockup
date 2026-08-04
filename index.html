@@ -431,11 +431,12 @@ td:first-child{padding:8px 8px}
 .guard-zone{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
   padding:6px 14px;
   flex:1;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   min-width:0;
+  overflow:hidden;
 }
 /* Kink divider between zones */
 .guard-kink{
@@ -491,8 +492,10 @@ td:first-child{padding:8px 8px}
   white-space:nowrap;
 }
 /* Guard key pills */
-.guard-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-400);margin-right:4px}
-.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:500;transition:opacity var(--t-smooth),transform var(--t-spring),background var(--t-smooth)}
+.guard-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-400);margin-right:4px;flex-shrink:0;white-space:nowrap}
+#guard-keys-display{display:contents}
+.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500;transition:opacity var(--t-smooth),transform var(--t-spring),background var(--t-smooth);flex-shrink:1;min-width:0;white-space:nowrap;overflow:hidden}
+.gk-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .guard-key:hover{transform:scale(1.04)}
 .guard-key.met{animation:guard-met-pop .3s var(--t-spring) both}
 .guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
@@ -5037,9 +5040,9 @@ function renderGuardKeys(){
     const g=guards.find(x=>x.key===def.key);
     if(!g){
       // Not required at this stage — show as pending/dimmed
-      return `<span class="guard-key pending" title="Not required at this stage"><span class="ms">radio_button_unchecked</span>${def.label}</span>`;
+      return `<span class="guard-key pending" title="Not required at this stage"><span class="ms" style="flex-shrink:0">radio_button_unchecked</span><span class="gk-lbl">${def.label}</span></span>`;
     }
-    return `<span class="guard-key ${g.met?'met':'blocked'}" title="${def.desc}"><span class="ms">${g.met?'check':'close'}</span>${def.label}</span>`;
+    return `<span class="guard-key ${g.met?'met':'blocked'}" title="${def.desc}"><span class="ms" style="flex-shrink:0">${g.met?'check':'close'}</span><span class="gk-lbl">${def.label}</span></span>`;
   }).join(' ');
   // Work stage statuses — determines which execution buttons are relevant
   const workStage=['on_my_way','work_in_progress','job_in_progress','job_completed','work_client_approved'];
