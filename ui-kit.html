@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bird Pulse — UI Kit</title>
+<title>Bird Pulse UI Kit — Jobs Module</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
-/* ── Tokens (exact match with index.html) ── */
+/* ── Reset ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;font-size:13px;color:#0f172a;background:#f0f2f5;min-height:100vh}
+.ms{font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;font-size:16px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';font-feature-settings:'liga';-webkit-font-smoothing:antialiased;vertical-align:middle}
+
+/* ── Design Tokens (exact match to index.html :root) ── */
 :root{
   --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-200:#c7d2fe;--indigo-300:#a5b4fc;
   --indigo-400:#818cf8;--indigo-500:#6366f1;--indigo-600:#4f46e5;--indigo-700:#4338ca;
@@ -23,300 +28,188 @@
   --bg:#f0f2f5;--white:#ffffff;--border:#e8eaed;
   --row-alt:#fafafa;
   --fg:#0f172a;--fg-2:#334155;--muted-fg:#64748b;--muted:#f8fafc;
-  --radius:6px;--shadow:0 1px 2px rgba(0,0,0,.05);
+  --radius:6px;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
   --shadow-md:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
   --shadow-lg:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-size:14px;line-height:1.5}
-.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:18px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:'liga';-webkit-font-smoothing:antialiased}
 
-/* ── Page layout ── */
+/* ── Kit layout ── */
 .kit-header{background:var(--indigo-600);padding:48px 64px 40px;color:#fff}
 .kit-header-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;opacity:.7;margin-bottom:10px}
 .kit-header-title{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:12px}
 .kit-header-sub{font-size:15px;opacity:.75;max-width:520px;line-height:1.6}
+.kit-header-rule{margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:12px 16px;font-size:12.5px;line-height:1.6;max-width:640px}
+.kit-header-rule strong{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
 .kit-header-meta{display:flex;gap:32px;margin-top:28px}
 .kit-header-meta-item{display:flex;flex-direction:column;gap:2px}
 .kit-header-meta-item .val{font-size:22px;font-weight:700}
 .kit-header-meta-item .lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.08em}
-
-.kit-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 64px;display:flex;gap:0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.kit-nav a{display:block;padding:14px 16px;font-size:12.5px;font-weight:600;color:var(--muted-fg);text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.kit-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 64px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:100}
+.kit-nav a{padding:12px 16px;font-size:12.5px;font-weight:600;color:var(--muted-fg);text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
 .kit-nav a:hover{color:var(--fg)}
 .kit-nav a.active{color:var(--indigo-600);border-bottom-color:var(--indigo-600)}
-
 .kit-body{max-width:1200px;margin:0 auto;padding:48px 64px 80px}
 .kit-section{margin-bottom:64px}
 .kit-section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .kit-section-title{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .kit-section-num{font-size:12px;font-weight:700;color:var(--indigo-500);background:var(--indigo-50);padding:2px 8px;border-radius:20px}
 .kit-section-desc{font-size:13px;color:var(--muted-fg);margin-left:auto}
-
-/* ── Swatch grid ── */
 .swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px}
 .swatch{border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
 .swatch-color{height:52px}
 .swatch-info{background:var(--white);padding:6px 8px;border-top:1px solid var(--border)}
 .swatch-name{font-size:10px;font-weight:700;color:var(--fg-2)}
 .swatch-hex{font-size:9.5px;color:var(--muted-fg);font-family:monospace}
-
-/* ── Component rows ── */
 .comp-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:20px}
 .comp-group{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:16px}
 .comp-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted-fg);margin-bottom:16px}
-
-/* ── Annotation ── */
 .anno{font-size:10px;color:var(--muted-fg);background:var(--slate-50);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:monospace;white-space:nowrap}
 
-/* ── Buttons ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;font-family:'Inter',sans-serif;white-space:nowrap}
-.btn .ms{font-size:15px}
-.btn-primary{background:var(--indigo-600);color:#fff}
-.btn-primary:hover{background:var(--indigo-700)}
-.btn-secondary{background:var(--white);color:var(--fg);border:1px solid var(--border);box-shadow:var(--shadow)}
-.btn-secondary:hover{background:var(--slate-50);border-color:var(--slate-300)}
-.btn-ghost{background:transparent;color:var(--fg-2);border:1px solid transparent}
-.btn-ghost:hover{background:var(--slate-100)}
-.btn-danger{background:var(--red-600);color:#fff}
-.btn-danger:hover{background:var(--red-700)}
-.btn-success{background:var(--green-600);color:#fff}
-.btn-success:hover{background:var(--green-700)}
-.btn-indigo-soft{background:var(--indigo-50);color:var(--indigo-700);border:1px solid var(--indigo-100)}
-.btn-indigo-soft:hover{background:var(--indigo-100)}
-.btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:5px}
-.btn-lg{height:42px;padding:0 20px;font-size:14px}
-.btn-icon{width:34px;padding:0;justify-content:center}
-.btn-icon.btn-sm{width:28px}
-.btn-icon.btn-lg{width:42px}
+/* ── Buttons (exact from index.html) ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:0 10px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);color:var(--fg-2);font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s;font-family:'Inter',sans-serif}
+.btn:hover{background:#fafafa;border-color:var(--border)}
+.btn.primary{background:var(--indigo-600);border-color:var(--indigo-600);color:#fff}
+.btn.primary:hover{background:var(--indigo-700)}
+.btn.danger{color:var(--red-600);border-color:var(--red-200)}
+.btn.danger:hover{background:var(--red-50)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:#f5f5f5}
+.btn.sm{height:24px;font-size:10.5px;padding:0 8px}
+.btn .ms{font-size:13px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 
-/* ── Status badges ── */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid transparent;white-space:nowrap}
-.badge .ms{font-size:11px}
-.badge-booked{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
-.badge-estimated{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-quoted{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-sent{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-finalized{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-accepted{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-enroute{background:#fffbeb;color:#b45309;border-color:#fde68a}
-.badge-wip{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
-.badge-inprogress{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
-.badge-completed{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-approved{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-invoiced{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-paid{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-commission{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff}
-.badge-declined{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
-.badge-cancelled{background:#f8fafc;color:#64748b;border-color:#e2e8f0}
+/* ── Pills (status/finance/priority badges) ── */
+.pill{display:inline-flex;align-items:center;padding:1px 6px;border-radius:20px;font-size:9px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent;flex-shrink:0}
+.pill-blue{background:#f0f5ff;color:#2563eb;border-color:#bfdbfe}
+.pill-green{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0}
+.pill-amber{background:#fffbf0;color:#b45309;border-color:#fde68a}
+.pill-red{background:#fff5f5;color:#dc2626;border-color:#fecaca}
+.pill-orange{background:#fff7f0;color:#ea580c;border-color:#fed7aa}
+.pill-slate{background:#f8f9fa;color:#6b7280;border-color:#e5e7eb}
+.pill-purple{background:#faf5ff;color:#7c3aed;border-color:#ddd6fe}
+.pill-teal{background:#f0fffe;color:#0f766e;border-color:#99f6e4}
 
-/* ── Finance badges ── */
-.badge-finance-estimated{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.badge-finance-quoted{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.badge-finance-invoiced{background:#fffbeb;color:#b45309;border-color:#fde68a}
-.badge-finance-paid{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-
-/* ── Priority pills ── */
-.priority{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent}
-.priority-urgent{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
-.priority-high{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
-.priority-normal{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.priority-low{background:#f8fafc;color:#64748b;border-color:#e2e8f0}
-
-/* ── Avatar ── */
-.avatar{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0;border:2px solid var(--white)}
-.avatar-sm{width:26px;height:26px;font-size:10px}
-.avatar-md{width:32px;height:32px;font-size:12px}
-.avatar-lg{width:40px;height:40px;font-size:14px}
-.avatar-xl{width:52px;height:52px;font-size:17px}
-.av-indigo{background:var(--indigo-100);color:var(--indigo-700)}
-.av-green{background:var(--green-100);color:var(--green-700)}
-.av-amber{background:var(--amber-100);color:var(--amber-700)}
-.av-red{background:var(--red-100);color:var(--red-700)}
-.av-slate{background:var(--slate-100);color:var(--slate-700)}
-.avatar-stack{display:flex;flex-direction:row-reverse}
-.avatar-stack .avatar{margin-left:-8px}
-.avatar-stack .avatar:last-child{margin-left:0}
+/* ── Quick filter chips ── */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--muted-fg);transition:all .12s;font-family:'Inter',sans-serif}
+.chip:hover{border-color:var(--indigo-300);color:var(--indigo-600)}
+.chip.active{background:var(--indigo-50);border-color:var(--indigo-300);color:var(--indigo-700)}
+.chip .ms{font-size:12px}
 
 /* ── Guard keys ── */
-.guard-key{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:600}
-.guard-key .ms{font-size:12px}
+.guard-key{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500}
 .guard-key.met{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
-.guard-key.blocked{background:var(--red-50);color:var(--red-600);border:1px solid var(--red-100)}
-.guard-key.pending{background:var(--slate-50);color:var(--muted-fg);border:1px solid var(--border)}
+.guard-key.met .ms{font-size:12px;color:var(--green-500)}
+.guard-key.blocked{background:var(--red-50);color:var(--red-700);border:1px solid var(--red-100)}
+.guard-key.blocked .ms{font-size:12px;color:var(--red-500)}
+.guard-key.pending{background:var(--slate-50);color:var(--slate-400);border:1px dashed var(--slate-200);opacity:.65}
+.guard-key.pending .ms{font-size:12px;color:var(--slate-300)}
 
-/* ── Pipeline bar — gradient progress bar (ui-kit demo) ── */
-.pipe-demo{
-  background:var(--white);border:1px solid var(--border);border-radius:10px;
-  padding:14px 20px;display:block;
-}
-.pipe-track-d{
-  position:relative;height:36px;background:#eef0f3;border-radius:99px;overflow:hidden;
-}
-.pipe-fill-d{
-  position:absolute;inset:0;width:var(--pipe-fill,20%);
-  background:linear-gradient(90deg,#bbf7d0 0%,#4ade80 40%,#16a34a 100%);
-  border-radius:99px;
-}
-.pipe-fill-d::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.25) 50%,transparent 100%);
-  background-size:200% 100%;animation:pipe-shimmer-d 2.2s linear infinite;border-radius:99px;
-}
-@keyframes pipe-shimmer-d{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.pipe-track-d.declined .pipe-fill-d{
-  background:linear-gradient(90deg,#fecaca 0%,#f87171 60%,#dc2626 100%);
-}
-.pipe-stages-d{
-  position:absolute;inset:0;display:flex;align-items:stretch;
-}
-.pipe-seg{
-  flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;
-  gap:4px;cursor:default;position:relative;overflow:hidden;
-}
-.pipe-seg+.pipe-seg::before{
-  content:'';position:absolute;left:0;top:6px;bottom:6px;
-  width:1px;background:rgba(255,255,255,.35);
-}
-.pipe-seg-lbl{font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap;line-height:1;pointer-events:none}
-.pipe-seg.done .pipe-seg-lbl{color:rgba(255,255,255,.95)}
-.pipe-seg.active .pipe-seg-lbl{color:rgba(255,255,255,.95)}
-.pipe-seg.future .pipe-seg-lbl{color:#94a3b8}
-.pipe-seg.declined .pipe-seg-lbl{color:rgba(255,255,255,.9)}
-.pipe-chip-s{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:20px;line-height:1.4;white-space:nowrap;pointer-events:none}
-.pipe-seg.done .pipe-chip-s{background:rgba(255,255,255,.25);color:rgba(255,255,255,.9)}
-.pipe-seg.active .pipe-chip-s{background:rgba(255,255,255,.3);color:#fff;font-weight:800}
-.pipe-seg.future .pipe-chip-s{background:rgba(0,0,0,.06);color:#94a3b8}
-.pipe-seg.declined .pipe-chip-s{background:rgba(255,255,255,.25);color:#fff}
-.pipe-pulse-s{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.9);display:inline-block;margin-right:3px;vertical-align:middle;animation:ppulse 1.6s ease-in-out infinite;flex-shrink:0}
-@keyframes ppulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.5)}}
+/* ── Pipeline bar ── */
+.pipe-track{position:relative;height:36px;background:#eef0f3;border-radius:99px;overflow:hidden}
+.pipe-fill{position:absolute;left:0;top:0;height:100%;width:var(--pipe-fill,60%);background:linear-gradient(90deg,#22c55e 0%,#10b981 100%);border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.pipe-labels{display:flex;justify-content:space-between;margin-top:6px;padding:0 2px}
+.pipe-stage-lbl{font-size:10px;font-weight:600;color:var(--muted-fg);text-align:center;flex:1}
+.pipe-stage-lbl.active{color:var(--green-700);font-weight:700}
+.pipe-stage-lbl.done{color:var(--green-600)}
 
-/* ── Form controls ── */
-.input{height:34px;border:1px solid var(--border);border-radius:var(--radius);padding:0 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
-.input:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.input::placeholder{color:var(--slate-400)}
-.input-with-icon{position:relative;display:inline-flex;align-items:center}
-.input-with-icon .ms{position:absolute;left:9px;color:var(--slate-400);font-size:16px;pointer-events:none}
-.input-with-icon .input{padding-left:32px}
-.select{height:34px;border:1px solid var(--border);border-radius:var(--radius);padding:0 28px 0 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;outline:none;cursor:pointer;transition:border-color .15s}
-.select:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.textarea{border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:var(--white);outline:none;transition:border-color .15s;resize:vertical;width:100%}
-.textarea:focus{border-color:var(--indigo-400);box-shadow:0 0 0 3px var(--indigo-50)}
-.label{font-size:11.5px;font-weight:600;color:var(--fg-2);display:block;margin-bottom:5px}
-.field{display:flex;flex-direction:column;gap:0}
-.field-hint{font-size:11px;color:var(--muted-fg);margin-top:4px}
-.field-error{font-size:11px;color:var(--red-600);margin-top:4px}
-.input.error{border-color:var(--red-400);box-shadow:0 0 0 3px var(--red-50)}
+/* ── Exec zone (amber shimmer) ── */
+.exec-zone{display:flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 40%,#fde68a 100%);border-radius:var(--radius);position:relative;overflow:hidden}
+.exec-zone::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);background-size:200% 100%;animation:exec-shimmer 3s ease-in-out infinite;pointer-events:none}
+@keyframes exec-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.exec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-right:2px;white-space:nowrap}
 
-/* ── Checkbox & Radio ── */
-.check-label{display:inline-flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;user-select:none}
-.check-label input[type=checkbox],.check-label input[type=radio]{accent-color:var(--indigo-600);width:15px;height:15px;cursor:pointer}
+/* ── Metric cards (stat cards) ── */
+.metric-card{background:var(--white);border:1px solid var(--border);border-top:2px solid var(--mc-accent,var(--slate-300));border-radius:var(--radius);padding:14px 16px;position:relative;overflow:hidden;transition:box-shadow .15s,transform .15s;--mx:50%;--my:50%}
+.metric-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle 160px at var(--mx) var(--my),var(--mc-glow,rgba(100,116,139,.07)),transparent 70%);opacity:0;transition:opacity .2s;pointer-events:none}
+.metric-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-2px)}
+.metric-card:hover::before{opacity:1}
+.metric-card.mc-slate{--mc-accent:var(--slate-300);--mc-glow:rgba(100,116,139,.08)}
+.metric-card.mc-indigo{--mc-accent:var(--indigo-500);--mc-glow:rgba(99,102,241,.1)}
+.metric-card.mc-green{--mc-accent:var(--green-500);--mc-glow:rgba(34,197,94,.1)}
+.metric-card.mc-red{--mc-accent:var(--red-500);--mc-glow:rgba(239,68,68,.1)}
+.metric-card.mc-amber{--mc-accent:#f59e0b;--mc-glow:rgba(245,158,11,.1)}
+.metric-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+.metric-value{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--mc-accent,var(--fg));line-height:1}
+.metric-value.neutral{color:var(--fg)}
+.metric-value.profit{color:var(--green-600)}
+.metric-value.loss{color:var(--red-600)}
 
-/* ── Toggle ── */
-.toggle{position:relative;display:inline-block;width:36px;height:20px}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:var(--slate-200);border-radius:20px;transition:.2s;cursor:pointer}
-.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle input:checked+.toggle-slider{background:var(--indigo-600)}
-.toggle input:checked+.toggle-slider:before{transform:translateX(16px)}
+/* ── Board cards ── */
+.board-card{background:var(--white);border:1px solid #eaecef;border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:box-shadow .15s,border-color .15s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.board-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);border-color:#d0d5dd}
+.board-col-header{background:var(--white);border:1px solid var(--border);border-top:2px solid var(--col-accent,var(--indigo-400));border-radius:var(--radius) var(--radius) 0 0;padding:9px 14px;display:flex;align-items:center;font-size:12.5px;font-weight:600}
+
+/* ── Guidance bar ── */
+.guidance-bar{background:var(--white);border-bottom:1px solid var(--border);border-left:3px solid var(--indigo-500);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.guidance-icon{width:26px;height:26px;border-radius:50%;background:var(--indigo-100);display:flex;align-items:center;justify-content:center}
+.guidance-icon .ms{font-size:14px;color:var(--indigo-600)}
+.guidance-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo-600);margin-bottom:2px}
+.guidance-msg{font-size:12px;color:var(--fg-2)}
+
+/* ── Sidebar right panel ── */
+.detail-sidebar{width:268px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column}
+.sec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
+.team-slot{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.team-role{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)}
+.team-name{font-size:12px;font-weight:600;color:var(--fg)}
+.pl-amount{font-size:18px;font-weight:700}
+.pl-amount.profit{color:var(--green-600)}
+.pl-amount.loss{color:var(--red-600)}
+.pl-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;color:var(--fg-2)}
+.pl-row .key{color:var(--muted-fg)}
+.doc-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.doc-icon{width:28px;height:28px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-name{font-size:12px;font-weight:600;color:var(--fg)}
+.doc-meta{font-size:10.5px;color:var(--muted-fg)}
+.doc-action{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--indigo-600);cursor:pointer;padding:3px 7px;border-radius:4px;border:1px solid var(--indigo-200);background:var(--indigo-50)}
+.doc-action.create{color:var(--green-700);border-color:var(--green-200);background:var(--green-50)}
+.doc-auto{display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;color:var(--amber-700);background:var(--amber-50);border:1px solid var(--amber-100);border-radius:4px;padding:1px 5px}
+
+/* ── VAT box ── */
+.vat-box{padding:14px;border-top:1px solid var(--border);background:linear-gradient(135deg,var(--indigo-50) 0%,#fff 60%)}
+.vat-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;color:var(--fg-2)}
+.vat-row .key{color:var(--muted-fg)}
+
+/* ── Tabs ── */
+.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 16px;gap:0}
+.tab-btn{display:flex;align-items:center;gap:5px;padding:8px 12px;font-size:12.5px;font-weight:500;color:var(--muted-fg);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.tab-btn:hover{color:var(--fg)}
+.tab-btn.active{color:var(--indigo-600);border-bottom-color:var(--indigo-600);font-weight:600}
+.tab-btn .ms{font-size:14px}
+.tab-badge{background:var(--indigo-100);color:var(--indigo-700);font-size:9.5px;font-weight:700;border-radius:20px;padding:1px 6px;margin-left:2px}
 
 /* ── Cards ── */
-.card{background:var(--white);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:13.5px;font-weight:700;color:var(--fg)}
-.card-body{padding:20px}
-/* ── Stat cards — production style with reactive gradient hover ── */
-.stat-card{
-  position:relative;
-  background:var(--white);
-  border:1px solid var(--border);
-  border-top:2px solid var(--sc-accent,var(--slate-300));
-  border-radius:10px;
-  padding:20px 22px 18px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:box-shadow .2s,transform .18s;
-  cursor:default;
-  --mx:50%;--my:50%;
-}
-.stat-card::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle 180px at var(--mx) var(--my),var(--sc-glow,rgba(99,102,241,.07)),transparent 70%);
-  opacity:0;
-  transition:opacity .25s;
-  pointer-events:none;
-  border-radius:inherit;
-}
-.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.stat-card:hover::before{opacity:1}
-/* accent variants */
-.sc-slate{--sc-accent:var(--slate-300);--sc-glow:rgba(100,116,139,.08)}
-.sc-amber{--sc-accent:#f59e0b;--sc-glow:rgba(245,158,11,.1)}
-.sc-red{--sc-accent:var(--red-500);--sc-glow:rgba(239,68,68,.1)}
-.sc-green{--sc-accent:var(--green-500);--sc-glow:rgba(34,197,94,.1)}
-.sc-indigo{--sc-accent:var(--indigo-500);--sc-glow:rgba(99,102,241,.1)}
-.stat-card-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:8px}
-.stat-card-value{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--sc-accent,var(--fg));line-height:1}
-.stat-card-value.neutral{color:var(--fg)}
-.stat-card-sub{font-size:11.5px;color:var(--muted-fg);margin-top:5px}
-.stat-card-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:10px}
-.delta-up{background:var(--green-50);color:var(--green-700)}
-.delta-down{background:var(--red-50);color:var(--red-600)}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center}
+.card-body{padding:14px}
+.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.info-field-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg);margin-bottom:3px}
+.info-field-value{font-size:12.5px;font-weight:600;color:var(--fg)}
+
+/* ── Modals ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:var(--white);border-radius:10px;box-shadow:var(--shadow-lg);width:100%;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.modal-sm{max-width:420px}.modal-md{max-width:560px}.modal-lg{max-width:720px}.modal-xl{max-width:900px}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-header h3{font-size:15px;font-weight:700;color:var(--fg)}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+
+/* ── Avatars ── */
+.avatar{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:1.5px solid var(--white)}
 
 /* ── Toast ── */
-.toast-demo{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);max-width:320px}
-.toast-demo .ms{font-size:17px;flex-shrink:0}
-.toast-success{background:#fff;border:1px solid var(--green-100);color:var(--green-700)}
-.toast-error{background:#fff;border:1px solid var(--red-100);color:var(--red-600)}
-.toast-info{background:#fff;border:1px solid var(--indigo-100);color:var(--indigo-700)}
-.toast-warn{background:#fff;border:1px solid var(--amber-100);color:var(--amber-700)}
+.toast{background:var(--fg);color:#fff;padding:8px 14px;border-radius:var(--radius);font-size:12px;font-weight:500;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:6px}
+.toast.success{background:var(--green-600)}
+.toast.error{background:var(--red-600)}
+.toast.warning{background:var(--amber-600)}
 
-/* ── Chips ── */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid transparent}
-.chip-default{background:var(--slate-100);color:var(--slate-700);border-color:var(--slate-200)}
-.chip-indigo{background:var(--indigo-50);color:var(--indigo-700);border-color:var(--indigo-100)}
-.chip-green{background:var(--green-50);color:var(--green-700);border-color:var(--green-100)}
-.chip-red{background:var(--red-50);color:var(--red-600);border-color:var(--red-100)}
-.chip-amber{background:var(--amber-50);color:var(--amber-700);border-color:var(--amber-100)}
-.chip .ms{font-size:12px;cursor:pointer}
-
-/* ── Table preview ── */
-.table-preview{width:100%;border-collapse:collapse;font-size:12.5px}
-.table-preview th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);background:var(--white)}
-.table-preview td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--fg-2)}
-.table-preview tr:last-child td{border-bottom:none}
-.table-preview tr:nth-child(even) td{background:var(--row-alt)}
-
-/* ── Typography ── */
-.type-sample{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.type-sample:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.type-meta{font-size:10.5px;color:var(--muted-fg);font-family:monospace;margin-top:4px}
-
-/* ── Icon grid ── */
-.icon-grid{display:flex;flex-wrap:wrap;gap:8px}
-.icon-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 10px;background:var(--white);border:1px solid var(--border);border-radius:8px;min-width:68px}
-.icon-item .ms{font-size:22px;color:var(--indigo-600)}
-.icon-item span:last-child{font-size:9px;color:var(--muted-fg);text-align:center}
-
-/* ── Spacing ── */
-.space-row{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
-.space-block{display:flex;flex-direction:column;align-items:center;gap:6px}
-.space-block .bar{background:var(--indigo-200);border-radius:3px;width:32px}
-.space-block .lbl{font-size:9.5px;color:var(--muted-fg);font-family:monospace}
-
-/* ── Divider ── */
-.divider{height:1px;background:var(--border);margin:8px 0}
-
-/* ── Two-col layout ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-
-/* ── Section anchor offset ── */
-.anchor{scroll-margin-top:60px}
+/* ── Breadcrumb ── */
+.breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:8px 16px;min-height:46px;display:flex;align-items:center;gap:16px;font-size:12px}
+.breadcrumb a{color:var(--muted-fg);cursor:pointer;text-decoration:none}
+.breadcrumb a:hover{color:var(--indigo-600)}
+.breadcrumb .sep{color:var(--slate-300);font-size:11px}
+.breadcrumb .current{color:var(--fg);font-weight:600}
 </style>
 </head>
 <body>
@@ -325,841 +218,477 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);font-si
 <div class="kit-header">
   <div class="kit-header-eyebrow">Design System</div>
   <div class="kit-header-title">Bird Pulse UI Kit</div>
-  <div class="kit-header-sub">The single source of truth for all visual components used across the Bird Pulse Jobs Module. Use these tokens, patterns, and components to keep every screen consistent.</div>
+  <div class="kit-header-sub">The visual contract for the Bird Pulse Jobs Module mockup. Documents every token, component, and pattern exactly as they exist in <code>index.html</code>.</div>
+  <div class="kit-header-rule">
+    <strong>Critical Rule</strong><br>
+    The <strong>mockup (<code>index.html</code>) is the design authority</strong>. This UI Kit exists to document what the mockup already does — not to dictate changes to it. When the mockup changes, update this file in the same commit. Never change the mockup to match an audit or this file without explicit user approval.
+  </div>
   <div class="kit-header-meta">
     <div class="kit-header-meta-item"><span class="val">Indigo</span><span class="lbl">Primary accent</span></div>
     <div class="kit-header-meta-item"><span class="val">Inter</span><span class="lbl">Typeface</span></div>
     <div class="kit-header-meta-item"><span class="val">6px</span><span class="lbl">Base radius</span></div>
-    <div class="kit-header-meta-item"><span class="val">14px</span><span class="lbl">Base font</span></div>
+    <div class="kit-header-meta-item"><span class="val">13px</span><span class="lbl">Base font</span></div>
     <div class="kit-header-meta-item"><span class="val">Material Symbols</span><span class="lbl">Icon set</span></div>
+    <div class="kit-header-meta-item"><span class="val">5029 lines</span><span class="lbl">index.html</span></div>
   </div>
 </div>
 
 <!-- ── Nav ── -->
 <nav class="kit-nav">
-  <a href="#colours" class="active">Colours</a>
-  <a href="#typography">Typography</a>
+  <a href="#tokens" class="active">Tokens</a>
   <a href="#buttons">Buttons</a>
-  <a href="#badges">Badges</a>
+  <a href="#pills">Pills</a>
+  <a href="#chips">Chips</a>
   <a href="#pipeline">Pipeline</a>
-  <a href="#forms">Forms</a>
-  <a href="#avatars">Avatars</a>
-  <a href="#cards">Cards</a>
-  <a href="#chips">Chips &amp; Toasts</a>
-  <a href="#icons">Icons</a>
-  <a href="#spacing">Spacing</a>
-  <a href="#tables">Tables</a>
+  <a href="#guard-keys">Guard Keys</a>
+  <a href="#stat-cards">Stat Cards</a>
+  <a href="#sidebar">Right Sidebar</a>
+  <a href="#tabs">Tabs</a>
+  <a href="#board">Board</a>
+  <a href="#modals">Modals</a>
+  <a href="#layout">Layout</a>
+  <a href="#rules">Rules</a>
 </nav>
 
 <div class="kit-body">
 
-  <!-- ── 1. Colours ── -->
-  <section class="kit-section anchor" id="colours">
+  <!-- ── 1. Design Tokens ── -->
+  <section class="kit-section" id="tokens">
     <div class="kit-section-header">
-      <span class="kit-section-title">Colour Tokens</span>
       <span class="kit-section-num">01</span>
-      <span class="kit-section-desc">All colours are CSS custom properties defined in <code>:root</code></span>
+      <span class="kit-section-title">Design Tokens</span>
+      <span class="kit-section-desc">Exact values from <code>:root</code> in index.html</span>
     </div>
 
     <div class="comp-group">
-      <div class="comp-group-label">Primary — Indigo</div>
-      <div class="swatch-grid">
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#eef2ff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#e0e7ff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-200)"></div><div class="swatch-info"><div class="swatch-name">200</div><div class="swatch-hex">#c7d2fe</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-300)"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#a5b4fc</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-400)"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#818cf8</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#6366f1</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#4f46e5</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#4338ca</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-800)"></div><div class="swatch-info"><div class="swatch-name">800</div><div class="swatch-hex">#3730a3</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--indigo-900)"></div><div class="swatch-info"><div class="swatch-name">900</div><div class="swatch-hex">#312e81</div></div></div>
-      </div>
+      <div class="comp-group-label">Colour Palette</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Token</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Value</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Swatch</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Usage</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--indigo-600</td><td style="padding:7px 10px;font-family:monospace">#4f46e5</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#4f46e5"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Primary buttons, active states, nav active</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--indigo-700</td><td style="padding:7px 10px;font-family:monospace">#4338ca</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#4338ca"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Button hover state</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--bg</td><td style="padding:7px 10px;font-family:monospace">#f0f2f5</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#f0f2f5;border:1px solid #e8eaed"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Canvas / page background ONLY</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--white</td><td style="padding:7px 10px;font-family:monospace">#ffffff</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#fff;border:1px solid #e8eaed"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">All surfaces: nav, toolbar, cards, sidebar, modals</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--border</td><td style="padding:7px 10px;font-family:monospace">#e8eaed</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#e8eaed"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">All dividers and card borders</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--fg</td><td style="padding:7px 10px;font-family:monospace">#0f172a</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#0f172a"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Primary text</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--muted-fg</td><td style="padding:7px 10px;font-family:monospace">#64748b</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#64748b"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Labels, meta text, section headers</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--green-500</td><td style="padding:7px 10px;font-family:monospace">#22c55e</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#22c55e"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Pipeline fill start, P/L profit icon</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--green-600</td><td style="padding:7px 10px;font-family:monospace">#16a34a</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:4px;background:#16a34a"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">Pipeline fill end, profit text, P/L amount</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace;font-size:11px">--radius</td><td style="padding:7px 10px;font-family:monospace">6px</td><td style="padding:7px 10px"><div style="width:32px;height:20px;border-radius:6px;background:var(--indigo-200)"></div></td><td style="padding:7px 10px;color:var(--muted-fg)">All controls, cards, modals</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="three-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Green (Success)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#f0fdf4</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#dcfce7</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#22c55e</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#16a34a</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--green-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#15803d</div></div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Red (Danger)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#fef2f2</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#fee2e2</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#ef4444</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#dc2626</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--red-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#b91c1c</div></div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Semantic — Amber (Warning)</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(5,1fr)">
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-50)"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#fffbeb</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-100)"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#fef3c7</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-500)"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#f59e0b</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-600)"></div><div class="swatch-info"><div class="swatch-name">600 ★</div><div class="swatch-hex">#d97706</div></div></div>
-          <div class="swatch"><div class="swatch-color" style="background:var(--amber-700)"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#b45309</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group" style="margin-top:16px">
-      <div class="comp-group-label">Neutral — Slate + Surface tokens</div>
-      <div class="swatch-grid">
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-50)"></div><div class="swatch-info"><div class="swatch-name">slate-50</div><div class="swatch-hex">#f8fafc</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-100)"></div><div class="swatch-info"><div class="swatch-name">slate-100</div><div class="swatch-hex">#f1f5f9</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-200)"></div><div class="swatch-info"><div class="swatch-name">slate-200</div><div class="swatch-hex">#e2e8f0</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-300)"></div><div class="swatch-info"><div class="swatch-name">slate-300</div><div class="swatch-hex">#cbd5e1</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-400)"></div><div class="swatch-info"><div class="swatch-name">slate-400</div><div class="swatch-hex">#94a3b8</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-500)"></div><div class="swatch-info"><div class="swatch-name">slate-500</div><div class="swatch-hex">#64748b</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-600)"></div><div class="swatch-info"><div class="swatch-name">slate-600</div><div class="swatch-hex">#475569</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-700)"></div><div class="swatch-info"><div class="swatch-name">slate-700</div><div class="swatch-hex">#334155</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-800)"></div><div class="swatch-info"><div class="swatch-name">slate-800</div><div class="swatch-hex">#1e293b</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--slate-900)"></div><div class="swatch-info"><div class="swatch-name">slate-900</div><div class="swatch-hex">#0f172a</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--bg);border:1px solid var(--border)"></div><div class="swatch-info"><div class="swatch-name">--bg</div><div class="swatch-hex">#f0f2f5</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--white);border:1px solid var(--border)"></div><div class="swatch-info"><div class="swatch-name">--white</div><div class="swatch-hex">#ffffff</div></div></div>
-        <div class="swatch"><div class="swatch-color" style="background:var(--border)"></div><div class="swatch-info"><div class="swatch-name">--border</div><div class="swatch-hex">#e8eaed</div></div></div>
+    <div class="comp-group">
+      <div class="comp-group-label">Typography</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div><span style="font-size:9px;color:var(--muted-fg);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Section label / eyebrow</span><br><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg)">SECTION LABEL</span> <span class="anno">9px / 700 / uppercase / ls .08em / muted-fg</span></div>
+        <div><span style="font-size:9px;color:var(--muted-fg);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Body / meta</span><br><span style="font-size:12px;color:var(--fg-2)">Body text at 12px</span> <span class="anno">12px / 400 / fg-2</span></div>
+        <div><span style="font-size:9px;color:var(--muted-fg);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Base</span><br><span style="font-size:13px;color:var(--fg)">Base body text</span> <span class="anno">13px / 400 / fg</span></div>
+        <div><span style="font-size:9px;color:var(--muted-fg);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Job title</span><br><span style="font-size:18px;font-weight:700;color:var(--fg)">JOB-0042 — Electrical Rewiring</span> <span class="anno">18px / 700 / fg</span></div>
+        <div><span style="font-size:9px;color:var(--muted-fg);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Metric value</span><br><span style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--green-600)">+R 12,300</span> <span class="anno">22px / 800 / ls -.02em</span></div>
       </div>
     </div>
   </section>
 
-  <!-- ── 2. Typography ── -->
-  <section class="kit-section anchor" id="typography">
+  <!-- ── 2. Buttons ── -->
+  <section class="kit-section" id="buttons">
     <div class="kit-section-header">
-      <span class="kit-section-title">Typography</span>
       <span class="kit-section-num">02</span>
-      <span class="kit-section-desc">Inter — all weights. No other typeface.</span>
-    </div>
-    <div class="comp-group">
-      <div class="type-sample">
-        <div style="font-size:32px;font-weight:800;letter-spacing:-.02em;line-height:1.1">Page Title — 32px / 800</div>
-        <div class="type-meta">font-size:32px · font-weight:800 · letter-spacing:-.02em · Used: module headings</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:20px;font-weight:700;letter-spacing:-.01em">Section Title — 20px / 700</div>
-        <div class="type-meta">font-size:20px · font-weight:700 · letter-spacing:-.01em · Used: card headers, panel titles</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:15px;font-weight:600">Sub-heading — 15px / 600</div>
-        <div class="type-meta">font-size:15px · font-weight:600 · Used: group labels, sidebar section titles</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:13.5px;font-weight:600">Card Title — 13.5px / 600</div>
-        <div class="type-meta">font-size:13.5px · font-weight:600 · Used: card headers, table column names</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:14px;font-weight:400;color:var(--fg)">Body — 14px / 400 — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-        <div class="type-meta">font-size:14px · font-weight:400 · color:--fg · Used: default body text</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:13px;font-weight:400;color:var(--fg-2)">Body Small — 13px / 400 — Secondary content, descriptions, helper text.</div>
-        <div class="type-meta">font-size:13px · font-weight:400 · color:--fg-2 · Used: table cells, detail fields</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:12px;font-weight:400;color:var(--muted-fg)">Caption — 12px / 400 — Muted supporting text, timestamps, metadata.</div>
-        <div class="type-meta">font-size:12px · font-weight:400 · color:--muted-fg</div>
-      </div>
-      <div class="type-sample">
-        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg)">LABEL / EYEBROW — 10.5px / 700 UPPERCASE</div>
-        <div class="type-meta">font-size:10.5px · font-weight:700 · text-transform:uppercase · letter-spacing:.08em · Used: column headers, section labels</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 3. Buttons ── -->
-  <section class="kit-section anchor" id="buttons">
-    <div class="kit-section-header">
       <span class="kit-section-title">Buttons</span>
-      <span class="kit-section-num">03</span>
-      <span class="kit-section-desc">All buttons use class <code>.btn</code> + variant modifier</span>
+      <span class="kit-section-desc">Height 28px base, 24px small. Border-radius 6px.</span>
     </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">Variants — Default size (34px)</div>
+      <div class="comp-group-label">Variants</div>
       <div class="comp-row">
-        <button class="btn btn-primary"><span class="ms">add</span> New Job</button>
-        <button class="btn btn-secondary"><span class="ms">filter_list</span> Filters</button>
-        <button class="btn btn-ghost"><span class="ms">more_horiz</span> More</button>
-        <button class="btn btn-danger"><span class="ms">delete</span> Delete</button>
-        <button class="btn btn-success"><span class="ms">check_circle</span> Mark Done</button>
-        <button class="btn btn-indigo-soft"><span class="ms">open_in_new</span> Open</button>
+        <button class="btn primary"><span class="ms">add</span>New Job</button>
+        <button class="btn"><span class="ms">filter_list</span>Filters</button>
+        <button class="btn ghost"><span class="ms">more_horiz</span></button>
+        <button class="btn danger"><span class="ms">delete</span>Delete</button>
+        <button class="btn" disabled>Disabled</button>
       </div>
-      <div class="comp-row" style="margin-top:4px">
-        <span class="anno">.btn-primary</span>
-        <span class="anno">.btn-secondary</span>
-        <span class="anno">.btn-ghost</span>
-        <span class="anno">.btn-danger</span>
-        <span class="anno">.btn-success</span>
-        <span class="anno">.btn-indigo-soft</span>
-      </div>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Sizes</div>
-        <div class="comp-row" style="align-items:center">
-          <button class="btn btn-primary btn-sm"><span class="ms">add</span> Small</button>
-          <button class="btn btn-primary">Default</button>
-          <button class="btn btn-primary btn-lg">Large</button>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.btn-sm (28px)</span>
-          <span class="anno">default (34px)</span>
-          <span class="anno">.btn-lg (42px)</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Icon-only buttons</div>
-        <div class="comp-row">
-          <button class="btn btn-primary btn-icon"><span class="ms">add</span></button>
-          <button class="btn btn-secondary btn-icon"><span class="ms">filter_list</span></button>
-          <button class="btn btn-ghost btn-icon"><span class="ms">more_vert</span></button>
-          <button class="btn btn-danger btn-icon"><span class="ms">delete</span></button>
-          <button class="btn btn-secondary btn-icon btn-sm"><span class="ms">edit</span></button>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.btn-icon</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">States</div>
       <div class="comp-row">
-        <button class="btn btn-primary">Normal</button>
-        <button class="btn btn-primary" disabled>Disabled</button>
-        <button class="btn btn-secondary">Normal</button>
-        <button class="btn btn-secondary" disabled>Disabled</button>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Workflow action buttons (Detail page)</div>
-      <div class="comp-row">
-        <button class="btn btn-secondary btn-sm"><span class="ms">engineering</span> Mark WIP</button>
-        <button class="btn btn-success btn-sm"><span class="ms">check_circle</span> Mark Done</button>
-        <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open Jobcard</button>
-        <button class="btn btn-ghost btn-sm"><span class="ms">lock_open</span> Unlock</button>
-        <button class="btn btn-ghost btn-sm"><span class="ms">content_copy</span> Duplicate</button>
-        <button class="btn btn-danger btn-sm"><span class="ms">delete</span> Delete</button>
+        <button class="btn sm primary"><span class="ms">add</span>New Message</button>
+        <button class="btn sm"><span class="ms">open_in_new</span>Open</button>
+        <button class="btn sm ghost"><span class="ms">edit</span>Edit</button>
       </div>
     </div>
   </section>
 
-  <!-- ── 4. Badges ── -->
-  <section class="kit-section anchor" id="badges">
+  <!-- ── 3. Pills ── -->
+  <section class="kit-section" id="pills">
     <div class="kit-section-header">
-      <span class="kit-section-title">Status Badges &amp; Priority Pills</span>
-      <span class="kit-section-num">04</span>
-      <span class="kit-section-desc">Exact values from <code>JOB_STATUS_LABELS</code> in production backend</span>
+      <span class="kit-section-num">03</span>
+      <span class="kit-section-title">Pills (Status / Finance / Priority)</span>
+      <span class="kit-section-desc">border-radius: 20px · 9px / 600 / uppercase · 1px coloured border</span>
     </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">Workflow Status Badges — all 16 real statuses</div>
+      <div class="comp-group-label">Status Pills</div>
       <div class="comp-row">
-        <span class="badge badge-booked">Job Booked</span>
-        <span class="badge badge-estimated">Estimate Done</span>
-        <span class="badge badge-quoted">Quote Drafted</span>
-        <span class="badge badge-sent">Quote Sent</span>
-        <span class="badge badge-finalized">Quote Finalized</span>
-        <span class="badge badge-accepted">Quote Accepted</span>
-        <span class="badge badge-enroute">On My Way</span>
-        <span class="badge badge-wip">Work In Progress</span>
-        <span class="badge badge-inprogress">Job In Progress</span>
-        <span class="badge badge-completed">Job Completed</span>
-        <span class="badge badge-approved">Client Approved</span>
-        <span class="badge badge-invoiced">Invoiced</span>
-        <span class="badge badge-paid">Paid</span>
-        <span class="badge badge-commission">Commission Paid</span>
-        <span class="badge badge-declined">Quote Declined</span>
-        <span class="badge badge-cancelled">Cancelled</span>
+        <span class="pill pill-slate">Job Booked</span>
+        <span class="pill pill-slate">Estimate Done</span>
+        <span class="pill pill-amber">Quote Drafted</span>
+        <span class="pill pill-blue">Quote Sent</span>
+        <span class="pill pill-green">Quote Accepted</span>
+        <span class="pill pill-red">Quote Declined</span>
+        <span class="pill pill-blue">En Route</span>
+        <span class="pill pill-purple">In Progress</span>
+        <span class="pill pill-green">Completed</span>
+        <span class="pill pill-teal">Client Approved</span>
+        <span class="pill pill-blue">Invoiced</span>
+        <span class="pill pill-green">Paid</span>
+        <span class="pill pill-slate">Cancelled</span>
       </div>
     </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Finance Status Badges</div>
-        <div class="comp-row">
-          <span class="badge badge-finance-estimated">Estimated</span>
-          <span class="badge badge-finance-quoted">Quoted</span>
-          <span class="badge badge-finance-invoiced">Invoiced</span>
-          <span class="badge badge-finance-paid">Paid</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Priority Pills</div>
-        <div class="comp-row">
-          <span class="priority priority-urgent">🔴 Urgent</span>
-          <span class="priority priority-high">🟠 High</span>
-          <span class="priority priority-normal">🔵 Normal</span>
-          <span class="priority priority-low">⚪ Low</span>
-        </div>
-      </div>
-    </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">Badge anatomy</div>
-      <div style="font-size:12.5px;color:var(--fg-2);line-height:1.8">
-        <strong>Structure:</strong> 1px coloured border · background tint · uppercase text · 10.5px · weight 700 · letter-spacing .06em · border-radius 4px · padding 3px 8px<br>
-        <strong>Rule:</strong> Badge colour = semantic colour of the stage group (blue=quote, purple=work, green=done/paid, red=declined, grey=cancelled)
+      <div class="comp-group-label">Priority Pills</div>
+      <div class="comp-row">
+        <span class="pill pill-slate">Low</span>
+        <span class="pill pill-blue">Medium</span>
+        <span class="pill pill-amber">High</span>
+        <span class="pill pill-red">Urgent</span>
       </div>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Finance Pills</div>
+      <div class="comp-row">
+        <span class="pill pill-slate">Not Started</span>
+        <span class="pill pill-amber">Estimated</span>
+        <span class="pill pill-blue">Quoted</span>
+        <span class="pill pill-green">Invoiced</span>
+        <span class="pill pill-teal">Paid</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. Quick Filter Chips ── -->
+  <section class="kit-section" id="chips">
+    <div class="kit-section-header">
+      <span class="kit-section-num">04</span>
+      <span class="kit-section-title">Quick Filter Chips</span>
+      <span class="kit-section-desc">border-radius: 20px · fully rounded · indigo active state</span>
+    </div>
+    <div class="comp-group">
+      <div class="comp-row">
+        <div class="chip"><span class="ms">person</span>My Jobs</div>
+        <div class="chip active"><span class="ms">person_off</span>Unassigned</div>
+        <div class="chip"><span class="ms">bolt</span>Active</div>
+        <div class="chip"><span class="ms">calendar_today</span>This Week</div>
+      </div>
+      <p style="font-size:11.5px;color:var(--muted-fg);margin-top:8px">Active chip: <code>background: indigo-50 · border: indigo-300 · color: indigo-700</code></p>
     </div>
   </section>
 
   <!-- ── 5. Pipeline Bar ── -->
-  <section class="kit-section anchor" id="pipeline">
+  <section class="kit-section" id="pipeline">
     <div class="kit-section-header">
-      <span class="kit-section-title">Pipeline Bar</span>
       <span class="kit-section-num">05</span>
-      <span class="kit-section-desc">Gradient progress bar — pale green → deep green, labels inside track, shimmer animation</span>
+      <span class="kit-section-title">Pipeline Bar</span>
+      <span class="kit-section-desc">Green gradient progress bar — 5 stages from <code>JobProgressPipeline.tsx</code></span>
     </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">State: Work In Progress (stages 1–2 done, stage 3 active — 50% fill)</div>
-      <div class="pipe-demo">
-        <div class="pipe-track-d" style="--pipe-fill:50%">
-          <div class="pipe-fill-d"></div>
-          <div class="pipe-stages-d">
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Estimate</span></div>
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Quote</span></div>
-            <div class="pipe-seg active"><span class="pipe-pulse-s"></span><span class="pipe-seg-lbl">Work</span><span class="pipe-chip-s">In Progress</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Invoice</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Paid</span></div>
-          </div>
+      <div class="comp-group-label">Work In Progress (60% fill)</div>
+      <div style="padding:14px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius)">
+        <div class="pipe-track">
+          <div class="pipe-fill" style="--pipe-fill:60%"></div>
+          <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:var(--slate-400);z-index:2;font-weight:600">Work In Progress</span>
+        </div>
+        <div class="pipe-labels">
+          <span class="pipe-stage-lbl done">Estimate</span>
+          <span class="pipe-stage-lbl done">Quote</span>
+          <span class="pipe-stage-lbl active">Work</span>
+          <span class="pipe-stage-lbl">Invoice</span>
+          <span class="pipe-stage-lbl">Paid</span>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:var(--muted-fg);margin-top:10px">Fill: <code>linear-gradient(90deg, #22c55e 0%, #10b981 100%)</code> · Track: <code>#eef0f3</code> · Height: 36px · border-radius: 99px</p>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Fully Paid (100% fill)</div>
+      <div style="padding:14px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius)">
+        <div class="pipe-track">
+          <div class="pipe-fill" style="--pipe-fill:100%"></div>
+          <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:#fff;z-index:2;font-weight:600">Commission Paid</span>
+        </div>
+        <div class="pipe-labels">
+          <span class="pipe-stage-lbl done">Estimate</span>
+          <span class="pipe-stage-lbl done">Quote</span>
+          <span class="pipe-stage-lbl done">Work</span>
+          <span class="pipe-stage-lbl done">Invoice</span>
+          <span class="pipe-stage-lbl done">Paid</span>
         </div>
       </div>
     </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">State: Job Booked (stage 1 active — 10% fill)</div>
-      <div class="pipe-demo">
-        <div class="pipe-track-d" style="--pipe-fill:10%">
-          <div class="pipe-fill-d"></div>
-          <div class="pipe-stages-d">
-            <div class="pipe-seg active"><span class="pipe-pulse-s"></span><span class="pipe-seg-lbl">Estimate</span><span class="pipe-chip-s">Booked</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Quote</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Work</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Invoice</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Paid</span></div>
-          </div>
-        </div>
+      <div class="comp-group-label">Exec Zone (amber shimmer — right of guard keys bar)</div>
+      <div class="exec-zone" style="border-radius:var(--radius);display:inline-flex">
+        <span class="exec-label">Job Execution:</span>
+        <button class="btn sm" style="background:#fffbeb;border-color:#d97706;color:#92400e"><span class="ms">directions_car</span>On My Way</button>
+        <button class="btn sm" style="background:#fffbeb;border-color:#d97706;color:#92400e"><span class="ms">construction</span>Work In Progress</button>
+        <button class="btn sm" style="background:#fffbeb;border-color:#d97706;color:#92400e"><span class="ms">draw</span>Mark Done</button>
       </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Fully Paid (all stages done — 100% fill)</div>
-      <div class="pipe-demo">
-        <div class="pipe-track-d" style="--pipe-fill:100%">
-          <div class="pipe-fill-d"></div>
-          <div class="pipe-stages-d">
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Estimate</span></div>
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Quote</span></div>
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Work</span></div>
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Invoice</span></div>
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Paid</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">State: Quote Declined (red gradient — 30% fill)</div>
-      <div class="pipe-demo">
-        <div class="pipe-track-d declined" style="--pipe-fill:30%">
-          <div class="pipe-fill-d"></div>
-          <div class="pipe-stages-d">
-            <div class="pipe-seg done"><span class="pipe-seg-lbl">Estimate</span></div>
-            <div class="pipe-seg declined"><span class="pipe-seg-lbl">Quote</span><span class="pipe-chip-s">Declined</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Work</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Invoice</span></div>
-            <div class="pipe-seg future"><span class="pipe-seg-lbl">Paid</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="comp-group">
-      <div class="comp-group-label">Stage mapping (from production <code>JobProgressPipeline.tsx</code>)</div>
-      <table class="table-preview">
-        <thead><tr><th>Stage</th><th>Icon</th><th>Statuses included</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Estimate</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">calculate</span></td><td><span class="anno">job_booked</span> <span class="anno">estimate_done</span></td></tr>
-          <tr><td><strong>Quote</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">description</span></td><td><span class="anno">quote_drafted</span> <span class="anno">quote_sent</span> <span class="anno">quote_finalized</span> <span class="anno">quote_accepted</span> <span class="anno">quote_declined</span></td></tr>
-          <tr><td><strong>Work</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">construction</span></td><td><span class="anno">on_my_way</span> <span class="anno">work_in_progress</span> <span class="anno">job_in_progress</span> <span class="anno">job_completed</span> <span class="anno">work_client_approved</span></td></tr>
-          <tr><td><strong>Invoice</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">receipt_long</span></td><td><span class="anno">invoiced</span></td></tr>
-          <tr><td><strong>Paid</strong></td><td><span class="ms" style="font-size:16px;color:var(--indigo-600)">payments</span></td><td><span class="anno">paid</span> <span class="anno">commission_paid</span></td></tr>
-        </tbody>
-      </table>
     </div>
   </section>
 
-  <!-- ── 6. Forms ── -->
-  <section class="kit-section anchor" id="forms">
+  <!-- ── 6. Guard Keys ── -->
+  <section class="kit-section" id="guard-keys">
     <div class="kit-section-header">
-      <span class="kit-section-title">Form Controls</span>
       <span class="kit-section-num">06</span>
+      <span class="kit-section-title">Guard Keys</span>
+      <span class="kit-section-desc">7 keys from <code>useWorkflowGuardKeys.ts</code> — 3 states: met / blocked / pending</span>
     </div>
-
-    <div class="three-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Text Input</div>
-        <div class="field">
-          <label class="label">Job Reference</label>
-          <input class="input" type="text" placeholder="e.g. PO-2026-4421">
-          <span class="field-hint">Client's purchase order number</span>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label class="label">Error state</label>
-          <input class="input error" type="text" value="invalid value">
-          <span class="field-error">This field is required</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Input with icon</div>
-        <div class="field">
-          <label class="label">Search</label>
-          <div class="input-with-icon">
-            <span class="ms">search</span>
-            <input class="input" type="text" placeholder="Search jobs, clients, sites…">
-          </div>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label class="label">Select</label>
-          <select class="select">
-            <option>Job Type</option>
-            <option>repair</option>
-            <option>maintenance</option>
-            <option>install</option>
-            <option>new_build</option>
-          </select>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Textarea</div>
-        <div class="field">
-          <label class="label">Description</label>
-          <textarea class="textarea" rows="4" placeholder="Describe the scope of work…"></textarea>
-        </div>
-      </div>
-    </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">Checkboxes, Radios &amp; Toggles</div>
-      <div class="comp-row" style="gap:24px;flex-wrap:wrap">
-        <label class="check-label"><input type="checkbox" checked> Quote Approved</label>
-        <label class="check-label"><input type="checkbox"> Payment Recorded</label>
-        <label class="check-label"><input type="radio" name="r1" checked> To Be Done</label>
-        <label class="check-label"><input type="radio" name="r1"> Done Already</label>
-        <div style="display:flex;align-items:center;gap:10px">
-          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-          <span style="font-size:13px">Auto-transitions on</span>
+      <div class="comp-row" style="flex-wrap:wrap">
+        <span class="guard-key met"><span class="ms">check_circle</span>Estimate Finalized</span>
+        <span class="guard-key met"><span class="ms">check_circle</span>Quote Ready</span>
+        <span class="guard-key met"><span class="ms">check_circle</span>Client Contact</span>
+        <span class="guard-key met"><span class="ms">check_circle</span>Quote Approved</span>
+        <span class="guard-key blocked"><span class="ms">cancel</span>Invoice Ready</span>
+        <span class="guard-key pending"><span class="ms">radio_button_unchecked</span>Payment Recorded</span>
+        <span class="guard-key pending"><span class="ms">radio_button_unchecked</span>Commission Enabled</span>
+      </div>
+      <p style="font-size:11.5px;color:var(--muted-fg);margin-top:10px"><strong>met:</strong> green-50 bg · green-700 text · green-100 border &nbsp;|&nbsp; <strong>blocked:</strong> red-50 bg · red-700 text · red-100 border &nbsp;|&nbsp; <strong>pending:</strong> slate-50 bg · slate-400 text · dashed slate-200 border · opacity .65</p>
+    </div>
+  </section>
+
+  <!-- ── 7. Stat Cards ── -->
+  <section class="kit-section" id="stat-cards">
+    <div class="kit-section-header">
+      <span class="kit-section-num">07</span>
+      <span class="kit-section-title">Stat Cards (Metric Cards)</span>
+      <span class="kit-section-desc">Overview tab — 4 cards with reactive radial gradient glow on hover</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div class="metric-card mc-slate">
+        <div class="metric-label">Quote Value</div>
+        <div class="metric-value neutral">R 48,500</div>
+      </div>
+      <div class="metric-card mc-indigo">
+        <div class="metric-label">Estimated Cost</div>
+        <div class="metric-value neutral">R 36,200</div>
+      </div>
+      <div class="metric-card mc-amber">
+        <div class="metric-label">Actual Cost</div>
+        <div class="metric-value neutral">R 0</div>
+      </div>
+      <div class="metric-card mc-green">
+        <div class="metric-label">Est. Profit</div>
+        <div class="metric-value profit">+R 12,300</div>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted-fg);margin-top:10px">Top border: 2px coloured accent · Hover: translateY(-2px) + box-shadow + radial glow via <code>--mc-glow</code> CSS var + mouse position via <code>--mx / --my</code></p>
+  </section>
+
+  <!-- ── 8. Right Sidebar ── -->
+  <section class="kit-section" id="sidebar">
+    <div class="kit-section-header">
+      <span class="kit-section-num">08</span>
+      <span class="kit-section-title">Right Sidebar Panel</span>
+      <span class="kit-section-desc">border-left: 1px solid border · width: 268px (resizable) · 4 sections top to bottom</span>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Section Order (top to bottom)</div>
+      <ol style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
+        <li><strong>Team</strong> — Tech Manager, Coordinator, Sales Rep, Job Owner. Each row: avatar + role label + name + edit pencil icon.</li>
+        <li><strong>Financials</strong> — Estimated P/L header (trending_up icon + amount + margin %). Rows: Quote (excl. VAT), Estimate Cost, Actual Cost, Commission, Est. Profit.</li>
+        <li><strong>VAT Summary</strong> — Indigo-tinted box. Output VAT (15%), Input VAT, Net VAT (bold, border-top).</li>
+        <li><strong>Documents</strong> — Estimate, Quote, Invoice (AUTO badge), Actual Costs, Jobcard, HSE Pack. Each row: coloured icon + name + meta + status pill + action button.</li>
+      </ol>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Document Row Pattern</div>
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+        <div class="doc-row" style="padding:8px 12px;border-bottom:1px solid var(--border)">
+          <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">calculate</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Estimate</div><div class="doc-meta">12 items · R 36,200</div></div>
+          <span class="pill pill-slate" style="font-size:9.5px;margin-right:4px">Draft</span>
+          <div class="doc-action"><span class="ms">open_in_new</span>Open</div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
-          <span style="font-size:13px">Auto-transitions off</span>
+        <div class="doc-row" style="padding:8px 12px;border-bottom:1px solid var(--border)">
+          <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">description</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Quote</div><div class="doc-meta">QUO-0089 · R 48,500</div></div>
+          <span class="pill pill-blue" style="font-size:9.5px;margin-right:4px">Sent</span>
+          <div class="doc-action"><span class="ms">open_in_new</span>Open</div>
+        </div>
+        <div class="doc-row" style="padding:8px 12px">
+          <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">receipt_long</span></div>
+          <div style="flex:1;min-width:0"><div class="doc-name">Invoice</div><div class="doc-meta">Auto-creates on completion</div></div>
+          <span class="doc-auto"><span class="ms">bolt</span>AUTO</span>
+          <div class="doc-action create" style="margin-left:6px"><span class="ms">add</span>Create</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── 7. Avatars ── -->
-  <section class="kit-section anchor" id="avatars">
+  <!-- ── 9. Tabs ── -->
+  <section class="kit-section" id="tabs">
     <div class="kit-section-header">
-      <span class="kit-section-title">Avatars &amp; Team</span>
-      <span class="kit-section-num">07</span>
+      <span class="kit-section-num">09</span>
+      <span class="kit-section-title">Tabs</span>
+      <span class="kit-section-desc">4 tabs on detail page: Overview, Communication, Timeline, HSE</span>
     </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Sizes</div>
-        <div class="comp-row" style="align-items:center">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-          <span class="avatar avatar-lg av-amber">MD</span>
-          <span class="avatar avatar-xl av-red">KL</span>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">.avatar-sm (26px)</span>
-          <span class="anno">.avatar-md (32px)</span>
-          <span class="anno">.avatar-lg (40px)</span>
-          <span class="anno">.avatar-xl (52px)</span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Colour variants</div>
-        <div class="comp-row">
-          <span class="avatar avatar-md av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-          <span class="avatar avatar-md av-amber">MD</span>
-          <span class="avatar avatar-md av-red">KL</span>
-          <span class="avatar avatar-md av-slate">?</span>
-        </div>
-        <div class="comp-row" style="margin-top:4px">
-          <span class="anno">av-indigo</span>
-          <span class="anno">av-green</span>
-          <span class="anno">av-amber</span>
-          <span class="anno">av-red</span>
-          <span class="anno">av-slate (unassigned)</span>
-        </div>
-      </div>
-    </div>
-
     <div class="comp-group">
-      <div class="comp-group-label">Avatar stack (team display in table rows)</div>
-      <div class="comp-row">
-        <div class="avatar-stack">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-          <span class="avatar avatar-sm av-green">SJ</span>
-          <span class="avatar avatar-sm av-amber">MD</span>
-        </div>
-        <div class="avatar-stack">
-          <span class="avatar avatar-md av-indigo">JS</span>
-          <span class="avatar avatar-md av-green">SJ</span>
-        </div>
-        <div class="avatar-stack">
-          <span class="avatar avatar-sm av-indigo">JS</span>
-        </div>
+      <div class="tabs" style="border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;margin-bottom:0">
+        <div class="tab-btn active"><span class="ms">bar_chart</span>Overview</div>
+        <div class="tab-btn"><span class="ms">forum</span>Communication <span class="tab-badge">3</span></div>
+        <div class="tab-btn"><span class="ms">history</span>Timeline <span class="tab-badge">6</span></div>
+        <div class="tab-btn"><span class="ms">health_and_safety</span>HSE</div>
       </div>
     </div>
+  </section>
 
+  <!-- ── 10. Board View ── -->
+  <section class="kit-section" id="board">
+    <div class="kit-section-header">
+      <span class="kit-section-num">10</span>
+      <span class="kit-section-title">Board View (Kanban)</span>
+      <span class="kit-section-desc">7 columns — exact KANBAN_STAGES from production <code>JobsKanbanBoard.tsx</code></span>
+    </div>
     <div class="comp-group">
-      <div class="comp-group-label">Assignment roles (from <code>JobAssignmentPanel.tsx</code>)</div>
-      <table class="table-preview">
-        <thead><tr><th>Role</th><th>Backend key</th><th>Avatar colour</th></tr></thead>
+      <div class="comp-group-label">Column Accents</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Column</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Statuses</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Accent</th>
+        </tr></thead>
         <tbody>
-          <tr><td>Tech Manager</td><td><span class="anno">technical</span></td><td><span class="avatar avatar-sm av-indigo">JS</span></td></tr>
-          <tr><td>Coordinator</td><td><span class="anno">coordinator</span></td><td><span class="avatar avatar-sm av-green">SJ</span></td></tr>
-          <tr><td>Sales Rep</td><td><span class="anno">sales</span></td><td><span class="avatar avatar-sm av-amber">MD</span></td></tr>
-          <tr><td>Job Owner</td><td><span class="anno">job_owner</span></td><td><span class="avatar avatar-sm av-red">KL</span></td></tr>
-          <tr><td>Unassigned</td><td>—</td><td><span class="avatar avatar-sm av-slate">?</span></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Booked</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">job_booked, estimate_done</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#94a3b8"></div></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Quoting</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">quote_drafted, quote_sent, quote_finalized</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#f59e0b"></div></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Accepted</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">quote_accepted</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#6366f1"></div></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">In Progress</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">on_my_way, work_in_progress, job_in_progress</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#0ea5e9"></div></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Completed</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">job_completed, work_client_approved</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#22c55e"></div></td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Invoiced</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">invoiced, paid, commission_paid</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#10b981"></div></td></tr>
+          <tr><td style="padding:7px 10px;font-weight:600">Declined / Cancelled</td><td style="padding:7px 10px;color:var(--muted-fg);font-family:monospace;font-size:11px">quote_declined, cancelled</td><td style="padding:7px 10px"><div style="width:24px;height:16px;border-radius:3px;background:#ef4444"></div></td></tr>
         </tbody>
       </table>
     </div>
-  </section>
-
-  <!-- ── 8. Cards ── -->
-  <section class="kit-section anchor" id="cards">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Cards &amp; Stat Tiles</span>
-      <span class="kit-section-num">08</span>
-    </div>
-
-    <!-- 5-card row matching production Finance dashboard -->
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
-
-      <!-- Drafts — slate -->
-      <div class="stat-card sc-slate">
-        <div class="stat-card-label">Drafts</div>
-        <div class="stat-card-value neutral" style="font-size:32px">1</div>
-        <div class="stat-card-sub">Not yet sent</div>
-      </div>
-
-      <!-- Outstanding — amber -->
-      <div class="stat-card sc-amber">
-        <div class="stat-card-label">Outstanding</div>
-        <div class="stat-card-value">R 261 490</div>
-        <div class="stat-card-sub">16 awaiting payment</div>
-      </div>
-
-      <!-- Overdue — red -->
-      <div class="stat-card sc-red">
-        <div class="stat-card-label">Overdue</div>
-        <div class="stat-card-value" style="font-size:32px">4</div>
-        <div class="stat-card-sub">R 25 136 at risk</div>
-      </div>
-
-      <!-- Collected — green -->
-      <div class="stat-card sc-green">
-        <div class="stat-card-label">Collected</div>
-        <div class="stat-card-value">R 1 071 725</div>
-        <div class="stat-card-sub">45 paid</div>
-      </div>
-
-      <!-- Collection Rate — indigo -->
-      <div class="stat-card sc-indigo">
-        <div class="stat-card-label">Collection Rate</div>
-        <div class="stat-card-value" style="font-size:32px">78%</div>
-        <div class="stat-card-sub">0 part paid</div>
-      </div>
-
-    </div>
-
-    <div class="comp-group" style="margin-top:16px">
-      <div class="comp-group-label">Stat card anatomy</div>
-      <div style="font-size:12.5px;color:var(--fg-2);line-height:2">
-        <strong>Structure:</strong> white bg · 3px coloured top border · 1px slate border sides/bottom · 10px radius · 20px 22px padding<br>
-        <strong>Hover:</strong> translateY(-2px) · shadow-md · radial gradient glow follows mouse cursor (JS-driven <code>--mx</code> / <code>--my</code> CSS vars)<br>
-        <strong>Variants:</strong> <span class="anno">.sc-slate</span> <span class="anno">.sc-amber</span> <span class="anno">.sc-red</span> <span class="anno">.sc-green</span> <span class="anno">.sc-indigo</span>
-      </div>
-    </div>
-
-    <div class="two-col" style="margin-top:16px">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Guard Keys</span>
-          <span class="badge badge-wip">Work In Progress</span>
-        </div>
-        <div class="card-body">
-          <div class="comp-row" style="flex-wrap:wrap">
-            <span class="guard-key met"><span class="ms">check</span> Quote Approved</span>
-            <span class="guard-key blocked"><span class="ms">close</span> Jobcard Signed</span>
-            <span class="guard-key pending"><span class="ms">schedule</span> Invoice Ready</span>
-            <span class="guard-key met"><span class="ms">check</span> Client Contact</span>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Document row</span>
-        </div>
-        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:6px">
-            <span class="ms" style="color:var(--indigo-500)">calculate</span>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600">Estimate</div>
-              <div style="font-size:11px;color:var(--muted-fg)">12 items · R 36,200</div>
-            </div>
-            <span class="badge badge-quoted">Draft</span>
-            <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open</button>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:6px">
-            <span class="ms" style="color:var(--indigo-500)">description</span>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600">Quote</div>
-              <div style="font-size:11px;color:var(--muted-fg)">QUO-0089 · R 48,500</div>
-            </div>
-            <span class="badge badge-sent">Sent</span>
-            <button class="btn btn-indigo-soft btn-sm"><span class="ms">open_in_new</span> Open</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 9. Chips & Toasts ── -->
-  <section class="kit-section anchor" id="chips">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Chips, Filter Tags &amp; Toasts</span>
-      <span class="kit-section-num">09</span>
-    </div>
-
-    <div class="two-col">
-      <div class="comp-group">
-        <div class="comp-group-label">Chips</div>
-        <div class="comp-row">
-          <span class="chip chip-default">My jobs <span class="ms">close</span></span>
-          <span class="chip chip-indigo">Active only <span class="ms">close</span></span>
-          <span class="chip chip-green">This week <span class="ms">close</span></span>
-          <span class="chip chip-red">Urgent <span class="ms">close</span></span>
-          <span class="chip chip-amber">High <span class="ms">close</span></span>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Toasts (notification feedback)</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="toast-demo toast-success"><span class="ms">check_circle</span> Stage advanced to "Invoice"</div>
-          <div class="toast-demo toast-error"><span class="ms">error</span> Blocked by: Quote Approved</div>
-          <div class="toast-demo toast-info"><span class="ms">info</span> Auto-transitions are enabled</div>
-          <div class="toast-demo toast-warn"><span class="ms">warning</span> Cannot skip stages</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── 10. Icons ── -->
-  <section class="kit-section anchor" id="icons">
-    <div class="kit-section-header">
-      <span class="kit-section-title">Icon Set</span>
-      <span class="kit-section-num">10</span>
-      <span class="kit-section-desc">Material Symbols Rounded — all icons used in the project</span>
-    </div>
     <div class="comp-group">
-      <div class="comp-group-label">Navigation</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">dashboard</span><span>dashboard</span></div>
-        <div class="icon-item"><span class="ms">work</span><span>work</span></div>
-        <div class="icon-item"><span class="ms">people</span><span>people</span></div>
-        <div class="icon-item"><span class="ms">receipt_long</span><span>receipt_long</span></div>
-        <div class="icon-item"><span class="ms">health_and_safety</span><span>health_and_safety</span></div>
-        <div class="icon-item"><span class="ms">hub</span><span>hub</span></div>
-        <div class="icon-item"><span class="ms">contacts</span><span>contacts</span></div>
-        <div class="icon-item"><span class="ms">business</span><span>business</span></div>
-        <div class="icon-item"><span class="ms">handshake</span><span>handshake</span></div>
-      </div>
-    </div>
-    <div class="comp-group" style="margin-top:12px">
-      <div class="comp-group-label">Actions</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">add</span><span>add</span></div>
-        <div class="icon-item"><span class="ms">edit</span><span>edit</span></div>
-        <div class="icon-item"><span class="ms">delete</span><span>delete</span></div>
-        <div class="icon-item"><span class="ms">search</span><span>search</span></div>
-        <div class="icon-item"><span class="ms">filter_list</span><span>filter_list</span></div>
-        <div class="icon-item"><span class="ms">download</span><span>download</span></div>
-        <div class="icon-item"><span class="ms">open_in_new</span><span>open_in_new</span></div>
-        <div class="icon-item"><span class="ms">content_copy</span><span>content_copy</span></div>
-        <div class="icon-item"><span class="ms">lock_open</span><span>lock_open</span></div>
-        <div class="icon-item"><span class="ms">more_vert</span><span>more_vert</span></div>
-        <div class="icon-item"><span class="ms">check_circle</span><span>check_circle</span></div>
-        <div class="icon-item"><span class="ms">close</span><span>close</span></div>
-      </div>
-    </div>
-    <div class="comp-group" style="margin-top:12px">
-      <div class="comp-group-label">Workflow / Pipeline</div>
-      <div class="icon-grid">
-        <div class="icon-item"><span class="ms">calculate</span><span>calculate</span></div>
-        <div class="icon-item"><span class="ms">description</span><span>description</span></div>
-        <div class="icon-item"><span class="ms">construction</span><span>construction</span></div>
-        <div class="icon-item"><span class="ms">engineering</span><span>engineering</span></div>
-        <div class="icon-item"><span class="ms">receipt_long</span><span>receipt_long</span></div>
-        <div class="icon-item"><span class="ms">payments</span><span>payments</span></div>
-        <div class="icon-item"><span class="ms">bolt</span><span>bolt</span></div>
-        <div class="icon-item"><span class="ms">check</span><span>check</span></div>
-        <div class="icon-item"><span class="ms">cancel</span><span>cancel</span></div>
-        <div class="icon-item"><span class="ms">schedule</span><span>schedule</span></div>
-        <div class="icon-item"><span class="ms">trending_up</span><span>trending_up</span></div>
-        <div class="icon-item"><span class="ms">bar_chart</span><span>bar_chart</span></div>
+      <div class="comp-group-label">Card Example</div>
+      <div class="board-card" style="max-width:260px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:10px;font-weight:700;color:var(--muted-fg);letter-spacing:.02em">JOB-0042</span>
+          <span style="font-size:9px;font-weight:700;letter-spacing:.07em;color:#2563eb">IN PROGRESS</span>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:1px">Acme Corp</div>
+        <div style="font-size:11px;color:var(--muted-fg);margin-bottom:5px">Main Warehouse</div>
+        <div style="font-size:11px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:9px">Complete rewiring of the main warehouse electrical DB</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;gap:2px">
+            <div class="avatar" style="background:#4f46e5">JS</div>
+            <div class="avatar" style="background:#0ea5e9">SJ</div>
+          </div>
+          <span style="font-size:11.5px;font-weight:700;color:var(--fg)">R 48,500</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ── 11. Spacing ── -->
-  <section class="kit-section anchor" id="spacing">
+  <!-- ── 11. Modals ── -->
+  <section class="kit-section" id="modals">
     <div class="kit-section-header">
-      <span class="kit-section-title">Spacing &amp; Radius</span>
       <span class="kit-section-num">11</span>
+      <span class="kit-section-title">Modals</span>
+      <span class="kit-section-desc">border-radius: 10px · max-height: 90vh · overlay: rgba(0,0,0,.35)</span>
     </div>
     <div class="comp-group">
-      <div class="comp-group-label">Spacing scale</div>
-      <div class="space-row">
-        <div class="space-block"><div class="bar" style="height:4px"></div><div class="lbl">4px</div></div>
-        <div class="space-block"><div class="bar" style="height:6px"></div><div class="lbl">6px</div></div>
-        <div class="space-block"><div class="bar" style="height:8px"></div><div class="lbl">8px</div></div>
-        <div class="space-block"><div class="bar" style="height:10px"></div><div class="lbl">10px</div></div>
-        <div class="space-block"><div class="bar" style="height:12px"></div><div class="lbl">12px</div></div>
-        <div class="space-block"><div class="bar" style="height:16px"></div><div class="lbl">16px</div></div>
-        <div class="space-block"><div class="bar" style="height:20px"></div><div class="lbl">20px</div></div>
-        <div class="space-block"><div class="bar" style="height:24px"></div><div class="lbl">24px</div></div>
-        <div class="space-block"><div class="bar" style="height:32px"></div><div class="lbl">32px</div></div>
-        <div class="space-block"><div class="bar" style="height:40px"></div><div class="lbl">40px</div></div>
-        <div class="space-block"><div class="bar" style="height:48px"></div><div class="lbl">48px</div></div>
-        <div class="space-block"><div class="bar" style="height:64px"></div><div class="lbl">64px</div></div>
-      </div>
+      <div class="comp-group-label">Modal Sizes</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Class</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Max Width</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Used For</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace">.modal-sm</td><td style="padding:7px 10px">420px</td><td style="padding:7px 10px;color:var(--muted-fg)">Confirm dialogs, assign modals</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace">.modal-md</td><td style="padding:7px 10px">560px</td><td style="padding:7px 10px;color:var(--muted-fg)">New Job wizard, Edit Job</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-family:monospace">.modal-lg</td><td style="padding:7px 10px">720px</td><td style="padding:7px 10px;color:var(--muted-fg)">Actual Costs, Jobcard</td></tr>
+          <tr><td style="padding:7px 10px;font-family:monospace">.modal-xl</td><td style="padding:7px 10px">900px</td><td style="padding:7px 10px;color:var(--muted-fg)">Estimate, Quote, Invoice editors</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="two-col" style="margin-top:16px">
-      <div class="comp-group">
-        <div class="comp-group-label">Border radius</div>
-        <div class="comp-row" style="align-items:flex-end;gap:16px">
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:4px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">4px<br>sm</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:6px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">6px ★<br>--radius</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:8px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">8px<br>card</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:10px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">10px<br>panel</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:50%;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">50%<br>avatar</div></div>
-          <div style="text-align:center"><div style="width:48px;height:48px;background:var(--indigo-100);border-radius:99px;border:1.5px solid var(--indigo-300)"></div><div class="type-meta" style="margin-top:6px">99px<br>pill/chip</div></div>
-        </div>
-      </div>
-      <div class="comp-group">
-        <div class="comp-group-label">Shadow tokens</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);font-size:12.5px;color:var(--fg-2)"><strong>--shadow</strong> — 0 1px 2px rgba(0,0,0,.05)<br><span style="color:var(--muted-fg)">Used: table rows, small elements</span></div>
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow-md);font-size:12.5px;color:var(--fg-2)"><strong>--shadow-md</strong> — 0 2px 8px rgba(0,0,0,.06)<br><span style="color:var(--muted-fg)">Used: cards, panels, dropdowns</span></div>
-          <div style="padding:14px 16px;background:var(--white);border-radius:8px;box-shadow:var(--shadow-lg);font-size:12.5px;color:var(--fg-2)"><strong>--shadow-lg</strong> — 0 4px 16px rgba(0,0,0,.07)<br><span style="color:var(--muted-fg)">Used: modals, toasts, popovers</span></div>
-        </div>
-      </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Document Editors Present in Mockup</div>
+      <ul style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
+        <li><strong>Estimate Editor</strong> — Line item table: Description, Qty, Unit Cost, Markup %, Unit Price, Total. Add/remove rows. Running total.</li>
+        <li><strong>Quote Editor</strong> — Same structure as Estimate. Quote number, validity date, notes.</li>
+        <li><strong>Invoice Editor</strong> — Same structure. Invoice number, due date.</li>
+        <li><strong>Actual Costs Editor</strong> — Entry table: Date, Supplier, Category, Reference, Amount. Running total.</li>
+        <li><strong>Jobcard Editor</strong> — 4×4 photo grid slots + signature capture box. Signed state: green border.</li>
+        <li><strong>New Job Wizard</strong> — Client, Site, Description, Type, Nature, Priority, Requested Date, Reference.</li>
+        <li><strong>Edit Job Modal</strong> — Same fields as New Job.</li>
+        <li><strong>Team Assign Modal</strong> — Assignee list with selection state.</li>
+        <li><strong>Bulk Status Modal</strong> — Status picker for selected jobs.</li>
+      </ul>
     </div>
   </section>
 
-  <!-- ── 12. Tables ── -->
-  <section class="kit-section anchor" id="tables">
+  <!-- ── 12. Layout ── -->
+  <section class="kit-section" id="layout">
     <div class="kit-section-header">
-      <span class="kit-section-title">Table Anatomy</span>
       <span class="kit-section-num">12</span>
-      <span class="kit-section-desc">All columns left-aligned. Alternating row: <code>--row-alt (#fafafa)</code></span>
+      <span class="kit-section-title">Page Layouts</span>
+      <span class="kit-section-desc">Two pages: Jobs List and Job Detail</span>
     </div>
     <div class="comp-group">
-      <div class="comp-group-label">Jobs table — sample rows</div>
-      <table class="table-preview">
-        <thead>
-          <tr>
-            <th>Job #</th>
-            <th>Client / Site</th>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Finance</th>
-            <th>Team</th>
-            <th>Value</th>
-          </tr>
-        </thead>
+      <div class="comp-group-label">Jobs List Layout (left to right, top to bottom)</div>
+      <ol style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
+        <li><strong>Nav sidebar</strong> (200px, white, border-right) — Logo, WORKSPACE section (Dashboard, Jobs, Clients, Invoices, HSE), CRM section (Cockpit, People, Companies, Deals)</li>
+        <li><strong>Toolbar</strong> (46px, white, border-bottom) — Job count badge, search, spacer, Filters toggle, Column toggle, Export CSV, View toggle (list/board), New Job button</li>
+        <li><strong>Quick filter chips bar</strong> (white, border-bottom) — My Jobs, Unassigned, Active, This Week + active filter chips</li>
+        <li><strong>Content area</strong> — Filter sidebar (210px, white, border-right) + Table/Board</li>
+        <li><strong>Filter sidebar</strong> — Status, Finance, Priority, Type filter groups (checkboxes)</li>
+        <li><strong>Table</strong> — Columns: JOB #, CLIENT / SITE, DESCRIPTION, TYPE, PRIORITY, STATUS, FINANCE, TEAM, VALUE, DATE. Column resizer handles. Alternating row-alt.</li>
+        <li><strong>Pagination bar</strong> (white, border-top) — info text + page buttons</li>
+      </ol>
+    </div>
+    <div class="comp-group">
+      <div class="comp-group-label">Job Detail Layout (top to bottom, then left/right split)</div>
+      <ol style="font-size:12.5px;color:var(--fg-2);line-height:2;padding-left:20px">
+        <li><strong>Breadcrumb bar</strong> (46px, white, border-bottom) — Jobs &gt; JOB-0042 + meta chips (Job Nature, Created, Priority, Type, Reference) + presence indicator + lock icon + duplicate icon + delete icon</li>
+        <li><strong>Header bar</strong> (white, border-bottom) — Job title (18px/700) + status pill + finance pill + priority pill</li>
+        <li><strong>Pipeline bar</strong> (white, border-bottom) — Green gradient progress bar + stage labels</li>
+        <li><strong>Guard keys bar</strong> (white, border-bottom) — GUARD KEYS label + 7 guard key pills + JOB EXECUTION amber zone with action buttons</li>
+        <li><strong>Guidance bar</strong> (white, indigo left-border) — Icon + status label + message</li>
+        <li><strong>Body</strong> (flex row-reverse) — Right sidebar + Main content</li>
+        <li><strong>Right sidebar</strong> (268px, resizable) — Team → Financials → VAT Summary → Documents</li>
+        <li><strong>Main content</strong> — Job Info card + Tabs card (Overview / Communication / Timeline / HSE)</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── 13. Rules ── -->
+  <section class="kit-section" id="rules">
+    <div class="kit-section-header">
+      <span class="kit-section-num">13</span>
+      <span class="kit-section-title">Non-Negotiable Rules</span>
+      <span class="kit-section-desc">Must be followed in every session</span>
+    </div>
+    <div class="comp-group">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="text-align:left;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Rule</th>
+          <th style="text-align:left;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg)">Description</th>
+        </tr></thead>
         <tbody>
-          <tr>
-            <td><strong>JOB-0042</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Acme Corp</div><div style="font-size:11px;color:var(--muted-fg)">Main Warehouse</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Electrical Rewiring — DB replacement</td>
-            <td><span class="priority priority-high">🟠 High</span></td>
-            <td><span class="badge badge-wip">Work In Progress</span></td>
-            <td><span class="badge badge-finance-quoted">Quoted</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-indigo">JS</span><span class="avatar avatar-sm av-green">SJ</span></div></td>
-            <td><strong>R 48,500</strong></td>
-          </tr>
-          <tr>
-            <td><strong>JOB-0041</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Globex Ltd</div><div style="font-size:11px;color:var(--muted-fg)">Head Office</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">HVAC Maintenance — quarterly service</td>
-            <td><span class="priority priority-normal">🔵 Normal</span></td>
-            <td><span class="badge badge-completed">Job Completed</span></td>
-            <td><span class="badge badge-finance-invoiced">Invoiced</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-green">SJ</span></div></td>
-            <td><strong>R 12,200</strong></td>
-          </tr>
-          <tr>
-            <td><strong>JOB-0040</strong></td>
-            <td><div style="font-weight:600;font-size:12.5px">Initech</div><div style="font-size:11px;color:var(--muted-fg)">Server Room</div></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">UPS Installation — 20kVA system</td>
-            <td><span class="priority priority-urgent">🔴 Urgent</span></td>
-            <td><span class="badge badge-sent">Quote Sent</span></td>
-            <td><span class="badge badge-finance-quoted">Quoted</span></td>
-            <td><div class="avatar-stack"><span class="avatar avatar-sm av-amber">MD</span></div></td>
-            <td><strong>R 95,000</strong></td>
-          </tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700;color:var(--indigo-700)">Mockup IS the standard</td><td style="padding:8px 10px;color:var(--fg-2)">index.html is the design authority. Notes and UI Kit document it — not the other way around.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">No drift</td><td style="padding:8px 10px;color:var(--fg-2)">Do not change the visual style unless explicitly requested. No new colours, fonts, or layout changes without instruction.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">Snapshot before risky changes</td><td style="padding:8px 10px;color:var(--fg-2)">Always create a git snapshot commit before large refactors.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">No regression</td><td style="padding:8px 10px;color:var(--fg-2)">Never remove or break a feature that was previously working.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">White surfaces</td><td style="padding:8px 10px;color:var(--fg-2)">All surfaces are white (#fff). Grey (#f0f2f5) is reserved for the canvas background only.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">Left-align tables</td><td style="padding:8px 10px;color:var(--fg-2)">All table headers and cells are left-aligned.</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 10px;font-weight:700">Filters by inclusion</td><td style="padding:8px 10px;color:var(--fg-2)">Unchecked = show all. Checked = restrict to selection. Multiple in same group = OR. Multiple groups = AND.</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:700">Sync kit with mockup</td><td style="padding:8px 10px;color:var(--fg-2)">If index.html changes, ui-kit.html must be updated in the same commit.</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
 </div>
-
-<script>
-// ── Reactive gradient on stat cards ──
-document.querySelectorAll('.stat-card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=((e.clientX-r.left)/r.width*100).toFixed(1)+'%';
-    const y=((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
-    card.style.setProperty('--mx',x);
-    card.style.setProperty('--my',y);
-  });
-  card.addEventListener('mouseleave',()=>{
-    card.style.setProperty('--mx','50%');
-    card.style.setProperty('--my','50%');
-  });
-});
-
-// Highlight active nav link on scroll
-const sections=document.querySelectorAll('.anchor');
-const navLinks=document.querySelectorAll('.kit-nav a');
-window.addEventListener('scroll',()=>{
-  let current='';
-  sections.forEach(s=>{if(s.getBoundingClientRect().top<=80)current=s.id;});
-  navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+current);});
-});
-</script>
 </body>
 </html>
