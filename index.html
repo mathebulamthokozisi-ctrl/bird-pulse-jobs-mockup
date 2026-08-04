@@ -1434,6 +1434,36 @@ td:first-child{padding:8px 8px}
   border-bottom: 1px solid var(--border);
 }
 .de-sb-section:last-child { border-bottom: none; }
+/* Coloured info cards inside sidebar sections — must sit inside a normal de-sb-section for padding */
+.de-sb-infocard {
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 0;
+}
+.de-sb-infocard-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 8px;
+}
+.de-sb-infocard-body {
+  font-size: 12px;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+.de-sb-infocard.indigo {
+  border: 1px solid var(--indigo-200);
+  background: var(--indigo-50);
+}
+.de-sb-infocard.indigo .de-sb-infocard-title { color: var(--indigo-700); }
+.de-sb-infocard.indigo .de-sb-infocard-body  { color: var(--muted-fg); }
+.de-sb-infocard.amber {
+  border: 1px dashed #fbbf24;
+  background: #fffbeb;
+}
+.de-sb-infocard.amber .de-sb-infocard-title { color: #92400e; }
+.de-sb-infocard.amber .de-sb-infocard-body  { color: #78350f; }
 .de-sb-label {
   font-size: 9px;
   font-weight: 700;
@@ -2964,10 +2994,12 @@ td:first-child{padding:8px 8px}
         <div class="de-sb-row"><span class="key">Last saved</span><span class="val" style="font-weight:400;color:var(--muted-fg)">Not saved</span></div>
       </div>
       <!-- Linked PO panel -->
-      <div class="de-sb-section" style="border:1px solid var(--indigo-200);border-radius:var(--radius);padding:10px;background:var(--indigo-50)">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--indigo-700);margin-bottom:8px">Linked PO</div>
-        <div style="font-size:12px;color:var(--muted-fg);margin-bottom:8px;line-height:1.4">No PO linked. Use <strong>Link PO</strong> to import line items from a client purchase order.</div>
-        <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('PO link dialog coming soon')"><span class="ms">link</span>Link PO</button>
+      <div class="de-sb-section">
+        <div class="de-sb-infocard indigo">
+          <div class="de-sb-infocard-title">Linked PO</div>
+          <div class="de-sb-infocard-body">No PO linked. Use <strong>Link PO</strong> to import line items from a client purchase order.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('PO link dialog coming soon')"><span class="ms">link</span>Link PO</button>
+        </div>
       </div>
     </aside>
   </div>
@@ -3494,10 +3526,12 @@ EFT payments preferred.</textarea>
         </div>
       </div>
       <!-- [NEW SUGGESTION] QBO Push -->
-      <div class="de-sb-section" style="border:1px dashed #fbbf24;border-radius:var(--radius);padding:10px;background:#fffbeb">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#92400e;margin-bottom:8px">&#x1F4A1; NEW SUGGESTION</div>
-        <div style="font-size:12px;color:#78350f;margin-bottom:8px;line-height:1.4"><strong>QuickBooks Online Push</strong> — Sync this invoice to QBO once sent. Requires QBO integration to be enabled under Settings &gt; Integrations.</div>
-        <button class="btn sm" style="width:100%;justify-content:center;opacity:.5;cursor:not-allowed" disabled><span class="ms">sync</span>Push to QBO</button>
+      <div class="de-sb-section">
+        <div class="de-sb-infocard amber">
+          <div class="de-sb-infocard-title">&#x1F4A1; New Suggestion</div>
+          <div class="de-sb-infocard-body"><strong>QuickBooks Online Push</strong> — Sync this invoice to QBO once sent. Requires QBO integration to be enabled under Settings &gt; Integrations.</div>
+          <button class="btn sm" style="width:100%;justify-content:center;opacity:.5;cursor:not-allowed" disabled><span class="ms">sync</span>Push to QBO</button>
+        </div>
       </div>
     </aside>
   </div>
@@ -4012,10 +4046,12 @@ EFT payments preferred.</textarea>
           <div class="de-sb-row"><span class="key">Last saved</span><span class="val" style="font-weight:400;color:var(--muted-fg)">Not saved</span></div>
         </div>
         <!-- Signing link status -->
-        <div class="de-sb-section" style="border:1px solid var(--indigo-200);border-radius:var(--radius);padding:10px;background:var(--indigo-50)">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--indigo-700);margin-bottom:8px">Signing Link</div>
-          <div style="font-size:12px;color:var(--muted-fg);margin-bottom:8px;line-height:1.4">No signing link sent yet. Use <strong>Request Signature</strong> to send a link to the client.</div>
-          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Signing link sent to client email')"><span class="ms">link</span>Request Signature</button>
+        <div class="de-sb-section">
+          <div class="de-sb-infocard indigo">
+            <div class="de-sb-infocard-title">Signing Link</div>
+            <div class="de-sb-infocard-body">No signing link sent yet. Use <strong>Request Signature</strong> to send a link to the client.</div>
+            <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Signing link sent to client email')"><span class="ms">link</span>Request Signature</button>
+          </div>
         </div>
         <div class="de-sb-section">
           <div class="de-sb-label"><span class="ms">group</span>Team on Site</div>
