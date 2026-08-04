@@ -1455,14 +1455,17 @@ td:first-child{padding:8px 6px}
 }
 
 /* ── Signature pad ── */
-.de-sig-pad {
+.de-sig-pad, .de-sig-canvas {
   border: 2px dashed var(--border);
   border-radius: var(--radius);
   background: var(--white);
   cursor: crosshair;
   display: block;
+  width: 100%;
+  max-width: 600px;
+  height: 130px;
 }
-.de-sig-pad.signed { border-style: solid; border-color: var(--green-300); }
+.de-sig-pad.signed, .de-sig-canvas.signed { border-style: solid; border-color: var(--green-300); }
 
 /* ── HSE checklist ── */
 .de-hse-item {
@@ -2326,7 +2329,7 @@ td:first-child{padding:8px 6px}
         <div class="de-card-header" style="background:var(--indigo-50);border-bottom:1px solid var(--indigo-100)">
           <span class="ms" style="color:var(--indigo-600)">inventory_2</span>
           <span class="de-card-title" style="color:var(--indigo-700)">Materials</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--indigo-500)" id="est-sec-materials-total">R 22,400</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--indigo-500)" id="est-sec-materials-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('materials')"><span class="ms">add</span>Add</button>
         </div>
         <div style="overflow-x:auto">
@@ -2386,7 +2389,7 @@ td:first-child{padding:8px 6px}
         <div class="de-card-header" style="background:#f0fdf4;border-bottom:1px solid #bbf7d0">
           <span class="ms" style="color:#16a34a">engineering</span>
           <span class="de-card-title" style="color:#15803d">Labour</span>
-          <span style="margin-left:auto;font-size:11px;color:#16a34a" id="est-sec-labour-total">R 13,800</span>
+          <span style="margin-left:auto;font-size:11px;color:#16a34a" id="est-sec-labour-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('labour')"><span class="ms">add</span>Add</button>
         </div>
         <div style="overflow-x:auto">
@@ -2415,7 +2418,7 @@ td:first-child{padding:8px 6px}
         <div class="de-card-header" style="background:#fdf4ff;border-bottom:1px solid #f0abfc">
           <span class="ms" style="color:#9333ea">checklist</span>
           <span class="de-card-title" style="color:#7e22ce">Preliminaries</span>
-          <span style="margin-left:auto;font-size:11px;color:#9333ea" id="est-sec-prelim-total">R 0</span>
+          <span style="margin-left:auto;font-size:11px;color:#9333ea" id="est-sec-preliminaries-total">R 0</span>
           <button class="btn sm" style="margin-left:12px" onclick="addEstimateLine('preliminaries')"><span class="ms">add</span>Add</button>
         </div>
         <div style="overflow-x:auto">
@@ -2431,7 +2434,7 @@ td:first-child{padding:8px 6px}
                 <th style="width:4%"></th>
               </tr>
             </thead>
-            <tbody id="est-tbody-prelim">
+            <tbody id="est-tbody-preliminaries">
               <tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted-fg);font-size:12px">No preliminaries — click Add for travel, waste, site establishment, HSE costs</td></tr>
             </tbody>
           </table>
@@ -4793,9 +4796,9 @@ function renderQuoteTable(){
   const tbody=document.getElementById('quote-tbody');
   if(!tbody)return;
   tbody.innerHTML=quoteLines.map((l,i)=>`<tr>
-    <td>${l.desc}</td>
+    <td><input value="${l.desc}" style="width:100%" onchange="quoteLines[${i}].desc=this.value"></td>
     <td><input type="number" value="${l.qty}" style="width:60px" onchange="quoteLines[${i}].qty=+this.value;recalcQuote()"></td>
-    <td>${l.unit}</td>
+    <td><select onchange="quoteLines[${i}].unit=this.value">${Object.entries(ESTIMATE_UNIT_LABELS).map(([k,v])=>`<option value="${k}" ${k===l.unit?'selected':''}>${v}</option>`).join('')}</select></td>
     <td><input type="number" value="${l.price}" onchange="quoteLines[${i}].price=+this.value;recalcQuote()"></td>
     <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
     <td><button class="de-del-row" onclick="quoteLines.splice(${i},1);renderQuoteTable()"><span class="ms">delete</span></button></td>
@@ -4846,9 +4849,9 @@ function renderInvTable(){
   const tbody=document.getElementById('inv-tbody');
   if(!tbody)return;
   tbody.innerHTML=invLines.map((l,i)=>`<tr>
-    <td>${l.desc}</td>
+    <td><input value="${l.desc}" style="width:100%" onchange="invLines[${i}].desc=this.value"></td>
     <td><input type="number" value="${l.qty}" style="width:60px" onchange="invLines[${i}].qty=+this.value;recalcInv()"></td>
-    <td>${l.unit}</td>
+    <td><select onchange="invLines[${i}].unit=this.value">${Object.entries(ESTIMATE_UNIT_LABELS).map(([k,v])=>`<option value="${k}" ${k===l.unit?'selected':''}>${v}</option>`).join('')}</select></td>
     <td><input type="number" value="${l.price}" onchange="invLines[${i}].price=+this.value;recalcInv()"></td>
     <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(l.qty*l.price)}</td>
     <td><button class="de-del-row" onclick="invLines.splice(${i},1);renderInvTable()"><span class="ms">delete</span></button></td>
@@ -4947,14 +4950,16 @@ function recalcCosts(){
 function renderVarianceTable(){
   const tbody=document.getElementById('var-tbody');
   if(!tbody)return;
-  const EST_CATS={Materials:26200,Labour:10000,Subcontractor:0,Travel:0,Other:0};
+  // Keys match real ActualCost.cat field (snake_case) and EST_LINES section totals
+  const EST_CATS={materials:22400,labour:10000,subcontractor:1800,travel:600,other:1400};
+  const CAT_LABELS={materials:'Materials',labour:'Labour',subcontractor:'Subcontractor',travel:'Travel',other:'Other'};
   const actCats={};
   actualCostEntries.forEach(e=>{actCats[e.cat]=(actCats[e.cat]||0)+e.amount;});
   const rows=Object.keys(EST_CATS).map(cat=>{
     const est=EST_CATS[cat];const act=actCats[cat]||0;const v=est-act;
     const pct=est>0?((v/est)*100).toFixed(0)+'%':'—';
     return `<tr>
-      <td>${cat}</td>
+      <td>${CAT_LABELS[cat]||cat}</td>
       <td style="text-align:right">${fmt(est)}</td>
       <td style="text-align:right">${act>0?fmt(act):'—'}</td>
       <td style="text-align:right" class="${v>=0?'var-pos':'var-neg'}">${act>0?(v>=0?'+':'')+fmt(v):'—'}</td>
@@ -5001,7 +5006,7 @@ function saveActualCosts(){
 // ═══════════════════════════════════════════════════════════
 // JOBCARD EDITOR
 // ═══════════════════════════════════════════════════════════
-let jcSigDrawing=false;let jcSigLastX=0;let jcSigLastY=0;
+// Sig canvas state is now local to initOneCanvas()
 function openJobcardModal(){
   initSigCanvas();
   openEditor('jobcard-editor');
@@ -5048,26 +5053,29 @@ function addDefectRow(){
     <td><button class="btn ghost sm" onclick="this.closest('tr').remove()"><span class="ms" style="font-size:13px">delete</span></button></td>`;
   tbody.appendChild(tr);
 }
-function initSigCanvas(){
-  const canvas=document.getElementById('jc-sig-canvas');
+function initOneCanvas(canvas){
   if(!canvas||canvas._inited)return;
   canvas._inited=true;
+  let drawing=false,lx=0,ly=0;
   const ctx=canvas.getContext('2d');
   ctx.strokeStyle='#0f172a';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
-  canvas.addEventListener('mousedown',e=>{jcSigDrawing=true;const r=canvas.getBoundingClientRect();jcSigLastX=e.clientX-r.left;jcSigLastY=e.clientY-r.top;});
+  canvas.addEventListener('mousedown',e=>{drawing=true;const r=canvas.getBoundingClientRect();lx=e.clientX-r.left;ly=e.clientY-r.top;});
   canvas.addEventListener('mousemove',e=>{
-    if(!jcSigDrawing)return;
+    if(!drawing)return;
     const r=canvas.getBoundingClientRect();
     const x=e.clientX-r.left;const y=e.clientY-r.top;
-    ctx.beginPath();ctx.moveTo(jcSigLastX,jcSigLastY);ctx.lineTo(x,y);ctx.stroke();
-    jcSigLastX=x;jcSigLastY=y;
+    ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();
+    lx=x;ly=y;
   });
-  canvas.addEventListener('mouseup',()=>jcSigDrawing=false);
-  canvas.addEventListener('mouseleave',()=>jcSigDrawing=false);
-  // Touch
-  canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();jcSigDrawing=true;jcSigLastX=t.clientX-r.left;jcSigLastY=t.clientY-r.top;});
-  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!jcSigDrawing)return;const t=e.touches[0];const r=canvas.getBoundingClientRect();const x=t.clientX-r.left;const y=t.clientY-r.top;ctx.beginPath();ctx.moveTo(jcSigLastX,jcSigLastY);ctx.lineTo(x,y);ctx.stroke();jcSigLastX=x;jcSigLastY=y;});
-  canvas.addEventListener('touchend',()=>jcSigDrawing=false);
+  canvas.addEventListener('mouseup',()=>drawing=false);
+  canvas.addEventListener('mouseleave',()=>drawing=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();drawing=true;lx=t.clientX-r.left;ly=t.clientY-r.top;});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const t=e.touches[0];const r=canvas.getBoundingClientRect();const x=t.clientX-r.left;const y=t.clientY-r.top;ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();lx=x;ly=y;});
+  canvas.addEventListener('touchend',()=>drawing=false);
+}
+function initSigCanvas(){
+  initOneCanvas(document.getElementById('jc-sig-canvas'));
+  initOneCanvas(document.getElementById('jc-tech-sig-canvas'));
 }
 function clearCanvas(id){
   const canvas=document.getElementById(id);
