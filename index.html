@@ -2349,7 +2349,7 @@ td:first-child{padding:8px 8px}
             <th data-col="status">Status</th>
             <th data-col="finance">Finance</th>
             <th data-col="team">Team</th>
-            <th data-col="value">Value</th>
+            <th data-col="value" style="text-align:right">Value</th>
             <th data-col="date">Date</th>
             <th></th>
           </tr>
@@ -2830,9 +2830,9 @@ td:first-child{padding:8px 8px}
                 <th style="width:4%">#</th>
                 <th style="width:35%">Description</th>
                 <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:7%;text-align:right">Qty</th>
                 <th style="width:7%">Unit</th>
-                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Unit Cost (R)</th>
                 <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
@@ -2861,9 +2861,9 @@ td:first-child{padding:8px 8px}
                 <th style="width:4%">#</th>
                 <th style="width:35%">Description / Asset</th>
                 <th style="width:13%">Owned/Hired</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:7%;text-align:right">Qty</th>
                 <th style="width:7%">Unit</th>
-                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Unit Cost (R)</th>
                 <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
@@ -2894,9 +2894,9 @@ td:first-child{padding:8px 8px}
                 <th style="width:4%">#</th>
                 <th style="width:35%">Description / Resource</th>
                 <th style="width:13%">Type</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:7%;text-align:right">Qty</th>
                 <th style="width:7%">Unit</th>
-                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Unit Cost (R)</th>
                 <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
@@ -2926,9 +2926,9 @@ td:first-child{padding:8px 8px}
                 <th style="width:4%">#</th>
                 <th style="width:35%">Description</th>
                 <th style="width:13%">Category</th>
-                <th style="width:7%">Qty</th>
+                <th style="width:7%;text-align:right">Qty</th>
                 <th style="width:7%">Unit</th>
-                <th style="width:12%">Unit Cost (R)</th>
+                <th style="width:12%;text-align:right">Unit Cost (R)</th>
                 <th style="width:12%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
               </tr>
@@ -3157,12 +3157,12 @@ td:first-child{padding:8px 8px}
             <thead>
               <tr>
                 <th style="width:23%">Description</th>
-                <th style="width:5%">Qty</th>
+                <th style="width:5%;text-align:right">Qty</th>
                 <th style="width:6%">Unit</th>
-                <th style="width:9%">Unit Price (R)</th>
-                <th style="width:6%">Comm %</th>
-                <th style="width:7%">Comm (R)</th>
-                <th style="width:5%">Disc %</th>
+                <th style="width:9%;text-align:right">Unit Price (R)</th>
+                <th style="width:6%;text-align:right">Comm %</th>
+                <th style="width:7%;text-align:right">Comm (R)</th>
+                <th style="width:5%;text-align:right">Disc %</th>
                 <th style="width:11%">Tax Type</th>
                 <th style="width:9%;text-align:right">Total (R)</th>
                 <th style="width:3%"></th>
@@ -3469,9 +3469,9 @@ td:first-child{padding:8px 8px}
             <thead>
               <tr>
                 <th style="width:36%">Description</th>
-                <th style="width:8%">Qty</th>
+                <th style="width:8%;text-align:right">Qty</th>
                 <th style="width:8%">Unit</th>
-                <th style="width:13%">Unit Price (R)</th>
+                <th style="width:13%;text-align:right">Unit Price (R)</th>
                 <th style="width:11%">Tax Type</th>
                 <th style="width:10%;text-align:right">Total (R)</th>
                 <th style="width:4%"></th>
@@ -3978,8 +3978,8 @@ EFT payments preferred.</textarea>
                   <th style="width:40%">Description / Part No.</th>
                   <th style="width:15%">Category</th>
                   <th style="width:10%">Unit</th>
-                  <th style="width:10%">Qty Used</th>
-                  <th style="width:12%">Unit Cost (R)</th>
+                  <th style="width:10%;text-align:right">Qty Used</th>
+                  <th style="width:12%;text-align:right">Unit Cost (R)</th>
                   <th style="width:9%;text-align:right">Total (R)</th>
                   <th style="width:4%"></th>
                 </tr>
@@ -4795,7 +4795,7 @@ function renderJobs(){
       ${visibleCols.status?`<td style="white-space:nowrap">${statusPill(j.status)}</td>`:''}
       ${visibleCols.finance?`<td style="white-space:nowrap">${financePill(j.finance)}</td>`:''}
       ${visibleCols.team?`<td><div style="display:flex;gap:2px">${j.team.map(avatarHtml).join('')}</div></td>`:''}
-      ${visibleCols.value?`<td style="font-weight:600;font-variant-numeric:tabular-nums">${fmt(j.value)}</td>`:''}
+      ${visibleCols.value?`<td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(j.value)}</td>`:''}
       ${visibleCols.date?`<td style="color:var(--muted-fg);font-size:12px">${j.date}</td>`:''}
       <td onclick="event.stopPropagation()"><button class="btn ghost xs" style="width:26px;padding:0;justify-content:center" onclick="openJobMenu(event,'${j.num}')"><span class="ms" style="font-size:15px">more_vert</span></button></td>
     </tr>`).join('');
