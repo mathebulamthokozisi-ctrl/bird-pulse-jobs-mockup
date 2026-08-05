@@ -2428,8 +2428,164 @@ td:first-child{padding:8px 8px}
 }
 
 </style>
+<link rel="stylesheet" href="responsive.css">
 </head>
 <body>
+
+<!-- ── Mobile top bar (hidden on desktop) ── -->
+<div id="mob-topbar" style="display:none">
+  <button class="mob-hamburger" onclick="openMobNav()" aria-label="Open menu">
+    <span class="ms">menu</span>
+  </button>
+  <div class="mob-logo">
+    <div class="mob-logo-icon"><span class="ms">bolt</span></div>
+    <span class="mob-logo-text">Bird Pulse</span>
+  </div>
+  <button class="mob-search-btn" onclick="focusMobSearch()" aria-label="Search">
+    <span class="ms">search</span>
+  </button>
+</div>
+
+<!-- ── Mobile nav drawer ── -->
+<div id="mob-nav-drawer">
+  <div class="drawer-backdrop" onclick="closeMobNav()"></div>
+  <div class="drawer-panel">
+    <div id="mob-nav-inner">
+      <div class="nav-logo">
+        <div class="nav-logo-icon"><span class="ms">bolt</span></div>
+        <span class="nav-logo-text">Bird Pulse</span>
+      </div>
+      <div class="nav-scroll">
+        <a class="nav-item active" href="#" onclick="closeMobNav();showList()">
+          <span class="ms">dashboard</span><span>Dashboard</span>
+        </a>
+        <div class="nav-section">Operations</div>
+        <a class="nav-item" href="#" onclick="closeMobNav()">
+          <span class="ms">work</span><span>Jobs</span>
+        </a>
+        <a class="nav-item" href="#" onclick="closeMobNav()">
+          <span class="ms">support_agent</span><span>Helpdesk</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <div class="nav-section">Sales &amp; CRM</div>
+        <a class="nav-item" href="#" onclick="closeMobNav()">
+          <span class="ms">groups</span><span>Customers</span>
+        </a>
+        <button class="nav-group-btn" onclick="toggleMobNavGroup('mob-sales')" id="mob-grp-sales">
+          <span class="ms">point_of_sale</span>
+          <span class="nav-group-label">Sales</span>
+          <span class="ms nav-group-chevron">chevron_right</span>
+        </button>
+        <div class="nav-sub" id="mob-nav-sub-sales">
+          <div class="nav-sub-inner">
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">request_quote</span>Quotes</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">receipt_long</span>Invoices</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">receipt</span>Credit Notes</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">summarize</span>Statements</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">fact_check</span>Payment Requests</a>
+          </div>
+        </div>
+        <a class="nav-item" href="#" onclick="closeMobNav()">
+          <span class="ms">contacts</span><span>CRM</span>
+        </a>
+        <div class="nav-section">Finance</div>
+        <button class="nav-group-btn" onclick="toggleMobNavGroup('mob-finances')" id="mob-grp-finances">
+          <span class="ms">account_balance</span>
+          <span class="nav-group-label">Finances</span>
+          <span class="ms nav-group-chevron">chevron_right</span>
+        </button>
+        <div class="nav-sub" id="mob-nav-sub-mob-finances">
+          <div class="nav-sub-inner">
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">account_balance_wallet</span>Bank Feeds</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">payments</span>Commissions</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">trending_up</span>Job Profitability</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">pie_chart</span>Company Profitability</a>
+          </div>
+        </div>
+        <button class="nav-group-btn" onclick="toggleMobNavGroup('mob-expenses')" id="mob-grp-expenses">
+          <span class="ms">receipt</span>
+          <span class="nav-group-label">Expenses</span>
+          <span class="ms nav-group-chevron">chevron_right</span>
+        </button>
+        <div class="nav-sub" id="mob-nav-sub-mob-expenses">
+          <div class="nav-sub-inner">
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">receipt</span>Adhoc Expenses</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">verified</span>WhatsApp Verification</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">apartment</span>Overheads</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">shield</span>VAT Control Centre</a>
+          </div>
+        </div>
+        <div class="nav-section">Operations &amp; Resources</div>
+        <button class="nav-group-btn" onclick="toggleMobNavGroup('mob-resources')" id="mob-grp-resources">
+          <span class="ms">category</span>
+          <span class="nav-group-label">Resources</span>
+          <span class="ms nav-group-chevron">chevron_right</span>
+        </button>
+        <div class="nav-sub" id="mob-nav-sub-mob-resources">
+          <div class="nav-sub-inner">
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">inventory_2</span>Assets</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">engineering</span>Tradesman Pool</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">directions_car</span>Fleet Management</a>
+          </div>
+        </div>
+        <a class="nav-item" href="#" onclick="closeMobNav()">
+          <span class="ms">health_and_safety</span><span>HSE</span>
+        </a>
+        <button class="nav-group-btn" onclick="toggleMobNavGroup('mob-procurement')" id="mob-grp-procurement">
+          <span class="ms">shopping_cart</span>
+          <span class="nav-group-label">Procurement</span>
+          <span class="ms nav-group-chevron">chevron_right</span>
+        </button>
+        <div class="nav-sub" id="mob-nav-sub-mob-procurement">
+          <div class="nav-sub-inner">
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">storefront</span>Suppliers</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">shopping_cart</span>Purchase Orders</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">inbox</span>Unlinked POs</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">receipt</span>Supplier Invoices</a>
+            <a class="nav-sub-item" href="#" onclick="closeMobNav()"><span class="ms">warehouse</span>Inventory</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-footer">
+        <div class="nav-user-row">
+          <div class="nav-avatar">JS</div>
+          <div>
+            <div class="nav-user-name">John Smith</div>
+            <div class="nav-user-role">Tech Manager</div>
+          </div>
+          <a class="nav-settings-btn" href="#" title="Settings"><span class="ms">settings</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Tablet sidebar drawer ── -->
+<div id="tab-sidebar-drawer">
+  <div class="drawer-backdrop" onclick="closeTabSidebar()"></div>
+  <div class="drawer-panel">
+    <div class="drawer-header">
+      <span>Job Info</span>
+      <button class="drawer-close" onclick="closeTabSidebar()"><span class="ms">close</span></button>
+    </div>
+    <div class="drawer-content" id="tab-sidebar-content"></div>
+  </div>
+</div>
+
+<!-- ── Tablet sidebar FAB (hidden on desktop) ── -->
+<button id="tab-sidebar-fab" style="display:none" onclick="openTabSidebar()" aria-label="Job info">
+  <span class="ms">info</span>
+</button>
+
+<!-- ── Mobile FAB: New Job ── -->
+<button id="mob-fab" style="display:none" onclick="openNewJobModal()" aria-label="New Job">
+  <span class="ms">add</span>
+</button>
+
+<!-- ── Mobile detail info FAB ── -->
+<button id="mob-detail-info-fab" style="display:none" onclick="openMobDetailInfo()" aria-label="Job info">
+  <span class="ms">info</span>
+</button>
 
 <!-- ── Nav ── -->
 <nav class="nav" id="app-nav">
@@ -2723,6 +2879,8 @@ td:first-child{padding:8px 8px}
 
     <!-- Board view -->
     <div class="board-wrap" id="board-wrap"></div>
+    <!-- Mobile job card list (hidden on desktop/tablet, shown on mobile) -->
+    <div id="mob-job-list" style="display:none"></div>
   </div>
 </div>
 
@@ -7330,7 +7488,182 @@ document.addEventListener('mouseleave',e=>{
   if(card){card.style.setProperty('--mx','50%');card.style.setProperty('--my','50%');}
 },true);
 
+// ═══════════════════════════════════════════════════════════
+// RESPONSIVE LAYER
+// ═══════════════════════════════════════════════════════════
 
+const MOBILE_BP  = 767;
+const TABLET_BP  = 1023;
+
+function isMobile()  { return window.innerWidth <= MOBILE_BP; }
+function isTablet()  { return window.innerWidth > MOBILE_BP && window.innerWidth <= TABLET_BP; }
+function isDesktop() { return window.innerWidth > TABLET_BP; }
+
+// ── Show/hide breakpoint-specific elements ──
+function applyBreakpoint(){
+  const mob = isMobile();
+  const tab = isTablet();
+
+  // Mobile top bar
+  const mobTopbar = document.getElementById('mob-topbar');
+  if(mobTopbar) mobTopbar.style.display = mob ? 'flex' : 'none';
+
+  // Mobile FAB
+  const mobFab = document.getElementById('mob-fab');
+  if(mobFab) mobFab.style.display = mob ? 'flex' : 'none';
+
+  // Mobile detail info FAB (only on detail page)
+  const detailFab = document.getElementById('mob-detail-info-fab');
+  if(detailFab){
+    const onDetail = document.getElementById('page-detail').style.display !== 'none';
+    detailFab.style.display = (mob && onDetail) ? 'flex' : 'none';
+  }
+
+  // Tablet sidebar FAB (only on detail page)
+  const tabFab = document.getElementById('tab-sidebar-fab');
+  if(tabFab){
+    const onDetail = document.getElementById('page-detail').style.display !== 'none';
+    tabFab.style.display = (tab && onDetail) ? 'flex' : 'none';
+  }
+
+  // Mobile job card list vs table
+  const mobList = document.getElementById('mob-job-list');
+  const tableWrap = document.getElementById('table-wrap');
+  const onList = document.getElementById('page-list').style.display !== 'none';
+  if(mobList && tableWrap && onList){
+    if(mob){
+      mobList.style.display = 'flex';
+      tableWrap.style.display = 'none';
+      renderMobJobList();
+    } else {
+      mobList.style.display = 'none';
+      tableWrap.style.display = '';
+    }
+  }
+}
+
+window.addEventListener('resize', applyBreakpoint);
+
+// ── Mobile nav drawer ──
+function openMobNav(){
+  document.getElementById('mob-nav-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobNav(){
+  document.getElementById('mob-nav-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Mobile nav group toggle ──
+function toggleMobNavGroup(key){
+  const btn = document.getElementById('mob-grp-' + key);
+  const sub = document.getElementById('mob-nav-sub-' + key);
+  if(!btn || !sub) return;
+  const open = sub.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+// ── Focus search on mobile ──
+function focusMobSearch(){
+  const inp = document.getElementById('search-input');
+  if(inp){ inp.focus(); inp.scrollIntoView({behavior:'smooth'}); }
+}
+
+// ── Tablet sidebar drawer ──
+function openTabSidebar(){
+  // Clone the detail sidebar content into the drawer
+  const src = document.getElementById('detail-sidebar');
+  const dst = document.getElementById('tab-sidebar-content');
+  if(src && dst){
+    dst.innerHTML = src.innerHTML;
+  }
+  document.getElementById('tab-sidebar-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeTabSidebar(){
+  document.getElementById('tab-sidebar-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Mobile detail info (bottom sheet) ──
+function openMobDetailInfo(){
+  // Reuse the tab sidebar drawer for mobile too
+  openTabSidebar();
+}
+
+// ── Mobile job card list renderer ──
+function renderMobJobList(){
+  const container = document.getElementById('mob-job-list');
+  if(!container) return;
+
+  // Read directly from filteredJobs (same data the table uses)
+  const jobs = typeof filteredJobs !== 'undefined' ? filteredJobs : [];
+  if(!jobs.length){
+    container.innerHTML = '<div style="padding:32px 16px;text-align:center;color:var(--muted-fg);font-size:13px">No jobs found</div>';
+    return;
+  }
+
+  let html = '';
+  jobs.forEach(j => {
+    // Priority pill
+    const prioClass = {urgent:'pill-urgent',high:'pill-high',normal:'pill-normal',low:'pill-low'}[j.priority] || 'pill-normal';
+    const prioHtml  = j.priority ? `<span class="pill ${prioClass}">${j.priority.charAt(0).toUpperCase()+j.priority.slice(1)}</span>` : '';
+
+    // Status pill (reuse existing statusPill function if available)
+    const statusHtml = typeof statusPill === 'function' ? statusPill(j.status) : `<span style="font-size:9px;font-weight:600;color:var(--fg-2);text-transform:uppercase;letter-spacing:.05em">${j.status}</span>`;
+
+    // Finance badge
+    const finHtml = typeof financePill === 'function' ? financePill(j.finance) : '';
+
+    // Value
+    const valHtml = typeof fmt === 'function' ? fmt(j.value) : 'R '+j.value;
+
+    html += `
+      <div class="mob-job-card" onclick="openDetail('${j.num}')">
+        <div class="mob-job-card-top">
+          <span class="mob-job-card-num">${j.num}</span>
+          <div class="mob-job-card-info">
+            <div class="mob-job-card-client">${j.client}<span style="font-weight:400;color:var(--muted-fg)"> · ${j.site}</span></div>
+            <div class="mob-job-card-desc">${j.desc}</div>
+          </div>
+          <div class="mob-job-card-right">
+            <span class="mob-job-card-value">${valHtml}</span>
+            ${prioHtml}
+          </div>
+        </div>
+        <div class="mob-job-card-bottom">
+          ${statusHtml}
+          ${finHtml}
+          <span class="mob-job-card-date">${j.date}</span>
+        </div>
+      </div>`;
+  });
+
+  container.innerHTML = html || '<div style="padding:32px 16px;text-align:center;color:var(--muted-fg);font-size:13px">No jobs found</div>';
+}
+
+// ── Patch existing functions after page load ──
+// We use a MutationObserver on #page-list and #page-detail to detect
+// page switches and update the responsive state accordingly.
+const _respObserver = new MutationObserver(() => {
+  setTimeout(applyBreakpoint, 30);
+  if(isMobile()) setTimeout(renderMobJobList, 60);
+});
+
+// ── Init on load ──
+document.addEventListener('DOMContentLoaded', () => {
+  applyBreakpoint();
+  // Watch page-list and page-detail for display changes
+  const listEl   = document.getElementById('page-list');
+  const detailEl = document.getElementById('page-detail');
+  if(listEl)   _respObserver.observe(listEl,   { attributes: true, attributeFilter: ['style'] });
+  if(detailEl) _respObserver.observe(detailEl, { attributes: true, attributeFilter: ['style'] });
+  // Also watch jobs-tbody for filter changes
+  const tbody = document.getElementById('jobs-tbody');
+  if(tbody) _respObserver.observe(tbody, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+});
+// Also run immediately in case DOMContentLoaded already fired
+applyBreakpoint();
 </script>
 </body>
 </html>
