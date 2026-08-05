@@ -2587,6 +2587,27 @@ td:first-child{padding:8px 8px}
   <span class="ms">info</span>
 </button>
 
+<!-- ── Mobile bottom navigation bar ── -->
+<div id="mob-bottom-nav" style="display:none">
+  <button class="mob-nav-tab active" id="mob-tab-jobs" onclick="showList()">
+    <span class="ms">work</span>
+    <span>Jobs</span>
+  </button>
+  <button class="mob-nav-tab" id="mob-tab-helpdesk">
+    <span class="ms">support_agent</span>
+    <span>Helpdesk</span>
+    <span class="mob-nav-tab-badge">3</span>
+  </button>
+  <button class="mob-nav-tab" id="mob-tab-customers">
+    <span class="ms">groups</span>
+    <span>Customers</span>
+  </button>
+  <button class="mob-nav-tab" id="mob-tab-more" onclick="openMobNav()">
+    <span class="ms">grid_view</span>
+    <span>More</span>
+  </button>
+</div>
+
 <!-- ── Nav ── -->
 <nav class="nav" id="app-nav">
 
@@ -5371,8 +5392,25 @@ function showList(){
 }
 function toggleFilterSidebar(){
   filterSidebarOpen=!filterSidebarOpen;
-  document.getElementById('filter-sidebar').classList.toggle('hidden',!filterSidebarOpen);
+  const fs=document.getElementById('filter-sidebar');
+  fs.classList.toggle('hidden',!filterSidebarOpen);
+  fs.classList.toggle('visible',filterSidebarOpen); // used by mobile/tablet drawer CSS
   document.getElementById('filter-btn').classList.toggle('active',filterSidebarOpen);
+  // On mobile/tablet, add a backdrop to close the drawer
+  if(isMobile&&isMobile()&&filterSidebarOpen){
+    let bd=document.getElementById('filter-backdrop');
+    if(!bd){
+      bd=document.createElement('div');
+      bd.id='filter-backdrop';
+      bd.style.cssText='position:fixed;inset:0;z-index:899;background:rgba(0,0,0,.4);';
+      bd.onclick=()=>toggleFilterSidebar();
+      document.body.appendChild(bd);
+    }
+    bd.style.display='block';
+  } else {
+    const bd=document.getElementById('filter-backdrop');
+    if(bd)bd.style.display='none';
+  }
 }
 function toggleQuick(key){
   quickFilters[key]=!quickFilters[key];
@@ -7526,19 +7564,34 @@ function applyBreakpoint(){
     tabFab.style.display = (tab && onDetail) ? 'flex' : 'none';
   }
 
+  // Bottom nav
+  const bottomNav = document.getElementById('mob-bottom-nav');
+  if(bottomNav) bottomNav.style.display = mob ? 'flex' : 'none';
+
   // Mobile job card list vs table
   const mobList = document.getElementById('mob-job-list');
   const tableWrap = document.getElementById('table-wrap');
-  const onList = document.getElementById('page-list').style.display !== 'none';
-  if(mobList && tableWrap && onList){
-    if(mob){
+  const onList = document.getElementById('page-list') &&
+                 document.getElementById('page-list').style.display !== 'none';
+  if(mobList && tableWrap){
+    if(mob && onList){
       mobList.style.display = 'flex';
       tableWrap.style.display = 'none';
       renderMobJobList();
+    } else if(mob && !onList){
+      mobList.style.display = 'none';
     } else {
       mobList.style.display = 'none';
       tableWrap.style.display = '';
     }
+  }
+
+  // Bottom nav active tab
+  if(mob){
+    const onDetail = document.getElementById('page-detail') &&
+                     document.getElementById('page-detail').style.display !== 'none';
+    const jobsTab = document.getElementById('mob-tab-jobs');
+    if(jobsTab) jobsTab.classList.toggle('active', !onDetail);
   }
 }
 
@@ -7619,11 +7672,12 @@ function renderMobJobList(){
     const valHtml = typeof fmt === 'function' ? fmt(j.value) : 'R '+j.value;
 
     html += `
-      <div class="mob-job-card" onclick="openDetail('${j.num}')">
+      <div class="mob-job-card" data-priority="${j.priority}" onclick="openDetail('${j.num}')">
         <div class="mob-job-card-top">
           <span class="mob-job-card-num">${j.num}</span>
           <div class="mob-job-card-info">
-            <div class="mob-job-card-client">${j.client}<span style="font-weight:400;color:var(--muted-fg)"> · ${j.site}</span></div>
+            <div class="mob-job-card-client">${j.client}</div>
+            <div class="mob-job-card-site">${j.site}</div>
             <div class="mob-job-card-desc">${j.desc}</div>
           </div>
           <div class="mob-job-card-right">
@@ -7636,6 +7690,7 @@ function renderMobJobList(){
           ${finHtml}
           <span class="mob-job-card-date">${j.date}</span>
         </div>
+        <span class="ms mob-job-card-chevron">chevron_right</span>
       </div>`;
   });
 

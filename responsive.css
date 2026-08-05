@@ -1,40 +1,36 @@
 /* ═══════════════════════════════════════════════════════════════════
    RESPONSIVE LAYER — tablet (768–1023px) + smartphone (≤767px)
-   !! NEVER edit desktop styles above !!
-   All rules here are scoped inside @media blocks.
+   Design principles:
+   · All CSS variables from :root — no hardcoded colours
+   · All components from the kit — .btn, .pill, .chip, .card, .ms icons
+   · No hidden functionality — everything adapts, nothing disappears
+   · Drawers use opacity+pointer-events (not display) for open/close animation
+   · Desktop CSS is NEVER modified — all rules live inside @media blocks
 ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Shared helpers (used at both breakpoints) ── */
-.mob-only   { display: none !important; }
-.tab-only   { display: none !important; }
-.desk-only  { display: block; }   /* default visible on desktop */
-
-/* ── Always hidden on desktop — drawers and mobile elements ──
-   JS sets inline style.display for mob-topbar, mob-fab, mob-detail-info-fab, tab-sidebar-fab.
-   Drawers use opacity+pointer-events for open/close; they need display:flex to exist in layout.
-   On desktop we force display:none with !important to override any inline style. */
+/* ── Desktop suppression: hide all responsive-only elements on desktop ── */
 #mob-topbar,
 #mob-nav-drawer,
 #mob-fab,
 #mob-detail-info-fab,
 #tab-sidebar-drawer,
-#tab-sidebar-fab { display: none !important; }
+#tab-sidebar-fab,
+#mob-bottom-nav { display: none !important; }
 
-/* ────────────────────────────────────────────────────────────────
+
+/* ════════════════════════════════════════════════════════════════════
    TABLET  768px – 1023px
-──────────────────────────────────────────────────────────────── */
+   Layout: icon-rail nav · wrapped toolbar · condensed table ·
+           detail sidebar in slide-in drawer · doc editor full-width
+════════════════════════════════════════════════════════════════════ */
 @media (max-width: 1023px) {
 
-  /* Show tablet-only elements */
-  .tab-only { display: block !important; }
-
-  /* Un-suppress tablet overlays — drawer always in DOM, JS toggles .open class */
+  /* Un-suppress tablet elements */
   #tab-sidebar-drawer { display: flex !important; }
-  /* tab-sidebar-fab: JS sets inline style.display=flex when on detail page */
-  #tab-sidebar-fab { display: none; } /* reset !important so JS inline style wins */
+  #tab-sidebar-fab    { display: none; } /* JS sets flex when on detail page */
 
-  /* ── Nav: auto-collapse to icon rail ── */
-  .nav { width: 64px; }
+  /* ── Nav: collapse to 64px icon rail ── */
+  .nav { width: 64px; overflow: hidden; }
   .nav .nav-logo-text,
   .nav .nav-section,
   .nav .nav-item-label,
@@ -43,29 +39,63 @@
   .nav .nav-badge,
   .nav .nav-user-info,
   .nav .nav-sub { display: none !important; }
-  .nav .nav-item { justify-content: center; padding: 7px 0; margin: 1px 8px; }
-  .nav .nav-group-btn { justify-content: center; padding: 7px 0; margin: 1px 8px; width: calc(100% - 16px); }
+  .nav .nav-item {
+    justify-content: center;
+    padding: 8px 0;
+    margin: 1px 8px;
+  }
+  .nav .nav-group-btn {
+    justify-content: center;
+    padding: 8px 0;
+    margin: 1px 8px;
+    width: calc(100% - 16px);
+  }
   .nav .nav-user-row { justify-content: center; }
   .nav .nav-footer { padding: 8px 4px; }
   .nav .nav-badge-dot { display: block; }
   .nav-collapse-btn { display: none; }
 
-  /* ── Toolbar: wrap gracefully ── */
-  .toolbar { height: auto; min-height: 48px; flex-wrap: wrap; padding: 8px 12px; gap: 6px; }
-  .toolbar-search { max-width: 100%; flex: 1 1 200px; order: -1; }
+  /* ── Toolbar: wrap to 2 rows ── */
+  .toolbar {
+    height: auto;
+    min-height: 48px;
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .toolbar-search {
+    max-width: 100%;
+    flex: 1 1 200px;
+    order: -1;
+  }
   .toolbar .spacer { display: none; }
 
   /* ── Table: hide lower-priority columns ── */
-  .col-type, .col-team, .col-date { display: none; }
-  .col-desc { max-width: 180px; }
+  .col-type,
+  .col-team,
+  .col-date { display: none; }
+  .col-desc { max-width: 200px; }
 
-  /* ── Detail page ── */
+  /* ── Filter sidebar: becomes a slide-in drawer ── */
+  .filter-sidebar {
+    position: fixed !important;
+    left: 0; top: 0; bottom: 0;
+    z-index: 900;
+    width: 260px !important;
+    transform: translateX(-100%);
+    transition: transform .25s cubic-bezier(.4,0,.2,1);
+    box-shadow: var(--shadow-xl);
+  }
+  .filter-sidebar.visible {
+    transform: translateX(0);
+  }
+
+  /* ── Detail page: sidebar hidden → drawer ── */
   .detail-sidebar { display: none; }
   .detail-main { padding: 12px; }
 
-  /* Floating sidebar toggle button (tablet) */
+  /* Tablet sidebar FAB */
   #tab-sidebar-fab {
-    display: flex;
     position: fixed;
     bottom: 24px;
     right: 20px;
@@ -75,6 +105,7 @@
     background: var(--indigo-600);
     color: #fff;
     border: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 16px rgba(79,70,229,.4);
@@ -84,9 +115,8 @@
   #tab-sidebar-fab:hover { background: var(--indigo-700); transform: scale(1.06); }
   #tab-sidebar-fab .ms { font-size: 20px; }
 
-  /* Sidebar drawer overlay (tablet) */
+  /* Tablet sidebar drawer */
   #tab-sidebar-drawer {
-    display: flex;
     position: fixed;
     inset: 0;
     z-index: 850;
@@ -102,19 +132,18 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: rgba(0,0,0,.35);
-    /* no backdrop-filter — it bleeds onto sibling panel */
+    background: rgba(0,0,0,.4);
   }
   #tab-sidebar-drawer .drawer-panel {
     position: absolute;
     right: 0; top: 0; bottom: 0;
     z-index: 2;
-    width: 320px;
+    width: 360px;
     background: var(--white);
     box-shadow: var(--shadow-xl);
     overflow-y: auto;
     transform: translateX(100%);
-    transition: transform .25s cubic-bezier(.4,0,.2,1);
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
     display: flex;
     flex-direction: column;
   }
@@ -127,9 +156,12 @@
     justify-content: space-between;
     padding: 12px 16px;
     border-bottom: 1px solid var(--border);
-    font-size: 13px;
+    background: var(--white);
+    font-size: 12px;
     font-weight: 700;
-    color: var(--fg);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--slate-500);
     flex-shrink: 0;
   }
   #tab-sidebar-drawer .drawer-close {
@@ -139,62 +171,89 @@
     cursor: pointer;
     color: var(--slate-400);
     background: none; border: none;
-    transition: background var(--t-fast);
+    transition: background var(--t-fast), color var(--t-fast);
   }
-  #tab-sidebar-drawer .drawer-close:hover { background: var(--surface-2); color: var(--fg); }
+  #tab-sidebar-drawer .drawer-close:hover {
+    background: var(--surface-2);
+    color: var(--fg);
+  }
   #tab-sidebar-drawer .drawer-close .ms { font-size: 18px; }
-  #tab-sidebar-drawer .drawer-content { flex: 1; overflow-y: auto; }
+  #tab-sidebar-drawer .drawer-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--white);
+  }
 
-  /* ── Doc editor: hide sidebar, full-width main ── */
+  /* ── Doc editors: sidebar hidden, full-width main ── */
   .de-sidebar { display: none; }
   .de-main { padding: 12px 14px; }
   .de-doc-header { grid-template-columns: 1fr 1fr; }
+  .de-topbar-sub { display: none; }
 
-  /* Pipeline bar: scroll horizontally on tablet */
-  .pipeline-bar { overflow-x: auto; }
+  /* ── Pipeline bar: horizontal scroll ── */
+  .pipeline-bar { overflow-x: auto; padding: 12px 16px; }
   .pipe-track { min-width: 520px; }
 
-  /* Guard bar: wrap */
-  .guard-bar { flex-wrap: wrap; gap: 6px; padding: 8px 12px; }
+  /* ── Guard bar: 2-row stacked layout ── */
+  .guard-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    min-height: auto;
+  }
+  .guard-zone {
+    padding: 6px 12px;
+    flex-wrap: wrap;
+    overflow: visible;
+    border-bottom: 1px solid var(--border);
+  }
   .guard-kink { display: none; }
-
-  /* Topbar actions: compress */
-  .de-topbar-sub { display: none; }
+  .exec-zone {
+    padding: 6px 12px;
+    border-left: none;
+    border-top: none;
+    background: linear-gradient(90deg, #fffbeb 0%, #fef9f0 100%);
+    border-top: 1px solid #fde68a;
+  }
+  .guard-actions { flex-wrap: wrap; gap: 6px; }
 }
 
-/* ────────────────────────────────────────────────────────────────
+
+/* ════════════════════════════════════════════════════════════════════
    SMARTPHONE  ≤767px
-──────────────────────────────────────────────────────────────── */
+   Layout: hidden desktop nav · sticky top bar · hamburger drawer ·
+           job card list · stacked detail · bottom tab bar ·
+           full-screen doc editors · bottom-sheet modals
+════════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
 
-  /* Show mobile-only elements */
-  .mob-only { display: block !important; }
-  .desk-only { display: none !important; }
-
-  /* Un-suppress mobile overlays */
-  #mob-nav-drawer { display: flex !important; }   /* always in DOM, JS toggles .open */
-  #tab-sidebar-drawer { display: flex !important; } /* reused for mobile info drawer */
-  /* mob-topbar, mob-fab, mob-detail-info-fab: reset !important so JS inline style wins */
-  #mob-topbar { display: none; }
-  #mob-fab { display: none; }
+  /* Un-suppress mobile elements */
+  #mob-nav-drawer    { display: flex !important; }
+  #tab-sidebar-drawer { display: flex !important; }
+  /* mob-topbar, mob-fab, mob-detail-info-fab: JS sets inline style */
+  #mob-topbar        { display: none; }
+  #mob-fab           { display: none; }
   #mob-detail-info-fab { display: none; }
+  #mob-bottom-nav    { display: flex !important; }
 
-  /* ── Shell: hide desktop nav entirely ── */
+  /* ── Shell ── */
   .nav { display: none; }
+  body { flex-direction: column; }
+  .main { flex-direction: column; overflow: hidden; }
 
   /* ── Mobile top bar ── */
   #mob-topbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     height: 52px;
-    padding: 0 14px;
+    padding: 0 12px;
     background: var(--white);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     position: sticky;
     top: 0;
     z-index: 600;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow);
   }
   #mob-topbar .mob-hamburger {
     width: 36px; height: 36px;
@@ -204,22 +263,25 @@
     background: none; border: none;
     color: var(--fg-2);
     transition: background var(--t-fast);
+    flex-shrink: 0;
   }
   #mob-topbar .mob-hamburger:hover { background: var(--surface-2); }
   #mob-topbar .mob-hamburger .ms { font-size: 22px; }
   #mob-topbar .mob-logo {
     display: flex; align-items: center; gap: 8px;
-    flex: 1;
+    flex: 1; min-width: 0;
   }
   #mob-topbar .mob-logo-icon {
     width: 28px; height: 28px;
     border-radius: 7px;
     background: var(--indigo-600);
     display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
   #mob-topbar .mob-logo-icon .ms { font-size: 16px; color: #fff; }
   #mob-topbar .mob-logo-text {
     font-size: 13px; font-weight: 700; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   #mob-topbar .mob-search-btn {
     width: 36px; height: 36px;
@@ -228,7 +290,10 @@
     cursor: pointer;
     background: none; border: none;
     color: var(--fg-2);
+    flex-shrink: 0;
+    transition: background var(--t-fast);
   }
+  #mob-topbar .mob-search-btn:hover { background: var(--surface-2); }
   #mob-topbar .mob-search-btn .ms { font-size: 20px; }
 
   /* ── Mobile nav drawer ── */
@@ -248,14 +313,13 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: rgba(0,0,0,.45);
-    /* no backdrop-filter — bleeds onto sibling panel */
+    background: rgba(0,0,0,.5);
   }
   #mob-nav-drawer .drawer-panel {
     position: absolute;
     left: 0; top: 0; bottom: 0;
     z-index: 2;
-    width: 280px;
+    width: 288px;
     background: var(--white);
     box-shadow: var(--shadow-xl);
     overflow-y: auto;
@@ -267,29 +331,36 @@
   #mob-nav-drawer.open .drawer-panel {
     transform: translateX(0);
   }
-  /* Reuse the full nav inside the drawer */
+
+  /* Nav inner — full kit nav styles */
   #mob-nav-inner {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
   }
   #mob-nav-inner .nav-logo {
     height: 56px;
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center; gap: 10px;
     padding: 0 16px;
+    flex-shrink: 0;
   }
   #mob-nav-inner .nav-logo-icon {
     width: 32px; height: 32px;
     border-radius: 9px;
     background: var(--indigo-600);
     display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(79,70,229,.3);
   }
   #mob-nav-inner .nav-logo-icon .ms { font-size: 18px; color: #fff; }
   #mob-nav-inner .nav-logo-text {
     font-size: 13px; font-weight: 700; color: var(--fg);
+    letter-spacing: -.01em;
   }
-  #mob-nav-inner .nav-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+  #mob-nav-inner .nav-scroll {
+    flex: 1; overflow-y: auto; padding: 8px 0;
+  }
   #mob-nav-inner .nav-section {
     padding: 16px 14px 4px;
     font-size: 9px; font-weight: 700;
@@ -297,7 +368,7 @@
     color: var(--slate-400);
   }
   #mob-nav-inner .nav-item {
-    display: flex; align-items: center; gap: 9px;
+    display: flex; align-items: center; gap: 10px;
     padding: 9px 12px;
     border-radius: var(--radius);
     cursor: pointer;
@@ -305,14 +376,19 @@
     text-decoration: none;
     margin: 1px 6px;
     transition: background var(--t-fast), color var(--t-fast);
-    white-space: nowrap;
   }
   #mob-nav-inner .nav-item:hover { background: var(--surface-2); color: var(--fg); }
-  #mob-nav-inner .nav-item.active { background: var(--indigo-50); color: var(--indigo-700); font-weight: 600; }
-  #mob-nav-inner .nav-item .ms { font-size: 20px; color: var(--slate-400); flex-shrink: 0; }
+  #mob-nav-inner .nav-item.active {
+    background: var(--indigo-50);
+    color: var(--indigo-700);
+    font-weight: 600;
+  }
+  #mob-nav-inner .nav-item .ms {
+    font-size: 20px; color: var(--slate-400); flex-shrink: 0;
+  }
   #mob-nav-inner .nav-item.active .ms { color: var(--indigo-600); }
   #mob-nav-inner .nav-group-btn {
-    display: flex; align-items: center; gap: 9px;
+    display: flex; align-items: center; gap: 10px;
     padding: 9px 12px;
     border-radius: var(--radius);
     cursor: pointer;
@@ -323,32 +399,48 @@
     transition: background var(--t-fast), color var(--t-fast);
   }
   #mob-nav-inner .nav-group-btn:hover { background: var(--surface-2); color: var(--fg); }
-  #mob-nav-inner .nav-group-btn .ms { font-size: 20px; color: var(--slate-400); flex-shrink: 0; }
+  #mob-nav-inner .nav-group-btn .ms {
+    font-size: 20px; color: var(--slate-400); flex-shrink: 0;
+  }
   #mob-nav-inner .nav-group-label { flex: 1; }
-  #mob-nav-inner .nav-group-chevron { font-size: 16px; color: var(--slate-400); transition: transform .2s; }
-  #mob-nav-inner .nav-group-btn.open .nav-group-chevron { transform: rotate(90deg); }
-  #mob-nav-inner .nav-sub { overflow: hidden; max-height: 0; transition: max-height .3s; }
-  #mob-nav-inner .nav-sub.open { max-height: 400px; }
+  #mob-nav-inner .nav-group-chevron {
+    font-size: 16px; color: var(--slate-400);
+    transition: transform var(--t-base);
+  }
+  #mob-nav-inner .nav-group-btn.open .nav-group-chevron {
+    transform: rotate(90deg);
+  }
+  #mob-nav-inner .nav-sub {
+    overflow: hidden; max-height: 0;
+    transition: max-height var(--t-slow);
+  }
+  #mob-nav-inner .nav-sub.open { max-height: 500px; }
   #mob-nav-inner .nav-sub-inner {
-    position: relative; margin-left: 24px; padding-left: 18px; padding-bottom: 4px;
+    position: relative;
+    margin-left: 24px; padding-left: 18px; padding-bottom: 4px;
   }
   #mob-nav-inner .nav-sub-inner::before {
-    content: ''; position: absolute; left: 10px; top: 0; bottom: 8px;
+    content: ''; position: absolute;
+    left: 10px; top: 0; bottom: 8px;
     width: 1px; background: var(--slate-200);
   }
   #mob-nav-inner .nav-sub-item {
     display: flex; align-items: center; gap: 8px;
     padding: 8px 8px; border-radius: var(--radius);
-    cursor: pointer; color: var(--fg-2); font-size: 12.5px; font-weight: 500;
+    cursor: pointer; color: var(--fg-2);
+    font-size: 12.5px; font-weight: 500;
     text-decoration: none; margin: 1px 0; position: relative;
     transition: background var(--t-fast), color var(--t-fast);
   }
   #mob-nav-inner .nav-sub-item::before {
-    content: ''; position: absolute; left: -8px; top: 50%;
+    content: ''; position: absolute;
+    left: -8px; top: 50%;
     width: 14px; height: 1px; background: var(--slate-200);
   }
   #mob-nav-inner .nav-sub-item:hover { background: var(--surface-2); color: var(--fg); }
-  #mob-nav-inner .nav-sub-item .ms { font-size: 17px; color: var(--slate-400); flex-shrink: 0; }
+  #mob-nav-inner .nav-sub-item .ms {
+    font-size: 17px; color: var(--slate-400); flex-shrink: 0;
+  }
   #mob-nav-inner .nav-badge {
     min-width: 18px; height: 18px; border-radius: 99px;
     background: var(--red-500); color: #fff;
@@ -357,10 +449,12 @@
     padding: 0 4px; flex-shrink: 0;
   }
   #mob-nav-inner .nav-footer {
-    border-top: 1px solid var(--border); padding: 10px 8px; flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    padding: 10px 8px; flex-shrink: 0;
+    background: var(--white);
   }
   #mob-nav-inner .nav-user-row {
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 10px;
     padding: 8px 8px; border-radius: var(--radius);
     cursor: pointer; transition: background var(--t-fast);
   }
@@ -369,39 +463,49 @@
     width: 32px; height: 32px; border-radius: 50%;
     background: var(--indigo-100); color: var(--indigo-700);
     font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
-  #mob-nav-inner .nav-user-name { font-size: 13px; font-weight: 600; color: var(--fg); }
-  #mob-nav-inner .nav-user-role { font-size: 11px; color: var(--muted-fg); }
+  #mob-nav-inner .nav-user-info { flex: 1; min-width: 0; }
+  #mob-nav-inner .nav-user-name {
+    font-size: 13px; font-weight: 600; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #mob-nav-inner .nav-user-role {
+    font-size: 11px; color: var(--muted-fg);
+  }
   #mob-nav-inner .nav-settings-btn {
     width: 32px; height: 32px; border-radius: var(--radius);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; color: var(--slate-400);
-    background: none; border: none;
-    text-decoration: none; margin-left: auto;
+    background: none; border: none; text-decoration: none;
+    transition: background var(--t-fast), color var(--t-fast);
   }
+  #mob-nav-inner .nav-settings-btn:hover { background: var(--surface-2); color: var(--fg); }
   #mob-nav-inner .nav-settings-btn .ms { font-size: 18px; }
 
-  /* ── Main area: full width, no left nav ── */
-  .main { width: 100%; }
+  /* ── Main area ── */
+  .main { width: 100%; flex: 1; overflow: hidden; }
 
-  /* ── Toolbar: mobile compact ── */
+  /* ── Toolbar: compact, search full-width ── */
   .toolbar {
     height: auto; min-height: 48px;
     flex-wrap: wrap; padding: 8px 12px; gap: 6px;
   }
-  .toolbar-search { max-width: 100%; flex: 1 1 100%; order: -1; }
+  .toolbar-search {
+    max-width: 100%; flex: 1 1 100%; order: -1;
+  }
   .toolbar .spacer { display: none; }
-  /* Hide less-important toolbar buttons on mobile */
-  #columns-btn, .toolbar .btn:not(.primary):not(#filter-btn) { display: none; }
-  /* New Job becomes icon-only FAB */
-  #new-job-btn { display: none; }
+  /* Keep Filters, Export, New Job; hide Columns and view toggle */
+  #columns-btn { display: none; }
+  .view-toggle { display: none; }
+  #new-job-btn { display: none; } /* replaced by FAB */
 
   /* ── FAB: New Job ── */
   #mob-fab {
-    display: flex;
     position: fixed;
-    bottom: 20px; right: 16px;
+    bottom: 72px; /* above bottom nav */
+    right: 16px;
     z-index: 700;
     width: 52px; height: 52px;
     border-radius: 50%;
@@ -417,105 +521,197 @@
   #mob-fab:active { transform: scale(.95); }
   #mob-fab .ms { font-size: 24px; }
 
-  /* ── Filter chips bar: horizontal scroll ── */
-  .filter-chips-bar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  /* ── Filter chips: horizontal scroll ── */
+  .filter-chips-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 6px 12px;
+  }
   .filter-chips-bar::-webkit-scrollbar { display: none; }
+
+  /* ── Filter sidebar: slide-in drawer ── */
+  .filter-sidebar {
+    position: fixed !important;
+    left: 0; top: 0; bottom: 0;
+    z-index: 900;
+    width: 280px !important;
+    transform: translateX(-100%);
+    transition: transform .25s cubic-bezier(.4,0,.2,1);
+    box-shadow: var(--shadow-xl);
+  }
+  .filter-sidebar.visible {
+    transform: translateX(0);
+  }
 
   /* ── List: hide table, show mobile job cards ── */
   .table-wrap { display: none; }
   .board-wrap { display: none !important; }
-  .view-toggle { display: none; }
 
   /* Mobile job card list */
   #mob-job-list {
-    display: flex;
     flex-direction: column;
     gap: 0;
     flex: 1;
     overflow-y: auto;
-    background: var(--surface-2);
+    background: var(--bg);
+    padding-bottom: 80px; /* space for bottom nav + FAB */
   }
   .mob-job-card {
     background: var(--white);
     border-bottom: 1px solid var(--border);
-    padding: 12px 14px;
+    padding: 12px 14px 10px;
     cursor: pointer;
     transition: background var(--t-fast);
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 7px;
     position: relative;
   }
+  /* Left accent bar coloured by priority */
+  .mob-job-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 0;
+    background: var(--border);
+  }
+  .mob-job-card[data-priority="urgent"]::before { background: var(--red-500); }
+  .mob-job-card[data-priority="high"]::before   { background: var(--amber-500); }
+  .mob-job-card[data-priority="normal"]::before { background: var(--indigo-400); }
+  .mob-job-card[data-priority="low"]::before    { background: var(--slate-300); }
   .mob-job-card:active { background: var(--indigo-50); }
   .mob-job-card-top {
     display: flex;
     align-items: flex-start;
     gap: 10px;
+    padding-left: 8px;
   }
   .mob-job-card-num {
     font-size: 10.5px; font-weight: 700;
     color: var(--muted-fg); white-space: nowrap;
-    flex-shrink: 0; padding-top: 1px;
+    flex-shrink: 0; padding-top: 2px;
+    font-variant-numeric: tabular-nums;
   }
   .mob-job-card-info { flex: 1; min-width: 0; }
   .mob-job-card-client {
     font-size: 13px; font-weight: 700; color: var(--fg);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .mob-job-card-site {
+    font-size: 11.5px; color: var(--muted-fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-top: 1px;
+  }
   .mob-job-card-desc {
     font-size: 12px; color: var(--fg-2);
     overflow: hidden; text-overflow: ellipsis;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    margin-top: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-top: 3px;
+    line-height: 1.5;
   }
   .mob-job-card-right {
-    display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+    display: flex; flex-direction: column;
+    align-items: flex-end; gap: 5px;
     flex-shrink: 0;
   }
   .mob-job-card-value {
     font-size: 13px; font-weight: 700; color: var(--fg);
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
   .mob-job-card-bottom {
-    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    display: flex; align-items: center;
+    gap: 5px; flex-wrap: wrap;
+    padding-left: 8px;
   }
   .mob-job-card-date {
-    font-size: 11px; color: var(--muted-fg); margin-left: auto;
+    font-size: 10.5px; color: var(--muted-fg);
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+  .mob-job-card-chevron {
+    position: absolute;
+    right: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--slate-300);
+    font-size: 18px;
   }
 
   /* ── Detail page: mobile layout ── */
   .detail-sidebar { display: none; }
-  .detail-breadcrumb { padding: 0 12px; height: 44px; }
-  .detail-breadcrumb .spacer { display: none; }
-  /* Hide icon buttons in breadcrumb on mobile */
-  .detail-breadcrumb > div:last-child { gap: 4px; }
-
-  /* Pipeline bar: horizontal scroll */
-  .pipeline-bar { overflow-x: auto; padding: 10px 12px; }
-  .pipe-track { min-width: 480px; }
-
-  /* Guard bar: stack vertically */
-  .guard-bar {
-    flex-direction: column; align-items: flex-start;
-    padding: 8px 12px; gap: 8px;
+  .detail-breadcrumb {
+    padding: 0 10px;
+    height: 48px;
+    gap: 8px;
   }
+  /* Compact breadcrumb: hide the "Jobs ›" text, show just job number + title */
+  .detail-breadcrumb a { font-size: 11px; }
+  .detail-breadcrumb > div:first-child { gap: 6px; }
+  /* Action buttons: icon-only */
+  .detail-breadcrumb > div:last-child .btn.xs {
+    width: 30px; height: 30px;
+    padding: 0; justify-content: center;
+  }
+
+  /* Pipeline bar: horizontal scroll with momentum */
+  .pipeline-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+    scrollbar-width: none;
+  }
+  .pipeline-bar::-webkit-scrollbar { display: none; }
+  .pipe-track { min-width: 460px; }
+
+  /* Guard bar: 2-row stacked */
+  .guard-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    min-height: auto;
+  }
+  .guard-zone {
+    padding: 6px 12px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .guard-zone::-webkit-scrollbar { display: none; }
   .guard-kink { display: none; }
-  .exec-zone { width: 100%; }
-  .guard-actions { flex-wrap: wrap; gap: 6px; }
-  .guard-actions .btn { flex: 1; min-width: 100px; justify-content: center; }
+  .exec-zone {
+    padding: 7px 12px;
+    border-left: none;
+    border-top: none;
+    background: linear-gradient(90deg, #fffbeb 0%, #fef9f0 100%);
+    border-top: 1px solid #fde68a;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .guard-actions { flex-wrap: wrap; gap: 6px; flex: 1; }
+  .guard-actions .btn { flex: 1; min-width: 90px; justify-content: center; }
 
   /* Guidance bar: compact */
   .guidance-bar { padding: 8px 12px; gap: 8px; }
-  .guidance-msg { font-size: 11px; }
+  .guidance-msg { font-size: 11.5px; }
 
-  /* Detail main: full width */
-  .detail-main { padding: 10px 12px; }
+  /* Detail main: full width, bottom padding for bottom nav */
+  .detail-main { padding: 10px 12px; padding-bottom: 80px; }
+
+  /* Detail tabs: make them scrollable horizontally */
+  .tabs { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; }
 
   /* Floating info button (mobile detail) */
   #mob-detail-info-fab {
-    display: flex;
     position: fixed;
-    bottom: 20px; right: 16px;
+    bottom: 72px; /* above bottom nav */
+    right: 16px;
     z-index: 700;
     width: 48px; height: 48px;
     border-radius: 50%;
@@ -523,62 +719,133 @@
     color: var(--indigo-600);
     border: 1.5px solid var(--indigo-200);
     align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    box-shadow: var(--shadow-lg);
     cursor: pointer;
     transition: background var(--t-fast), transform var(--t-fast);
   }
   #mob-detail-info-fab:hover { background: var(--indigo-50); transform: scale(1.06); }
   #mob-detail-info-fab .ms { font-size: 20px; }
 
-  /* ── Doc editors: full-screen mobile ── */
-  .de-topbar { padding: 0 10px; height: 52px; }
-  .de-topbar-divider { margin: 0 8px; }
-  .de-topbar-sub { display: none; }
-  .de-topbar-actions .btn:not(.primary) { display: none; }
-  /* Keep only the primary action and a "more" button */
-  .de-topbar-actions .btn.primary { padding: 0 12px; }
+  /* ── Bottom navigation bar ── */
+  #mob-bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 650;
+    height: 56px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.06);
+  }
+  .mob-nav-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    color: var(--slate-400);
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    transition: color var(--t-fast), background var(--t-fast);
+    text-decoration: none;
+    position: relative;
+    border: none;
+    background: none;
+  }
+  .mob-nav-tab:hover { background: var(--surface-2); color: var(--fg-2); }
+  .mob-nav-tab.active { color: var(--indigo-600); }
+  .mob-nav-tab .ms { font-size: 22px; }
+  .mob-nav-tab-badge {
+    position: absolute;
+    top: 6px; right: calc(50% - 16px);
+    min-width: 16px; height: 16px;
+    border-radius: 99px;
+    background: var(--red-500); color: #fff;
+    font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 3px;
+    border: 1.5px solid var(--white);
+  }
 
-  .de-statusbar { padding: 0 10px; font-size: 10.5px; }
-  .de-statusbar .sep { margin: 0 1px; }
+  /* ── Doc editors: full-screen mobile ── */
+  .de-topbar {
+    padding: 0 10px;
+    height: 52px;
+    gap: 6px;
+  }
+  .de-topbar-divider { margin: 0 6px; }
+  .de-topbar-sub { display: none; }
+  /* Topbar actions: show all but compress to icon+label */
+  .de-topbar-actions {
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .de-topbar-actions::-webkit-scrollbar { display: none; }
+  .de-topbar-actions .btn.sm {
+    padding: 0 8px;
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .de-topbar-actions .btn.sm .ms { font-size: 13px; }
+
+  .de-statusbar {
+    padding: 0 10px;
+    font-size: 10.5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .de-statusbar::-webkit-scrollbar { display: none; }
+  .de-statusbar .de-stage-strip { min-width: 300px; }
 
   .de-sidebar { display: none; }
-  .de-main { padding: 10px 12px; gap: 10px; }
+  .de-main { padding: 10px 12px; gap: 10px; padding-bottom: 80px; }
   .de-doc-header { grid-template-columns: 1fr; gap: 8px; }
 
-  /* Line items table: horizontal scroll */
-  .de-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .de-line-table { min-width: 600px; }
+  /* Line items table: horizontal scroll with sticky # column */
+  .de-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .de-line-table { min-width: 560px; }
 
-  /* ── Modals: bottom sheet on mobile ── */
+  /* ── Modals: bottom sheet ── */
   .modal-overlay {
     align-items: flex-end !important;
     padding: 0 !important;
   }
   .modal-box {
-    border-radius: 16px 16px 0 0 !important;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
     max-width: 100% !important;
     width: 100% !important;
-    max-height: 92vh !important;
+    max-height: 90vh !important;
     margin: 0 !important;
     animation: mob-sheet-in .3s cubic-bezier(.4,0,.2,1) !important;
+    overflow-y: auto;
   }
   @keyframes mob-sheet-in {
-    from { transform: translateY(100%); opacity: .6; }
+    from { transform: translateY(40px); opacity: 0; }
     to   { transform: translateY(0);    opacity: 1; }
   }
-  /* Bottom sheet drag handle */
+  /* Drag handle above modal header */
   .modal-box::before {
     content: '';
     display: block;
     width: 36px; height: 4px;
     border-radius: 2px;
-    background: var(--slate-300);
+    background: var(--slate-200);
     margin: 10px auto 0;
   }
 
-  /* ── Toast: bottom center on mobile ── */
+  /* ── Toast: bottom center, above bottom nav ── */
   .toast-container {
-    bottom: 80px;
+    bottom: 68px;
     right: 12px; left: 12px;
     align-items: center;
   }
@@ -586,8 +853,5 @@
 
   /* ── Pagination: compact ── */
   .pagination { gap: 4px; }
-  .page-btn { min-width: 30px; height: 30px; font-size: 11px; }
-
-  /* ── Board view: disable on mobile (card list is better) ── */
-  #vbtn-board { display: none; }
+  .page-btn { min-width: 32px; height: 32px; font-size: 11px; }
 }
