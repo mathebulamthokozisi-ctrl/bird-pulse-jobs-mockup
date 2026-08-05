@@ -8,6 +8,11 @@
    · Desktop CSS is NEVER modified — all rules live inside @media blocks
 ═══════════════════════════════════════════════════════════════════ */
 
+/* ── Visibility helpers ── */
+.mob-only  { display: none !important; }  /* hidden on desktop, shown on mobile via @media */
+.tab-only  { display: none !important; }  /* hidden on desktop, shown on tablet via @media */
+.desk-only { display: block; }            /* visible on desktop by default */
+
 /* ── Desktop suppression: hide all responsive-only elements on desktop ── */
 #mob-topbar,
 #mob-nav-drawer,
@@ -226,6 +231,9 @@
            full-screen doc editors · bottom-sheet modals
 ════════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
+  /* Un-suppress mobile-only helper class */
+  .mob-only  { display: block !important; }
+  .desk-only { display: none !important; }
 
   /* Un-suppress mobile elements */
   #mob-nav-drawer    { display: flex !important; }

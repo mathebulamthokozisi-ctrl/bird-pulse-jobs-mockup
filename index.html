@@ -3052,8 +3052,85 @@ td:first-child{padding:8px 8px}
       </div>
     </aside>
 
-    <!-- Main content -->
+        <!-- Main content -->
     <div class="detail-main">
+
+      <!-- ── Mobile-only: Financials summary card ── -->
+      <div class="card mob-only" id="mob-financials-card">
+        <div class="card-label">Financials</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 0 8px">
+          <div style="background:var(--indigo-50);border-radius:var(--radius);padding:10px 12px">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo-600);margin-bottom:4px">Quote (excl. VAT)</div>
+            <div style="font-size:15px;font-weight:700;color:var(--fg)" id="mob-fin-quote">R 48,500</div>
+          </div>
+          <div style="background:var(--surface-2);border-radius:var(--radius);padding:10px 12px">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:4px">Estimate Cost</div>
+            <div style="font-size:15px;font-weight:700;color:var(--fg)" id="mob-fin-est">R 36,200</div>
+          </div>
+          <div style="background:var(--surface-2);border-radius:var(--radius);padding:10px 12px">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);margin-bottom:4px">Actual Cost</div>
+            <div style="font-size:15px;font-weight:700;color:var(--fg)" id="mob-fin-actual">R 0</div>
+          </div>
+          <div style="background:var(--green-50);border-radius:var(--radius);padding:10px 12px">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--green-700);margin-bottom:4px">Est. Profit</div>
+            <div style="font-size:15px;font-weight:700;color:var(--green-700)" id="mob-fin-profit">+R 12,300</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Mobile-only: Documents card (sidebar is hidden on mobile) ── -->
+      <div class="card mob-only" id="mob-docs-card">
+        <div class="card-label">Documents</div>
+        <div id="mob-doc-rows">
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">calculate</span></div>
+            <div class="doc-info"><div class="doc-name">Estimate</div><div class="doc-meta" id="mob-est-meta">12 items · R 36,200</div></div>
+            <div class="doc-tag-slot"><span class="doc-tag tag-slate">Draft</span></div>
+            <div class="doc-action" onclick="openEstimateModal()"><span class="ms">open_in_new</span>Open</div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">description</span></div>
+            <div class="doc-info"><div class="doc-name">Quote</div><div class="doc-meta" id="mob-quo-meta">QUO-0089 · R 48,500</div></div>
+            <div class="doc-tag-slot"><span class="doc-tag tag-blue">Sent</span></div>
+            <div class="doc-action" onclick="openQuoteModal()"><span class="ms">open_in_new</span>Open</div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--indigo-50)"><span class="ms" style="color:var(--indigo-600)">receipt_long</span></div>
+            <div class="doc-info"><div class="doc-name">Invoice</div><div class="doc-meta" id="mob-inv-meta">Auto-creates on completion</div></div>
+            <div class="doc-tag-slot"><span class="doc-auto"><span class="ms">bolt</span>Auto</span></div>
+            <div class="doc-action" id="mob-invoice-create-btn" onclick="openInvoiceModal()"><span class="ms">add</span>Create</div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">attach_money</span></div>
+            <div class="doc-info"><div class="doc-name">Actual Costs</div><div class="doc-meta" id="mob-actual-meta">R 0 · 0 entries</div></div>
+            <div class="doc-tag-slot"></div>
+            <div class="doc-action" onclick="openActualCostsModal()"><span class="ms">open_in_new</span>Open</div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--amber-50)"><span class="ms" style="color:var(--amber-600)">assignment</span></div>
+            <div class="doc-info"><div class="doc-name">Jobcard</div><div class="doc-meta" id="mob-jobcard-meta">0 photos · Awaiting signature</div></div>
+            <div class="doc-tag-slot"><span class="doc-tag tag-slate" id="mob-jobcard-status-pill">Draft</span></div>
+            <div class="doc-action" onclick="openJobcardModal()"><span class="ms">open_in_new</span>Open</div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-icon" style="background:var(--green-50)"><span class="ms" style="color:var(--green-600)">health_and_safety</span></div>
+            <div class="doc-info"><div class="doc-name">HSE Pack</div><div class="doc-meta" id="mob-hse-meta">Not generated</div></div>
+            <div class="doc-tag-slot"></div>
+            <div class="doc-action" id="mob-hse-generate-btn" onclick="generateHSE()"><span class="ms">add</span>Generate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Mobile-only: Team card ── -->
+      <div class="card mob-only" id="mob-team-card">
+        <div class="card-label">Team</div>
+        <div class="team-grid" id="mob-team-grid">
+          <div class="team-slot"><div class="team-role">Tech Manager</div><div class="team-member" id="mob-tm-tech"><span class="avatar av-indigo">JS</span><span>John Smith</span></div></div>
+          <div class="team-slot"><div class="team-role">Coordinator</div><div class="team-member" id="mob-tm-coord"><span class="avatar av-green">SJ</span><span>Sarah Jones</span></div></div>
+          <div class="team-slot"><div class="team-role">Sales Rep</div><div class="team-member" id="mob-tm-sales"><span class="avatar av-amber">MD</span><span>Mike Davis</span></div></div>
+          <div class="team-slot"><div class="team-role">Job Owner</div><div class="team-member" id="mob-tm-owner"><span class="avatar av-slate">—</span><span style="color:var(--muted-fg)">Unassigned</span></div></div>
+        </div>
+      </div>
 
       <!-- Job Info Card -->
       <div class="card">
