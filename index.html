@@ -3668,6 +3668,19 @@ td:first-child{padding:8px 8px}
           </div>
         </div>
       </div>
+      <!-- PDF Options bar -->
+      <div class="de-card" style="padding:8px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-400)">PDF Options</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;color:var(--fg-2);font-weight:500">
+          <input type="checkbox" id="inv-pdf-show-lines" checked style="accent-color:var(--indigo-600);width:13px;height:13px"> Show line item descriptions
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;color:var(--fg-2);font-weight:500">
+          <input type="checkbox" id="inv-pdf-show-bank" checked style="accent-color:var(--indigo-600);width:13px;height:13px"> Include bank details
+        </label>
+        <div style="margin-left:auto">
+          <button class="btn sm"><span class="ms">settings</span>PDF Preferences</button>
+        </div>
+      </div>
       <!-- Line items -->
       <div class="de-card">
         <div class="de-card-header">
@@ -3769,6 +3782,71 @@ EFT payments preferred.</textarea>
           <div style="margin-top:10px;font-size:11.5px;color:var(--muted-fg)">Payment Reference: <strong style="color:var(--fg)">INV-0089 / JOB-0042</strong></div>
         </div>
       </div>
+      <!-- Comments / Attachments / Communication -->
+      <div class="de-card" style="padding:0">
+        <div class="de-tabs" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0">
+          <button class="de-tab-btn active" onclick="switchDeTab('inv','comments',this)"><span class="ms" style="font-size:14px">chat_bubble_outline</span> Comments</button>
+          <button class="de-tab-btn" onclick="switchDeTab('inv','attachments',this)"><span class="ms" style="font-size:14px">attach_file</span> Attachments</button>
+          <button class="de-tab-btn" onclick="switchDeTab('inv','comm',this)"><span class="ms" style="font-size:14px">schedule</span> Communication <span class="tab-badge">2</span></button>
+        </div>
+        <!-- Comments pane -->
+        <div class="de-tab-pane active" id="inv-tab-comments">
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">Invoice Comments</div>
+                <div style="font-size:11px;color:var(--muted-fg);margin-top:2px">Internal notes attached to this invoice revision.</div>
+              </div>
+              <button class="btn sm" onclick="toast('Comment added')"><span class="ms">add</span>Add Comment</button>
+            </div>
+            <div id="inv-comments-list">
+              <div style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <span style="font-size:12px;font-weight:600">Sarah Jones</span>
+                  <span style="font-size:11px;color:var(--muted-fg)">· Coordinator</span>
+                  <span style="font-size:11px;color:var(--muted-fg);margin-left:auto">12 Jul 2026 09:15</span>
+                </div>
+                <div style="font-size:12.5px;color:var(--fg-2)">Invoice auto-created from accepted quote QUO-0089. Claim 1 of 1 at 100%. Please confirm bank details before sending.</div>
+              </div>
+              <div style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <span style="font-size:12px;font-weight:600">System</span>
+                  <span style="font-size:11px;color:var(--muted-fg)">· Workflow</span>
+                  <span style="font-size:11px;color:var(--muted-fg);margin-left:auto">12 Jul 2026 09:00</span>
+                </div>
+                <div style="font-size:12.5px;color:var(--fg-2)">Invoice INV-0089 auto-generated from Quote QUO-0089 on job completion. Deposit of R 0 deducted.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Attachments pane -->
+        <div class="de-tab-pane" id="inv-tab-attachments">
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">Invoice Attachments</div>
+              <button class="btn sm" onclick="toast('File upload dialog would open here')"><span class="ms">upload_file</span>Upload</button>
+            </div>
+            <div style="border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;background:var(--slate-50)" onclick="toast('File upload dialog would open here')">
+              <span class="ms" style="font-size:28px;color:var(--muted-fg)">upload_file</span>
+              <div style="font-size:13px;color:var(--muted-fg);margin-top:6px">Drag &amp; drop or click to upload</div>
+              <div style="font-size:11px;color:var(--muted-fg);margin-top:2px">Proof of payment, signed invoice, remittance advice…</div>
+            </div>
+          </div>
+        </div>
+        <!-- Communication pane -->
+        <div class="de-tab-pane" id="inv-tab-comm">
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">Communication Threads</div>
+                <div style="font-size:11px;color:var(--muted-fg);margin-top:2px">Client-facing messages linked to this invoice.</div>
+              </div>
+              <button class="btn sm" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
+            </div>
+            <div id="inv-comm-threads"></div>
+          </div>
+        </div>
+      </div>
     </div><!-- /de-main -->
     </div><!-- /de-main-col -->
     <!-- Sidebar -->
@@ -3784,6 +3862,9 @@ EFT payments preferred.</textarea>
         <div class="de-sb-row"><span class="key">Status</span><span class="val"><span class="pill pill-slate" id="inv-status-pill">Draft</span></span></div>
         <div class="de-sb-row"><span class="key">Invoice date</span><span class="val" style="font-weight:400" id="inv-date-display">—</span></div>
         <div class="de-sb-row"><span class="key">Due date</span><span class="val" style="font-weight:400" id="inv-due-display2">—</span></div>
+        <div class="de-sb-row"><span class="key">Terms</span><span class="val" style="font-weight:400">30 days from invoice</span></div>
+        <div class="de-sb-row"><span class="key">Sales Rep</span><span class="val" style="font-weight:400">John Smith</span></div>
+        <div class="de-sb-row"><span class="key">Customer Code</span><span class="val" style="font-weight:400">ACME-001</span></div>
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">bolt</span>Actions</div>
@@ -3793,7 +3874,23 @@ EFT payments preferred.</textarea>
           <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Payment reminder sent')"><span class="ms">notifications</span>Send Reminder</button>
         </div>
       </div>
-      <!-- [NEW SUGGESTION] QBO Push -->
+      <!-- Linked PO -->
+      <div class="de-sb-section">
+        <div class="de-sb-infocard indigo">
+          <div class="de-sb-infocard-title">Linked PO</div>
+          <div class="de-sb-infocard-body">Client PO <strong>PO-2026-4421</strong> linked from the quote. The PO number appears on the invoice PDF and is pre-filled in the header.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="switchDeTab('inv','attachments',document.querySelector('#invoice-editor .de-tab-btn:nth-child(2)'));toast('Open the Attachments tab to view the client PO')"><span class="ms">link</span>View Attachments</button>
+        </div>
+      </div>
+      <!-- Payment History -->
+      <div class="de-sb-section">
+        <div class="de-sb-infocard amber">
+          <div class="de-sb-infocard-title">Payment History</div>
+          <div class="de-sb-infocard-body">No payment recorded yet. Once payment is received, use <strong>Mark Paid</strong> to record the date, method, and reference.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="markInvoicePaid()"><span class="ms">check_circle</span>Mark Paid</button>
+        </div>
+      </div>
+      <!-- QBO Push -->
       <div class="de-sb-section">
         <div class="de-sb-infocard amber">
           <div class="de-sb-infocard-title">&#x1F4A1; New Suggestion</div>
