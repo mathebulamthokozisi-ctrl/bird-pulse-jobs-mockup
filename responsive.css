@@ -9,6 +9,17 @@
 .tab-only   { display: none !important; }
 .desk-only  { display: block; }   /* default visible on desktop */
 
+/* ── Always hidden on desktop — drawers and mobile elements ──
+   JS sets inline style.display for mob-topbar, mob-fab, mob-detail-info-fab, tab-sidebar-fab.
+   Drawers use opacity+pointer-events for open/close; they need display:flex to exist in layout.
+   On desktop we force display:none with !important to override any inline style. */
+#mob-topbar,
+#mob-nav-drawer,
+#mob-fab,
+#mob-detail-info-fab,
+#tab-sidebar-drawer,
+#tab-sidebar-fab { display: none !important; }
+
 /* ────────────────────────────────────────────────────────────────
    TABLET  768px – 1023px
 ──────────────────────────────────────────────────────────────── */
@@ -16,6 +27,11 @@
 
   /* Show tablet-only elements */
   .tab-only { display: block !important; }
+
+  /* Un-suppress tablet overlays — drawer always in DOM, JS toggles .open class */
+  #tab-sidebar-drawer { display: flex !important; }
+  /* tab-sidebar-fab: JS sets inline style.display=flex when on detail page */
+  #tab-sidebar-fab { display: none; } /* reset !important so JS inline style wins */
 
   /* ── Nav: auto-collapse to icon rail ── */
   .nav { width: 64px; }
@@ -85,15 +101,17 @@
   #tab-sidebar-drawer .drawer-backdrop {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: rgba(0,0,0,.35);
-    backdrop-filter: blur(2px);
+    /* no backdrop-filter — it bleeds onto sibling panel */
   }
   #tab-sidebar-drawer .drawer-panel {
     position: absolute;
     right: 0; top: 0; bottom: 0;
+    z-index: 2;
     width: 320px;
     background: var(--white);
-    box-shadow: -4px 0 24px rgba(0,0,0,.12);
+    box-shadow: var(--shadow-xl);
     overflow-y: auto;
     transform: translateX(100%);
     transition: transform .25s cubic-bezier(.4,0,.2,1);
@@ -152,6 +170,14 @@
   /* Show mobile-only elements */
   .mob-only { display: block !important; }
   .desk-only { display: none !important; }
+
+  /* Un-suppress mobile overlays */
+  #mob-nav-drawer { display: flex !important; }   /* always in DOM, JS toggles .open */
+  #tab-sidebar-drawer { display: flex !important; } /* reused for mobile info drawer */
+  /* mob-topbar, mob-fab, mob-detail-info-fab: reset !important so JS inline style wins */
+  #mob-topbar { display: none; }
+  #mob-fab { display: none; }
+  #mob-detail-info-fab { display: none; }
 
   /* ── Shell: hide desktop nav entirely ── */
   .nav { display: none; }
@@ -221,15 +247,17 @@
   #mob-nav-drawer .drawer-backdrop {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: rgba(0,0,0,.45);
-    backdrop-filter: blur(3px);
+    /* no backdrop-filter — bleeds onto sibling panel */
   }
   #mob-nav-drawer .drawer-panel {
     position: absolute;
     left: 0; top: 0; bottom: 0;
+    z-index: 2;
     width: 280px;
     background: var(--white);
-    box-shadow: 4px 0 24px rgba(0,0,0,.15);
+    box-shadow: var(--shadow-xl);
     overflow-y: auto;
     transform: translateX(-100%);
     transition: transform .28s cubic-bezier(.4,0,.2,1);
