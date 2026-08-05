@@ -3495,27 +3495,30 @@ td:first-child{padding:8px 8px}
               </tr>
             </thead>
             <tbody id="inv-tbody"></tbody>
-            <tfoot>
-              <tr>
-                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">Subtotal (excl. VAT)</td>
-                <td class="de-line-total" id="inv-subtotal" style="text-align:right">R 48,500</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td colspan="5" style="text-align:right;color:var(--muted-fg);font-size:11.5px;font-weight:500">VAT (15%)</td>
-                <td style="text-align:right;font-weight:600;color:var(--fg-2)" id="inv-vat">R 7,275</td>
-                <td></td>
-              </tr>
-              <tr class="de-grand-total-row">
-                <td colspan="5">Total Due (incl. VAT)</td>
-                <td class="de-line-grand" id="inv-total">R 55,775</td>
-                <td></td>
-              </tr>
-            </tfoot>
           </table>
         </div>
         <div style="padding:10px 16px 14px">
           <button class="de-add-row" onclick="addInvLine()"><span class="ms">add</span>Add Line Item</button>
+        </div>
+      </div>
+
+      <!-- Invoice Totals card -->
+      <div class="de-card">
+        <div class="de-card-body" style="padding:0">
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;justify-content:flex-end;align-items:center;gap:24px;padding:10px 16px;border-bottom:1px solid var(--border)">
+              <span style="font-size:12.5px;color:var(--muted-fg);font-weight:500">Subtotal (excl. VAT)</span>
+              <span style="font-size:13px;font-weight:600;color:var(--fg);min-width:90px;text-align:right" id="inv-subtotal">R 48,500</span>
+            </div>
+            <div style="display:flex;justify-content:flex-end;align-items:center;gap:24px;padding:10px 16px;border-bottom:1px solid var(--border)">
+              <span style="font-size:12.5px;color:var(--muted-fg);font-weight:500">VAT (15%)</span>
+              <span style="font-size:13px;font-weight:600;color:var(--fg-2);min-width:90px;text-align:right" id="inv-vat">R 7,275</span>
+            </div>
+            <div style="display:flex;justify-content:flex-end;align-items:center;gap:24px;padding:12px 16px;background:var(--indigo-50);border-radius:0 0 var(--radius) var(--radius)">
+              <span style="font-size:13.5px;font-weight:700;color:var(--fg)">Total Due (incl. VAT)</span>
+              <span style="font-size:16px;font-weight:800;color:var(--indigo-700);min-width:90px;text-align:right" id="inv-total">R 55,775</span>
+            </div>
+          </div>
         </div>
       </div>
 
