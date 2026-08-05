@@ -3784,10 +3784,10 @@ EFT payments preferred.</textarea>
       </div>
       <!-- Comments / Attachments / Communication -->
       <div class="de-card" style="padding:0">
-        <div class="de-tabs" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0">
-          <button class="de-tab-btn active" onclick="switchDeTab('inv','comments',this)"><span class="ms" style="font-size:14px">chat_bubble_outline</span> Comments</button>
-          <button class="de-tab-btn" onclick="switchDeTab('inv','attachments',this)"><span class="ms" style="font-size:14px">attach_file</span> Attachments</button>
-          <button class="de-tab-btn" onclick="switchDeTab('inv','comm',this)"><span class="ms" style="font-size:14px">schedule</span> Communication <span class="tab-badge">2</span></button>
+        <div class="de-tabs" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden">
+          <div class="de-tab-btn active" onclick="switchDeTab('inv','comments',this)"><span class="ms">chat_bubble</span>Comments</div>
+          <div class="de-tab-btn" onclick="switchDeTab('inv','attachments',this)"><span class="ms">attach_file</span>Attachments</div>
+          <div class="de-tab-btn" onclick="switchDeTab('inv','communication',this)"><span class="ms">forum</span>Communication <span class="tab-badge">2</span></div>
         </div>
         <!-- Comments pane -->
         <div class="de-tab-pane active" id="inv-tab-comments">
@@ -3834,7 +3834,7 @@ EFT payments preferred.</textarea>
           </div>
         </div>
         <!-- Communication pane -->
-        <div class="de-tab-pane" id="inv-tab-comm">
+        <div class="de-tab-pane" id="inv-tab-communication">
           <div style="padding:16px">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
               <div>
