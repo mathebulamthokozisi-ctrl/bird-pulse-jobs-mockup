@@ -1487,6 +1487,144 @@ td:first-child{padding:8px 8px}
 }
 .de-add-row:hover { background: var(--indigo-50); }
 .de-add-row .ms { font-size: 15px; }
+/* ── Quote sections ── */
+.quo-section-header,
+.quo-section-header:hover {
+  background: #f7f6ff !important;
+}
+.quo-section-header td {
+  padding: 8px 0;
+  border-top: 1px solid var(--indigo-100);
+  border-bottom: 1px solid var(--indigo-100);
+  vertical-align: middle;
+}
+.quo-section-header td:first-child { padding-left: 12px; }
+.quo-section-header td:last-child { padding-right: 12px; }
+.quo-section-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+}
+.quo-section-toggle,
+.quo-section-icon {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-fg);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.quo-section-toggle .ms,
+.quo-section-icon .ms {
+  font-size: 18px;
+}
+.quo-section-toggle:hover,
+.quo-section-icon:hover {
+  background: var(--white);
+  color: var(--indigo-600);
+}
+.quo-section-icon.delete:hover {
+  background: var(--red-50);
+  color: var(--red-600);
+}
+.section-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 6px 2px 2px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--indigo-700);
+  outline: none;
+  cursor: text;
+}
+.section-title:hover {
+  background: rgba(79,70,229,.06);
+}
+.section-title.editing {
+  background: var(--white);
+  box-shadow: 0 0 0 2px rgba(79,70,229,.12);
+}
+.quo-section-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--indigo-100);
+  background: var(--white);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted-fg);
+  white-space: nowrap;
+}
+.quo-section-subtotal {
+  text-align: right !important;
+  padding-right: 12px !important;
+  font-weight: 700;
+  color: var(--indigo-700);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.quo-section-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.quo-item-row td {
+  background: var(--white);
+}
+.quo-add-line-row,
+.quo-add-line-row:hover,
+.quo-empty-row,
+.quo-empty-row:hover {
+  background: transparent !important;
+}
+.quo-add-line-row td,
+.quo-empty-row td {
+  padding: 0 !important;
+}
+.quo-add-line-btn {
+  width: 100%;
+  border-top: none;
+  padding-left: 24px;
+}
+.quo-add-section-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px dashed var(--indigo-200);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--indigo-700);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast);
+}
+.quo-add-section-btn:hover {
+  background: var(--indigo-50);
+  border-color: var(--indigo-300);
+  color: var(--indigo-700);
+}
+.quo-add-section-btn .ms { font-size: 16px; }
+.quo-empty-row td {
+  padding: 18px 12px !important;
+  text-align: center;
+  color: var(--muted-fg);
+  font-size: 12px;
+}
 
 /* ── Sidebar sections ── */
 .de-sb-section {
@@ -3167,7 +3305,7 @@ td:first-child{padding:8px 8px}
         <div class="de-card-header">
           <span class="ms">list_alt</span>
           <span class="de-card-title">Line Items</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--muted-fg)">34% markup applied</span>
+          <span id="quote-section-meta" class="de-card-meta">34% markup applied</span>
         </div>
         <div class="de-table-wrap">
           <table class="de-line-table">
@@ -3188,8 +3326,8 @@ td:first-child{padding:8px 8px}
             <tbody id="quote-tbody"></tbody>
           </table>
         </div>
-        <div style="padding:10px 16px 14px">
-          <button class="de-add-row" onclick="addQuoteLine()"><span class="ms">add</span>Add Line Item</button>
+        <div style="padding:12px 16px 14px;border-top:1px solid var(--border)">
+          <button class="quo-add-section-btn" onclick="addQuoteSection()"><span class="ms">add</span>Add Section</button>
         </div>
       </div>
 
@@ -5767,6 +5905,7 @@ function recalcEst(){
   if(el('est-total'))el('est-total').textContent=fmt(sub+vat);
   if(el('est-sb-total'))el('est-sb-total').textContent=fmt(sub);
   if(el('est-sb-cost'))el('est-sb-cost').textContent=fmt(sub);
+  const quoteLines=getQuoteLines();
   const quote=quoteLines.length>0?quoteLines.reduce((s,l)=>s+l.qty*l.price,0):48500;
   const profit=quote-sub;
   const margin=quote>0?(profit/quote)*100:0;
@@ -5856,11 +5995,63 @@ function saveEstimate(){
 // ═══════════════════════════════════════════════════════════
 // QUOTE EDITOR
 // ═══════════════════════════════════════════════════════════
-let quoteLines=[];
+let quoteSections=[];
+let quoteSectionSeed=1;
+function nextQuoteSectionId(){
+  return `qsec-${quoteSectionSeed++}`;
+}
+function escHtml(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function getQuoteLines(){
+  return quoteSections.flatMap(section=>section.items||[]);
+}
+function createQuoteLine(overrides={}){
+  return {
+    desc:'New item',
+    cat:'materials',
+    section:'materials',
+    qty:1,
+    unit:'ea',
+    price:0,
+    commPct:0,
+    discPct:0,
+    taxType:'standard',
+    ...overrides,
+  };
+}
+function createQuoteSection(title,key,items=[]){
+  return {
+    id:nextQuoteSectionId(),
+    key:key||String(title||'section').toLowerCase().replace(/\s+/g,'_'),
+    title:title||'New Section',
+    expanded:true,
+    items:items.map(item=>createQuoteLine(item)),
+  };
+}
+function getQuoteSectionSubtotal(section){
+  return (section.items||[]).reduce((sum,l)=>{
+    const base=l.qty*l.price;
+    const discR=Math.round(base*((l.discPct||0)/100));
+    return sum+base-discR;
+  },0);
+}
+function buildQuoteSectionsFromEstimate(){
+  const order=['materials','labour','preliminaries'];
+  const labels={materials:'Materials',labour:'Labour',preliminaries:'Preliminaries'};
+  const grouped={materials:[],labour:[],preliminaries:[]};
+  estLines.forEach(line=>{
+    const sec=order.includes(line.section)?line.section:'materials';
+    grouped[sec].push({...line,section:sec,price:Math.round(line.price*1.34)});
+  });
+  quoteSections=order.map(sec=>createQuoteSection(labels[sec],sec,grouped[sec]));
+}
+function findQuoteSection(sectionId){
+  return quoteSections.find(section=>section.id===sectionId);
+}
 function openQuoteModal(){
-  // Build quote lines from estimate with 34% markup
-  if(quoteLines.length===0){
-    quoteLines=estLines.map(l=>({...l,price:Math.round(l.price*1.34)}));
+  if(quoteSections.length===0){
+    buildQuoteSectionsFromEstimate();
   }
   renderQuoteTable();
   openEditor('quote-editor');
@@ -5870,37 +6061,144 @@ const UNIT_OPTIONS=['ea','m','m²','m³','hr','day','lot','kg','l','set'];
 let quoteDiscType='pct'; // 'pct' or 'rand'
 let quoteDiscVal=0;
 let quoteDepositPct=0;
-
+function startEditQuoteSectionTitle(sectionId,el){
+  if(!el||el.getAttribute('contenteditable')==='true')return;
+  el.dataset.original=el.textContent.trim();
+  el.setAttribute('contenteditable','true');
+  el.classList.add('editing');
+  const range=document.createRange();
+  range.selectNodeContents(el);
+  const sel=window.getSelection();
+  if(sel){
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+function finishEditQuoteSectionTitle(sectionId,el){
+  const section=findQuoteSection(sectionId);
+  if(!section||!el)return;
+  const nextTitle=(el.textContent||'').trim()||el.dataset.original||'Untitled Section';
+  section.title=nextTitle;
+  el.removeAttribute('contenteditable');
+  el.classList.remove('editing');
+  renderQuoteTable();
+}
+function handleQuoteSectionTitleKeydown(event,sectionId,el){
+  if(event.key==='Enter'){
+    event.preventDefault();
+    el.blur();
+  }
+  if(event.key==='Escape'){
+    event.preventDefault();
+    el.textContent=el.dataset.original||findQuoteSection(sectionId)?.title||'Untitled Section';
+    el.blur();
+  }
+}
+function toggleQuoteSection(sectionId){
+  const section=findQuoteSection(sectionId);
+  if(!section)return;
+  section.expanded=!section.expanded;
+  renderQuoteTable();
+}
+function addQuoteSection(title='New Section'){
+  const clean=(title||'New Section').trim()||'New Section';
+  const section=createQuoteSection(clean,clean.toLowerCase().replace(/\s+/g,'_'));
+  quoteSections.push(section);
+  renderQuoteTable();
+  requestAnimationFrame(()=>{
+    const titleEls=document.querySelectorAll('#quote-tbody .section-title');
+    const el=titleEls[titleEls.length-1];
+    if(el)startEditQuoteSectionTitle(section.id,el);
+  });
+}
+function deleteQuoteSection(sectionId){
+  const idx=quoteSections.findIndex(section=>section.id===sectionId);
+  if(idx===-1)return;
+  quoteSections.splice(idx,1);
+  renderQuoteTable();
+}
+function updateQuoteLine(sectionId,itemIndex,field,value,rerender=false){
+  const section=findQuoteSection(sectionId);
+  if(!section||!section.items[itemIndex])return;
+  section.items[itemIndex][field]=value;
+  if(rerender)renderQuoteTable();
+}
+function deleteQuoteLine(sectionId,itemIndex){
+  const section=findQuoteSection(sectionId);
+  if(!section||!section.items[itemIndex])return;
+  section.items.splice(itemIndex,1);
+  renderQuoteTable();
+}
+function addQuoteLine(sectionId){
+  const section=findQuoteSection(sectionId)||quoteSections[0];
+  if(!section)return;
+  const sectionKey=section.key||'materials';
+  const defaultCat=sectionKey==='labour'?'labour':(sectionKey==='preliminaries'?'travel':'materials');
+  section.items.push(createQuoteLine({section:sectionKey,cat:defaultCat}));
+  section.expanded=true;
+  renderQuoteTable();
+}
 function renderQuoteTable(){
   const tbody=document.getElementById('quote-tbody');
   if(!tbody)return;
-  tbody.innerHTML=quoteLines.map((l,i)=>{
-    const commPct=l.commPct||0;
-    const discPct=l.discPct||0;
-    const taxType=l.taxType||'standard';
-    const baseTotal=l.qty*l.price;
-    const commR=Math.round(baseTotal*(commPct/100));
-    const discR=Math.round(baseTotal*(discPct/100));
-    const lineTotal=baseTotal-discR;
-    const taxOpts=TAX_TYPE_OPTIONS.map(t=>`<option value="${t.v}" ${t.v===taxType?'selected':''}>${t.l}</option>`).join('');
-    return `<tr>
-    <td><input value="${l.desc}" style="width:100%" onchange="quoteLines[${i}].desc=this.value"></td>
-    <td><input type="number" value="${l.qty}" style="text-align:right" onchange="quoteLines[${i}].qty=+this.value;renderQuoteTable()"></td>
-    <td><select class="unit-select" style="font-size:11.5px;min-width:44px" onchange="quoteLines[${i}].unit=this.value">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
-    <td><input type="number" value="${l.price}" style="text-align:right" onchange="quoteLines[${i}].price=+this.value;renderQuoteTable()"></td>
-    <td><input type="number" value="${commPct}" min="0" max="100" step="0.5" style="text-align:right" onchange="quoteLines[${i}].commPct=+this.value;renderQuoteTable()"></td>
-    <td style="text-align:right;color:var(--muted-fg);font-size:12px;font-variant-numeric:tabular-nums">${fmt(commR)}</td>
-    <td><input type="number" value="${discPct}" min="0" max="100" step="0.5" style="text-align:right" onchange="quoteLines[${i}].discPct=+this.value;renderQuoteTable()"></td>
-    <td><select style="font-size:11.5px" onchange="quoteLines[${i}].taxType=this.value;renderQuoteTable()">${taxOpts}</select></td>
-    <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmt(lineTotal)}</td>
-    <td><button class="de-del-row" onclick="quoteLines.splice(${i},1);renderQuoteTable()"><span class="ms">delete</span></button></td>
-  </tr>`;
+  const meta=document.getElementById('quote-section-meta');
+  const allQuoteLines=getQuoteLines();
+  const sectionCount=quoteSections.length;
+  if(meta){
+    const itemLabel=allQuoteLines.length===1?'item':'items';
+    const sectionLabel=sectionCount===1?'section':'sections';
+    meta.textContent=`${sectionCount} ${sectionLabel} · ${allQuoteLines.length} ${itemLabel} · 34% markup applied`;
+  }
+  if(sectionCount===0){
+    tbody.innerHTML='<tr class="quo-empty-row"><td colspan="10">No sections yet. Add a section to start building the quote.</td></tr>';
+    recalcQuote();
+    return;
+  }
+  tbody.innerHTML=quoteSections.map(section=>{
+    const subtotal=getQuoteSectionSubtotal(section);
+    const itemCount=section.items.length;
+    const itemLabel=itemCount===1?'item':'items';
+    const itemRows=section.expanded?section.items.map((l,i)=>{
+      const commPct=l.commPct||0;
+      const discPct=l.discPct||0;
+      const taxType=l.taxType||'standard';
+      const baseTotal=l.qty*l.price;
+      const commR=Math.round(baseTotal*(commPct/100));
+      const discR=Math.round(baseTotal*(discPct/100));
+      const lineTotal=baseTotal-discR;
+      const taxOpts=TAX_TYPE_OPTIONS.map(t=>`<option value="${t.v}" ${t.v===taxType?'selected':''}>${t.l}</option>`).join('');
+      return `<tr class="quo-item-row">
+        <td><input value="${escHtml(l.desc)}" style="width:100%" onchange="updateQuoteLine('${section.id}',${i},'desc',this.value)"></td>
+        <td><input type="number" value="${l.qty}" onchange="updateQuoteLine('${section.id}',${i},'qty',+this.value,true)"></td>
+        <td><select class="unit-select" style="font-size:11.5px;min-width:44px" onchange="updateQuoteLine('${section.id}',${i},'unit',this.value)">${UNIT_OPTIONS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select></td>
+        <td><input type="number" value="${l.price}" onchange="updateQuoteLine('${section.id}',${i},'price',+this.value,true)"></td>
+        <td><input type="number" value="${commPct}" min="0" max="100" step="0.5" onchange="updateQuoteLine('${section.id}',${i},'commPct',+this.value,true)"></td>
+        <td style="text-align:right;color:var(--muted-fg);font-size:12px;font-variant-numeric:tabular-nums">${fmt(commR)}</td>
+        <td><input type="number" value="${discPct}" min="0" max="100" step="0.5" onchange="updateQuoteLine('${section.id}',${i},'discPct',+this.value,true)"></td>
+        <td><select style="font-size:11.5px" onchange="updateQuoteLine('${section.id}',${i},'taxType',this.value,true)">${taxOpts}</select></td>
+        <td class="de-line-total">${fmt(lineTotal)}</td>
+        <td><button class="de-del-row" style="opacity:1" onclick="deleteQuoteLine('${section.id}',${i})"><span class="ms">delete</span></button></td>
+      </tr>`;
+    }).join(''):'';
+    const addLineRow=section.expanded?`<tr class="quo-add-line-row"><td colspan="10"><button class="de-add-row quo-add-line-btn" onclick="addQuoteLine('${section.id}')"><span class="ms">add</span>Add Line Item</button></td></tr>`:'';
+    return `<tr class="quo-section-header ${section.expanded?'':'collapsed'}">
+      <td colspan="8">
+        <div class="quo-section-main">
+          <button class="quo-section-toggle" onclick="toggleQuoteSection('${section.id}')" title="${section.expanded?'Collapse':'Expand'} section"><span class="ms">${section.expanded?'expand_more':'chevron_right'}</span></button>
+          <span class="section-title" ondblclick="startEditQuoteSectionTitle('${section.id}',this)" onblur="finishEditQuoteSectionTitle('${section.id}',this)" onkeydown="handleQuoteSectionTitleKeydown(event,'${section.id}',this)">${escHtml(section.title)}</span>
+          <span class="quo-section-count">${itemCount} ${itemLabel}</span>
+        </div>
+      </td>
+      <td class="quo-section-subtotal">${fmt(subtotal)}</td>
+      <td>
+        <div class="quo-section-actions">
+          <button class="quo-section-icon" onclick="addQuoteLine('${section.id}')" title="Add line item"><span class="ms">add</span></button>
+          <button class="quo-section-icon delete" onclick="deleteQuoteSection('${section.id}')" title="Delete section"><span class="ms">delete</span></button>
+        </div>
+      </td>
+    </tr>${itemRows}${addLineRow}`;
   }).join('');
   recalcQuote();
-}
-function addQuoteLine(){
-  quoteLines.push({desc:'New item',cat:'materials',qty:1,unit:'ea',price:0,commPct:0,discPct:0,taxType:'standard'});
-  renderQuoteTable();
 }
 function saveQuote(){
   toast('Quote saved','success');
@@ -5914,6 +6212,7 @@ function setDiscType(t){
   recalcQuote();
 }
 function recalcQuote(){
+  const quoteLines=getQuoteLines();
   // Line totals (after per-line discount)
   const sub=quoteLines.reduce((s,l)=>{
     const base=l.qty*l.price;
@@ -6023,6 +6322,7 @@ function openInvoiceModal(){
   const id=document.getElementById('inv-date-display');if(id)id.textContent=today.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});
   // Pre-populate from quote lines
   if(invLines.length===0){
+    const quoteLines=getQuoteLines();
     invLines=quoteLines.length>0?quoteLines.map(l=>({...l})):estLines.map(l=>({...l,price:Math.round(l.price*1.34)}));
   }
   renderInvTable();
