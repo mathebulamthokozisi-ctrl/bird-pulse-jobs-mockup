@@ -3471,13 +3471,54 @@ td:first-child{padding:8px 8px}
           </div>
         </div>
       </div>
+      <!-- Comments / Attachments / Communication -->
+      <div class="de-card" style="padding:0;overflow:hidden">
+        <div class="de-tabs">
+          <div class="de-tab-btn active" onclick="switchDeTab('quo','comments',this)"><span class="ms">chat_bubble</span>Comments</div>
+          <div class="de-tab-btn" onclick="switchDeTab('quo','attachments',this)"><span class="ms">attach_file</span>Attachments</div>
+          <div class="de-tab-btn" onclick="switchDeTab('quo','communication',this)"><span class="ms">forum</span>Communication <span class="tab-badge">3</span></div>
+        </div>
+        <div class="de-tab-pane active" id="quo-tab-comments">
+          <div style="padding:16px 18px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)">Quote Comments</div>
+                <div style="font-size:12px;color:var(--muted-fg);margin-top:3px">Internal notes that stay attached to the quote revision and do not appear on the client PDF.</div>
+              </div>
+              <button class="btn sm" onclick="toast('New quote comment composer opening…')"><span class="ms">add_comment</span>Add Comment</button>
+            </div>
+            <div id="quo-comments-list" style="display:flex;flex-direction:column;gap:10px"></div>
+          </div>
+        </div>
+        <div class="de-tab-pane" id="quo-tab-attachments">
+          <div style="padding:16px 18px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)">Supporting Files</div>
+                <div style="font-size:12px;color:var(--muted-fg);margin-top:3px">Client PO, drawings, specs, and supporting documents linked to this quote.</div>
+              </div>
+              <button class="btn sm" onclick="toast('Attachment picker opening…')"><span class="ms">upload_file</span>Upload</button>
+            </div>
+            <div id="quo-attachments-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px"></div>
+          </div>
+        </div>
+        <div class="de-tab-pane" id="quo-tab-communication">
+          <div style="padding:16px 18px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+              <div style="font-size:12px;color:var(--muted-fg)">Client portal queries and quote-specific email threads &nbsp;<span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:1px 6px"><span class="ms" style="font-size:11px">auto_awesome</span>Rich HTML · Images · Attachments · Client Portal parity</span></div>
+              <button class="btn primary sm" onclick="openNewCommModal()"><span class="ms">add</span>New Message</button>
+            </div>
+            <div id="quote-comm-threads"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Sidebar -->
     <aside class="de-sidebar">
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">summarize</span>Quote Summary</div>
-        <div class="de-big-num">R 48,500</div>
-        <div class="de-big-sub">Excl. VAT · R 55,775 incl.</div>
+        <div class="de-big-num" id="quote-sb-bignum">R 48,500</div>
+        <div class="de-big-sub" id="quote-sb-bigsub">Excl. VAT · R 55,775 incl.</div>
       </div>
       <div class="de-sb-section">
         <div class="de-sb-label"><span class="ms">receipt_long</span>Summary</div>
@@ -3505,6 +3546,20 @@ td:first-child{padding:8px 8px}
           <button class="btn primary sm" style="width:100%;justify-content:center" onclick="acceptQuote()"><span class="ms">thumb_up</span>Accept Quote</button>
           <button class="btn danger sm" style="width:100%;justify-content:center" onclick="toast('Quote marked as declined','error');closeEditor('quote-editor')"><span class="ms">thumb_down</span>Decline Quote</button>
           <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Quote emailed to client')"><span class="ms">send</span>Resend to Client</button>
+        </div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-infocard indigo">
+          <div class="de-sb-infocard-title">Linked PO</div>
+          <div class="de-sb-infocard-body">No client PO attached yet. Upload it under <strong>Attachments</strong> to auto-fill the PO number and carry it through to the invoice.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="switchDeTab('quo','attachments',document.querySelector('#quote-editor .de-tab-btn:nth-child(2)'));toast('Open the Attachments tab to upload the client PO')"><span class="ms">link</span>Open Attachments</button>
+        </div>
+      </div>
+      <div class="de-sb-section">
+        <div class="de-sb-infocard amber">
+          <div class="de-sb-infocard-title">Revision History</div>
+          <div class="de-sb-infocard-body">Current revision <strong>v3</strong>. Last sent to the client on <strong>11 Jul 2026</strong>. Any material line-item changes should trigger a resend.</div>
+          <button class="btn sm" style="width:100%;justify-content:center" onclick="toast('Revision timeline opening…')"><span class="ms">history</span>View Revisions</button>
         </div>
       </div>
     </aside>
@@ -5844,7 +5899,140 @@ function switchDeTab(prefix,tab,btn){
   if(pane)pane.classList.add('active');
   btn.classList.add('active');
 }
-
+const QUOTE_COMMENTS=[
+  {author:'John Smith',role:'Sales Rep',time:'11 Jul 2026 13:40',body:'Client asked that the quote clearly separate materials and labour for internal approval. Section subtotals now reflect that layout.'},
+  {author:'Sarah Jones',role:'Coordinator',time:'11 Jul 2026 12:15',body:'Awaiting client PO upload. Once attached, the PO number should flow through to the invoice automatically.'},
+  {author:'System',role:'Workflow',time:'11 Jul 2026 11:02',body:'Quote revised from estimate EST-0042 using 34% markup and commission rules.'}
+];
+const QUOTE_ATTACHMENTS=[
+  {name:'Client_PO_pending.pdf',meta:'Expected from client · Not uploaded yet',icon:'picture_as_pdf',tone:'var(--amber-50)',iconColor:'#b45309'},
+  {name:'Warehouse_DB_Photos.zip',meta:'Site reference photos · 24.8 MB',icon:'folder_zip',tone:'var(--indigo-50)',iconColor:'var(--indigo-600)'},
+  {name:'Single_Line_Diagram_REV_B.pdf',meta:'Technical drawing · 2.1 MB',icon:'schema',tone:'var(--green-50)',iconColor:'var(--green-600)'},
+  {name:'Scope_Clarification.docx',meta:'Client clarification notes · 184 KB',icon:'description',tone:'var(--slate-100)',iconColor:'var(--slate-600)'}
+];
+function renderQuoteAuxPanels(){
+  const comments=document.getElementById('quo-comments-list');
+  if(comments){
+    comments.innerHTML=QUOTE_COMMENTS.map(c=>`
+      <div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;background:var(--white)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
+          <div style="font-size:12px;font-weight:600;color:var(--fg)">${c.author} <span style="font-weight:400;color:var(--muted-fg)">· ${c.role}</span></div>
+          <div style="font-size:10.5px;color:var(--muted-fg)">${c.time}</div>
+        </div>
+        <div style="font-size:12px;line-height:1.6;color:var(--fg-2)">${c.body}</div>
+      </div>`).join('');
+  }
+  const files=document.getElementById('quo-attachments-list');
+  if(files){
+    files.innerHTML=QUOTE_ATTACHMENTS.map(f=>`
+      <div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px;background:var(--white);display:flex;align-items:flex-start;gap:10px">
+        <div style="width:34px;height:34px;border-radius:10px;background:${f.tone};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span class="ms" style="font-size:18px;color:${f.iconColor}">${f.icon}</span>
+        </div>
+        <div style="min-width:0;flex:1">
+          <div style="font-size:12.5px;font-weight:600;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
+          <div style="font-size:11px;color:var(--muted-fg);margin-top:4px;line-height:1.4">${f.meta}</div>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn xs" onclick="toast('Previewing ${f.name.replace(/'/g,"\\'")}')"><span class="ms">visibility</span>Preview</button>
+            <button class="btn xs" onclick="toast('Downloading ${f.name.replace(/'/g,"\\'")}')"><span class="ms">download</span>Download</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+  renderQuoteCommThreads();
+}
+function renderQuoteCommThreads(){
+  const c=document.getElementById('quote-comm-threads');
+  if(!c)return;
+  c.innerHTML=commThreads.map(t=>`
+    <div class="comm-thread">
+      <div class="comm-thread-header" onclick="toggleQuoteCommThread(${t.id})">
+        <span class="ms" style="font-size:16px;color:var(--muted-fg)">forum</span>
+        <div style="flex:1">
+          <div class="comm-subject">${t.subject}</div>
+          <div class="comm-meta">${t.from} · ${t.date}</div>
+        </div>
+        <span class="comm-status ${t.status}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span>
+        <span class="ms" style="font-size:16px;color:var(--muted-fg);margin-left:4px">expand_more</span>
+      </div>
+      <div class="comm-body" id="quote-comm-body-${t.id}">
+        ${t.messages.map(m=>`<div class="comm-msg"><div class="comm-msg-from">${m.from} · ${m.time}</div>${m.body}</div>`).join('')}
+        <div class="comm-reply-box">
+          <div class="comm-toolbar">
+            <button class="comm-tb-btn" title="Bold" onclick="execFmt('bold')"><b>B</b></button>
+            <button class="comm-tb-btn" title="Italic" onclick="execFmt('italic')"><i>I</i></button>
+            <button class="comm-tb-btn" title="Underline" onclick="execFmt('underline')"><u>U</u></button>
+            <div class="comm-tb-sep"></div>
+            <button class="comm-tb-btn ms" title="Bulleted list" onclick="execFmt('insertUnorderedList')">format_list_bulleted</button>
+            <button class="comm-tb-btn ms" title="Numbered list" onclick="execFmt('insertOrderedList')">format_list_numbered</button>
+            <button class="comm-tb-btn ms" title="Blockquote" onclick="execFmt('formatBlock','blockquote')">format_quote</button>
+            <div class="comm-tb-sep"></div>
+            <button class="comm-tb-btn ms" title="Insert link" onclick="quoteInsertCommLink(${t.id})">link</button>
+            <button class="comm-tb-btn ms" title="Insert image" onclick="quoteInsertCommImage(${t.id})">image</button>
+            <span class="comm-tb-badge"><span class="ms">auto_awesome</span>Rich HTML · Client Portal parity</span>
+          </div>
+          <div class="comm-compose" contenteditable="true" data-placeholder="Type your reply… supports bold, lists, links, inline images" id="quote-comm-reply-${t.id}"></div>
+          <div class="comm-attach-row" id="quote-comm-attach-${t.id}"></div>
+          <div class="comm-reply-footer">
+            <label class="attach-label" title="Attach file (PDF, Excel, ZIP…)" onclick="quoteMockAttach(${t.id})">
+              <span class="ms" style="font-size:15px">attach_file</span>Attach
+            </label>
+            <span class="spacer"></span>
+            <button class="btn sm" onclick="quoteMarkCommResolved(${t.id})"><span class="ms">check</span>Mark Resolved</button>
+            <button class="btn primary sm" onclick="quoteSendCommReply(${t.id})"><span class="ms">send</span>Send Reply</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleQuoteCommThread(id){
+  const b=document.getElementById('quote-comm-body-'+id);
+  if(b)b.classList.toggle('open');
+}
+function quoteInsertCommLink(id){
+  const url=prompt('Enter URL:','https://');
+  if(url) document.execCommand('createLink',false,url);
+}
+function quoteInsertCommImage(id){
+  const url=prompt('Image URL (or paste a public link):','https://');
+  if(url) document.execCommand('insertImage',false,url);
+}
+function quoteMockAttach(id){
+  const row=document.getElementById('quote-comm-attach-'+id);
+  if(!row)return;
+  const names=['Updated_Scope.pdf','Site_Photos.zip','Quote_Revision.xlsx'];
+  const name=names[row.children.length%names.length];
+  const icons={zip:'folder_zip',pdf:'picture_as_pdf',xlsx:'table_chart'};
+  const ext=name.split('.').pop();
+  const icon=icons[ext]||'attach_file';
+  const chip=document.createElement('span');
+  chip.className='comm-attach-chip';
+  chip.innerHTML=`<span class="ms">${icon}</span>${name}<span class="ms rm" onclick="this.parentElement.remove()">close</span>`;
+  row.appendChild(chip);
+}
+function quoteSendCommReply(id){
+  const div=document.getElementById('quote-comm-reply-'+id);
+  const body=(div&&div.innerHTML||'').trim();
+  if(!body||body==='<br>'){toast('Please type a reply','error');return;}
+  const t=commThreads.find(t=>t.id===id);
+  if(t){
+    t.messages.push({from:'You',time:new Date().toLocaleString(),body});
+    t.status='replied';
+    div.innerHTML='';
+    const row=document.getElementById('quote-comm-attach-'+id);
+    if(row)row.innerHTML='';
+    renderQuoteCommThreads();
+    toast('Reply sent to client','success');
+  }
+}
+function quoteMarkCommResolved(id){
+  const t=commThreads.find(t=>t.id===id);
+  if(t){
+    t.status='resolved';
+    renderQuoteCommThreads();
+    toast('Communication marked resolved','success');
+  }
+}
 // ═══════════════════════════════════════════════════════════
 // ESTIMATE EDITOR
 // ═══════════════════════════════════════════════════════════
@@ -6053,6 +6241,7 @@ function openQuoteModal(){
   if(quoteSections.length===0){
     buildQuoteSectionsFromEstimate();
   }
+  renderQuoteAuxPanels();
   renderQuoteTable();
   openEditor('quote-editor');
 }
