@@ -1206,6 +1206,7 @@ td:first-child{padding:8px 8px}
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   overflow: visible;
+  flex-shrink: 0;
   box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03);
 }
 /* Clip only the scrollable table wrappers, not the card itself */
@@ -3472,13 +3473,13 @@ td:first-child{padding:8px 8px}
         </div>
       </div>
       <!-- Comments / Attachments / Communication -->
-      <div class="de-card" style="padding:0;overflow:hidden">
-        <div class="de-tabs">
+      <div class="de-card" style="padding:0">
+        <div class="de-tabs" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden">
           <div class="de-tab-btn active" onclick="switchDeTab('quo','comments',this)"><span class="ms">chat_bubble</span>Comments</div>
           <div class="de-tab-btn" onclick="switchDeTab('quo','attachments',this)"><span class="ms">attach_file</span>Attachments</div>
           <div class="de-tab-btn" onclick="switchDeTab('quo','communication',this)"><span class="ms">forum</span>Communication <span class="tab-badge">3</span></div>
         </div>
-        <div class="de-tab-pane active" id="quo-tab-comments">
+        <div class="de-tab-pane active" id="quo-tab-comments" style="display:block">
           <div style="padding:16px 18px 18px">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
               <div>
@@ -5893,7 +5894,10 @@ function closeEditor(id){
 function switchDeTab(prefix,tab,btn){
   // deactivate all panes and buttons in this editor
   const editor=btn.closest('.doc-editor');
-  editor.querySelectorAll('.de-tab-pane').forEach(p=>p.classList.remove('active'));
+  editor.querySelectorAll('.de-tab-pane').forEach(p=>{
+    p.classList.remove('active');
+    p.style.display='';
+  });
   editor.querySelectorAll('.de-tab-btn').forEach(b=>b.classList.remove('active'));
   const pane=document.getElementById(prefix+'-tab-'+tab);
   if(pane)pane.classList.add('active');
