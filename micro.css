@@ -1,0 +1,442 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BIRD PULSE — MICRO-INTERACTIONS, TRANSITIONS & UX VALIDATIONS
+   All rules are additive. Desktop CSS is never modified here.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ─────────────────────────────────────────────────────── */
+@keyframes bp-ripple {
+  from { transform: scale(0); opacity: .45; }
+  to   { transform: scale(2.8); opacity: 0; }
+}
+@keyframes bp-pop-in {
+  0%   { transform: scale(.82); opacity: 0; }
+  65%  { transform: scale(1.06); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes bp-shake {
+  0%,100% { transform: translateX(0); }
+  18%     { transform: translateX(-5px); }
+  36%     { transform: translateX(5px); }
+  54%     { transform: translateX(-4px); }
+  72%     { transform: translateX(4px); }
+  90%     { transform: translateX(-2px); }
+}
+@keyframes bp-slide-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bp-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bp-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(79,70,229,.35); }
+  70%  { box-shadow: 0 0 0 6px rgba(79,70,229,0); }
+  100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); }
+}
+@keyframes bp-check-draw {
+  from { stroke-dashoffset: 24; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes bp-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes bp-badge-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes bp-row-highlight {
+  0%   { background: rgba(79,70,229,.10); }
+  100% { background: transparent; }
+}
+
+/* ── Ripple effect on buttons ───────────────────────────────────────── */
+.btn { position: relative; overflow: hidden; }
+.bp-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.35);
+  pointer-events: none;
+  animation: bp-ripple 500ms ease-out forwards;
+  transform-origin: center;
+}
+.btn.ghost .bp-ripple,
+.btn:not(.primary):not(.success):not(.danger) .bp-ripple {
+  background: rgba(79,70,229,.12);
+}
+
+/* ── Button loading state ───────────────────────────────────────────── */
+.btn.loading { pointer-events: none; opacity: .75; }
+.btn.loading .btn-label { opacity: 0; }
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: bp-spin 600ms linear infinite;
+}
+.btn:not(.primary):not(.success):not(.danger).loading::after {
+  border-color: rgba(79,70,229,.25);
+  border-top-color: var(--indigo-600);
+}
+
+/* ── Chip toggle feedback ───────────────────────────────────────────── */
+.chip { transition: background var(--t-smooth), border-color var(--t-smooth),
+                    color var(--t-smooth), transform var(--t-spring),
+                    box-shadow var(--t-smooth); }
+.chip.active { animation: bp-pop-in 200ms var(--t-spring) both; }
+
+/* ── Nav item hover lift ────────────────────────────────────────────── */
+.nav-item {
+  transition: background var(--t-fast), color var(--t-fast),
+              transform var(--t-fast);
+}
+.nav-item:hover { transform: translateX(2px); }
+.nav-item.active { transform: none; }
+
+/* ── Table row interactions ─────────────────────────────────────────── */
+tbody tr {
+  transition: background var(--t-smooth), box-shadow var(--t-smooth),
+              transform var(--t-smooth);
+}
+tbody tr:hover { transform: translateX(1px); }
+tbody tr.selected { transform: none; }
+/* Row flash on new/updated */
+tbody tr.bp-row-new {
+  animation: bp-row-highlight 1.2s ease-out both;
+}
+
+/* ── Detail panel slide-in ──────────────────────────────────────────── */
+#page-detail { animation: none; }
+#page-detail.bp-entering {
+  animation: bp-fade-up 160ms ease both;
+}
+
+/* ── Doc editor open/close ──────────────────────────────────────────── */
+.doc-editor {
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(.4,0,.2,1);
+}
+.doc-editor.open {
+  transition: opacity 200ms ease, transform 240ms cubic-bezier(.22,.68,0,1.2);
+}
+
+/* ── Pipeline step hover ────────────────────────────────────────────── */
+.pipeline-step {
+  transition: background var(--t-base), color var(--t-base),
+              transform var(--t-fast);
+}
+.pipeline-step:hover:not(.active):not(.done) {
+  transform: translateY(-1px);
+}
+
+/* ── Guard key met pop ──────────────────────────────────────────────── */
+.guard-key.met {
+  animation: guard-met-pop .3s var(--t-spring) both;
+}
+/* Pulse ring on newly-met guard key */
+.guard-key.met.bp-just-met {
+  animation: guard-met-pop .3s var(--t-spring) both,
+             bp-pulse-ring .6s ease .25s both;
+}
+
+/* ── Section collapse/expand ────────────────────────────────────────── */
+.de-section-body {
+  transition: max-height 260ms cubic-bezier(.4,0,.2,1),
+              opacity 200ms ease;
+  overflow: hidden;
+}
+.de-section-hdr .ms.chevron {
+  transition: transform var(--t-slow);
+}
+.de-section-hdr.collapsed .ms.chevron {
+  transform: rotate(-90deg);
+}
+
+/* ── Line item row add/remove ───────────────────────────────────────── */
+.de-line-table tbody tr {
+  transition: background var(--t-smooth), opacity var(--t-base);
+}
+.de-line-table tbody tr.bp-row-entering {
+  animation: bp-fade-up 180ms ease both;
+}
+.de-line-table tbody tr.bp-row-removing {
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+/* ── Form field focus ring ──────────────────────────────────────────── */
+.form-group input,
+.form-group select,
+.form-group textarea,
+.de-doc-header-cell input,
+.de-doc-header-cell select,
+.de-form-group input,
+.de-form-group select,
+.de-form-group textarea {
+  transition: border-color var(--t-base), box-shadow var(--t-base),
+              background var(--t-base);
+}
+
+/* ── Form validation states ─────────────────────────────────────────── */
+.form-group.bp-invalid input,
+.form-group.bp-invalid select,
+.form-group.bp-invalid textarea {
+  border-color: var(--red-500) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.1) !important;
+  animation: bp-shake 380ms ease both;
+}
+.form-group.bp-valid input,
+.form-group.bp-valid select,
+.form-group.bp-valid textarea {
+  border-color: var(--green-600) !important;
+  box-shadow: 0 0 0 3px rgba(0,182,184,.08) !important;
+}
+.bp-field-error {
+  font-size: 10.5px;
+  color: var(--red-600);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  animation: bp-slide-down 140ms ease both;
+}
+.bp-field-error .ms { font-size: 12px; }
+.bp-field-hint {
+  font-size: 10.5px;
+  color: var(--muted-fg);
+  margin-top: 3px;
+  animation: bp-slide-down 140ms ease both;
+}
+
+/* ── Inline editable fields ─────────────────────────────────────────── */
+[contenteditable="true"] {
+  transition: background var(--t-base), box-shadow var(--t-base),
+              border-radius var(--t-base);
+  border-radius: 3px;
+  outline: none;
+}
+[contenteditable="true"]:focus {
+  background: var(--indigo-50);
+  box-shadow: 0 0 0 2px var(--indigo-300);
+}
+
+/* ── Tab switching ──────────────────────────────────────────────────── */
+.tab-content {
+  animation: bp-fade-up 160ms ease both;
+}
+.de-tab-pane.active {
+  animation: bp-fade-up 140ms ease both;
+}
+
+/* ── Modal / bottom sheet ───────────────────────────────────────────── */
+.modal-overlay {
+  transition: opacity 180ms ease;
+}
+.modal-box {
+  transition: opacity 200ms ease, transform 240ms cubic-bezier(.22,.68,0,1.2);
+}
+.modal-overlay:not(.open) .modal-box {
+  transform: translateY(12px) scale(.97);
+  opacity: 0;
+}
+
+/* ── Toast improvements ─────────────────────────────────────────────── */
+.toast {
+  animation: bp-fade-up 200ms ease both;
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.toast .ms { transition: transform var(--t-spring); }
+.toast:hover .ms { transform: scale(1.15); }
+
+/* ── Sidebar drawer slide ───────────────────────────────────────────── */
+.drawer-panel {
+  transition: transform 260ms cubic-bezier(.4,0,.2,1);
+}
+#tab-sidebar-drawer .drawer-panel,
+#mob-nav-drawer .drawer-panel {
+  transition: transform 280ms cubic-bezier(.22,.68,0,1.2);
+}
+
+/* ── Card hover lift (detail sidebar infocards) ─────────────────────── */
+.de-sb-infocard {
+  transition: box-shadow var(--t-base), transform var(--t-base);
+}
+.de-sb-infocard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* ── Doc row (Documents card) hover ────────────────────────────────── */
+.doc-row {
+  transition: background var(--t-smooth), box-shadow var(--t-smooth);
+}
+.doc-row:hover {
+  background: var(--surface-2);
+  box-shadow: inset 3px 0 0 var(--indigo-400);
+}
+
+/* ── Checkbox accent transition ─────────────────────────────────────── */
+input[type="checkbox"] {
+  transition: transform var(--t-spring);
+}
+input[type="checkbox"]:active { transform: scale(.88); }
+
+/* ── Select / date input hover ──────────────────────────────────────── */
+select:hover:not(:focus),
+input[type="date"]:hover:not(:focus) {
+  border-color: var(--border-strong) !important;
+}
+
+/* ── Pagination button ──────────────────────────────────────────────── */
+.page-btn {
+  transition: background var(--t-fast), color var(--t-fast),
+              border-color var(--t-fast), transform var(--t-fast);
+}
+.page-btn:hover:not(.active) { transform: scale(1.08); }
+.page-btn.active { animation: bp-pop-in 180ms var(--t-spring) both; }
+
+/* ── Nav badge pop ──────────────────────────────────────────────────── */
+.nav-badge {
+  transition: transform var(--t-spring), background var(--t-base);
+}
+.nav-badge.bp-updated { animation: bp-badge-pop 300ms var(--t-spring) both; }
+
+/* ── Collapse toggle ────────────────────────────────────────────────── */
+.nav-collapse-btn {
+  transition: color var(--t-fast), box-shadow var(--t-fast),
+              transform var(--t-spring);
+}
+.nav-collapse-btn:hover { transform: translateY(-50%) scale(1.12); }
+.nav.collapsed .nav-collapse-btn .ms { transform: rotate(180deg); }
+.nav-collapse-btn .ms { transition: transform var(--t-slow); }
+
+/* ── Scroll-to-top FAB ──────────────────────────────────────────────── */
+#bp-scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--muted-fg);
+  z-index: 800;
+  opacity: 0;
+  transform: translateY(8px) scale(.9);
+  pointer-events: none;
+  transition: opacity var(--t-base), transform var(--t-spring),
+              color var(--t-fast), box-shadow var(--t-fast);
+}
+#bp-scroll-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#bp-scroll-top:hover {
+  color: var(--indigo-600);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── Tooltip ────────────────────────────────────────────────────────── */
+[data-tip] { position: relative; }
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--slate-900);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--t-base), transform var(--t-base);
+  z-index: 9999;
+}
+[data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Skeleton loader ────────────────────────────────────────────────── */
+@keyframes bp-skeleton {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.bp-skeleton {
+  background: linear-gradient(90deg,
+    var(--slate-100) 25%,
+    var(--slate-50) 50%,
+    var(--slate-100) 75%);
+  background-size: 200% 100%;
+  animation: bp-skeleton 1.4s ease infinite;
+  border-radius: var(--radius);
+  color: transparent !important;
+  pointer-events: none;
+}
+
+/* ── Focus-visible ring (keyboard nav) ──────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--indigo-400);
+  outline-offset: 2px;
+}
+.btn:focus-visible,
+.chip:focus-visible,
+.nav-item:focus-visible,
+.page-btn:focus-visible {
+  outline: 2px solid var(--indigo-400);
+  outline-offset: 2px;
+}
+/* Remove focus ring for mouse users inside doc editors */
+.doc-editor *:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Smooth column resize ───────────────────────────────────────────── */
+th { transition: width var(--t-fast); }
+
+/* ── Bulk action bar slide ──────────────────────────────────────────── */
+.bulk-bar {
+  transition: max-height var(--t-slow), opacity var(--t-base);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+.bulk-bar.visible {
+  max-height: 52px;
+  opacity: 1;
+}
+
+/* ── Filter sidebar slide ───────────────────────────────────────────── */
+.filter-sidebar {
+  transition: width var(--t-slow), opacity var(--t-slow),
+              transform var(--t-slow);
+}
+.filter-sidebar.hidden {
+  width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(-8px);
+}
+
+/* ── Empty state fade ───────────────────────────────────────────────── */
+.empty-state {
+  animation: bp-fade-up 240ms ease both;
+}
+
+/* ── Inline number input nudge ──────────────────────────────────────── */
+.de-line-table td input[type="number"]:focus {
+  transform: scale(1.01);
+}

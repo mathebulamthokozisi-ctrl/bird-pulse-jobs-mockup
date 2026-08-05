@@ -2429,6 +2429,7 @@ td:first-child{padding:8px 8px}
 
 </style>
 <link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="micro.css">
 </head>
 <body>
 
@@ -7796,6 +7797,271 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // Also run immediately in case DOMContentLoaded already fired
 applyBreakpoint();
+
+// ═══════════════════════════════════════════════════════════════════
+// MICRO-INTERACTIONS & UX VALIDATIONS
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Ripple on all .btn elements ──────────────────────────────────────
+document.addEventListener('pointerdown', function(e) {
+  const btn = e.target.closest('.btn');
+  if (!btn || btn.disabled) return;
+  const r = document.createElement('span');
+  r.className = 'bp-ripple';
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 1.4;
+  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  btn.appendChild(r);
+  r.addEventListener('animationend', () => r.remove(), { once: true });
+}, { passive: true });
+
+// ── Button loading state helper ───────────────────────────────────────
+function btnLoading(btn, promise) {
+  if (!btn) return promise;
+  const label = btn.innerHTML;
+  btn.classList.add('loading');
+  btn.innerHTML = `<span class="btn-label" style="opacity:0">${label}</span>`;
+  return Promise.resolve(promise).finally(() => {
+    btn.classList.remove('loading');
+    btn.innerHTML = label;
+  });
+}
+
+// ── Chip toggle pop ───────────────────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  if (chip.classList.contains('active')) {
+    chip.style.animation = 'none';
+    void chip.offsetWidth;
+    chip.style.animation = '';
+  } else {
+    chip.style.animation = 'none';
+    void chip.offsetWidth;
+    chip.style.animation = 'bp-pop-in 200ms cubic-bezier(.34,1.56,.64,1) both';
+  }
+}, { passive: true });
+
+// ── Detail panel entrance animation ──────────────────────────────────
+const _origOpenDetail = typeof openDetail === 'function' ? openDetail : null;
+if (_origOpenDetail) {
+  window._bpOpenDetail = function(jobNum) {
+    _origOpenDetail(jobNum);
+    requestAnimationFrame(() => {
+      const panel = document.getElementById('page-detail');
+      if (panel) {
+        panel.classList.remove('bp-entering');
+        void panel.offsetWidth;
+        panel.classList.add('bp-entering');
+        panel.addEventListener('animationend', () => panel.classList.remove('bp-entering'), { once: true });
+      }
+    });
+  };
+}
+
+// ── Guard key pulse ring on met ───────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const key = e.target.closest('.guard-key');
+  if (!key) return;
+  if (key.classList.contains('met')) {
+    key.classList.remove('bp-just-met');
+    void key.offsetWidth;
+    key.classList.add('bp-just-met');
+    key.addEventListener('animationend', () => key.classList.remove('bp-just-met'), { once: true });
+  }
+}, { passive: true });
+
+// ── Line item row enter/exit animations ──────────────────────────────
+function animateRowEnter(row) {
+  if (!row) return;
+  row.classList.add('bp-row-entering');
+  row.addEventListener('animationend', () => row.classList.remove('bp-row-entering'), { once: true });
+}
+function animateRowRemove(row, cb) {
+  if (!row) return cb && cb();
+  row.classList.add('bp-row-removing');
+  row.addEventListener('transitionend', () => { row.remove(); cb && cb(); }, { once: true });
+  setTimeout(() => { row.remove(); cb && cb(); }, 200);
+}
+
+// ── Form validation helpers ───────────────────────────────────────────
+function validateField(input, rules = {}) {
+  const group = input.closest('.form-group') || input.closest('.de-form-group');
+  if (!group) return true;
+  clearFieldState(group);
+  let msg = '';
+  if (rules.required && !input.value.trim()) msg = 'This field is required';
+  else if (rules.minLength && input.value.length < rules.minLength) msg = `Minimum ${rules.minLength} characters`;
+  else if (rules.pattern && !rules.pattern.test(input.value)) msg = rules.patternMsg || 'Invalid format';
+  else if (rules.min !== undefined && parseFloat(input.value) < rules.min) msg = `Minimum value is ${rules.min}`;
+  if (msg) {
+    group.classList.add('bp-invalid');
+    const err = document.createElement('div');
+    err.className = 'bp-field-error';
+    err.innerHTML = `<span class="ms">error</span>${msg}`;
+    group.appendChild(err);
+    return false;
+  }
+  group.classList.add('bp-valid');
+  return true;
+}
+function clearFieldState(group) {
+  group.classList.remove('bp-invalid', 'bp-valid');
+  group.querySelectorAll('.bp-field-error, .bp-field-hint').forEach(el => el.remove());
+}
+function showFieldHint(input, hint) {
+  const group = input.closest('.form-group') || input.closest('.de-form-group');
+  if (!group) return;
+  clearFieldState(group);
+  const h = document.createElement('div');
+  h.className = 'bp-field-hint';
+  h.textContent = hint;
+  group.appendChild(h);
+}
+
+// Clear validation state on input
+document.addEventListener('input', function(e) {
+  const input = e.target;
+  if (!input.matches('input,select,textarea')) return;
+  const group = input.closest('.form-group') || input.closest('.de-form-group');
+  if (group && (group.classList.contains('bp-invalid') || group.classList.contains('bp-valid'))) {
+    clearFieldState(group);
+  }
+}, { passive: true });
+
+// ── New Job modal validation ──────────────────────────────────────────
+const _origSaveNewJob = typeof saveNewJob === 'function' ? saveNewJob : null;
+if (_origSaveNewJob) {
+  window.saveNewJob = function() {
+    const modal = document.getElementById('modal-new-job');
+    if (!modal) return _origSaveNewJob();
+    let valid = true;
+    modal.querySelectorAll('[data-required]').forEach(input => {
+      if (!validateField(input, { required: true })) valid = false;
+    });
+    if (!valid) return;
+    _origSaveNewJob();
+  };
+}
+
+// ── Scroll-to-top FAB ─────────────────────────────────────────────────
+(function() {
+  const fab = document.createElement('button');
+  fab.id = 'bp-scroll-top';
+  fab.setAttribute('data-tip', 'Back to top');
+  fab.innerHTML = '<span class="ms">arrow_upward</span>';
+  fab.setAttribute('aria-label', 'Scroll to top');
+  document.body.appendChild(fab);
+  fab.addEventListener('click', () => {
+    const scrollable = document.querySelector('.de-main') ||
+                       document.querySelector('.detail-main') ||
+                       document.querySelector('.content-area');
+    if (scrollable) scrollable.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  function checkScroll() {
+    const scrollable = document.querySelector('.de-main') ||
+                       document.querySelector('.detail-main') ||
+                       document.querySelector('.content-area');
+    if (scrollable && scrollable.scrollTop > 200) {
+      fab.classList.add('visible');
+    } else {
+      fab.classList.remove('visible');
+    }
+  }
+  document.addEventListener('scroll', checkScroll, { passive: true, capture: true });
+})();
+
+// ── Tooltip on data-tip elements ─────────────────────────────────────
+// CSS-only tooltips via [data-tip]::after — no JS needed.
+// Add data-tip to key buttons for handover reference:
+(function addTooltips() {
+  const tips = [
+    ['#btn-new-job', 'Create a new job'],
+    ['.toolbar .btn[onclick*="Filters"]', 'Toggle filter panel'],
+    ['.nav-collapse-btn', 'Collapse / expand nav'],
+    ['.de-add-row', 'Add line item'],
+    ['.de-pdf-prefs-btn', 'PDF layout preferences'],
+  ];
+  tips.forEach(([sel, tip]) => {
+    document.querySelectorAll(sel).forEach(el => {
+      if (!el.hasAttribute('data-tip')) el.setAttribute('data-tip', tip);
+    });
+  });
+})();
+
+// ── Keyboard shortcut: Escape closes editors/modals ──────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  // Close any open doc editor
+  const openEditor = document.querySelector('.doc-editor.open');
+  if (openEditor) {
+    const editorId = openEditor.id;
+    if (typeof closeEditor === 'function') closeEditor(editorId);
+    return;
+  }
+  // Close any open modal
+  const openModal = document.querySelector('.modal-overlay.open');
+  if (openModal) {
+    if (typeof closeModal === 'function') closeModal(openModal.id);
+    return;
+  }
+  // Close detail panel → back to list
+  const detail = document.getElementById('page-detail');
+  if (detail && detail.style.display !== 'none') {
+    if (typeof showList === 'function') showList();
+  }
+});
+
+// ── Keyboard shortcut: N = New Job (when on list page) ───────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'n' && e.key !== 'N') return;
+  if (e.target.matches('input,select,textarea,[contenteditable]')) return;
+  const list = document.getElementById('page-list');
+  if (list && list.style.display !== 'none') {
+    const newJobBtn = document.getElementById('btn-new-job');
+    if (newJobBtn) newJobBtn.click();
+  }
+});
+
+// ── Keyboard shortcut: / = Focus search ──────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key !== '/') return;
+  if (e.target.matches('input,select,textarea,[contenteditable]')) return;
+  e.preventDefault();
+  const search = document.querySelector('.toolbar-search input');
+  if (search) search.focus();
+});
+
+// ── Row flash on table re-render ─────────────────────────────────────
+(function() {
+  const tbody = document.getElementById('jobs-tbody');
+  if (!tbody) return;
+  const obs = new MutationObserver(() => {
+    tbody.querySelectorAll('tr').forEach((row, i) => {
+      row.style.animationDelay = `${i * 18}ms`;
+      row.classList.remove('bp-row-new');
+      void row.offsetWidth;
+      row.classList.add('bp-row-new');
+    });
+  });
+  obs.observe(tbody, { childList: true });
+})();
+
+// ── Inline number input: select all on focus ─────────────────────────
+document.addEventListener('focusin', function(e) {
+  if (e.target.matches('.de-line-table input[type="number"],.de-line-table input[type="text"]')) {
+    e.target.select();
+  }
+}, { passive: true });
+
+// ── Confirm destructive actions ───────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.btn.danger[data-confirm]');
+  if (!btn) return;
+  const msg = btn.getAttribute('data-confirm') || 'Are you sure?';
+  if (!confirm(msg)) e.stopImmediatePropagation();
+});
+
 </script>
 </body>
 </html>
