@@ -148,10 +148,10 @@ tbody tr.bp-row-new {
               opacity 200ms ease;
   overflow: hidden;
 }
-.de-section-hdr .ms.chevron {
+.de-section-hdr .hi.chevron {
   transition: transform var(--t-slow);
 }
-.de-section-hdr.collapsed .ms.chevron {
+.de-section-hdr.collapsed .hi.chevron {
   transform: rotate(-90deg);
 }
 
@@ -204,7 +204,7 @@ tbody tr.bp-row-new {
   gap: 3px;
   animation: bp-slide-down 140ms ease both;
 }
-.bp-field-error .ms { font-size: 12px; }
+.bp-field-error .hi { width:12px;height:12px; }
 .bp-field-hint {
   font-size: 10.5px;
   color: var(--muted-fg);
@@ -249,8 +249,8 @@ tbody tr.bp-row-new {
   animation: bp-fade-up 200ms ease both;
   transition: opacity 300ms ease, transform 300ms ease;
 }
-.toast .ms { transition: transform var(--t-spring); }
-.toast:hover .ms { transform: scale(1.15); }
+.toast .hi { transition: transform var(--t-spring); }
+.toast:hover .hi { transform: scale(1.15); }
 
 /* ── Sidebar drawer slide ───────────────────────────────────────────── */
 .drawer-panel {
@@ -311,8 +311,8 @@ input[type="date"]:hover:not(:focus) {
               transform var(--t-spring);
 }
 .nav-collapse-btn:hover { transform: translateY(-50%) scale(1.12); }
-.nav.collapsed .nav-collapse-btn .ms { transform: rotate(180deg); }
-.nav-collapse-btn .ms { transition: transform var(--t-slow); }
+.nav.collapsed .nav-collapse-btn .hi { transform: rotate(180deg); }
+.nav-collapse-btn .hi { transition: transform var(--t-slow); }
 
 /* ── Scroll-to-top FAB ──────────────────────────────────────────────── */
 #bp-scroll-top {
