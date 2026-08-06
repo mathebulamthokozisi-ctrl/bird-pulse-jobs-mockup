@@ -219,7 +219,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 }
 /* Sizes */
 .btn.sm{height:27px;font-size:11px;padding:0 10px;border-radius:4px}
-.btn.xs{height:22px;font-size:10.5px;padding:0 8px;border-radius:4px;border-width:1px}
+.btn.xs{height:22px;font-size:10.5px;padding:0 8px;border-radius:6px;border-width:1px}
 .btn .hi{width:14px;height:14px}
 .view-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface-2)}
 .view-toggle .btn{border:none;border-radius:0;height:30px;background:transparent;color:var(--muted-fg)}
@@ -246,7 +246,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 .filter-sidebar.hidden{display:none}
 .filter-section{padding:9px 12px;border-bottom:1px solid var(--border)}
 .filter-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-400);margin-bottom:6px}
-.filter-item{display:flex;align-items:center;gap:7px;padding:2.5px 4px;border-radius:4px;cursor:pointer;font-size:11.5px;color:var(--fg-2);transition:background var(--t-fast),color var(--t-fast)}
+.filter-item{display:flex;align-items:center;gap:7px;padding:2.5px 4px;border-radius:6px;cursor:pointer;font-size:11.5px;color:var(--fg-2);transition:background var(--t-fast),color var(--t-fast)}
 .filter-item:hover{background:var(--indigo-50);color:var(--indigo-700)}
 .filter-item input[type=checkbox]{accent-color:var(--indigo-600);width:13px;height:13px;cursor:pointer}
 .filter-toggle{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:var(--radius);cursor:pointer;font-size:11.5px;color:var(--fg-2);margin:1px 0;transition:background var(--t-smooth),border-color var(--t-smooth),color var(--t-smooth),transform var(--t-spring);background:var(--white);border:1px solid var(--border)}
@@ -287,7 +287,7 @@ td:first-child{padding:8px 8px}
 .tag{
   display:inline-flex;align-items:center;gap:3px;
   padding:2px 7px;
-  border-radius:4px;
+  border-radius:6px;
   font-size:9px;font-weight:700;
   text-transform:uppercase;letter-spacing:.06em;
   white-space:nowrap;flex-shrink:0;line-height:1.5;
@@ -387,7 +387,7 @@ td:first-child{padding:8px 8px}
   position:relative;
   height:36px;
   background:#eef0f3;
-  border-radius:4px;
+  border-radius:6px;
   overflow:hidden;
 }
 /* Filled gradient fill — width set inline by JS via --pipe-fill */
@@ -396,7 +396,7 @@ td:first-child{padding:8px 8px}
   inset:0;
   width:var(--pipe-fill,20%);
   background:linear-gradient(90deg,#007A7A 0%,#00B4B4 50%,#00CED1 100%);
-  border-radius:4px;
+  border-radius:6px;
   transition:width .5s cubic-bezier(.4,0,.2,1);
 }
 /* Declined state fill */
@@ -411,7 +411,7 @@ td:first-child{padding:8px 8px}
   background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.25) 50%,transparent 100%);
   background-size:200% 100%;
   animation:pipe-shimmer 2.2s linear infinite;
-  border-radius:4px;
+  border-radius:6px;
 }
 @keyframes pipe-shimmer{
   0%{background-position:200% 0}
@@ -687,7 +687,7 @@ td:first-child{padding:8px 8px}
 .doc-tag{
   display:inline-flex;align-items:center;gap:3px;
   padding:2px 7px;
-  border-radius:4px;
+  border-radius:6px;
   font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   border:none;pointer-events:none;
   line-height:1.5;white-space:nowrap;
@@ -696,7 +696,7 @@ td:first-child{padding:8px 8px}
 .doc-auto{
   display:inline-flex;align-items:center;gap:3px;
   padding:2px 7px;
-  border-radius:4px;
+  border-radius:6px;
   font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   background:var(--indigo-50);color:var(--indigo-700);
   border:none;pointer-events:none;
@@ -707,7 +707,7 @@ td:first-child{padding:8px 8px}
 .doc-action{
   display:inline-flex;align-items:center;gap:4px;
   padding:0 10px;height:27px;
-  border-radius:4px;
+  border-radius:6px;
   border:1.5px solid var(--border-strong);
   background:var(--white);
   color:var(--fg-2);
@@ -831,11 +831,11 @@ td:first-child{padding:8px 8px}
 .comm-reply-box:focus-within{border-color:var(--indigo-400);box-shadow:0 0 0 2px rgba(99,102,241,.1)}
 /* Rich compose toolbar */
 .comm-toolbar{display:flex;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid var(--border);background:#fafafa;flex-wrap:wrap}
-.comm-tb-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:4px;border:none;background:transparent;cursor:pointer;color:var(--fg-2);font-size:13px;font-weight:700;transition:background .1s}
+.comm-tb-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;border:none;background:transparent;cursor:pointer;color:var(--fg-2);font-size:13px;font-weight:700;transition:background .1s}
 .comm-tb-btn:hover{background:var(--indigo-50);color:var(--indigo-700)}
 .comm-tb-btn.hi{width:16px;height:16px;font-weight:300}
 .comm-tb-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
-.comm-tb-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:2px 6px;margin-left:auto}
+.comm-tb-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:6px;padding:2px 6px;margin-left:auto}
 .comm-tb-badge .hi{width:12px;height:12px}
 /* Editable compose area */
 .comm-compose{width:100%;border:none;outline:none;padding:10px 12px;font-size:12px;font-family:inherit;min-height:72px;color:var(--fg);line-height:1.6}
@@ -848,7 +848,7 @@ td:first-child{padding:8px 8px}
 .comm-attach-chip .rm{font-size:12px;color:var(--muted-fg);cursor:pointer;margin-left:2px}
 .comm-attach-chip .rm:hover{color:var(--red-500)}
 .comm-reply-footer{background:#fafafa;border-top:1px solid var(--border);padding:6px 10px;display:flex;align-items:center;gap:6px}
-.comm-reply-footer .attach-label{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-fg);cursor:pointer;padding:4px 6px;border-radius:4px;transition:background .1s}
+.comm-reply-footer .attach-label{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-fg);cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .1s}
 .comm-reply-footer .attach-label:hover{background:var(--indigo-50);color:var(--indigo-600)}
 .comm-reply-footer .spacer{flex:1}
 
@@ -1019,7 +1019,7 @@ td:first-child{padding:8px 8px}
 .cost-entry-table{width:100%;border-collapse:collapse;font-size:12px}
 .cost-entry-table th{padding:6px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-fg);border-bottom:1px solid var(--border);text-align:left}
 .cost-entry-table td{padding:6px 8px;border-bottom:1px solid var(--border)}
-.cost-entry-table td input,.cost-entry-table td select{border:1px solid var(--border);border-radius:4px;padding:4px 7px;font-size:11.5px;font-family:inherit;color:var(--fg);outline:none;width:100%}
+.cost-entry-table td input,.cost-entry-table td select{border:1px solid var(--border);border-radius:6px;padding:4px 7px;font-size:11.5px;font-family:inherit;color:var(--fg);outline:none;width:100%}
 .cost-entry-table td input:focus,.cost-entry-table td select:focus{border-color:var(--indigo-400)}
 
 /* Confirm dialog */
@@ -3490,7 +3490,7 @@ td:first-child{padding:8px 8px}
 <!-- Communication -->
 <div class="tab-content" id="tab-communication">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-<div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads  <span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:1px 6px"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M9.8132 15.9038L9 18.75L8.1868 15.9038C7.75968 14.4089 6.59112 13.2403 5.09619 12.8132L2.25 12L5.09619 11.1868C6.59113 10.7597 7.75968 9.59112 8.1868 8.09619L9 5.25L9.8132 8.09619C10.2403 9.59113 11.4089 10.7597 12.9038 11.1868L15.75 12L12.9038 12.8132C11.4089 13.2403 10.2403 14.4089 9.8132 15.9038Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M18.2589 8.71454L18 9.75L17.7411 8.71454C17.4388 7.50533 16.4947 6.56117 15.2855 6.25887L14.25 6L15.2855 5.74113C16.4947 5.43883 17.4388 4.49467 17.7411 3.28546L18 2.25L18.2589 3.28546C18.5612 4.49467 19.5053 5.43883 20.7145 5.74113L21.75 6L20.7145 6.25887C19.5053 6.56117 18.5612 7.50533 18.2589 8.71454Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M16.8942 20.5673L16.5 21.75L16.1058 20.5673C15.8818 19.8954 15.3546 19.3682 14.6827 19.1442L13.5 18.75L14.6827 18.3558C15.3546 18.1318 15.8818 17.6046 16.1058 16.9327L16.5 15.75L16.8942 16.9327C17.1182 17.6046 17.6454 18.1318 18.3173 18.3558L19.5 18.75L18.3173 19.1442C17.6454 19.3682 17.1182 19.8954 16.8942 20.5673Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>Rich HTML · Images · Attachments · Client Portal parity</span></div>
+<div style="font-size:12px;color:var(--muted-fg)">Client portal queries and email threads  <span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:6px;padding:1px 6px"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M9.8132 15.9038L9 18.75L8.1868 15.9038C7.75968 14.4089 6.59112 13.2403 5.09619 12.8132L2.25 12L5.09619 11.1868C6.59113 10.7597 7.75968 9.59112 8.1868 8.09619L9 5.25L9.8132 8.09619C10.2403 9.59113 11.4089 10.7597 12.9038 11.1868L15.75 12L12.9038 12.8132C11.4089 13.2403 10.2403 14.4089 9.8132 15.9038Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M18.2589 8.71454L18 9.75L17.7411 8.71454C17.4388 7.50533 16.4947 6.56117 15.2855 6.25887L14.25 6L15.2855 5.74113C16.4947 5.43883 17.4388 4.49467 17.7411 3.28546L18 2.25L18.2589 3.28546C18.5612 4.49467 19.5053 5.43883 20.7145 5.74113L21.75 6L20.7145 6.25887C19.5053 6.56117 18.5612 7.50533 18.2589 8.71454Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M16.8942 20.5673L16.5 21.75L16.1058 20.5673C15.8818 19.8954 15.3546 19.3682 14.6827 19.1442L13.5 18.75L14.6827 18.3558C15.3546 18.1318 15.8818 17.6046 16.1058 16.9327L16.5 15.75L16.8942 16.9327C17.1182 17.6046 17.6454 18.1318 18.3173 18.3558L19.5 18.75L18.3173 19.1442C17.6454 19.3682 17.1182 19.8954 16.8942 20.5673Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>Rich HTML · Images · Attachments · Client Portal parity</span></div>
 <button class="btn primary sm" onclick="openNewCommModal()"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M12 4.5V19.5M19.5 12L4.5 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>New Message</button>
 </div>
 <div id="comm-threads"></div>
@@ -4226,7 +4226,7 @@ td:first-child{padding:8px 8px}
 <div class="de-tab-pane" id="quo-tab-communication">
 <div style="padding:16px 18px 18px">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap">
-<div style="font-size:12px;color:var(--muted-fg)">Client portal queries and quote-specific email threads  <span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:4px;padding:1px 6px"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M9.8132 15.9038L9 18.75L8.1868 15.9038C7.75968 14.4089 6.59112 13.2403 5.09619 12.8132L2.25 12L5.09619 11.1868C6.59113 10.7597 7.75968 9.59112 8.1868 8.09619L9 5.25L9.8132 8.09619C10.2403 9.59113 11.4089 10.7597 12.9038 11.1868L15.75 12L12.9038 12.8132C11.4089 13.2403 10.2403 14.4089 9.8132 15.9038Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M18.2589 8.71454L18 9.75L17.7411 8.71454C17.4388 7.50533 16.4947 6.56117 15.2855 6.25887L14.25 6L15.2855 5.74113C16.4947 5.43883 17.4388 4.49467 17.7411 3.28546L18 2.25L18.2589 3.28546C18.5612 4.49467 19.5053 5.43883 20.7145 5.74113L21.75 6L20.7145 6.25887C19.5053 6.56117 18.5612 7.50533 18.2589 8.71454Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M16.8942 20.5673L16.5 21.75L16.1058 20.5673C15.8818 19.8954 15.3546 19.3682 14.6827 19.1442L13.5 18.75L14.6827 18.3558C15.3546 18.1318 15.8818 17.6046 16.1058 16.9327L16.5 15.75L16.8942 16.9327C17.1182 17.6046 17.6454 18.1318 18.3173 18.3558L19.5 18.75L18.3173 19.1442C17.6454 19.3682 17.1182 19.8954 16.8942 20.5673Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>Rich HTML · Images · Attachments · Client Portal parity</span></div>
+<div style="font-size:12px;color:var(--muted-fg)">Client portal queries and quote-specific email threads  <span style="display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--indigo-600);background:var(--indigo-50);border:1px solid var(--indigo-100);border-radius:6px;padding:1px 6px"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M9.8132 15.9038L9 18.75L8.1868 15.9038C7.75968 14.4089 6.59112 13.2403 5.09619 12.8132L2.25 12L5.09619 11.1868C6.59113 10.7597 7.75968 9.59112 8.1868 8.09619L9 5.25L9.8132 8.09619C10.2403 9.59113 11.4089 10.7597 12.9038 11.1868L15.75 12L12.9038 12.8132C11.4089 13.2403 10.2403 14.4089 9.8132 15.9038Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M18.2589 8.71454L18 9.75L17.7411 8.71454C17.4388 7.50533 16.4947 6.56117 15.2855 6.25887L14.25 6L15.2855 5.74113C16.4947 5.43883 17.4388 4.49467 17.7411 3.28546L18 2.25L18.2589 3.28546C18.5612 4.49467 19.5053 5.43883 20.7145 5.74113L21.75 6L20.7145 6.25887C19.5053 6.56117 18.5612 7.50533 18.2589 8.71454Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path> <path d="M16.8942 20.5673L16.5 21.75L16.1058 20.5673C15.8818 19.8954 15.3546 19.3682 14.6827 19.1442L13.5 18.75L14.6827 18.3558C15.3546 18.1318 15.8818 17.6046 16.1058 16.9327L16.5 15.75L16.8942 16.9327C17.1182 17.6046 17.6454 18.1318 18.3173 18.3558L19.5 18.75L18.3173 19.1442C17.6454 19.3682 17.1182 19.8954 16.8942 20.5673Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>Rich HTML · Images · Attachments · Client Portal parity</span></div>
 <button class="btn primary sm" onclick="openNewCommModal()"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M12 4.5V19.5M19.5 12L4.5 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>New Message</button>
 </div>
 <div id="quote-comm-threads"></div>
@@ -7670,7 +7670,7 @@ function addJcPhoto(phase,slot){
   const colors=['#ddd6fe','#bfdbfe','#b2f5f0','#fde68a','#fecaca','#fed7aa'];
   const c=colors[photoCount%colors.length];
   const label=phase==='before'?'Before':'After';
-  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">${label}</span><span style="font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</span></div>`;
+  slot.innerHTML=`<div style="width:100%;height:100%;background:${c};border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted-fg)">${label}</span><span style="font-size:10px;color:var(--muted-fg)">Photo ${photoCount+1}</span></div>`;
   slot.onclick=null;
   photoCount++;
   if(phase==='before'){
