@@ -544,9 +544,9 @@ td:first-child{padding:8px 8px}
   line-height:1;
 }
 /* Right zone: job execution */
-@keyframes exec-pulse{
-  0%,100%{background:linear-gradient(90deg,#fef3c7 0%,#fef9e7 100%);border-top-color:#fcd34d;border-bottom-color:#fcd34d;}
-  50%{background:linear-gradient(90deg,#fde68a 0%,#fef3c7 100%);border-top-color:#f59e0b;border-bottom-color:#f59e0b;}
+@keyframes exec-shimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
 }
 .exec-zone{
   display:flex;
@@ -554,12 +554,13 @@ td:first-child{padding:8px 8px}
   gap:6px;
   padding:6px 14px;
   flex-shrink:0;
-  background:linear-gradient(90deg,#fef3c7 0%,#fef9e7 100%);
+  background:linear-gradient(90deg,#fef3c7 0%,rgba(255,255,255,.55) 50%,#fef3c7 100%);
+  background-size:200% 100%;
   border-left:1px solid var(--border);
   border-top:1px solid #fcd34d;
   border-bottom:1px solid #fcd34d;
   position:relative;
-  animation:exec-pulse 2.4s ease-in-out infinite;
+  animation:exec-shimmer 3s linear infinite;
 }
 .exec-label{
   font-size:9px;
