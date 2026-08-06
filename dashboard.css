@@ -6,12 +6,13 @@
 
 /* ── Page shell — no scroll, all widgets fit in viewport ───────────────── */
 #page-dashboard {
-  flex: 1;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   background: var(--surface-2);
   display: none;
   flex-direction: column;
-  height: 100%;
+  z-index: 10;
 }
 
 /* ── Date filter bar ────────────────────────────────────────────────────── */
