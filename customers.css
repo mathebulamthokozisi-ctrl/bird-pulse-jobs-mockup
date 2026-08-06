@@ -716,7 +716,7 @@
 .cdp-ov-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 .cdp-ov-kpi {
   background: var(--white);
