@@ -27,3 +27,13 @@ All core features working. Latest session changes:
 
 ## Server
 `python3 -m http.server 8080` from `/home/ubuntu/job-mockup/`
+
+---
+## Session: 6 Aug 2026 (Customers Module)
+
+### New: Customers Module
+- **Customers list page** — KPI strip, sortable table (9 columns), search, status filter chips, date filter, export CSV, New Customer form drawer, quick drawer on row click
+- **Customer detail page** — 9 tabs: Overview, Sites, Contacts, Portfolio, Billing, Rate Card, Income, Comms, HSE
+- **Health score badge** — colour-coded by risk level (low/medium/high/critical) with breakdown bars
+- **Nav wired** — Customers nav link routes to page-customers
+- **customers.css** — new stylesheet for the Customers module
