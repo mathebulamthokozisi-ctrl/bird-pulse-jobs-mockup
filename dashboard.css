@@ -332,23 +332,28 @@
 .db-pipeline {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 0;
 }
 .db-pipeline-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
 }
 .db-pipeline-label {
-  font-size: 10.5px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--fg-2);
-  width: 88px;
+  width: 96px;
   flex-shrink: 0;
 }
 .db-pipeline-bar-wrap {
   flex: 1;
-  height: 20px;
+  height: 26px;
   background: var(--surface-2);
   border-radius: var(--radius);
   overflow: visible;
@@ -360,28 +365,28 @@
   transition: width 1s cubic-bezier(.22,.68,0,1.2);
   display: flex;
   align-items: center;
-  padding-left: 8px;
+  padding-left: 10px;
   overflow: hidden;
   min-width: 0;
 }
 .db-pipeline-bar span {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--white);
   white-space: nowrap;
 }
 .db-pipeline-count {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--fg);
-  width: 28px;
+  width: 24px;
   text-align: right;
   flex-shrink: 0;
 }
 .db-pipeline-value {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--slate-400);
-  width: 64px;
+  width: 52px;
   text-align: right;
   flex-shrink: 0;
 }
@@ -457,8 +462,15 @@
   font-size: 11px;
   font-weight: 700;
   color: var(--fg);
-  width: 68px;
+  width: 56px;
   text-align: right;
+  flex-shrink: 0;
+}
+/* Profit badge in leaderboard — fixed width so values stay aligned */
+.db-lb-row .badge {
+  width: 60px;
+  text-align: right;
+  justify-content: flex-end;
   flex-shrink: 0;
 }
 /* Leaderboard profit badges use kit .badge classes in HTML */
