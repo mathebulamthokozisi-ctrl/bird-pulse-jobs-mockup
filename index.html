@@ -2429,6 +2429,7 @@ td:first-child{padding:8px 8px}
 
 </style>
 <link rel="stylesheet" href="responsive.css">
+  <link rel="stylesheet" href="dashboard.css">
 <link rel="stylesheet" href="micro.css">
 </head>
 <body>
@@ -2624,17 +2625,17 @@ td:first-child{padding:8px 8px}
   <div class="nav-scroll">
 
     <!-- Dashboard (top-level) -->
-    <a class="nav-item active" id="nav-jobs" href="#" onclick="showList()">
+    <a class="nav-item active" id="nav-dashboard" href="#" onclick="showDashboard()">
       <svg class="hi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 12L11.2045 3.04549C11.6438 2.60615 12.3562 2.60615 12.7955 3.04549L21.75 12M4.5 9.75V19.875C4.5 20.4963 5.00368 21 5.625 21H9.75V16.125C9.75 15.5037 10.2537 15 10.875 15H13.125C13.7463 15 14.25 15.5037 14.25 16.125V21H18.375C18.9963 21 19.5 20.4963 19.5 19.875V9.75M8.25 21H16.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="nav-item-label">Dashboard</span>
+    </a>
+    <a class="nav-item" id="nav-jobs" href="#" onclick="showList()">
+      <svg class="hi" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/></svg>
+      <span class="nav-item-label">Jobs</span>
     </a>
 
     <!-- OPERATIONS -->
     <div class="nav-section">Operations</div>
-    <a class="nav-item" href="#">
-      <svg class="hi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 14.1499V18.4C20.25 19.4944 19.4631 20.4359 18.3782 20.58C16.2915 20.857 14.1624 21 12 21C9.83757 21 7.70854 20.857 5.62185 20.58C4.5369 20.4359 3.75 19.4944 3.75 18.4V14.1499M20.25 14.1499C20.7219 13.7476 21 13.1389 21 12.4889V8.70569C21 7.62475 20.2321 6.69082 19.1631 6.53086C18.0377 6.36247 16.8995 6.23315 15.75 6.14432M20.25 14.1499C20.0564 14.315 19.8302 14.4453 19.5771 14.5294C17.1953 15.3212 14.6477 15.75 12 15.75C9.35229 15.75 6.80469 15.3212 4.42289 14.5294C4.16984 14.4452 3.94361 14.3149 3.75 14.1499M3.75 14.1499C3.27808 13.7476 3 13.1389 3 12.4889V8.70569C3 7.62475 3.7679 6.69082 4.83694 6.53086C5.96233 6.36247 7.10049 6.23315 8.25 6.14432M15.75 6.14432V5.25C15.75 4.00736 14.7426 3 13.5 3H10.5C9.25736 3 8.25 4.00736 8.25 5.25V6.14432M15.75 6.14432C14.5126 6.0487 13.262 6 12 6C10.738 6 9.48744 6.0487 8.25 6.14432M12 12.75H12.0075V12.7575H12V12.75Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="nav-item-label">Jobs</span>
-    </a>
     <a class="nav-item" href="#">
       <svg class="hi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.7124 4.3299C17.2999 4.69153 17.8548 5.12691 18.364 5.63604C18.8731 6.14517 19.3085 6.70012 19.6701 7.28763M16.7124 4.3299L13.2636 8.46838M16.7124 4.3299C13.8316 2.5567 10.1684 2.5567 7.28763 4.3299M19.6701 7.28763L15.5316 10.7364M19.6701 7.28763C21.4433 10.1684 21.4433 13.8316 19.6701 16.7124M15.5316 10.7364C15.3507 10.2297 15.0574 9.75408 14.6517 9.34835C14.2459 8.94262 13.7703 8.6493 13.2636 8.46838M15.5316 10.7364C15.8228 11.5519 15.8228 12.4481 15.5316 13.2636M13.2636 8.46838C12.4481 8.17721 11.5519 8.17721 10.7364 8.46838M15.5316 13.2636C15.3507 13.7703 15.0574 14.2459 14.6517 14.6517C14.2459 15.0574 13.7703 15.3507 13.2636 15.5316M15.5316 13.2636L19.6701 16.7124M19.6701 16.7124C19.3085 17.2999 18.8731 17.8548 18.364 18.364C17.8548 18.8731 17.2999 19.3085 16.7124 19.6701M16.7124 19.6701L13.2636 15.5316M16.7124 19.6701C13.8316 21.4433 10.1684 21.4433 7.28763 19.6701M13.2636 15.5316C12.4481 15.8228 11.5519 15.8228 10.7364 15.5316M10.7364 15.5316C10.2297 15.3507 9.75408 15.0574 9.34835 14.6517C8.94262 14.2459 8.6493 13.7703 8.46838 13.2636M10.7364 15.5316L7.28763 19.6701M7.28763 19.6701C6.70012 19.3085 6.14517 18.8731 5.63604 18.364C5.12691 17.8548 4.69153 17.2999 4.3299 16.7124M4.3299 16.7124L8.46838 13.2636M4.3299 16.7124C2.5567 13.8316 2.5567 10.1684 4.3299 7.28763M8.46838 13.2636C8.17721 12.4481 8.17721 11.5519 8.46838 10.7364M8.46838 10.7364C8.6493 10.2297 8.94262 9.75408 9.34835 9.34835C9.75408 8.94262 10.2297 8.6493 10.7364 8.46838M8.46838 10.7364L4.3299 7.28763M10.7364 8.46838L7.28763 4.3299M7.28763 4.3299C6.70012 4.69153 6.14517 5.12691 5.63604 5.63604C5.12691 6.14517 4.69153 6.70013 4.3299 7.28763" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="nav-item-label">Helpdesk</span>
@@ -2759,6 +2760,282 @@ td:first-child{padding:8px 8px}
 <!-- ═══════════════════════════════════════════════════════════
      PAGE: JOBS LIST
 ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DASHBOARD PAGE  (inject before #page-list)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page-dashboard" style="display:none;flex-direction:column;">
+
+  <!-- Greeting -->
+  <div class="db-greeting">
+    <div class="db-greeting-avatar">JS</div>
+    <div class="db-greeting-text">
+      <h2 id="db-greeting-msg">Good morning, John</h2>
+      <p id="db-greeting-sub">Here's what's happening at Bird Pulse today — 12 Jul 2026</p>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="db-filterbar" style="margin-top:16px;">
+    <span class="db-filterbar-title">Overview</span>
+    <div class="db-date-chip active" onclick="dbSetPreset('month',this)">
+      <svg class="hi" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+      This Month
+    </div>
+    <div class="db-date-chip" onclick="dbSetPreset('quarter',this)">
+      <svg class="hi" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+      This Quarter
+    </div>
+    <div class="db-date-chip" onclick="dbSetPreset('year',this)">
+      <svg class="hi" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+      This Year
+    </div>
+    <div class="db-filterbar-spacer"></div>
+    <div class="db-compare-btn">
+      <svg class="hi" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+      Compare Period
+    </div>
+  </div>
+
+  <!-- Alert banner -->
+  <div class="db-alert-banner" id="db-alert-banner">
+    <div class="db-alert-item">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+      <strong>3 overdue invoices</strong> — R 142,500 outstanding
+    </div>
+    <div class="db-alert-sep"></div>
+    <div class="db-alert-item">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+      <strong>2 HSE certs expiring</strong> in 14 days
+    </div>
+    <div class="db-alert-sep"></div>
+    <div class="db-alert-item">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>
+      <strong>4 unlinked POs</strong> awaiting allocation
+    </div>
+    <div class="db-alert-dismiss" onclick="document.getElementById('db-alert-banner').style.display='none'">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </div>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="db-kpi-strip">
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+        Net Profit
+      </div>
+      <div class="db-kpi-value positive" id="db-kpi-net-profit">R 0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend up" id="db-kpi-net-profit-trend">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
+          +18%
+        </span>
+        <svg class="db-kpi-sparkline" id="db-spark-net-profit" viewBox="0 0 64 24" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+        Invoiced
+      </div>
+      <div class="db-kpi-value" id="db-kpi-invoiced">R 0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend up">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
+          +12%
+        </span>
+        <svg class="db-kpi-sparkline" id="db-spark-invoiced" viewBox="0 0 64 24" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>
+        Job Costs
+      </div>
+      <div class="db-kpi-value" id="db-kpi-job-costs">R 0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend down">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"/></svg>
+          -5%
+        </span>
+        <svg class="db-kpi-sparkline" id="db-spark-job-costs" viewBox="0 0 64 24" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/></svg>
+        Overheads
+      </div>
+      <div class="db-kpi-value" id="db-kpi-overheads">R 0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend neutral">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+          +2%
+        </span>
+        <svg class="db-kpi-sparkline" id="db-spark-overheads" viewBox="0 0 64 24" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Job Profit
+      </div>
+      <div class="db-kpi-value positive" id="db-kpi-job-profit">R 0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend up">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
+          +22%
+        </span>
+        <svg class="db-kpi-sparkline" id="db-spark-job-profit" viewBox="0 0 64 24" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+    <div class="db-kpi-card">
+      <div class="db-kpi-label">
+        <svg class="hi" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/></svg>
+        Active Jobs
+      </div>
+      <div class="db-kpi-value" id="db-kpi-active-jobs">0</div>
+      <div class="db-kpi-footer">
+        <span class="db-kpi-trend up">
+          <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
+          +3 new
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="db-quick-actions" style="padding-top:16px;">
+    <a class="db-qa-btn" onclick="openNewJobModal()">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
+      New Job
+    </a>
+    <a class="db-qa-btn" onclick="showList()">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/></svg>
+      View All Jobs
+    </a>
+    <a class="db-qa-btn">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+      New Quote
+    </a>
+    <a class="db-qa-btn">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+      New Invoice
+    </a>
+    <a class="db-qa-btn">
+      <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      Add Customer
+    </a>
+  </div>
+
+  <!-- Widget grid -->
+  <div class="db-grid">
+
+    <!-- 1. Profit Bridge -->
+    <div class="db-widget">
+      <div class="db-widget-header">
+        <div class="db-widget-icon indigo">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+        </div>
+        <span class="db-widget-title">Profit Bridge</span>
+        <span class="db-widget-sub">Jul 2026</span>
+      </div>
+      <div class="db-widget-body">
+        <div class="db-waterfall" id="db-waterfall"></div>
+      </div>
+    </div>
+
+    <!-- 2. Monthly Revenue Trend -->
+    <div class="db-widget span-2">
+      <div class="db-widget-header">
+        <div class="db-widget-icon green">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+        </div>
+        <span class="db-widget-title">Revenue & Profit Trend</span>
+        <span class="db-widget-sub">Last 6 months</span>
+      </div>
+      <div class="db-widget-body">
+        <svg class="db-trend-chart" id="db-trend-chart" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
+        <div class="db-trend-legend">
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#4f46e5"></div>Invoiced</div>
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#16a34a"></div>Net Profit</div>
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#f97316"></div>Job Costs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Job Pipeline -->
+    <div class="db-widget span-2">
+      <div class="db-widget-header">
+        <div class="db-widget-icon amber">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
+        </div>
+        <span class="db-widget-title">Job Pipeline</span>
+        <span class="db-widget-sub">24 active jobs</span>
+      </div>
+      <div class="db-widget-body">
+        <div class="db-pipeline" id="db-pipeline"></div>
+      </div>
+    </div>
+
+    <!-- 4. Job Distribution Donut -->
+    <div class="db-widget">
+      <div class="db-widget-header">
+        <div class="db-widget-icon indigo">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"/><path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"/></svg>
+        </div>
+        <span class="db-widget-title">Job Profitability</span>
+        <span class="db-widget-sub">Distribution</span>
+      </div>
+      <div class="db-widget-body">
+        <div class="db-donut-wrap">
+          <svg class="db-donut-svg" id="db-donut" viewBox="0 0 120 120"></svg>
+          <div class="db-donut-legend" id="db-donut-legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Client Leaderboard -->
+    <div class="db-widget span-2">
+      <div class="db-widget-header">
+        <div class="db-widget-icon amber">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg>
+        </div>
+        <span class="db-widget-title">Client Leaderboard</span>
+        <span class="db-widget-sub">By revenue</span>
+      </div>
+      <div class="db-widget-body">
+        <div class="db-leaderboard" id="db-leaderboard"></div>
+      </div>
+    </div>
+
+    <!-- 6. HSE Compliance -->
+    <div class="db-widget">
+      <div class="db-widget-header">
+        <div class="db-widget-icon green">
+          <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        </div>
+        <span class="db-widget-title">HSE Compliance</span>
+        <span class="db-widget-sub">Vault health</span>
+      </div>
+      <div class="db-widget-body">
+        <div class="db-hse-grid" id="db-hse-grid"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Activity Feed -->
+  <div class="db-activity-section">
+    <div class="db-activity-header">
+      <span class="db-activity-title">Recent Activity</span>
+      <span class="db-activity-badge" id="db-activity-count">12 events</span>
+    </div>
+    <div class="db-activity-feed" id="db-activity-feed"></div>
+  </div>
+
+</div>
+
 <div id="page-list">
 
   <!-- Toolbar -->
@@ -5593,6 +5870,9 @@ function hiIcon(name, size) {
 // LIST PAGE
 // ═══════════════════════════════════════════════════════════
 function showList(){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const nj=document.getElementById('nav-jobs'); if(nj) nj.classList.add('active');
+  const dash=document.getElementById('page-dashboard'); if(dash) dash.style.display='none';
   const listEl=document.getElementById('page-list');
   const detailEl=document.getElementById('page-detail');
   detailEl.style.transition='opacity .12s ease';
@@ -8206,6 +8486,494 @@ document.addEventListener('click', function(e) {
   const msg = btn.getAttribute('data-confirm') || 'Are you sure?';
   if (!confirm(msg)) e.stopImmediatePropagation();
 });
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD JS — Bird Pulse landing page
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Sample data (mirrors real DB structure from useDashboardData.ts) ──────
+const DB_DATA = {
+  profitBridge: {
+    invoiced: 748200,
+    jobCosts: 498400,
+    jobProfit: 249800,
+    overheads: 82600,
+    fleetCosts: 14200,
+    adhoc: 18400,
+    netProfit: 134600
+  },
+  monthlyTrend: [
+    { month: 'Feb', invoiced: 520000, jobCosts: 348000, netProfit: 82000 },
+    { month: 'Mar', invoiced: 612000, jobCosts: 398000, netProfit: 98000 },
+    { month: 'Apr', invoiced: 580000, jobCosts: 372000, netProfit: 88000 },
+    { month: 'May', invoiced: 695000, jobCosts: 445000, netProfit: 112000 },
+    { month: 'Jun', invoiced: 710000, jobCosts: 462000, netProfit: 118000 },
+    { month: 'Jul', invoiced: 748200, jobCosts: 498400, netProfit: 134600 }
+  ],
+  pipeline: [
+    { label: 'Job Booked',    count: 4,  value: 142000,  color: '#6366f1', pct: 100 },
+    { label: 'Estimated',     count: 8,  value: 298000,  color: '#8b5cf6', pct: 88 },
+    { label: 'Quote Sent',    count: 6,  value: 245000,  color: '#a78bfa', pct: 72 },
+    { label: 'Quote Accepted',count: 5,  value: 198000,  color: '#4f46e5', pct: 60 },
+    { label: 'In Progress',   count: 7,  value: 312000,  color: '#3b82f6', pct: 52 },
+    { label: 'Invoiced',      count: 3,  value: 128000,  color: '#0ea5e9', pct: 38 },
+    { label: 'Paid',          count: 9,  value: 384000,  color: '#16a34a', pct: 28 }
+  ],
+  leaderboard: [
+    { name: 'Acme Corp',        initials: 'AC', invoiced: 248500, profit: 68200 },
+    { name: 'Globex Ltd',       initials: 'GL', invoiced: 198200, profit: 52400 },
+    { name: 'Wayne Enterprises',initials: 'WE', invoiced: 155800, profit: 38600 },
+    { name: 'Umbrella Inc',     initials: 'UI', invoiced: 82600,  profit: 18200 },
+    { name: 'Initech',          initials: 'IT', invoiced: 63100,  profit: -4800 }
+  ],
+  distribution: {
+    profitable: { count: 16, value: 612000 },
+    breakEven:  { count: 4,  value: 48000  },
+    loss:       { count: 4,  value: -28000 }
+  },
+  hse: {
+    compliancePct: 87,
+    activeWorkers: 14,
+    compliantWorkers: 12,
+    expiringCerts: 2,
+    openAudits: 1
+  },
+  activity: [
+    { dot: 'green',  text: '<strong>JOB-0042</strong> — Quote accepted by <strong>Acme Corp</strong>', tag: 'Quote Accepted', tagColor: 'green',  time: '2 min ago',  amount: 'R 48,500' },
+    { dot: 'indigo', text: '<strong>INV-0089</strong> sent to <strong>Acme Corp</strong> via email',     tag: 'Invoice Sent',    tagColor: 'indigo', time: '18 min ago', amount: 'R 55,775' },
+    { dot: 'amber',  text: '<strong>JOB-0040</strong> — Status changed to <strong>Work In Progress</strong>', tag: 'Status Update', tagColor: 'amber', time: '1 hr ago',   amount: null },
+    { dot: 'green',  text: '<strong>INV-0086</strong> marked as <strong>Paid</strong> — R 28,400 received', tag: 'Payment',      tagColor: 'green',  time: '2 hr ago',   amount: 'R 28,400' },
+    { dot: 'indigo', text: '<strong>QUO-0091</strong> created for <strong>Wayne Enterprises</strong>',   tag: 'Quote Created',   tagColor: 'indigo', time: '3 hr ago',   amount: 'R 88,000' },
+    { dot: 'red',    text: '<strong>INV-0081</strong> is now <strong>overdue</strong> — 14 days past due', tag: 'Overdue',       tagColor: 'red',    time: '5 hr ago',   amount: 'R 42,600' },
+    { dot: 'slate',  text: '<strong>JOB-0039</strong> — Estimate completed by <strong>John Smith</strong>', tag: 'Estimate Done', tagColor: 'slate', time: '6 hr ago',   amount: 'R 36,200' },
+    { dot: 'green',  text: '<strong>JOB-0037</strong> — Job completed and signed off',                   tag: 'Job Completed',   tagColor: 'green',  time: 'Yesterday',  amount: null },
+    { dot: 'amber',  text: '<strong>HSE</strong> — Mike Davis COID cert expires in <strong>12 days</strong>', tag: 'HSE Alert',  tagColor: 'amber',  time: 'Yesterday',  amount: null },
+    { dot: 'indigo', text: '<strong>JOB-0038</strong> booked for <strong>Wayne Enterprises</strong>',    tag: 'Job Booked',      tagColor: 'indigo', time: 'Yesterday',  amount: 'R 67,800' },
+    { dot: 'green',  text: '<strong>INV-0084</strong> — R 95,000 received from <strong>Initech</strong>', tag: 'Payment',       tagColor: 'green',  time: '2 days ago', amount: 'R 95,000' },
+    { dot: 'slate',  text: '<strong>QUO-0088</strong> — Revision v2 sent to <strong>Globex Ltd</strong>', tag: 'Quote Revised', tagColor: 'slate',  time: '2 days ago', amount: 'R 145,000' }
+  ]
+};
+
+// ── Utility ───────────────────────────────────────────────────────────────
+function dbFmt(n) {
+  if (n >= 1000000) return 'R ' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return 'R ' + Math.round(n/1000) + 'K';
+  return 'R ' + n.toLocaleString('en-ZA');
+}
+function dbFmtFull(n) {
+  return 'R ' + Math.abs(n).toLocaleString('en-ZA');
+}
+
+// ── Count-up animation ────────────────────────────────────────────────────
+function dbCountUp(el, target, prefix, duration) {
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = Math.round(target * ease);
+    el.textContent = prefix + val.toLocaleString('en-ZA');
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ── Sparkline ─────────────────────────────────────────────────────────────
+function dbSparkline(svgId, data, color) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+  const w = 64, h = 24, pad = 2;
+  const pts = data.map((v, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+    const y = h - pad - ((v - min) / range) * (h - pad * 2);
+    return `${x},${y}`;
+  });
+  const area = `M${pts[0]} ` + pts.slice(1).map(p => `L${p}`).join(' ') +
+    ` L${w - pad},${h} L${pad},${h} Z`;
+  const line = `M${pts[0]} ` + pts.slice(1).map(p => `L${p}`).join(' ');
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="sg-${svgId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#sg-${svgId})"/>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  `;
+}
+
+// ── Profit Bridge waterfall ───────────────────────────────────────────────
+function dbRenderWaterfall() {
+  const el = document.getElementById('db-waterfall');
+  if (!el) return;
+  const d = DB_DATA.profitBridge;
+  const cols = [
+    { label: 'Invoiced',  value: d.invoiced,   cls: 'invoiced' },
+    { label: 'Job Costs', value: -d.jobCosts,  cls: 'costs'    },
+    { label: 'Job Profit',value: d.jobProfit,  cls: 'profit'   },
+    { label: 'Overheads', value: -d.overheads, cls: 'overhead' },
+    { label: 'Net Profit',value: d.netProfit,  cls: 'net'      }
+  ];
+  const maxVal = d.invoiced;
+  const maxH = 120;
+  el.innerHTML = cols.map((c, i) => {
+    const h = Math.max(4, Math.abs(c.value) / maxVal * maxH);
+    const valStr = (c.value < 0 ? '-' : '+') + dbFmt(Math.abs(c.value));
+    return `
+      <div class="db-wf-col">
+        <div class="db-wf-bar-wrap">
+          <div class="db-wf-value">${dbFmt(Math.abs(c.value))}</div>
+          <div class="db-wf-bar ${c.cls}" style="height:0" data-h="${h}px"></div>
+          ${i < cols.length - 1 ? '<div class="db-wf-connector"></div>' : ''}
+        </div>
+        <div class="db-wf-label">${c.label}</div>
+      </div>
+    `;
+  }).join('');
+  // Animate bars after paint
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.db-wf-bar').forEach(b => {
+        b.style.height = b.dataset.h;
+      });
+    });
+  });
+}
+
+// ── Monthly trend chart ───────────────────────────────────────────────────
+function dbRenderTrend() {
+  const svg = document.getElementById('db-trend-chart');
+  if (!svg) return;
+  const data = DB_DATA.monthlyTrend;
+  const W = 600, H = 160, padL = 40, padR = 20, padT = 20, padB = 30;
+  const allVals = data.flatMap(d => [d.invoiced, d.jobCosts, d.netProfit]);
+  const maxV = Math.max(...allVals);
+  const minV = 0;
+  const range = maxV - minV || 1;
+  const xStep = (W - padL - padR) / (data.length - 1);
+
+  function pts(key) {
+    return data.map((d, i) => {
+      const x = padL + i * xStep;
+      const y = padT + (1 - (d[key] - minV) / range) * (H - padT - padB);
+      return `${x},${y}`;
+    });
+  }
+  function area(key, color) {
+    const p = pts(key);
+    const lastX = padL + (data.length - 1) * xStep;
+    return `<defs>
+      <linearGradient id="tg-${key}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M${p[0]} ${p.slice(1).map(pt=>`L${pt}`).join(' ')} L${lastX},${H-padB} L${padL},${H-padB} Z" fill="url(#tg-${key})"/>
+    <path d="M${p[0]} ${p.slice(1).map(pt=>`L${pt}`).join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${p.map(pt => `<circle cx="${pt.split(',')[0]}" cy="${pt.split(',')[1]}" r="3" fill="${color}" stroke="white" stroke-width="1.5"/>`).join('')}`;
+  }
+
+  // Grid lines
+  let grid = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (i / 4) * (H - padT - padB);
+    const val = Math.round(maxV - (i / 4) * maxV);
+    grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>
+    <text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="9" fill="#94a3b8">${val >= 1000 ? Math.round(val/1000)+'K' : val}</text>`;
+  }
+
+  // Month labels
+  let labels = data.map((d, i) => {
+    const x = padL + i * xStep;
+    return `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="9" fill="#94a3b8">${d.month}</text>`;
+  }).join('');
+
+  svg.innerHTML = grid + area('invoiced', '#4f46e5') + area('jobCosts', '#f97316') + area('netProfit', '#16a34a') + labels;
+}
+
+// ── Pipeline funnel ───────────────────────────────────────────────────────
+function dbRenderPipeline() {
+  const el = document.getElementById('db-pipeline');
+  if (!el) return;
+  const maxPct = 100;
+  el.innerHTML = DB_DATA.pipeline.map(row => `
+    <div class="db-pipeline-row">
+      <div class="db-pipeline-label">${row.label}</div>
+      <div class="db-pipeline-bar-wrap">
+        <div class="db-pipeline-bar" style="width:0;background:${row.color}" data-w="${row.pct}%">
+          <span>${row.count} jobs</span>
+        </div>
+      </div>
+      <div class="db-pipeline-count">${row.count}</div>
+      <div class="db-pipeline-value">${dbFmt(row.value)}</div>
+    </div>
+  `).join('');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.db-pipeline-bar').forEach(b => {
+        b.style.width = b.dataset.w;
+      });
+    });
+  });
+}
+
+// ── Client leaderboard ────────────────────────────────────────────────────
+function dbRenderLeaderboard() {
+  const el = document.getElementById('db-leaderboard');
+  if (!el) return;
+  const maxInv = Math.max(...DB_DATA.leaderboard.map(c => c.invoiced));
+  const rankClass = ['gold', 'silver', 'bronze', '', ''];
+  el.innerHTML = DB_DATA.leaderboard.map((c, i) => {
+    const barW = Math.round((c.invoiced / maxInv) * 100);
+    const profitPos = c.profit >= 0;
+    const barColor = profitPos ? '#4f46e5' : '#dc2626';
+    return `
+      <div class="db-lb-row">
+        <div class="db-lb-rank ${rankClass[i]}">${i + 1}</div>
+        <div class="db-lb-avatar">${c.initials}</div>
+        <div class="db-lb-name">${c.name}</div>
+        <div class="db-lb-bar-wrap">
+          <div class="db-lb-bar" style="width:0;background:${barColor}" data-w="${barW}%"></div>
+        </div>
+        <div class="db-lb-value">${dbFmt(c.invoiced)}</div>
+        <div class="db-lb-profit ${profitPos ? 'pos' : 'neg'}">${profitPos ? '+' : ''}${dbFmt(c.profit)}</div>
+      </div>
+    `;
+  }).join('');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.db-lb-bar').forEach(b => {
+        b.style.width = b.dataset.w;
+      });
+    });
+  });
+}
+
+// ── Job distribution donut ────────────────────────────────────────────────
+function dbRenderDonut() {
+  const svg = document.getElementById('db-donut');
+  const legend = document.getElementById('db-donut-legend');
+  if (!svg || !legend) return;
+  const d = DB_DATA.distribution;
+  const total = d.profitable.count + d.breakEven.count + d.loss.count;
+  const segments = [
+    { label: 'Profitable', count: d.profitable.count, color: '#16a34a' },
+    { label: 'Break-even', count: d.breakEven.count,  color: '#f59e0b' },
+    { label: 'Loss',       count: d.loss.count,        color: '#dc2626' }
+  ];
+  const cx = 60, cy = 60, r = 44, inner = 28;
+  let startAngle = -Math.PI / 2;
+  let paths = '';
+  segments.forEach(seg => {
+    const angle = (seg.count / total) * 2 * Math.PI;
+    const endAngle = startAngle + angle;
+    const x1 = cx + r * Math.cos(startAngle);
+    const y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle);
+    const y2 = cy + r * Math.sin(endAngle);
+    const ix1 = cx + inner * Math.cos(startAngle);
+    const iy1 = cy + inner * Math.sin(startAngle);
+    const ix2 = cx + inner * Math.cos(endAngle);
+    const iy2 = cy + inner * Math.sin(endAngle);
+    const large = angle > Math.PI ? 1 : 0;
+    paths += `<path d="M${ix1},${iy1} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${ix2},${iy2} A${inner},${inner} 0 ${large},0 ${ix1},${iy1} Z" fill="${seg.color}" opacity="0.9" style="transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.9"/>`;
+    startAngle = endAngle;
+  });
+  // Center label
+  paths += `<text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="18" font-weight="800" fill="#1e293b">${total}</text>
+  <text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="9" fill="#94a3b8">JOBS</text>`;
+  svg.innerHTML = paths;
+
+  legend.innerHTML = segments.map(seg => {
+    const pct = Math.round((seg.count / total) * 100);
+    return `
+      <div class="db-donut-legend-item">
+        <div class="db-donut-legend-dot" style="background:${seg.color}"></div>
+        <div class="db-donut-legend-label">${seg.label}</div>
+        <div class="db-donut-legend-val">${seg.count}</div>
+        <div class="db-donut-legend-pct">${pct}%</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── HSE compliance ────────────────────────────────────────────────────────
+function dbRenderHSE() {
+  const el = document.getElementById('db-hse-grid');
+  if (!el) return;
+  const h = DB_DATA.hse;
+  const pct = h.compliancePct;
+  // Semi-circle gauge SVG
+  const gaugeAngle = (pct / 100) * Math.PI;
+  const gx = 40, gy = 40, gr = 32;
+  const ex = gx + gr * Math.cos(Math.PI - gaugeAngle);
+  const ey = gy - gr * Math.sin(Math.PI - gaugeAngle);
+  const gColor = pct >= 80 ? '#16a34a' : pct >= 60 ? '#f59e0b' : '#dc2626';
+
+  el.innerHTML = `
+    <div class="db-hse-gauge">
+      <svg class="db-hse-gauge-svg" viewBox="0 0 80 48">
+        <path d="M8,40 A32,32 0 0,1 72,40" fill="none" stroke="#f1f5f9" stroke-width="8" stroke-linecap="round"/>
+        <path d="M8,40 A32,32 0 0,1 ${ex},${ey}" fill="none" stroke="${gColor}" stroke-width="8" stroke-linecap="round" style="transition:stroke-dasharray 1s ease"/>
+        <text x="40" y="38" text-anchor="middle" font-size="11" font-weight="800" fill="#1e293b">${pct}%</text>
+      </svg>
+      <div class="db-hse-gauge-info">
+        <div class="db-hse-gauge-pct" style="color:${gColor}">${pct}%</div>
+        <div class="db-hse-gauge-label">Overall compliance</div>
+      </div>
+    </div>
+    <div class="db-hse-stat">
+      <div class="db-hse-stat-val ok">${h.compliantWorkers}/${h.activeWorkers}</div>
+      <div class="db-hse-stat-label">Workers compliant</div>
+    </div>
+    <div class="db-hse-stat">
+      <div class="db-hse-stat-val ${h.expiringCerts > 0 ? 'warn' : 'ok'}">${h.expiringCerts}</div>
+      <div class="db-hse-stat-label">Certs expiring soon</div>
+    </div>
+    <div class="db-hse-stat">
+      <div class="db-hse-stat-val ${h.openAudits > 0 ? 'warn' : 'ok'}">${h.openAudits}</div>
+      <div class="db-hse-stat-label">Open audits</div>
+    </div>
+    <div class="db-hse-stat">
+      <div class="db-hse-stat-val ok">${h.activeWorkers}</div>
+      <div class="db-hse-stat-label">Active workers</div>
+    </div>
+  `;
+}
+
+// ── Activity feed ─────────────────────────────────────────────────────────
+function dbRenderActivity() {
+  const el = document.getElementById('db-activity-feed');
+  if (!el) return;
+  el.innerHTML = DB_DATA.activity.map((item, i) => `
+    <div class="db-activity-item" style="animation-delay:${i * 0.05}s">
+      <div class="db-activity-dot ${item.dot}"></div>
+      <div class="db-activity-body">
+        <div class="db-activity-text">${item.text}</div>
+        <div class="db-activity-meta">
+          <span class="db-activity-time">${item.time}</span>
+          <span class="db-activity-tag ${item.tagColor}">${item.tag}</span>
+        </div>
+      </div>
+      <div class="db-activity-right">
+        ${item.amount ? `<div class="db-activity-amount">${item.amount}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── KPI count-up ──────────────────────────────────────────────────────────
+function dbAnimateKPIs() {
+  const d = DB_DATA.profitBridge;
+  const sparkData = {
+    'db-spark-net-profit': DB_DATA.monthlyTrend.map(m => m.netProfit),
+    'db-spark-invoiced':   DB_DATA.monthlyTrend.map(m => m.invoiced),
+    'db-spark-job-costs':  DB_DATA.monthlyTrend.map(m => m.jobCosts),
+    'db-spark-overheads':  [72000, 78000, 74000, 80000, 82000, 82600],
+    'db-spark-job-profit': DB_DATA.monthlyTrend.map(m => m.invoiced - m.jobCosts)
+  };
+
+  const kpis = [
+    { id: 'db-kpi-net-profit',  val: d.netProfit,  prefix: 'R ' },
+    { id: 'db-kpi-invoiced',    val: d.invoiced,   prefix: 'R ' },
+    { id: 'db-kpi-job-costs',   val: d.jobCosts,   prefix: 'R ' },
+    { id: 'db-kpi-overheads',   val: d.overheads,  prefix: 'R ' },
+    { id: 'db-kpi-job-profit',  val: d.jobProfit,  prefix: 'R ' },
+    { id: 'db-kpi-active-jobs', val: 24,           prefix: ''   }
+  ];
+
+  kpis.forEach((k, i) => {
+    const el = document.getElementById(k.id);
+    if (!el) return;
+    setTimeout(() => dbCountUp(el, k.val, k.prefix, 800), i * 60);
+  });
+
+  // Sparklines
+  const colors = {
+    'db-spark-net-profit': '#16a34a',
+    'db-spark-invoiced':   '#4f46e5',
+    'db-spark-job-costs':  '#f97316',
+    'db-spark-overheads':  '#94a3b8',
+    'db-spark-job-profit': '#16a34a'
+  };
+  Object.entries(sparkData).forEach(([id, data]) => {
+    dbSparkline(id, data, colors[id]);
+  });
+}
+
+// ── Greeting ──────────────────────────────────────────────────────────────
+function dbSetGreeting() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const el = document.getElementById('db-greeting-msg');
+  if (el) el.textContent = `${greet}, John`;
+  const sub = document.getElementById('db-greeting-sub');
+  if (sub) {
+    const d = new Date();
+    sub.textContent = `Here's what's happening at Bird Pulse today — ${d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+  }
+}
+
+// ── Date preset ───────────────────────────────────────────────────────────
+function dbSetPreset(preset, btn) {
+  document.querySelectorAll('.db-date-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ── Show dashboard ────────────────────────────────────────────────────────
+function showDashboard() {
+  const pages = ['page-list', 'page-detail'];
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.display = 'none'; el.style.opacity = ''; }
+  });
+  // Also hide any open editors
+  document.querySelectorAll('.doc-editor.open').forEach(e => {
+    e.classList.remove('open');
+    e.style.opacity = '';
+    e.style.pointerEvents = '';
+  });
+
+  const dash = document.getElementById('page-dashboard');
+  if (!dash) return;
+  dash.style.display = 'flex';
+  dash.style.opacity = '0';
+  dash.style.transition = 'opacity .2s ease';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      dash.style.opacity = '1';
+      setTimeout(() => { dash.style.transition = ''; dash.style.opacity = ''; }, 250);
+    });
+  });
+
+  // Update nav active state
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navDash = document.getElementById('nav-dashboard');
+  if (navDash) navDash.classList.add('active');
+
+  // Render all widgets
+  dbSetGreeting();
+  dbRenderWaterfall();
+  dbRenderTrend();
+  dbRenderPipeline();
+  dbRenderLeaderboard();
+  dbRenderDonut();
+  dbRenderHSE();
+  dbRenderActivity();
+  dbAnimateKPIs();
+}
+
+// ── Init: wire nav item ───────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Show dashboard by default on load
+  showDashboard();
+});
+
 
 </script>
 </body>
