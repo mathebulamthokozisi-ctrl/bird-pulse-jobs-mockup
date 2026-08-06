@@ -9080,30 +9080,51 @@ function dbInitDragAndDrop() {
     if (_rafPending) return;
     _rafPending = true;
     requestAnimationFrame(() => { _rafPending = false; });
+
     const { widget, ph, offsetX, offsetY } = drag;
-    // Move dragged widget with cursor
     widget.style.left = (e.clientX - offsetX) + 'px';
     widget.style.top  = (e.clientY - offsetY) + 'px';
-    // Find closest widget by centre-point distance and swap placeholder
-    const items = Array.from(grid.querySelectorAll('.db-widget'));
-    let closest = null, closestDist = Infinity;
-    for (const item of items) {
-      const r = item.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const d  = Math.hypot(e.clientX - cx, e.clientY - cy);
-      if (d < closestDist) { closestDist = d; closest = item; }
+
+    // ── Stable index-based collision detection with hysteresis ──────────────
+    // Get all grid items (widgets + placeholder) in DOM order
+    const allItems = Array.from(grid.children);
+    const phIdx    = allItems.indexOf(ph);
+
+    // Find which widget the cursor centre is over
+    const widgets  = Array.from(grid.querySelectorAll('.db-widget'));
+    let overWidget = null;
+    for (const w of widgets) {
+      const r = w.getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right &&
+          e.clientY >= r.top  && e.clientY <= r.bottom) {
+        overWidget = w; break;
+      }
     }
-    if (!closest) return;
-    const r  = closest.getBoundingClientRect();
-    const cx = r.left + r.width  / 2;
-    // Insert placeholder before or after closest widget
-    // Use left/right half of the widget to decide
-    const insertAfter = e.clientX >= cx;
-    const newRef = insertAfter ? closest.nextSibling : closest;
-    if (ph.nextSibling !== newRef && ph !== newRef) {
-      grid.insertBefore(ph, newRef || null);
+    if (!overWidget) return;
+
+    const r   = overWidget.getBoundingClientRect();
+    const wIdx = allItems.indexOf(overWidget);
+
+    // Hysteresis: only swap when cursor has crossed 35% into the widget
+    // (not 50%) — prevents oscillation at the boundary
+    const THRESHOLD = 0.35;
+    const relX = (e.clientX - r.left) / r.width;
+
+    let targetIdx; // where to insert placeholder
+    if (relX < THRESHOLD) {
+      // Cursor in left 35% → placeholder goes BEFORE this widget
+      targetIdx = wIdx < phIdx ? wIdx : wIdx - 1;
+      if (ph.nextSibling !== overWidget) {
+        grid.insertBefore(ph, overWidget);
+      }
+    } else if (relX > (1 - THRESHOLD)) {
+      // Cursor in right 35% → placeholder goes AFTER this widget
+      const afterRef = overWidget.nextSibling;
+      if (afterRef !== ph && ph.nextSibling !== afterRef) {
+        grid.insertBefore(ph, afterRef || null);
+      }
     }
+    // Middle 30% zone → do nothing (dead zone prevents oscillation)
   }
   function onPointerUp() {
     if (!drag) return;
