@@ -2886,7 +2886,6 @@ td:first-child{padding:8px 8px}
 <svg class="hi" fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="13"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"></path></svg>
       Widgets
     </button>
-
 <button class="btn sm">
 <svg class="hi" fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="13"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path></svg>
       Compare Period
@@ -3009,7 +3008,7 @@ td:first-child{padding:8px 8px}
 <span class="db-widget-sub">Last 6 months</span>
 </div>
 <div class="db-widget-body">
-<svg class="db-trend-chart" id="db-trend-chart" preserveaspectratio="none" viewbox="0 0 600 160"></svg>
+<svg class="db-trend-chart" id="db-trend-chart" viewBox="0 0 600 160" style="width:100%;height:100%;"></svg>
 <div class="db-trend-legend">
 <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#a5b4fc"></div>Invoiced</div>
 <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#5eead4"></div>Net Profit</div>
@@ -3080,11 +3079,9 @@ td:first-child{padding:8px 8px}
 </div>
 </div>
 </div>
-
 <!-- ═══════════════════════════════════════════════════════════
      PAGE: JOB DETAIL
 ═══════════════════════════════════════════════════════════ -->
-
 </div><div id="page-list">
 <!-- Toolbar -->
 <div class="toolbar">
@@ -9232,50 +9229,83 @@ function dbCloseWidgetLibrary() {
   setTimeout(function() { modal.style.display = 'none'; }, 200);
 }
 
+
+/* ── Compare Period ──────────────────────────────────────────────────────── */
+function dbOpenCompare() {
+  var modal = document.getElementById('db-compare-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  requestAnimationFrame(function() {
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  });
+}
+function dbCloseCompare() {
+  var modal = document.getElementById('db-compare-modal');
+  if (!modal) return;
+  modal.style.opacity = '0';
+  modal.style.pointerEvents = 'none';
+  setTimeout(function() { modal.style.display = 'none'; }, 200);
+}
+function dbSetComparePreset(el, preset) {
+  el.closest('div').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+  el.classList.add('active');
+  var customRow = document.getElementById('db-cmp-custom-row');
+  if (customRow) customRow.style.display = preset === 'custom' ? 'grid' : 'none';
+}
+function dbApplyCompare() {
+  dbCloseCompare();
+  // Show a toast indicating comparison mode is active
+  if (typeof toast === 'function') toast('Comparison mode applied', 'success');
+}
+
 </script>
+<!-- ── Widget Library Modal ─────────────────────────────────────────────── -->
 
 <!-- ── Widget Library Modal ─────────────────────────────────────────────── -->
-<div class="modal-overlay" id="db-widget-library-modal" style="display:none;opacity:0;pointer-events:none;" onclick="if(event.target===this)dbCloseWidgetLibrary()">
-  <div class="modal" style="width:640px;max-height:80vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">
-      <div>
-        <div style="font-size:16px;font-weight:700;color:var(--fg);margin-bottom:3px;">Widget Library</div>
-        <div id="db-wl-slot-count" style="font-size:12px;color:var(--muted-fg);">5 of 6 slots used · Click to toggle</div>
-      </div>
-      <button class="btn ghost" style="width:28px;height:28px;padding:0;border-radius:50%;" onclick="dbCloseWidgetLibrary()">
-        <svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-    </div>
-    <!-- Widget grid -->
-    <div id="db-wl-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 24px;overflow-y:auto;flex:1;"></div>
-    <!-- Footer -->
-    <div style="display:flex;align-items:center;justify-content:flex-end;padding:14px 24px;border-top:1px solid var(--border);flex-shrink:0;">
-      <button class="btn primary" onclick="dbCloseWidgetLibrary()">Done</button>
-    </div>
-  </div>
-</div>
 
-<!-- ── Widget Library Modal ─────────────────────────────────────────────── -->
-<div class="modal-overlay" id="db-widget-library-modal" style="display:none;opacity:0;pointer-events:none;" onclick="if(event.target===this)dbCloseWidgetLibrary()">
-  <div class="modal" style="width:640px;max-height:80vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">
-      <div>
-        <div style="font-size:16px;font-weight:700;color:var(--fg);margin-bottom:3px;">Widget Library</div>
-        <div id="db-wl-slot-count" style="font-size:12px;color:var(--muted-fg);">5 of 6 slots used · Click to toggle</div>
-      </div>
-      <button class="btn ghost" style="width:28px;height:28px;padding:0;border-radius:50%;" onclick="dbCloseWidgetLibrary()">
-        <svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="16"><path d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-    </div>
-    <!-- Widget grid -->
-    <div id="db-wl-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 24px;overflow-y:auto;flex:1;"></div>
-    <!-- Footer -->
-    <div style="display:flex;align-items:center;justify-content:flex-end;padding:14px 24px;border-top:1px solid var(--border);flex-shrink:0;">
-      <button class="btn primary" onclick="dbCloseWidgetLibrary()">Done</button>
-    </div>
-  </div>
+</div><div class="modal-overlay" id="db-widget-library-modal" style="display:none;opacity:0;pointer-events:none;transition:opacity .2s;" onclick="if(event.target===this)dbCloseWidgetLibrary()">
+<div class="modal" style="width:680px;max-height:80vh;display:flex;flex-direction:column;">
+<div class="modal-header">
+<h3 class="modal-title">Widget Library</h3>
+<button class="modal-close" onclick="dbCloseWidgetLibrary()"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="16"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
-</div></body>
+<p id="db-wl-slot-count" style="font-size:12px;color:var(--muted-fg);padding:0 20px 12px;margin:0;">5 of 6 slots used · Click to toggle</p>
+<div id="db-wl-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px;overflow-y:auto;"></div>
+<div class="modal-footer">
+<button class="btn primary" onclick="dbCloseWidgetLibrary()">Done</button>
+</div>
+</div>
+</div>
+<div class="modal-overlay" id="db-compare-modal" style="display:none;opacity:0;pointer-events:none;transition:opacity .2s;" onclick="if(event.target===this)dbCloseCompare()">
+<div class="modal" style="width:420px;">
+<div class="modal-header">
+<h3 class="modal-title">Compare Period</h3>
+<button class="modal-close" onclick="dbCloseCompare()"><svg class="hi" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="16"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+</div>
+<div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;">
+<div style="font-size:12px;font-weight:600;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;">Current period</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+<div><label class="form-label">From</label><input class="input" type="date" id="db-cmp-cur-from" value="2026-07-01"></div>
+<div><label class="form-label">To</label><input class="input" type="date" id="db-cmp-cur-to" value="2026-07-31"></div>
+</div>
+<div style="font-size:12px;font-weight:600;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;">Compare against</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">
+<div class="chip active" onclick="dbSetComparePreset(this,'prev-month')" data-preset="prev-month">Previous month</div>
+<div class="chip" onclick="dbSetComparePreset(this,'prev-quarter')" data-preset="prev-quarter">Previous quarter</div>
+<div class="chip" onclick="dbSetComparePreset(this,'prev-year')" data-preset="prev-year">Same period last year</div>
+<div class="chip" onclick="dbSetComparePreset(this,'custom')" data-preset="custom">Custom</div>
+</div>
+<div id="db-cmp-custom-row" style="display:none;grid-template-columns:1fr 1fr;gap:10px;">
+<div><label class="form-label">From</label><input class="input" type="date" id="db-cmp-cmp-from" value="2026-06-01"></div>
+<div><label class="form-label">To</label><input class="input" type="date" id="db-cmp-cmp-to" value="2026-06-30"></div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="dbCloseCompare()">Cancel</button>
+<button class="btn primary" onclick="dbApplyCompare()">Apply Comparison</button>
+</div>
+</div>
+</div>
+</body>
 </html>
