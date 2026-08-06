@@ -2790,10 +2790,10 @@ td:first-child{padding:8px 8px}
       This Year
     </div>
     <div class="db-filterbar-spacer"></div>
-    <div class="db-compare-btn">
+    <button class="btn sm">
       <svg class="hi" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
       Compare Period
-    </div>
+    </button>
   </div>
 
   <!-- Alert banner -->
@@ -2826,7 +2826,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value positive" id="db-kpi-net-profit">R 0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend up" id="db-kpi-net-profit-trend">
+        <span class="badge badge-green" id="db-kpi-net-profit-trend">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
           +18%
         </span>
@@ -2840,7 +2840,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value" id="db-kpi-invoiced">R 0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend up">
+        <span class="badge badge-green">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
           +12%
         </span>
@@ -2854,7 +2854,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value" id="db-kpi-job-costs">R 0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend down">
+        <span class="badge badge-red">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"/></svg>
           -5%
         </span>
@@ -2868,7 +2868,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value" id="db-kpi-overheads">R 0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend neutral">
+        <span class="badge badge-slate">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
           +2%
         </span>
@@ -2882,7 +2882,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value positive" id="db-kpi-job-profit">R 0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend up">
+        <span class="badge badge-green">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
           +22%
         </span>
@@ -2896,7 +2896,7 @@ td:first-child{padding:8px 8px}
       </div>
       <div class="db-kpi-value" id="db-kpi-active-jobs">0</div>
       <div class="db-kpi-footer">
-        <span class="db-kpi-trend up">
+        <span class="badge badge-green">
           <svg class="hi" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg>
           +3 new
         </span>
@@ -2906,23 +2906,23 @@ td:first-child{padding:8px 8px}
 
   <!-- Quick actions -->
   <div class="db-quick-actions" style="padding-top:16px;">
-    <a class="db-qa-btn" onclick="openNewJobModal()">
+    <a class="btn" onclick="openNewJobModal()">
       <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
       New Job
     </a>
-    <a class="db-qa-btn" onclick="showList()">
+    <a class="btn" onclick="showList()">
       <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/></svg>
       View All Jobs
     </a>
-    <a class="db-qa-btn">
+    <a class="btn">
       <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
       New Quote
     </a>
-    <a class="db-qa-btn">
+    <a class="btn">
       <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
       New Invoice
     </a>
-    <a class="db-qa-btn">
+    <a class="btn">
       <svg class="hi" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
       Add Customer
     </a>
@@ -2957,9 +2957,9 @@ td:first-child{padding:8px 8px}
       <div class="db-widget-body">
         <svg class="db-trend-chart" id="db-trend-chart" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
         <div class="db-trend-legend">
-          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#4f46e5"></div>Invoiced</div>
-          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#16a34a"></div>Net Profit</div>
-          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#f97316"></div>Job Costs</div>
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:var(--indigo-600)"></div>Invoiced</div>
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:#00B5B8"></div>Net Profit</div>
+          <div class="db-trend-legend-item"><div class="db-trend-legend-dot" style="background:var(--orange-500)"></div>Job Costs</div>
         </div>
       </div>
     </div>
@@ -3029,7 +3029,7 @@ td:first-child{padding:8px 8px}
   <div class="db-activity-section">
     <div class="db-activity-header">
       <span class="db-activity-title">Recent Activity</span>
-      <span class="db-activity-badge" id="db-activity-count">12 events</span>
+      <span class="badge badge-indigo" id="db-activity-count">12 events</span>
     </div>
     <div class="db-activity-feed" id="db-activity-feed"></div>
   </div>
@@ -8693,7 +8693,7 @@ function dbRenderTrend() {
     return `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="9" fill="#94a3b8">${d.month}</text>`;
   }).join('');
 
-  svg.innerHTML = grid + area('invoiced', '#4f46e5') + area('jobCosts', '#f97316') + area('netProfit', '#16a34a') + labels;
+  svg.innerHTML = grid + area('invoiced', '#4f46e5') + area('jobCosts', '#f97316') + area('netProfit', '#00B5B8') + labels;
 }
 
 // ── Pipeline funnel ───────────────────────────────────────────────────────
@@ -8731,7 +8731,7 @@ function dbRenderLeaderboard() {
   el.innerHTML = DB_DATA.leaderboard.map((c, i) => {
     const barW = Math.round((c.invoiced / maxInv) * 100);
     const profitPos = c.profit >= 0;
-    const barColor = profitPos ? '#4f46e5' : '#dc2626';
+    const barColor = profitPos ? 'var(--indigo-600)' : 'var(--red-600)';
     return `
       <div class="db-lb-row">
         <div class="db-lb-rank ${rankClass[i]}">${i + 1}</div>
@@ -8741,7 +8741,7 @@ function dbRenderLeaderboard() {
           <div class="db-lb-bar" style="width:0;background:${barColor}" data-w="${barW}%"></div>
         </div>
         <div class="db-lb-value">${dbFmt(c.invoiced)}</div>
-        <div class="db-lb-profit ${profitPos ? 'pos' : 'neg'}">${profitPos ? '+' : ''}${dbFmt(c.profit)}</div>
+        <span class="badge ${profitPos ? 'badge-green' : 'badge-red'}">${profitPos ? '+' : ''}${dbFmt(c.profit)}</span>
       </div>
     `;
   }).join('');
@@ -8762,8 +8762,8 @@ function dbRenderDonut() {
   const d = DB_DATA.distribution;
   const total = d.profitable.count + d.breakEven.count + d.loss.count;
   const segments = [
-    { label: 'Profitable', count: d.profitable.count, color: '#16a34a' },
-    { label: 'Break-even', count: d.breakEven.count,  color: '#f59e0b' },
+    { label: 'Profitable', count: d.profitable.count, color: '#00B5B8' },
+    { label: 'Break-even', count: d.breakEven.count,  color: '#d97706' },
     { label: 'Loss',       count: d.loss.count,        color: '#dc2626' }
   ];
   const cx = 60, cy = 60, r = 44, inner = 28;
@@ -8813,7 +8813,7 @@ function dbRenderHSE() {
   const gx = 40, gy = 40, gr = 32;
   const ex = gx + gr * Math.cos(Math.PI - gaugeAngle);
   const ey = gy - gr * Math.sin(Math.PI - gaugeAngle);
-  const gColor = pct >= 80 ? '#16a34a' : pct >= 60 ? '#f59e0b' : '#dc2626';
+  const gColor = pct >= 80 ? '#00B5B8' : pct >= 60 ? '#d97706' : '#dc2626';
 
   el.innerHTML = `
     <div class="db-hse-gauge">
@@ -8857,7 +8857,7 @@ function dbRenderActivity() {
         <div class="db-activity-text">${item.text}</div>
         <div class="db-activity-meta">
           <span class="db-activity-time">${item.time}</span>
-          <span class="db-activity-tag ${item.tagColor}">${item.tag}</span>
+          <span class="badge badge-${item.tagColor}">${item.tag}</span>
         </div>
       </div>
       <div class="db-activity-right">
@@ -8895,11 +8895,11 @@ function dbAnimateKPIs() {
 
   // Sparklines
   const colors = {
-    'db-spark-net-profit': '#16a34a',
+    'db-spark-net-profit': '#00B5B8',
     'db-spark-invoiced':   '#4f46e5',
     'db-spark-job-costs':  '#f97316',
     'db-spark-overheads':  '#94a3b8',
-    'db-spark-job-profit': '#16a34a'
+    'db-spark-job-profit': '#00B5B8'
   };
   Object.entries(sparkData).forEach(([id, data]) => {
     dbSparkline(id, data, colors[id]);

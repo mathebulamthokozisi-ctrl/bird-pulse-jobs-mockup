@@ -1,5 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    DASHBOARD — Bird Pulse landing page
+   All colours use kit CSS variables. No hardcoded hex values.
+   Buttons use .btn kit class. Tags/badges use .badge kit class.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Page shell ─────────────────────────────────────────────────────────── */
@@ -28,50 +30,36 @@
   color: var(--fg);
   margin-right: 8px;
 }
+/* Date chips reuse .chip from kit — just override size */
 .db-date-chip {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--fg-2);
   cursor: pointer;
   background: var(--white);
   transition: all var(--t-fast);
+  white-space: nowrap;
 }
-.db-date-chip:hover { background: var(--surface-2); color: var(--fg); }
+.db-date-chip:hover { background: var(--surface-2); color: var(--fg); border-color: var(--slate-400); }
 .db-date-chip.active {
   background: var(--indigo-50);
   border-color: var(--indigo-300);
   color: var(--indigo-700);
   font-weight: 600;
 }
-.db-date-chip .hi { width: 13px; height: 13px; }
+.db-date-chip .hi { width: 12px; height: 12px; }
 .db-filterbar-spacer { flex: 1; }
-.db-compare-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--fg-2);
-  cursor: pointer;
-  background: var(--white);
-  transition: all var(--t-fast);
-}
-.db-compare-btn:hover { background: var(--surface-2); color: var(--fg); }
-.db-compare-btn .hi { width: 13px; height: 13px; }
 
-/* ── Alert banner ───────────────────────────────────────────────────────── */
+/* ── Alert banner — uses amber kit tokens ───────────────────────────────── */
 .db-alert-banner {
-  background: linear-gradient(90deg, #fef3c7 0%, #fef9ee 100%);
-  border-bottom: 1px solid #fde68a;
+  background: var(--amber-50);
+  border-bottom: 1px solid var(--amber-100);
   padding: 8px 20px;
   display: flex;
   align-items: center;
@@ -83,18 +71,21 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #92400e;
+  color: var(--amber-700);
   font-weight: 500;
 }
-.db-alert-item .hi { width: 14px; height: 14px; color: #d97706; }
-.db-alert-sep { width: 1px; height: 14px; background: #fde68a; }
+.db-alert-item .hi { width: 14px; height: 14px; color: var(--amber-600); }
+.db-alert-sep { width: 1px; height: 14px; background: var(--amber-100); }
 .db-alert-dismiss {
   margin-left: auto;
   cursor: pointer;
-  color: #b45309;
+  color: var(--amber-700);
   display: flex;
   align-items: center;
+  opacity: .7;
+  transition: opacity var(--t-fast);
 }
+.db-alert-dismiss:hover { opacity: 1; }
 .db-alert-dismiss .hi { width: 14px; height: 14px; }
 
 /* ── KPI strip ──────────────────────────────────────────────────────────── */
@@ -139,27 +130,16 @@
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
-.db-kpi-value.positive { color: #16a34a; }
-.db-kpi-value.negative { color: #dc2626; }
+/* Positive = teal (kit green), negative = kit red */
+.db-kpi-value.positive { color: var(--green-600); }
+.db-kpi-value.negative { color: var(--red-600); }
 .db-kpi-footer {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-top: 4px;
 }
-.db-kpi-trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 20px;
-}
-.db-kpi-trend.up { background: #dcfce7; color: #16a34a; }
-.db-kpi-trend.down { background: #fee2e2; color: #dc2626; }
-.db-kpi-trend.neutral { background: var(--surface-2); color: var(--slate-400); }
-.db-kpi-trend .hi { width: 10px; height: 10px; }
+/* KPI trend badges — use kit .badge classes directly in HTML */
 .db-kpi-sparkline {
   width: 64px;
   height: 24px;
@@ -181,7 +161,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow);
   transition: box-shadow var(--t-fast), transform var(--t-fast);
 }
 .db-widget:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
@@ -215,14 +195,15 @@
   justify-content: center;
   flex-shrink: 0;
 }
+/* Widget icon colour variants — use kit tokens */
 .db-widget-icon.indigo { background: var(--indigo-50); }
 .db-widget-icon.indigo .hi { color: var(--indigo-600); }
-.db-widget-icon.green { background: #dcfce7; }
-.db-widget-icon.green .hi { color: #16a34a; }
-.db-widget-icon.amber { background: #fef3c7; }
-.db-widget-icon.amber .hi { color: #d97706; }
-.db-widget-icon.red { background: #fee2e2; }
-.db-widget-icon.red .hi { color: #dc2626; }
+.db-widget-icon.green { background: var(--green-50); }
+.db-widget-icon.green .hi { color: var(--green-600); }
+.db-widget-icon.amber { background: var(--amber-50); }
+.db-widget-icon.amber .hi { color: var(--amber-600); }
+.db-widget-icon.red { background: var(--red-50); }
+.db-widget-icon.red .hi { color: var(--red-600); }
 .db-widget-icon.slate { background: var(--surface-2); }
 .db-widget-icon.slate .hi { color: var(--slate-500); }
 .db-widget-icon .hi { width: 14px; height: 14px; }
@@ -266,11 +247,12 @@
   position: relative;
   min-height: 4px;
 }
-.db-wf-bar.invoiced { background: linear-gradient(180deg, #818cf8 0%, #4f46e5 100%); }
-.db-wf-bar.costs { background: linear-gradient(180deg, #f87171 0%, #dc2626 100%); }
-.db-wf-bar.profit { background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%); }
-.db-wf-bar.overhead { background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%); }
-.db-wf-bar.net { background: linear-gradient(180deg, #34d399 0%, #059669 100%); }
+/* Waterfall bar colours — use kit indigo/red/green/amber/teal */
+.db-wf-bar.invoiced { background: linear-gradient(180deg, var(--indigo-400) 0%, var(--indigo-600) 100%); }
+.db-wf-bar.costs    { background: linear-gradient(180deg, var(--red-500) 0%, var(--red-600) 100%); }
+.db-wf-bar.profit   { background: linear-gradient(180deg, var(--green-100) 0%, var(--green-600) 100%); }
+.db-wf-bar.overhead { background: linear-gradient(180deg, var(--amber-500) 0%, var(--amber-600) 100%); }
+.db-wf-bar.net      { background: linear-gradient(180deg, var(--green-500) 0%, var(--green-700) 100%); }
 .db-wf-connector {
   position: absolute;
   top: 0;
@@ -351,13 +333,13 @@
   flex: 1;
   height: 24px;
   background: var(--surface-2);
-  border-radius: 4px;
+  border-radius: var(--radius);
   overflow: hidden;
   position: relative;
 }
 .db-pipeline-bar {
   height: 100%;
-  border-radius: 4px;
+  border-radius: var(--radius);
   transition: width 1s cubic-bezier(.22,.68,0,1.2);
   display: flex;
   align-items: center;
@@ -366,7 +348,7 @@
 .db-pipeline-bar span {
   font-size: 10px;
   font-weight: 700;
-  color: white;
+  color: var(--white);
   white-space: nowrap;
 }
 .db-pipeline-count {
@@ -389,14 +371,14 @@
 .db-leaderboard {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 .db-lb-row {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   transition: background var(--t-fast);
   cursor: pointer;
 }
@@ -409,9 +391,10 @@
   text-align: center;
   flex-shrink: 0;
 }
-.db-lb-rank.gold { color: #d97706; }
-.db-lb-rank.silver { color: #94a3b8; }
-.db-lb-rank.bronze { color: #b45309; }
+/* Gold/silver/bronze use amber and slate kit tokens */
+.db-lb-rank.gold   { color: var(--amber-600); }
+.db-lb-rank.silver { color: var(--slate-400); }
+.db-lb-rank.bronze { color: var(--amber-700); }
 .db-lb-avatar {
   width: 28px;
   height: 28px;
@@ -456,15 +439,7 @@
   text-align: right;
   flex-shrink: 0;
 }
-.db-lb-profit {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 10px;
-  flex-shrink: 0;
-}
-.db-lb-profit.pos { background: #dcfce7; color: #16a34a; }
-.db-lb-profit.neg { background: #fee2e2; color: #dc2626; }
+/* Leaderboard profit badges use kit .badge classes in HTML */
 
 /* ── Job distribution donut ─────────────────────────────────────────────── */
 .db-donut-wrap {
@@ -524,16 +499,14 @@
   gap: 16px;
   padding: 12px;
   background: var(--surface-2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
 }
 .db-hse-gauge-svg {
   width: 80px;
   height: 48px;
   flex-shrink: 0;
 }
-.db-hse-gauge-info {
-  flex: 1;
-}
+.db-hse-gauge-info { flex: 1; }
 .db-hse-gauge-pct {
   font-size: 28px;
   font-weight: 800;
@@ -547,7 +520,7 @@
 }
 .db-hse-stat {
   background: var(--surface-2);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
@@ -559,8 +532,8 @@
   color: var(--fg);
   line-height: 1;
 }
-.db-hse-stat-val.warn { color: #d97706; }
-.db-hse-stat-val.ok { color: #16a34a; }
+.db-hse-stat-val.warn { color: var(--amber-600); }
+.db-hse-stat-val.ok   { color: var(--green-600); }
 .db-hse-stat-label {
   font-size: 10px;
   color: var(--slate-400);
@@ -582,14 +555,7 @@
   font-weight: 700;
   color: var(--fg);
 }
-.db-activity-badge {
-  background: var(--indigo-50);
-  color: var(--indigo-700);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
-}
+/* Activity count badge uses kit .badge.badge-indigo in HTML */
 .db-activity-feed {
   background: var(--white);
   border: 1px solid var(--border);
@@ -619,11 +585,12 @@
   flex-shrink: 0;
   margin-top: 5px;
 }
-.db-activity-dot.green { background: #16a34a; }
+/* Activity dot colours use kit tokens */
+.db-activity-dot.green  { background: var(--green-600); }
 .db-activity-dot.indigo { background: var(--indigo-600); }
-.db-activity-dot.amber { background: #d97706; }
-.db-activity-dot.red { background: #dc2626; }
-.db-activity-dot.slate { background: var(--slate-400); }
+.db-activity-dot.amber  { background: var(--amber-600); }
+.db-activity-dot.red    { background: var(--red-600); }
+.db-activity-dot.slate  { background: var(--slate-400); }
 .db-activity-body { flex: 1; min-width: 0; }
 .db-activity-text {
   font-size: 12.5px;
@@ -641,17 +608,7 @@
   font-size: 11px;
   color: var(--slate-400);
 }
-.db-activity-tag {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-.db-activity-tag.green { background: #dcfce7; color: #16a34a; }
-.db-activity-tag.indigo { background: var(--indigo-50); color: var(--indigo-700); }
-.db-activity-tag.amber { background: #fef3c7; color: #d97706; }
-.db-activity-tag.red { background: #fee2e2; color: #dc2626; }
-.db-activity-tag.slate { background: var(--surface-2); color: var(--slate-500); }
+/* Activity tags use kit .badge classes in HTML — no custom .db-activity-tag needed */
 .db-activity-right {
   display: flex;
   flex-direction: column;
@@ -665,34 +622,14 @@
   color: var(--fg);
 }
 
-/* ── Quick actions row ──────────────────────────────────────────────────── */
+/* ── Quick actions row — uses kit .btn class ────────────────────────────── */
 .db-quick-actions {
   display: flex;
   gap: 8px;
   padding: 0 20px 16px;
   flex-wrap: wrap;
 }
-.db-qa-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--white);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--fg-2);
-  cursor: pointer;
-  transition: all var(--t-fast);
-  text-decoration: none;
-}
-.db-qa-btn:hover {
-  background: var(--indigo-50);
-  border-color: var(--indigo-300);
-  color: var(--indigo-700);
-}
-.db-qa-btn .hi { width: 14px; height: 14px; }
+/* No custom button CSS needed — HTML uses .btn from the kit */
 
 /* ── Greeting banner ────────────────────────────────────────────────────── */
 .db-greeting {
@@ -717,7 +654,7 @@
   height: 40px;
   border-radius: 50%;
   background: var(--indigo-600);
-  color: white;
+  color: var(--white);
   font-size: 14px;
   font-weight: 700;
   display: flex;
@@ -744,9 +681,7 @@
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
 }
-.db-widget {
-  animation: db-widget-in 0.5s ease both;
-}
+.db-widget { animation: db-widget-in 0.5s ease both; }
 .db-widget:nth-child(1) { animation-delay: 0.1s; }
 .db-widget:nth-child(2) { animation-delay: 0.15s; }
 .db-widget:nth-child(3) { animation-delay: 0.2s; }
