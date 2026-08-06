@@ -8647,13 +8647,13 @@ function dbRenderTrend() {
     const y = padT + (i / 4) * (H - padT - padB);
     const val = Math.round(maxV - (i / 4) * maxV);
     grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>
-    <text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="9" fill="#94a3b8">${val >= 1000 ? Math.round(val/1000)+'K' : val}</text>`;
+    <text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="11" fill="#94a3b8">${val >= 1000 ? Math.round(val/1000)+'K' : val}</text>`;
   }
 
   // Month labels
   let labels = data.map((d, i) => {
     const x = padL + i * xStep;
-    return `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="9" fill="#94a3b8">${d.month}</text>`;
+    return `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#94a3b8">${d.month}</text>`;
   }).join('');
 
   svg.innerHTML = grid + area('invoiced', '#a5b4fc') + area('jobCosts', '#fdba74') + area('netProfit', '#5eead4') + labels;
