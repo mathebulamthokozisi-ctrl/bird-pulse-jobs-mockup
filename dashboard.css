@@ -174,16 +174,7 @@
 /* Drag-and-drop states */
 /* Drag states now handled by pointer-events DnD system (db-dnd-style injected at runtime) */
 /* Drag handle in widget header */
-.db-drag-handle {
-  display: flex;
-  align-items: center;
-  color: var(--slate-300);
-  cursor: grab;
-  margin-right: 2px;
-  transition: color var(--t-fast);
-}
-.db-drag-handle:hover { color: var(--slate-400); }
-.db-drag-handle .hi { width: 12px; height: 12px; }
+/* drag handle styles injected by dbInitDragAndDrop() */
 .db-widget:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .db-widget.span-2 { grid-column: span 2; }
 .db-widget.span-3 { grid-column: span 3; }

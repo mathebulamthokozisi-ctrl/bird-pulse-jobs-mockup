@@ -8953,192 +8953,190 @@ function dbInitDragAndDrop() {
   const grid = document.getElementById('db-widget-grid');
   if (!grid) return;
 
-  // Remove old draggable attributes
-  grid.querySelectorAll('.db-widget').forEach(w => w.removeAttribute('draggable'));
-
-  let dragState = null; // { widget, clone, startX, startY, offsetX, offsetY, placeholder }
-
-  // ── CSS for the drag clone and placeholder ─────────────────────────────
+  // ── Inject CSS once ──────────────────────────────────────────────────────
   if (!document.getElementById('db-dnd-style')) {
     const s = document.createElement('style');
     s.id = 'db-dnd-style';
     s.textContent = `
+      /* Source widget becomes invisible — clean ghost effect (matches dnd-kit SortableWidget) */
+      .db-widget.db-dnd-source {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+      /* Floating clone — subtle lift, no rotation (matches WidgetDragOverlay) */
       .db-dnd-clone {
         position: fixed;
         pointer-events: none;
         z-index: 9999;
-        border-radius: 8px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 4px 16px rgba(79,70,229,.15);
-        opacity: .96;
-        transform: rotate(1.5deg) scale(1.03);
-        transition: box-shadow 0.15s ease, transform 0.15s ease;
-        will-change: transform, left, top;
+        border-radius: 12px;
+        box-shadow: 0 12px 28px -8px rgba(0,0,0,0.25);
+        transform: scale(1.02);
+        transition: box-shadow 0.15s ease;
+        will-change: left, top;
         overflow: hidden;
+        cursor: grabbing;
       }
+      /* Placeholder — subtle indigo-50 background, no dashed border */
       .db-dnd-placeholder {
-        border-radius: 8px;
+        border-radius: 12px;
         background: #eef2ff;
-        border: 2px dashed #818cf8;
-        transition: all 0.2s cubic-bezier(.34,1.56,.64,1);
-        min-height: 40px;
+        border: 1.5px dashed #a5b4fc;
+        transition: all 0.18s ease;
       }
-      .db-widget.db-dnd-source {
-        opacity: 0.35;
-        transition: opacity 0.15s ease;
+      /* Drag handle pill — appears on hover (matches SortableWidget hover pill) */
+      .db-drag-handle {
+        position: absolute;
+        left: 50%;
+        top: 8px;
+        transform: translateX(-50%);
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        cursor: grab;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: rgba(241,245,249,0.85);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(226,232,240,0.6);
+        border-radius: 20px;
+        padding: 4px 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       }
-      .db-widget.db-dnd-over {
-        transform: scale(1.01);
-        box-shadow: 0 0 0 2px rgba(129,140,248,.5), var(--shadow-md);
-        transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
-      }
-      .db-widget {
-        transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease, opacity 0.15s ease;
-      }
+      .db-drag-handle:hover { background: rgba(241,245,249,1); box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+      .db-drag-handle:active { cursor: grabbing; }
+      .db-drag-handle .hi { width: 14px; height: 14px; color: rgba(100,116,139,0.6); }
+      .db-widget:hover .db-drag-handle { opacity: 1; }
+      /* Drop flash — clean ring then fade (matches dnd-kit drop animation) */
       .db-dnd-drop-flash {
-        animation: db-drop-flash 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
+        animation: db-drop-flash 0.35s ease forwards;
       }
       @keyframes db-drop-flash {
-        0%   { box-shadow: 0 0 0 3px rgba(129,140,248,.6), 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1.015); }
-        60%  { box-shadow: 0 0 0 4px rgba(129,140,248,.2), 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1.005); }
-        100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1); }
+        0%   { box-shadow: 0 0 0 2px rgba(129,140,248,.5), 0 1px 2px rgba(0,0,0,.05); }
+        100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); }
+      }
+      /* Smooth grid reflow during drag */
+      .db-widget:not(.db-dnd-source) {
+        transition: transform 0.2s ease, box-shadow 0.15s ease;
       }
     `;
     document.head.appendChild(s);
   }
 
-  function getWidgetCenter(el) {
-    const r = el.getBoundingClientRect();
-    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-  }
+  // Move drag handle to be position:absolute inside widget (not inside header)
+  grid.querySelectorAll('.db-widget').forEach(widget => {
+    // Remove any existing handle injected by previous init
+    widget.querySelectorAll('.db-drag-handle').forEach(h => h.remove());
+    // Inject handle as first child of widget (absolute positioned)
+    const handle = document.createElement('div');
+    handle.className = 'db-drag-handle';
+    handle.innerHTML = hiIcon('bars-2', 14);
+    handle.setAttribute('title', 'Drag to reorder');
+    widget.style.position = 'relative';
+    widget.insertBefore(handle, widget.firstChild);
+  });
 
-  function getNearestWidget(x, y, exclude) {
-    let nearest = null, minDist = Infinity;
-    grid.querySelectorAll('.db-widget:not(.db-dnd-source)').forEach(w => {
-      if (w === exclude) return;
-      const c = getWidgetCenter(w);
-      const dist = Math.hypot(x - c.x, y - c.y);
-      if (dist < minDist) { minDist = dist; nearest = w; }
-    });
-    return nearest;
-  }
+  let dragState = null;
 
   function onPointerDown(e) {
-    // Only trigger from the drag handle or widget header
-    const handle = e.target.closest('.db-drag-handle, .db-widget-header');
+    // Only trigger from the drag handle pill
+    const handle = e.target.closest('.db-drag-handle');
     if (!handle) return;
-    const widget = e.target.closest('.db-widget');
+    const widget = handle.closest('.db-widget');
     if (!widget) return;
-
     e.preventDefault();
-
     const rect = widget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
 
-    // Create floating clone
+    // Create floating clone — exact copy, scale(1.02), deep shadow
     const clone = widget.cloneNode(true);
     clone.className = 'db-dnd-clone';
-    clone.style.width = rect.width + 'px';
+    clone.style.width  = rect.width  + 'px';
     clone.style.height = rect.height + 'px';
-    clone.style.left = rect.left + 'px';
-    clone.style.top = rect.top + 'px';
+    clone.style.left   = rect.left   + 'px';
+    clone.style.top    = rect.top    + 'px';
     document.body.appendChild(clone);
 
-    // Create placeholder in the grid
+    // Placeholder matches widget dimensions
     const placeholder = document.createElement('div');
     placeholder.className = 'db-dnd-placeholder';
-    placeholder.style.width = rect.width + 'px';
+    placeholder.style.width  = rect.width  + 'px';
     placeholder.style.height = rect.height + 'px';
-    // Copy grid span classes
     if (widget.classList.contains('span-2')) placeholder.classList.add('span-2');
     if (widget.classList.contains('span-3')) placeholder.classList.add('span-3');
 
+    // Source becomes invisible
     widget.classList.add('db-dnd-source');
     widget.parentNode.insertBefore(placeholder, widget.nextSibling);
 
-    dragState = {
-      widget, clone, placeholder,
-      offsetX, offsetY,
-      lastOver: null
-    };
+    dragState = { widget, clone, placeholder, offsetX, offsetY, lastOver: null };
 
     document.addEventListener('pointermove', onPointerMove, { passive: false });
-    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('pointerup',   onPointerUp);
     document.body.style.userSelect = 'none';
-    document.body.style.cursor = 'grabbing';
+    document.body.style.cursor     = 'grabbing';
   }
 
   function onPointerMove(e) {
     if (!dragState) return;
     e.preventDefault();
-
     const { clone, placeholder, offsetX, offsetY } = dragState;
 
-    // Move the clone
+    // Move clone with cursor
     clone.style.left = (e.clientX - offsetX) + 'px';
     clone.style.top  = (e.clientY - offsetY) + 'px';
 
-    // Find nearest widget to swap with
-    const nearest = getNearestWidget(e.clientX, e.clientY, dragState.widget);
+    // Find nearest widget by centre-point distance
+    let nearest = null, minDist = Infinity;
+    grid.querySelectorAll('.db-widget:not(.db-dnd-source)').forEach(w => {
+      const r = w.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+      if (dist < minDist) { minDist = dist; nearest = w; }
+    });
 
     if (nearest && nearest !== dragState.lastOver) {
-      // Clear previous over state
-      if (dragState.lastOver) dragState.lastOver.classList.remove('db-dnd-over');
-      nearest.classList.add('db-dnd-over');
       dragState.lastOver = nearest;
-
-      // Move placeholder next to the nearest widget
-      const nearestRect = nearest.getBoundingClientRect();
-      const midX = nearestRect.left + nearestRect.width / 2;
-      const midY = nearestRect.top + nearestRect.height / 2;
-
-      if (e.clientX > midX || e.clientY > midY) {
-        nearest.parentNode.insertBefore(placeholder, nearest.nextSibling);
-      } else {
-        nearest.parentNode.insertBefore(placeholder, nearest);
-      }
+      const nr = nearest.getBoundingClientRect();
+      const after = e.clientX > nr.left + nr.width / 2 || e.clientY > nr.top + nr.height / 2;
+      nearest.parentNode.insertBefore(placeholder, after ? nearest.nextSibling : nearest);
     }
   }
 
-  function onPointerUp(e) {
+  function onPointerUp() {
     if (!dragState) return;
     document.removeEventListener('pointermove', onPointerMove);
-    document.removeEventListener('pointerup', onPointerUp);
+    document.removeEventListener('pointerup',   onPointerUp);
     document.body.style.userSelect = '';
-    document.body.style.cursor = '';
+    document.body.style.cursor     = '';
 
-    const { widget, clone, placeholder, lastOver } = dragState;
+    const { widget, clone, placeholder } = dragState;
+    dragState = null;
 
-    // Clear over state
-    if (lastOver) lastOver.classList.remove('db-dnd-over');
-
-    // Animate clone to placeholder position
+    // Animate clone to placeholder position, then snap widget in
     const phRect = placeholder.getBoundingClientRect();
-    clone.style.transition = 'left 0.25s cubic-bezier(.34,1.56,.64,1), top 0.25s cubic-bezier(.34,1.56,.64,1), transform 0.25s cubic-bezier(.34,1.56,.64,1), opacity 0.2s ease';
-    clone.style.left = phRect.left + 'px';
-    clone.style.top  = phRect.top  + 'px';
-    clone.style.transform = 'rotate(0deg) scale(1)';
-    clone.style.opacity = '0';
+    clone.style.transition = 'left 0.22s ease, top 0.22s ease, transform 0.22s ease, opacity 0.18s ease';
+    clone.style.left      = phRect.left + 'px';
+    clone.style.top       = phRect.top  + 'px';
+    clone.style.transform = 'scale(1)';
+    clone.style.opacity   = '0';
 
     setTimeout(() => {
-      // Insert widget where placeholder is
       placeholder.parentNode.insertBefore(widget, placeholder);
       placeholder.remove();
       clone.remove();
       widget.classList.remove('db-dnd-source');
-
-      // Drop flash animation
+      // Brief ring flash on drop
       widget.classList.add('db-dnd-drop-flash');
-      setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 450);
-    }, 240);
-
-    dragState = null;
+      setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 380);
+    }, 210);
   }
 
-  // Attach pointer down to each widget
-  grid.querySelectorAll('.db-widget').forEach(widget => {
-    widget.addEventListener('pointerdown', onPointerDown);
-  });
+  // Attach to grid (event delegation)
+  grid.removeEventListener('pointerdown', onPointerDown);
+  grid.addEventListener('pointerdown', onPointerDown);
 }
 
 /* ── Widget Library ─────────────────────────────────────────────────────── */
