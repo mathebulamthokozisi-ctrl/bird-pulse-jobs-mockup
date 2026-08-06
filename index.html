@@ -8871,7 +8871,6 @@ function dbInitDragAndDrop() {
         transform: rotate(1.5deg) scale(1.03);
         transition: box-shadow 0.15s ease, transform 0.15s ease;
         will-change: transform, left, top;
-        border: 2px solid #818cf8;
         overflow: hidden;
       }
       .db-dnd-placeholder {
@@ -8887,19 +8886,19 @@ function dbInitDragAndDrop() {
       }
       .db-widget.db-dnd-over {
         transform: scale(1.01);
-        box-shadow: 0 0 0 2px #818cf8, 0 4px 16px rgba(79,70,229,.12);
+        box-shadow: 0 0 0 2px rgba(129,140,248,.5), var(--shadow-md);
         transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
       }
       .db-widget {
         transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease, opacity 0.15s ease;
       }
       .db-dnd-drop-flash {
-        animation: db-drop-flash 0.4s cubic-bezier(.34,1.56,.64,1);
+        animation: db-drop-flash 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
       }
       @keyframes db-drop-flash {
-        0%   { box-shadow: 0 0 0 3px #818cf8; transform: scale(1.02); }
-        60%  { box-shadow: 0 0 0 6px rgba(129,140,248,.3); transform: scale(1.01); }
-        100% { box-shadow: none; transform: scale(1); }
+        0%   { box-shadow: 0 0 0 3px rgba(129,140,248,.6), 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1.015); }
+        60%  { box-shadow: 0 0 0 4px rgba(129,140,248,.2), 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1.005); }
+        100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1); }
       }
     `;
     document.head.appendChild(s);
