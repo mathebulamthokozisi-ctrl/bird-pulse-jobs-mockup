@@ -5588,7 +5588,7 @@ const RISK_ROWS = [
 // STATE
 // ═══════════════════════════════════════════════════════════
 let currentPage = 1;
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 13;
 let filteredJobs = [...JOBS];
 let selectedJobs = new Set();
 let currentView = 'list';
@@ -6004,7 +6004,10 @@ function goPage(p){
   const max=Math.ceil(filteredJobs.length/PAGE_SIZE);
   if(p<1||p>max)return;
   currentPage=p;
-  [1,2,3].forEach(i=>{const b=document.getElementById('pg-'+i);if(b)b.classList.toggle('active',i===p);});
+  [1,2,3].forEach(i=>{
+    const b=document.getElementById('pg-'+i);
+    if(b){b.classList.toggle('active',i===p);b.style.display=i<=max?'':'none';}
+  });
   renderJobs();
 }
 function setView(v){
