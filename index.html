@@ -8476,13 +8476,13 @@ const DB_DATA = {
     { month: 'Jul', invoiced: 748200, jobCosts: 498400, netProfit: 134600 }
   ],
   pipeline: [
-    { label: 'Job Booked',    count: 4,  value: 142000,  color: '#c7d2fe', pct: 100 },
-    { label: 'Estimated',     count: 8,  value: 298000,  color: '#a5b4fc', pct: 88 },
-    { label: 'Quote Sent',    count: 6,  value: 245000,  color: '#818cf8', pct: 72 },
-    { label: 'Quote Accepted',count: 5,  value: 198000,  color: '#6366f1', pct: 60 },
-    { label: 'In Progress',   count: 7,  value: 312000,  color: '#4f46e5', pct: 52 },
-    { label: 'Invoiced',      count: 3,  value: 128000,  color: '#4338ca', pct: 38 },
-    { label: 'Paid',          count: 9,  value: 384000,  color: '#99f6e4', pct: 28 }
+    { label: 'Job Booked',    count: 4,  value: 142000,  color: '#c7d2fe', textColor: '#3730a3', pct: 100 },
+    { label: 'Estimated',     count: 8,  value: 298000,  color: '#a5b4fc', textColor: '#3730a3', pct: 88 },
+    { label: 'Quote Sent',    count: 6,  value: 245000,  color: '#818cf8', textColor: '#ffffff', pct: 72 },
+    { label: 'Quote Accepted',count: 5,  value: 198000,  color: '#6366f1', textColor: '#ffffff', pct: 60 },
+    { label: 'In Progress',   count: 7,  value: 312000,  color: '#4f46e5', textColor: '#ffffff', pct: 52 },
+    { label: 'Invoiced',      count: 3,  value: 128000,  color: '#4338ca', textColor: '#ffffff', pct: 38 },
+    { label: 'Paid',          count: 9,  value: 384000,  color: '#99f6e4', textColor: '#134e4a', pct: 28 }
   ],
   leaderboard: [
     { name: 'Acme Corp',        initials: 'AC', invoiced: 248500, profit: 68200 },
@@ -8669,7 +8669,7 @@ function dbRenderPipeline() {
       <div class="db-pipeline-label">${row.label}</div>
       <div class="db-pipeline-bar-wrap">
         <div class="db-pipeline-bar" style="width:0;background:${row.color}" data-w="${row.pct}%">
-          <span style="color:${row.pct <= 72 ? 'var(--indigo-700)' : 'var(--white)'}">${row.count} jobs</span>
+          <span style="color:${row.textColor}">${row.count} jobs</span>
         </div>
       </div>
       <div class="db-pipeline-count">${row.count}</div>
