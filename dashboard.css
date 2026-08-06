@@ -281,11 +281,11 @@
   min-height: 4px;
 }
 /* Waterfall bar colours — use kit indigo/red/green/amber/teal */
-.db-wf-bar.invoiced { background: var(--indigo-200); }
-.db-wf-bar.costs    { background: var(--red-200); }
-.db-wf-bar.profit   { background: var(--green-100); }
-.db-wf-bar.overhead { background: var(--amber-200); }
-.db-wf-bar.net      { background: var(--green-200); }
+.db-wf-bar.invoiced { background: var(--indigo-300); }
+.db-wf-bar.costs    { background: var(--red-300); }
+.db-wf-bar.profit   { background: var(--green-300); }
+.db-wf-bar.overhead { background: var(--amber-300); }
+.db-wf-bar.net      { background: var(--green-400); }
 .db-wf-connector {
   position: absolute;
   top: 0;
