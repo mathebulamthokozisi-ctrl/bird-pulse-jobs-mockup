@@ -1,24 +1,29 @@
 # Mockup Status
 
-## URL
-https://8080-iugug5c2hyq481g5ngnjb-b90ea954.us1.manus.computer
+## Live URL
+https://8080-ii56y9231pksds6gvu8sv-3c2d8d14.us2.manus.computer
 
-## Current State
-- Mockup is WORKING. Row click opens detail. Modals open correctly.
-- The "features are dead" issue was a JS syntax error (broken string literal in TIMELINE_ITEMS) — FIXED.
-- All core features confirmed working: row click → detail, jobcard modal opens, pipeline bar shows, guard keys show, P/L widget shows, team slots show.
+## Current State — 6 Aug 2026
+All core features working. Latest session changes:
 
-## What user reported as broken
-- "features are not active anymore, just dead"
-- Need to test: Communication tab, Timeline tab, HSE tab, Estimate modal, Quote modal, Actual Costs modal, filter sidebar checkboxes, search, board view, bulk actions, column resize
+### UI fixes applied
+- **Dashboard DnD** — complete rewrite with placeholder-based DnD (horizontal + vertical). Hysteresis dead zone (35%) eliminates oscillation/blinking. See `DND_HANDOFF.md` for remaining proportional-swap limitation.
+- **Job Pipeline widget** — taller bars (26px), bigger fonts (12px labels), `justify-content:space-between` rows fill card height
+- **Client Leaderboard** — value column fixed-width right-aligned (R 249K → R 63K), profit badge column fixed-width right-aligned
+- **HSE Compliance widget** — gauge scaled up, stat tiles stretched to fill card height
+- **Pagination bar** — `justify-content:space-between`, fixed 41px height, page size 13 rows (2 pages for 24 jobs)
+- **Nav footer** — role text removed, single-line 41px height aligned with pagination bar
+- **Nav width** — 220px (was narrower, clipping "Company Profitability" and "WhatsApp Verification")
+- **Workflow progress bar** — border-radius 99px → 6px (less pill-shaped)
+- **Dashboard widget cards** — border-radius reduced to 6px
+- **Dashboard pipeline bars** — border-radius 2px
+- **JOB EXECUTION zone** — saturation boosted (#fef3c7 bg, #fcd34d border), amber shimmer animation (3s linear infinite)
+
+### Known issues / handoffs
+- **DnD proportional swap** — see `DND_HANDOFF.md`
 
 ## File location
-/home/ubuntu/job-mockup/index.html (2131 lines)
+`/home/ubuntu/job-mockup/index.html`
 
 ## Server
-Python http.server on port 8080, PID check: `lsof -ti:8080`
-
-## Design tokens
-- Full indigo palette: --indigo-600 (#4f46e5) primary
-- White surfaces everywhere, --bg (#f1f5f9) only for page canvas
-- CRM-style layout: filter sidebar, compact toolbar, indigo pills
+`python3 -m http.server 8080` from `/home/ubuntu/job-mockup/`
