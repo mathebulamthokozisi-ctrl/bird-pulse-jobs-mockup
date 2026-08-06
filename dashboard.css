@@ -131,8 +131,8 @@
   font-variant-numeric: tabular-nums;
 }
 /* Positive = teal (kit green), negative = kit red */
-.db-kpi-value.positive { color: var(--green-600); }
-.db-kpi-value.negative { color: var(--red-600); }
+.db-kpi-value.positive { color: var(--green-500); }
+.db-kpi-value.negative { color: var(--red-400); }
 .db-kpi-footer {
   display: flex;
   align-items: center;
@@ -227,9 +227,9 @@
 }
 /* Widget icon colour variants — use kit tokens */
 .db-widget-icon.indigo { background: var(--indigo-50); }
-.db-widget-icon.indigo .hi { color: var(--indigo-600); }
+.db-widget-icon.indigo .hi { color: var(--indigo-400); }
 .db-widget-icon.green { background: var(--green-50); }
-.db-widget-icon.green .hi { color: var(--green-600); }
+.db-widget-icon.green .hi { color: var(--green-500); }
 .db-widget-icon.amber { background: var(--amber-50); }
 .db-widget-icon.amber .hi { color: var(--amber-600); }
 .db-widget-icon.red { background: var(--red-50); }
@@ -281,11 +281,11 @@
   min-height: 4px;
 }
 /* Waterfall bar colours — use kit indigo/red/green/amber/teal */
-.db-wf-bar.invoiced { background: linear-gradient(180deg, var(--indigo-400) 0%, var(--indigo-600) 100%); }
-.db-wf-bar.costs    { background: linear-gradient(180deg, var(--red-500) 0%, var(--red-600) 100%); }
-.db-wf-bar.profit   { background: linear-gradient(180deg, var(--green-100) 0%, var(--green-600) 100%); }
-.db-wf-bar.overhead { background: linear-gradient(180deg, var(--amber-500) 0%, var(--amber-600) 100%); }
-.db-wf-bar.net      { background: linear-gradient(180deg, var(--green-500) 0%, var(--green-700) 100%); }
+.db-wf-bar.invoiced { background: var(--indigo-200); }
+.db-wf-bar.costs    { background: var(--red-200); }
+.db-wf-bar.profit   { background: var(--green-100); }
+.db-wf-bar.overhead { background: var(--amber-200); }
+.db-wf-bar.net      { background: var(--green-200); }
 .db-wf-connector {
   position: absolute;
   top: 0;
@@ -567,7 +567,7 @@
   line-height: 1;
 }
 .db-hse-stat-val.warn { color: var(--amber-600); }
-.db-hse-stat-val.ok   { color: var(--green-600); }
+.db-hse-stat-val.ok   { color: var(--green-500); }
 .db-hse-stat-label {
   font-size: 10px;
   color: var(--slate-400);
