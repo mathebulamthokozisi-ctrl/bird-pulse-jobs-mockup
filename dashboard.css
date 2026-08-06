@@ -150,7 +150,7 @@
 .db-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 1fr 1.3fr;
   gap: 12px;
   padding: 12px;
   flex: 1;
@@ -165,24 +165,14 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03);
-  transition: box-shadow var(--t-fast), transform var(--t-fast);
+  transition: box-shadow var(--t-fast), transform var(--t-fast), opacity var(--t-fast);
   min-height: 0;
   cursor: grab;
   user-select: none;
 }
 .db-widget:active { cursor: grabbing; }
 /* Drag-and-drop states */
-.db-widget.dragging {
-  opacity: .5;
-  box-shadow: var(--shadow-xl);
-  transform: scale(1.02);
-  cursor: grabbing;
-  z-index: 100;
-}
-.db-widget.drag-over {
-  border-color: var(--indigo-400);
-  box-shadow: 0 0 0 2px var(--indigo-200);
-}
+/* Drag states now handled by pointer-events DnD system (db-dnd-style injected at runtime) */
 /* Drag handle in widget header */
 .db-drag-handle {
   display: flex;

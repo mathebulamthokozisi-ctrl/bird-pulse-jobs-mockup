@@ -2938,11 +2938,12 @@ td:first-child{padding:8px 8px}
 <span class="db-widget-title">Job Profitability</span>
 <span class="db-widget-sub">Distribution</span>
 </div>
-<div class="db-widget-body">
-<div class="db-donut-wrap">
-<svg class="db-donut-svg" id="db-donut" viewbox="0 0 120 120"></svg>
-<div class="db-donut-legend" id="db-donut-legend"></div>
+<div class="db-widget-body" style="padding:12px 16px 8px;gap:0;justify-content:space-between;">
+<div class="db-donut-wrap" style="align-items:center;margin-bottom:8px;">
+<svg class="db-donut-svg" id="db-donut" viewbox="0 0 160 160" style="width:140px;height:140px;flex-shrink:0;"></svg>
+<div class="db-donut-legend" id="db-donut-legend" style="flex:1;justify-content:center;gap:0;"></div>
 </div>
+<div class="db-donut-stats" id="db-donut-stats"></div>
 </div>
 </div>
 <!-- 5. Client Leaderboard -->
@@ -8847,70 +8848,193 @@ document.addEventListener('DOMContentLoaded', () => {
 function dbInitDragAndDrop() {
   const grid = document.getElementById('db-widget-grid');
   if (!grid) return;
-  let dragSrc = null;
 
-  function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.db-widget:not(.dragging)')];
-    return draggableElements.reduce((closest, child) => {
-      const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
-      if (offset < 0 && offset > closest.offset) {
-        return { offset, element: child };
+  // Remove old draggable attributes
+  grid.querySelectorAll('.db-widget').forEach(w => w.removeAttribute('draggable'));
+
+  let dragState = null; // { widget, clone, startX, startY, offsetX, offsetY, placeholder }
+
+  // ── CSS for the drag clone and placeholder ─────────────────────────────
+  if (!document.getElementById('db-dnd-style')) {
+    const s = document.createElement('style');
+    s.id = 'db-dnd-style';
+    s.textContent = `
+      .db-dnd-clone {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        border-radius: 8px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 4px 16px rgba(79,70,229,.15);
+        opacity: .96;
+        transform: rotate(1.5deg) scale(1.03);
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+        will-change: transform, left, top;
+        border: 2px solid #818cf8;
+        overflow: hidden;
       }
-      return closest;
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
+      .db-dnd-placeholder {
+        border-radius: 8px;
+        background: #eef2ff;
+        border: 2px dashed #818cf8;
+        transition: all 0.2s cubic-bezier(.34,1.56,.64,1);
+        min-height: 40px;
+      }
+      .db-widget.db-dnd-source {
+        opacity: 0.35;
+        transition: opacity 0.15s ease;
+      }
+      .db-widget.db-dnd-over {
+        transform: scale(1.01);
+        box-shadow: 0 0 0 2px #818cf8, 0 4px 16px rgba(79,70,229,.12);
+        transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
+      }
+      .db-widget {
+        transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease, opacity 0.15s ease;
+      }
+      .db-dnd-drop-flash {
+        animation: db-drop-flash 0.4s cubic-bezier(.34,1.56,.64,1);
+      }
+      @keyframes db-drop-flash {
+        0%   { box-shadow: 0 0 0 3px #818cf8; transform: scale(1.02); }
+        60%  { box-shadow: 0 0 0 6px rgba(129,140,248,.3); transform: scale(1.01); }
+        100% { box-shadow: none; transform: scale(1); }
+      }
+    `;
+    document.head.appendChild(s);
   }
 
-  grid.querySelectorAll('.db-widget').forEach(widget => {
-    widget.setAttribute('draggable', 'true');
+  function getWidgetCenter(el) {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
 
-    widget.addEventListener('dragstart', e => {
-      dragSrc = widget;
-      widget.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', '');
+  function getNearestWidget(x, y, exclude) {
+    let nearest = null, minDist = Infinity;
+    grid.querySelectorAll('.db-widget:not(.db-dnd-source)').forEach(w => {
+      if (w === exclude) return;
+      const c = getWidgetCenter(w);
+      const dist = Math.hypot(x - c.x, y - c.y);
+      if (dist < minDist) { minDist = dist; nearest = w; }
     });
+    return nearest;
+  }
 
-    widget.addEventListener('dragend', () => {
-      widget.classList.remove('dragging');
-      grid.querySelectorAll('.db-widget').forEach(w => w.classList.remove('drag-over'));
-      dragSrc = null;
-    });
+  function onPointerDown(e) {
+    // Only trigger from the drag handle or widget header
+    const handle = e.target.closest('.db-drag-handle, .db-widget-header');
+    if (!handle) return;
+    const widget = e.target.closest('.db-widget');
+    if (!widget) return;
 
-    widget.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      grid.querySelectorAll('.db-widget').forEach(w => w.classList.remove('drag-over'));
-      if (widget !== dragSrc) widget.classList.add('drag-over');
-    });
+    e.preventDefault();
 
-    widget.addEventListener('dragleave', () => {
-      widget.classList.remove('drag-over');
-    });
+    const rect = widget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
 
-    widget.addEventListener('drop', e => {
-      e.preventDefault();
-      widget.classList.remove('drag-over');
-      if (dragSrc && dragSrc !== widget) {
-        // Swap positions in the DOM
-        const srcParent = dragSrc.parentNode;
-        const targetParent = widget.parentNode;
-        const srcNext = dragSrc.nextSibling;
-        const targetNext = widget.nextSibling;
-        if (srcNext === widget) {
-          srcParent.insertBefore(widget, dragSrc);
-        } else if (targetNext === dragSrc) {
-          targetParent.insertBefore(dragSrc, widget);
-        } else {
-          srcParent.insertBefore(widget, srcNext);
-          targetParent.insertBefore(dragSrc, targetNext);
-        }
-        // Brief flash to confirm drop
-        dragSrc.style.transition = 'box-shadow 0.2s ease';
-        dragSrc.style.boxShadow = '0 0 0 2px var(--indigo-400)';
-        setTimeout(() => { dragSrc.style.boxShadow = ''; dragSrc.style.transition = ''; }, 400);
+    // Create floating clone
+    const clone = widget.cloneNode(true);
+    clone.className = 'db-dnd-clone';
+    clone.style.width = rect.width + 'px';
+    clone.style.height = rect.height + 'px';
+    clone.style.left = rect.left + 'px';
+    clone.style.top = rect.top + 'px';
+    document.body.appendChild(clone);
+
+    // Create placeholder in the grid
+    const placeholder = document.createElement('div');
+    placeholder.className = 'db-dnd-placeholder';
+    placeholder.style.width = rect.width + 'px';
+    placeholder.style.height = rect.height + 'px';
+    // Copy grid span classes
+    if (widget.classList.contains('span-2')) placeholder.classList.add('span-2');
+    if (widget.classList.contains('span-3')) placeholder.classList.add('span-3');
+
+    widget.classList.add('db-dnd-source');
+    widget.parentNode.insertBefore(placeholder, widget.nextSibling);
+
+    dragState = {
+      widget, clone, placeholder,
+      offsetX, offsetY,
+      lastOver: null
+    };
+
+    document.addEventListener('pointermove', onPointerMove, { passive: false });
+    document.addEventListener('pointerup', onPointerUp);
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'grabbing';
+  }
+
+  function onPointerMove(e) {
+    if (!dragState) return;
+    e.preventDefault();
+
+    const { clone, placeholder, offsetX, offsetY } = dragState;
+
+    // Move the clone
+    clone.style.left = (e.clientX - offsetX) + 'px';
+    clone.style.top  = (e.clientY - offsetY) + 'px';
+
+    // Find nearest widget to swap with
+    const nearest = getNearestWidget(e.clientX, e.clientY, dragState.widget);
+
+    if (nearest && nearest !== dragState.lastOver) {
+      // Clear previous over state
+      if (dragState.lastOver) dragState.lastOver.classList.remove('db-dnd-over');
+      nearest.classList.add('db-dnd-over');
+      dragState.lastOver = nearest;
+
+      // Move placeholder next to the nearest widget
+      const nearestRect = nearest.getBoundingClientRect();
+      const midX = nearestRect.left + nearestRect.width / 2;
+      const midY = nearestRect.top + nearestRect.height / 2;
+
+      if (e.clientX > midX || e.clientY > midY) {
+        nearest.parentNode.insertBefore(placeholder, nearest.nextSibling);
+      } else {
+        nearest.parentNode.insertBefore(placeholder, nearest);
       }
-    });
+    }
+  }
+
+  function onPointerUp(e) {
+    if (!dragState) return;
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+
+    const { widget, clone, placeholder, lastOver } = dragState;
+
+    // Clear over state
+    if (lastOver) lastOver.classList.remove('db-dnd-over');
+
+    // Animate clone to placeholder position
+    const phRect = placeholder.getBoundingClientRect();
+    clone.style.transition = 'left 0.25s cubic-bezier(.34,1.56,.64,1), top 0.25s cubic-bezier(.34,1.56,.64,1), transform 0.25s cubic-bezier(.34,1.56,.64,1), opacity 0.2s ease';
+    clone.style.left = phRect.left + 'px';
+    clone.style.top  = phRect.top  + 'px';
+    clone.style.transform = 'rotate(0deg) scale(1)';
+    clone.style.opacity = '0';
+
+    setTimeout(() => {
+      // Insert widget where placeholder is
+      placeholder.parentNode.insertBefore(widget, placeholder);
+      placeholder.remove();
+      clone.remove();
+      widget.classList.remove('db-dnd-source');
+
+      // Drop flash animation
+      widget.classList.add('db-dnd-drop-flash');
+      setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 450);
+    }, 240);
+
+    dragState = null;
+  }
+
+  // Attach pointer down to each widget
+  grid.querySelectorAll('.db-widget').forEach(widget => {
+    widget.addEventListener('pointerdown', onPointerDown);
   });
 }
 </script>
