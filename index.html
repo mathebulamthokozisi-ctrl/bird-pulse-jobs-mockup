@@ -64,7 +64,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 
 /* Section labels */
 .nav-section{padding:16px 14px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-400);white-space:nowrap;overflow:hidden;transition:opacity var(--t-slow)}
-.nav.collapsed .nav-section{opacity:0;padding:8px 0}
+.nav.collapsed .nav-section{opacity:0;padding:8px 0}.nav.collapsed~.nav-collapse-btn{left:52px}
 
 /* Nav scroll area */
 .nav-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:8px 0}
@@ -133,7 +133,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--fg);background:va
 .nav.collapsed .nav-footer{padding:8px 4px}
 
 /* Collapse toggle handle */
-.nav-collapse-btn{position:absolute;top:50%;right:-12px;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;box-shadow:var(--shadow-md);color:var(--slate-400);transition:color var(--t-fast),box-shadow var(--t-fast)}
+.nav-collapse-btn{position:absolute;top:50%;left:188px;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;box-shadow:var(--shadow-md);color:var(--slate-400);transition:color var(--t-fast),box-shadow var(--t-fast),left var(--t-slow)}
 .nav-collapse-btn:hover{color:var(--fg);box-shadow:var(--shadow-lg)}
 .nav-collapse-btn .hi{width:14px;height:14px}
 
@@ -2749,11 +2749,10 @@ td:first-child{padding:8px 8px}
   </div>
 
   <!-- Collapse toggle handle -->
+</nav>
   <button class="nav-collapse-btn" onclick="toggleNavCollapse()" id="nav-collapse-btn" title="Collapse sidebar">
     <svg class="hi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 19.5L8.25 12L15.75 4.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-
-</nav>
 
 <!-- ── Main ── -->
 <div class="main">
