@@ -9074,42 +9074,31 @@ function dbInitDragAndDrop() {
   function onPointerMove(e) {
     if (!drag) return;
     e.preventDefault();
-
     const { widget, ph, offsetX, offsetY } = drag;
-
-    // Follow cursor
+    // Move dragged widget with cursor
     widget.style.left = (e.clientX - offsetX) + 'px';
     widget.style.top  = (e.clientY - offsetY) + 'px';
-
-    // Find which grid widget the cursor is over
-    const items = Array.from(grid.querySelectorAll('.db-widget, .db-dnd-placeholder'));
-    let target = null;
-    let insertAfter = false;
-
+    // Find closest widget by centre-point distance and swap placeholder
+    const items = Array.from(grid.querySelectorAll('.db-widget'));
+    let closest = null, closestDist = Infinity;
     for (const item of items) {
-      if (item === ph) continue;
       const r = item.getBoundingClientRect();
-      if (e.clientX >= r.left && e.clientX <= r.right &&
-          e.clientY >= r.top  && e.clientY <= r.bottom) {
-        target = item;
-        // Insert before or after based on cursor position within the item
-        const midX = r.left + r.width  / 2;
-        const midY = r.top  + r.height / 2;
-        insertAfter = e.clientX > midX || (Math.abs(e.clientX - midX) < 20 && e.clientY > midY);
-        break;
-      }
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      const d  = Math.hypot(e.clientX - cx, e.clientY - cy);
+      if (d < closestDist) { closestDist = d; closest = item; }
     }
-
-    if (target && target !== drag.lastTarget) {
-      drag.lastTarget = target;
-      if (insertAfter) {
-        grid.insertBefore(ph, target.nextSibling);
-      } else {
-        grid.insertBefore(ph, target);
-      }
+    if (!closest) return;
+    const r  = closest.getBoundingClientRect();
+    const cx = r.left + r.width  / 2;
+    // Insert placeholder before or after closest widget
+    // Use left/right half of the widget to decide
+    const insertAfter = e.clientX >= cx;
+    const newRef = insertAfter ? closest.nextSibling : closest;
+    if (ph.nextSibling !== newRef && ph !== newRef) {
+      grid.insertBefore(ph, newRef || null);
     }
   }
-
   function onPointerUp() {
     if (!drag) return;
     document.removeEventListener('pointermove', onPointerMove);
