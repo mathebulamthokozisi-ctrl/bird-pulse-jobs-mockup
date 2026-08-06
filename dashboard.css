@@ -36,7 +36,7 @@
   align-items: center;
   gap: 5px;
   padding: 4px 10px;
-  border-radius: var(--radius);
+  border-radius: 20px;
   border: 1px solid var(--border);
   font-size: 11px;
   font-weight: 500;
@@ -164,7 +164,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow);
+  box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03);
   transition: box-shadow var(--t-fast), transform var(--t-fast);
   min-height: 0;
   cursor: grab;
@@ -201,8 +201,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 16px 10px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--border);
+  background: var(--slate-50);
   flex-shrink: 0;
 }
 .db-widget-title {
@@ -219,7 +220,7 @@
 .db-widget-icon {
   width: 28px;
   height: 28px;
-  border-radius: 7px;
+  border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -275,7 +276,7 @@
 }
 .db-wf-bar {
   width: 100%;
-  border-radius: 4px 4px 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
   transition: height 0.8s cubic-bezier(.22,.68,0,1.2);
   position: relative;
   min-height: 4px;
@@ -412,7 +413,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
   transition: background var(--t-fast);
   cursor: pointer;
 }
@@ -500,7 +501,7 @@
 .db-donut-legend-dot {
   width: 10px;
   height: 10px;
-  border-radius: 3px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 .db-donut-legend-label {
@@ -532,7 +533,7 @@
   align-items: center;
   gap: 16px;
   padding: 12px;
-  background: var(--surface-2);
+  background: var(--slate-50);
   border-radius: var(--radius-lg);
 }
 .db-hse-gauge-svg {
@@ -553,7 +554,7 @@
   margin-top: 2px;
 }
 .db-hse-stat {
-  background: var(--surface-2);
+  background: var(--slate-50);
   border-radius: var(--radius-lg);
   padding: 10px 12px;
   display: flex;
