@@ -8953,37 +8953,45 @@ function dbInitDragAndDrop() {
   const grid = document.getElementById('db-widget-grid');
   if (!grid) return;
 
-  // ── Inject CSS once ──────────────────────────────────────────────────────
+  // ── Inject styles once ────────────────────────────────────────────────────
   if (!document.getElementById('db-dnd-style')) {
     const s = document.createElement('style');
     s.id = 'db-dnd-style';
     s.textContent = `
-      /* Source widget becomes invisible — clean ghost effect (matches dnd-kit SortableWidget) */
-      .db-widget.db-dnd-source {
-        opacity: 0 !important;
-        pointer-events: none;
-      }
-      /* Floating clone — subtle lift, no rotation (matches WidgetDragOverlay) */
-      .db-dnd-clone {
-        position: fixed;
-        pointer-events: none;
+      /* Dragging widget — solid, lifted, follows cursor */
+      .db-dnd-dragging {
+        position: fixed !important;
         z-index: 9999;
-        border-radius: 12px;
-        box-shadow: 0 12px 28px -8px rgba(0,0,0,0.25);
-        transform: scale(1.02);
-        transition: box-shadow 0.15s ease;
+        pointer-events: none;
+        margin: 0 !important;
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.10) !important;
+        transform: scale(1.03) rotate(0.8deg) !important;
+        transition: box-shadow 0.12s ease, transform 0.12s ease !important;
         will-change: left, top;
+        cursor: grabbing !important;
+        border-radius: 12px;
         overflow: hidden;
-        cursor: grabbing;
       }
-      /* Placeholder — subtle indigo-50 background, no dashed border */
+      /* Placeholder slot — indigo tinted, dashed border */
       .db-dnd-placeholder {
         border-radius: 12px;
         background: #eef2ff;
-        border: 1.5px dashed #a5b4fc;
-        transition: all 0.18s ease;
+        border: 2px dashed #a5b4fc;
+        transition: all 0.18s cubic-bezier(0.2, 0, 0, 1);
       }
-      /* Drag handle pill — appears on hover (matches SortableWidget hover pill) */
+      /* All other widgets shift smoothly */
+      .db-widget:not(.db-dnd-dragging) {
+        transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.15s ease;
+      }
+      /* Drop flash */
+      .db-dnd-drop-flash {
+        animation: db-drop-flash 0.4s ease forwards;
+      }
+      @keyframes db-drop-flash {
+        0%   { box-shadow: 0 0 0 3px rgba(99,102,241,0.5), 0 1px 4px rgba(0,0,0,.05); }
+        100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); }
+      }
+      /* Drag handle pill */
       .db-drag-handle {
         position: absolute;
         left: 50%;
@@ -8991,86 +8999,71 @@ function dbInitDragAndDrop() {
         transform: translateX(-50%);
         z-index: 10;
         opacity: 0;
-        transition: opacity 0.2s ease;
+        transition: opacity 0.18s ease;
         cursor: grab;
         display: flex;
         align-items: center;
-        gap: 2px;
-        background: rgba(241,245,249,0.85);
+        gap: 3px;
+        background: rgba(241,245,249,0.92);
         backdrop-filter: blur(4px);
-        border: 1px solid rgba(226,232,240,0.6);
+        border: 1px solid rgba(226,232,240,0.7);
         border-radius: 20px;
         padding: 4px 10px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.10);
       }
-      .db-drag-handle:hover { background: rgba(241,245,249,1); box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+      .db-drag-handle:hover { background: rgba(241,245,249,1); box-shadow: 0 2px 8px rgba(0,0,0,0.14); }
       .db-drag-handle:active { cursor: grabbing; }
-      .db-drag-handle .hi { width: 14px; height: 14px; color: rgba(100,116,139,0.6); }
+      .db-drag-handle svg { width: 14px; height: 14px; color: rgba(100,116,139,0.7); pointer-events: none; }
       .db-widget:hover .db-drag-handle { opacity: 1; }
-      /* Drop flash — clean ring then fade (matches dnd-kit drop animation) */
-      .db-dnd-drop-flash {
-        animation: db-drop-flash 0.35s ease forwards;
-      }
-      @keyframes db-drop-flash {
-        0%   { box-shadow: 0 0 0 2px rgba(129,140,248,.5), 0 1px 2px rgba(0,0,0,.05); }
-        100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); }
-      }
-      /* Smooth grid reflow during drag */
-      .db-widget:not(.db-dnd-source) {
-        transition: transform 0.2s ease, box-shadow 0.15s ease;
-      }
     `;
     document.head.appendChild(s);
   }
 
-  // Move drag handle to be position:absolute inside widget (not inside header)
+  // ── Inject drag handles ───────────────────────────────────────────────────
   grid.querySelectorAll('.db-widget').forEach(widget => {
-    // Remove any existing handle injected by previous init
     widget.querySelectorAll('.db-drag-handle').forEach(h => h.remove());
-    // Inject handle as first child of widget (absolute positioned)
     const handle = document.createElement('div');
     handle.className = 'db-drag-handle';
-    handle.innerHTML = hiIcon('bars-2', 14);
-    handle.setAttribute('title', 'Drag to reorder');
+    handle.title = 'Drag to reorder';
+    handle.innerHTML = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 9h16.5m-16.5 6.75h16.5"/></svg>';
     widget.style.position = 'relative';
     widget.insertBefore(handle, widget.firstChild);
   });
 
-  let dragState = null;
+  // ── State ─────────────────────────────────────────────────────────────────
+  let drag = null;
 
   function onPointerDown(e) {
-    // Only trigger from the drag handle pill
     const handle = e.target.closest('.db-drag-handle');
     if (!handle) return;
     const widget = handle.closest('.db-widget');
     if (!widget) return;
     e.preventDefault();
+    e.stopPropagation();
+
     const rect = widget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
 
-    // Create floating clone — exact copy, scale(1.02), deep shadow
-    const clone = widget.cloneNode(true);
-    clone.className = 'db-dnd-clone';
-    clone.style.width  = rect.width  + 'px';
-    clone.style.height = rect.height + 'px';
-    clone.style.left   = rect.left   + 'px';
-    clone.style.top    = rect.top    + 'px';
-    document.body.appendChild(clone);
+    // Create placeholder with same dimensions
+    const ph = document.createElement('div');
+    ph.className = 'db-dnd-placeholder';
+    if (widget.classList.contains('span-2')) ph.classList.add('span-2');
+    if (widget.classList.contains('span-3')) ph.classList.add('span-3');
+    // Insert placeholder where widget is, then remove widget from flow
+    widget.parentNode.insertBefore(ph, widget);
 
-    // Placeholder matches widget dimensions
-    const placeholder = document.createElement('div');
-    placeholder.className = 'db-dnd-placeholder';
-    placeholder.style.width  = rect.width  + 'px';
-    placeholder.style.height = rect.height + 'px';
-    if (widget.classList.contains('span-2')) placeholder.classList.add('span-2');
-    if (widget.classList.contains('span-3')) placeholder.classList.add('span-3');
+    // Make widget fixed — it leaves the grid flow
+    widget.classList.add('db-dnd-dragging');
+    widget.style.left   = rect.left   + 'px';
+    widget.style.top    = rect.top    + 'px';
+    widget.style.width  = rect.width  + 'px';
+    widget.style.height = rect.height + 'px';
 
-    // Source becomes invisible
-    widget.classList.add('db-dnd-source');
-    widget.parentNode.insertBefore(placeholder, widget.nextSibling);
+    // Move widget to body so it's truly out of grid stacking context
+    document.body.appendChild(widget);
 
-    dragState = { widget, clone, placeholder, offsetX, offsetY, lastOver: null };
+    drag = { widget, ph, offsetX, offsetY, lastTarget: null };
 
     document.addEventListener('pointermove', onPointerMove, { passive: false });
     document.addEventListener('pointerup',   onPointerUp);
@@ -9079,62 +9072,87 @@ function dbInitDragAndDrop() {
   }
 
   function onPointerMove(e) {
-    if (!dragState) return;
+    if (!drag) return;
     e.preventDefault();
-    const { clone, placeholder, offsetX, offsetY } = dragState;
 
-    // Move clone with cursor
-    clone.style.left = (e.clientX - offsetX) + 'px';
-    clone.style.top  = (e.clientY - offsetY) + 'px';
+    const { widget, ph, offsetX, offsetY } = drag;
 
-    // Find nearest widget by centre-point distance
-    let nearest = null, minDist = Infinity;
-    grid.querySelectorAll('.db-widget:not(.db-dnd-source)').forEach(w => {
-      const r = w.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
-      if (dist < minDist) { minDist = dist; nearest = w; }
-    });
+    // Follow cursor
+    widget.style.left = (e.clientX - offsetX) + 'px';
+    widget.style.top  = (e.clientY - offsetY) + 'px';
 
-    if (nearest && nearest !== dragState.lastOver) {
-      dragState.lastOver = nearest;
-      const nr = nearest.getBoundingClientRect();
-      const after = e.clientX > nr.left + nr.width / 2 || e.clientY > nr.top + nr.height / 2;
-      nearest.parentNode.insertBefore(placeholder, after ? nearest.nextSibling : nearest);
+    // Find which grid widget the cursor is over
+    const items = Array.from(grid.querySelectorAll('.db-widget, .db-dnd-placeholder'));
+    let target = null;
+    let insertAfter = false;
+
+    for (const item of items) {
+      if (item === ph) continue;
+      const r = item.getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right &&
+          e.clientY >= r.top  && e.clientY <= r.bottom) {
+        target = item;
+        // Insert before or after based on cursor position within the item
+        const midX = r.left + r.width  / 2;
+        const midY = r.top  + r.height / 2;
+        insertAfter = e.clientX > midX || (Math.abs(e.clientX - midX) < 20 && e.clientY > midY);
+        break;
+      }
+    }
+
+    if (target && target !== drag.lastTarget) {
+      drag.lastTarget = target;
+      if (insertAfter) {
+        grid.insertBefore(ph, target.nextSibling);
+      } else {
+        grid.insertBefore(ph, target);
+      }
     }
   }
 
   function onPointerUp() {
-    if (!dragState) return;
+    if (!drag) return;
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup',   onPointerUp);
     document.body.style.userSelect = '';
     document.body.style.cursor     = '';
 
-    const { widget, clone, placeholder } = dragState;
-    dragState = null;
+    const { widget, ph } = drag;
+    drag = null;
 
-    // Animate clone to placeholder position, then snap widget in
-    const phRect = placeholder.getBoundingClientRect();
-    clone.style.transition = 'left 0.22s ease, top 0.22s ease, transform 0.22s ease, opacity 0.18s ease';
-    clone.style.left      = phRect.left + 'px';
-    clone.style.top       = phRect.top  + 'px';
-    clone.style.transform = 'scale(1)';
-    clone.style.opacity   = '0';
+    // Snap widget into placeholder position
+    const phRect = ph.getBoundingClientRect();
+
+    // Animate widget to placeholder position
+    widget.style.transition = 'left 0.2s cubic-bezier(0.2,0,0,1), top 0.2s cubic-bezier(0.2,0,0,1), transform 0.2s ease, box-shadow 0.2s ease';
+    widget.style.left      = phRect.left + 'px';
+    widget.style.top       = phRect.top  + 'px';
+    widget.style.transform = 'scale(1) rotate(0deg)';
+    widget.style.boxShadow = '';
 
     setTimeout(() => {
-      placeholder.parentNode.insertBefore(widget, placeholder);
-      placeholder.remove();
-      clone.remove();
-      widget.classList.remove('db-dnd-source');
-      // Brief ring flash on drop
+      // Move widget back into grid at placeholder position
+      grid.insertBefore(widget, ph);
+      ph.remove();
+
+      // Restore widget styles
+      widget.classList.remove('db-dnd-dragging');
+      widget.style.left       = '';
+      widget.style.top        = '';
+      widget.style.width      = '';
+      widget.style.height     = '';
+      widget.style.transform  = '';
+      widget.style.boxShadow  = '';
+      widget.style.transition = '';
+      widget.style.position   = 'relative';
+
+      // Drop flash
       widget.classList.add('db-dnd-drop-flash');
-      setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 380);
-    }, 210);
+      setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 420);
+    }, 200);
   }
 
-  // Attach to grid (event delegation)
+  // Attach listener to grid
   grid.removeEventListener('pointerdown', onPointerDown);
   grid.addEventListener('pointerdown', onPointerDown);
 }
