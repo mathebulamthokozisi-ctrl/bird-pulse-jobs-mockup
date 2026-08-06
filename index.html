@@ -5422,31 +5422,31 @@ EFT payments preferred.</textarea>
     New Customer
   </button>
 </div>
-<!-- KPI strip -->
+<!-- KPI strip — uses shared .metric-card pattern -->
 <div class="cust-kpi-strip" id="cust-kpi-strip">
-  <div class="cust-kpi active" onclick="custSetKpiFilter('all')" data-filter="all">
-    <div class="cust-kpi-label">Total</div>
-    <div class="cust-kpi-value" id="cust-kpi-total">5</div>
+  <div class="metric-card mc-indigo cust-kpi active" onclick="custSetKpiFilter('all')" data-filter="all" style="cursor:pointer">
+    <div class="metric-label">Total</div>
+    <div class="metric-value neutral" id="cust-kpi-total">5</div>
     <div class="cust-kpi-sub">customers</div>
   </div>
-  <div class="cust-kpi" onclick="custSetKpiFilter('active')" data-filter="active">
-    <div class="cust-kpi-label">Active</div>
-    <div class="cust-kpi-value" id="cust-kpi-active">4</div>
+  <div class="metric-card mc-green cust-kpi" onclick="custSetKpiFilter('active')" data-filter="active" style="cursor:pointer">
+    <div class="metric-label">Active</div>
+    <div class="metric-value neutral" id="cust-kpi-active">4</div>
     <div class="cust-kpi-sub">customers</div>
   </div>
-  <div class="cust-kpi" onclick="custSetKpiFilter('inactive')" data-filter="inactive">
-    <div class="cust-kpi-label">Inactive</div>
-    <div class="cust-kpi-value" id="cust-kpi-inactive">0</div>
+  <div class="metric-card mc-slate cust-kpi" onclick="custSetKpiFilter('inactive')" data-filter="inactive" style="cursor:pointer">
+    <div class="metric-label">Inactive</div>
+    <div class="metric-value neutral" id="cust-kpi-inactive">0</div>
     <div class="cust-kpi-sub">customers</div>
   </div>
-  <div class="cust-kpi" onclick="custSetKpiFilter('lead')" data-filter="lead">
-    <div class="cust-kpi-label">Leads</div>
-    <div class="cust-kpi-value" id="cust-kpi-leads">1</div>
+  <div class="metric-card mc-amber cust-kpi" onclick="custSetKpiFilter('lead')" data-filter="lead" style="cursor:pointer">
+    <div class="metric-label">Leads</div>
+    <div class="metric-value neutral" id="cust-kpi-leads">1</div>
     <div class="cust-kpi-sub">customers</div>
   </div>
-  <div class="cust-kpi" onclick="custSetKpiFilter('top')" data-filter="top">
-    <div class="cust-kpi-label">Top Performers</div>
-    <div class="cust-kpi-value" id="cust-kpi-top">2</div>
+  <div class="metric-card mc-green cust-kpi" onclick="custSetKpiFilter('top')" data-filter="top" style="cursor:pointer">
+    <div class="metric-label">Top Performers</div>
+    <div class="metric-value profit" id="cust-kpi-top">2</div>
     <div class="cust-kpi-sub">health ≥ 80</div>
   </div>
 </div>

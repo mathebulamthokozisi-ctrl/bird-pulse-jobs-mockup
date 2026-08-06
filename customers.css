@@ -77,47 +77,26 @@
 }
 .cust-search input::placeholder { color: var(--muted-fg); }
 
-/* ── KPI strip ─────────────────────────────────────────────── */
+/* ── KPI strip — uses shared .metric-card pattern ──────────── */
 .cust-kpi-strip {
-  display: flex;
-  gap: 0;
-  background: var(--white);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  overflow-x: auto;
 }
 .cust-kpi {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 20px;
-  border-right: 1px solid var(--border);
-  cursor: pointer;
-  transition: background var(--t-fast);
-  flex-shrink: 0;
-  min-width: 100px;
+  /* inherits from .metric-card — no overrides needed */
 }
-.cust-kpi:last-child { border-right: none; }
-.cust-kpi:hover { background: var(--surface-2); }
-.cust-kpi.active { background: var(--indigo-50); border-bottom: 2px solid var(--indigo-600); }
-.cust-kpi-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  color: var(--muted-fg);
-  white-space: nowrap;
+.cust-kpi.active {
+  box-shadow: 0 0 0 2px var(--indigo-400), var(--shadow-md);
 }
-.cust-kpi-value {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--fg);
-  line-height: 1.1;
-}
-.cust-kpi.active .cust-kpi-value { color: var(--indigo-600); }
 .cust-kpi-sub {
   font-size: 10px;
   color: var(--muted-fg);
+  margin-top: 3px;
 }
 
 /* ── Date + status filters ─────────────────────────────────── */
