@@ -387,7 +387,7 @@ td:first-child{padding:8px 8px}
   position:relative;
   height:36px;
   background:#eef0f3;
-  border-radius:99px;
+  border-radius:4px;
   overflow:hidden;
 }
 /* Filled gradient fill — width set inline by JS via --pipe-fill */
@@ -396,7 +396,7 @@ td:first-child{padding:8px 8px}
   inset:0;
   width:var(--pipe-fill,20%);
   background:linear-gradient(90deg,#007A7A 0%,#00B4B4 50%,#00CED1 100%);
-  border-radius:99px;
+  border-radius:4px;
   transition:width .5s cubic-bezier(.4,0,.2,1);
 }
 /* Declined state fill */
@@ -411,7 +411,7 @@ td:first-child{padding:8px 8px}
   background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.25) 50%,transparent 100%);
   background-size:200% 100%;
   animation:pipe-shimmer 2.2s linear infinite;
-  border-radius:99px;
+  border-radius:4px;
 }
 @keyframes pipe-shimmer{
   0%{background-position:200% 0}
