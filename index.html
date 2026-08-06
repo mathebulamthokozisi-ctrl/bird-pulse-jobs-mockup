@@ -8958,7 +8958,6 @@ function dbInitDragAndDrop() {
     const s = document.createElement('style');
     s.id = 'db-dnd-style';
     s.textContent = `
-      /* Dragging widget — solid, gently lifted, subtle tilt */
       .db-dnd-dragging {
         position: fixed !important;
         z-index: 9999;
@@ -8972,19 +8971,16 @@ function dbInitDragAndDrop() {
         border-radius: 12px;
         overflow: hidden;
       }
-      /* Placeholder — soft indigo tint, no harsh dashes */
       .db-dnd-placeholder {
         border-radius: 12px;
         background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
         border: 1.5px dashed #c7d2fe;
-        transition: all 0.25s cubic-bezier(0.34,1.2,0.64,1);
+        transition: all 0.22s cubic-bezier(0.34,1.2,0.64,1);
         opacity: 0.85;
       }
-      /* Non-dragging widgets — smooth grid reflow */
       .db-widget:not(.db-dnd-dragging) {
         transition: box-shadow 0.2s ease;
       }
-      /* Drop flash */
       .db-dnd-drop-flash {
         animation: db-drop-flash 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
       }
@@ -8993,7 +8989,6 @@ function dbInitDragAndDrop() {
         60%  { transform: scale(1.0); }
         100% { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 4px rgba(0,0,0,.03); transform: scale(1); }
       }
-      /* Drag handle pill */
       .db-drag-handle {
         position: absolute;
         left: 50%;
@@ -9021,20 +9016,20 @@ function dbInitDragAndDrop() {
     document.head.appendChild(s);
   }
 
-  // ── Inject drag handles ───────────────────────────────────────────────────
+  // ── Add drag handles to each widget ──────────────────────────────────────
   grid.querySelectorAll('.db-widget').forEach(widget => {
-    widget.querySelectorAll('.db-drag-handle').forEach(h => h.remove());
+    if (widget.querySelector('.db-drag-handle')) return;
     const handle = document.createElement('div');
     handle.className = 'db-drag-handle';
-    handle.title = 'Drag to reorder';
-    handle.innerHTML = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 9h16.5m-16.5 6.75h16.5"/></svg>';
-    widget.style.position = 'relative';
+    handle.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7" cy="5" r="1.2" fill="currentColor" stroke="none"/><circle cx="13" cy="5" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="13" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="15" r="1.2" fill="currentColor" stroke="none"/><circle cx="13" cy="15" r="1.2" fill="currentColor" stroke="none"/></svg>`;
     widget.insertBefore(handle, widget.firstChild);
   });
 
   // ── State ─────────────────────────────────────────────────────────────────
   let drag = null;
+  let _rafPending = false;
 
+  // ── onPointerDown ─────────────────────────────────────────────────────────
   function onPointerDown(e) {
     const handle = e.target.closest('.db-drag-handle');
     if (!handle) return;
@@ -9042,38 +9037,29 @@ function dbInitDragAndDrop() {
     if (!widget) return;
     e.preventDefault();
     e.stopPropagation();
-
     const rect = widget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
-
-    // Create placeholder with same dimensions
     const ph = document.createElement('div');
     ph.className = 'db-dnd-placeholder';
     if (widget.classList.contains('span-2')) ph.classList.add('span-2');
     if (widget.classList.contains('span-3')) ph.classList.add('span-3');
-    // Insert placeholder where widget is, then remove widget from flow
     widget.parentNode.insertBefore(ph, widget);
-
-    // Make widget fixed — it leaves the grid flow
     widget.classList.add('db-dnd-dragging');
     widget.style.left   = rect.left   + 'px';
     widget.style.top    = rect.top    + 'px';
     widget.style.width  = rect.width  + 'px';
     widget.style.height = rect.height + 'px';
-
-    // Move widget to body so it's truly out of grid stacking context
     document.body.appendChild(widget);
-
-    drag = { widget, ph, offsetX, offsetY, lastTarget: null };
-
+    drag = { widget, ph, offsetX, offsetY, pushTarget: null };
+    _rafPending = false;
     document.addEventListener('pointermove', onPointerMove, { passive: false });
     document.addEventListener('pointerup',   onPointerUp);
     document.body.style.userSelect = 'none';
     document.body.style.cursor     = 'grabbing';
   }
 
-  let _rafPending = false;
+  // ── onPointerMove ─────────────────────────────────────────────────────────
   function onPointerMove(e) {
     if (!drag) return;
     e.preventDefault();
@@ -9085,73 +9071,92 @@ function dbInitDragAndDrop() {
     widget.style.left = (e.clientX - offsetX) + 'px';
     widget.style.top  = (e.clientY - offsetY) + 'px';
 
-    // ── Stable index-based collision detection with hysteresis ──────────────
-    // Get all grid items (widgets + placeholder) in DOM order
-    const allItems = Array.from(grid.children);
-    const phIdx    = allItems.indexOf(ph);
+    // Use elementsFromPoint to see through the fixed dragged widget
+    widget.style.pointerEvents = 'none';
+    const els = document.elementsFromPoint(e.clientX, e.clientY);
+    widget.style.pointerEvents = '';
 
-    // Find which widget the cursor centre is over
-    const widgets  = Array.from(grid.querySelectorAll('.db-widget'));
+    const allWidgets = Array.from(grid.querySelectorAll('.db-widget'));
     let overWidget = null;
-    for (const w of widgets) {
-      const r = w.getBoundingClientRect();
-      if (e.clientX >= r.left && e.clientX <= r.right &&
-          e.clientY >= r.top  && e.clientY <= r.bottom) {
-        overWidget = w; break;
-      }
+    for (const el of els) {
+      const w = el.closest ? el.closest('.db-widget') : null;
+      if (w && w !== widget && allWidgets.includes(w)) { overWidget = w; break; }
     }
-    if (!overWidget) return;
 
-    const r   = overWidget.getBoundingClientRect();
-    const wIdx = allItems.indexOf(overWidget);
+    // Clear push transforms on all non-target widgets
+    allWidgets.forEach(w => { if (w !== overWidget) { w.style.transform = ''; w.style.transition = ''; } });
 
-    // Hysteresis: only swap when cursor has crossed 35% into the widget
-    // (not 50%) — prevents oscillation at the boundary
-    const THRESHOLD = 0.35;
+    if (!overWidget) { drag.pushTarget = null; return; }
+
+    const r    = overWidget.getBoundingClientRect();
     const relX = (e.clientX - r.left) / r.width;
+    const relY = (e.clientY - r.top)  / r.height;
 
-    let targetIdx; // where to insert placeholder
-    if (relX < THRESHOLD) {
-      // Cursor in left 35% → placeholder goes BEFORE this widget
-      targetIdx = wIdx < phIdx ? wIdx : wIdx - 1;
-      if (ph.nextSibling !== overWidget) {
-        grid.insertBefore(ph, overWidget);
-      }
-    } else if (relX > (1 - THRESHOLD)) {
-      // Cursor in right 35% → placeholder goes AFTER this widget
-      const afterRef = overWidget.nextSibling;
-      if (afterRef !== ph && ph.nextSibling !== afterRef) {
-        grid.insertBefore(ph, afterRef || null);
+    // Determine axis: compare placeholder centre vs target centre
+    const phR = ph.getBoundingClientRect();
+    const dy  = Math.abs((phR.top + phR.height/2) - (r.top + r.height/2));
+    const dx  = Math.abs((phR.left + phR.width/2) - (r.left + r.width/2));
+    const isVertical = dy > dx * 0.5;
+
+    const allItems    = Array.from(grid.children);
+    const phIdx       = allItems.indexOf(ph);
+    const wIdx        = allItems.indexOf(overWidget);
+    const pushForward = phIdx < wIdx;
+
+    let pushAmount;
+    if (isVertical) {
+      pushAmount = pushForward ? Math.min(relY * 2, 1) : Math.min((1 - relY) * 2, 1);
+    } else {
+      pushAmount = pushForward ? Math.min(relX * 2, 1) : Math.min((1 - relX) * 2, 1);
+    }
+
+    const maxPush = isVertical ? r.height * 0.12 : r.width * 0.16;
+    const pushPx  = pushAmount * maxPush;
+
+    drag.pushTarget = overWidget;
+    overWidget.style.transition = 'transform 0.05s linear';
+    if (isVertical) {
+      overWidget.style.transform = pushForward ? `translateY(${pushPx}px)` : `translateY(-${pushPx}px)`;
+    } else {
+      overWidget.style.transform = pushForward ? `translateX(${pushPx}px)` : `translateX(-${pushPx}px)`;
+    }
+
+    if (pushAmount >= 0.5) {
+      overWidget.style.transform  = '';
+      overWidget.style.transition = '';
+      drag.pushTarget = null;
+      if (pushForward) {
+        if (ph.nextSibling !== overWidget) grid.insertBefore(ph, overWidget);
+      } else {
+        const afterRef = overWidget.nextSibling;
+        if (afterRef !== ph && ph.nextSibling !== afterRef) grid.insertBefore(ph, afterRef || null);
       }
     }
-    // Middle 30% zone → do nothing (dead zone prevents oscillation)
   }
+
+  // ── onPointerUp ───────────────────────────────────────────────────────────
   function onPointerUp() {
     if (!drag) return;
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup',   onPointerUp);
     document.body.style.userSelect = '';
     document.body.style.cursor     = '';
-
     const { widget, ph } = drag;
+    // Clear push transforms
+    Array.from(grid.querySelectorAll('.db-widget')).forEach(w => {
+      w.style.transform  = '';
+      w.style.transition = '';
+    });
     drag = null;
-
-    // Snap widget into placeholder position
     const phRect = ph.getBoundingClientRect();
-
-    // Animate widget to placeholder position
     widget.style.transition = 'left 0.28s cubic-bezier(0.34,1.2,0.64,1), top 0.28s cubic-bezier(0.34,1.2,0.64,1), transform 0.28s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.2s ease';
     widget.style.left      = phRect.left + 'px';
     widget.style.top       = phRect.top  + 'px';
     widget.style.transform = 'scale(1) rotate(0deg)';
     widget.style.boxShadow = '';
-
     setTimeout(() => {
-      // Move widget back into grid at placeholder position
       grid.insertBefore(widget, ph);
       ph.remove();
-
-      // Restore widget styles
       widget.classList.remove('db-dnd-dragging');
       widget.style.left       = '';
       widget.style.top        = '';
@@ -9161,18 +9166,15 @@ function dbInitDragAndDrop() {
       widget.style.boxShadow  = '';
       widget.style.transition = '';
       widget.style.position   = 'relative';
-
-      // Drop flash
       widget.classList.add('db-dnd-drop-flash');
       setTimeout(() => widget.classList.remove('db-dnd-drop-flash'), 420);
     }, 280);
   }
 
-  // Attach listener to grid
+  // ── Attach listener ───────────────────────────────────────────────────────
   grid.removeEventListener('pointerdown', onPointerDown);
   grid.addEventListener('pointerdown', onPointerDown);
 }
-
 /* ── Widget Library ─────────────────────────────────────────────────────── */
 const DB_WIDGET_CATALOG = [
   { id: 'profit-bridge',     name: 'Profit Bridge',                   desc: 'Waterfall showing invoiced → job profit → net profit',        icon: 'bar-chart' },
