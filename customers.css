@@ -7,8 +7,11 @@
 #page-customers {
   display: none;
   flex-direction: column;
-  flex: 1;
+  position: fixed;
+  inset: 0 0 0 220px;
+  background: var(--bg);
   overflow: hidden;
+  z-index: 10;
 }
 
 /* ── Toolbar ───────────────────────────────────────────────── */
@@ -550,8 +553,11 @@
 #page-customer-detail {
   display: none;
   flex-direction: column;
-  flex: 1;
+  position: fixed;
+  inset: 0 0 0 220px;
+  background: var(--bg);
   overflow: hidden;
+  z-index: 10;
 }
 
 /* ── Detail header ─────────────────────────────────────────── */
